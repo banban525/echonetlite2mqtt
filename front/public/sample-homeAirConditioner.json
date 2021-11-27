@@ -1,0 +1,667 @@
+{
+  "id": "fe00000601052c9ffbfffeb18384013001",
+  "ip": "192.168.111.36",
+  "eoj": "013001",
+  "mqttTopics": "devices/fe00000601052c9ffbfffeb18384013001",
+  "type": "homeAirConditioner",
+  "descriptions": { "ja": "家庭用エアコン", "en": "Home air conditioner" },
+  "actions":[],
+  "properties": [
+    {
+      "name": "operationStatus",
+      "epc": "0x80",
+      "descriptions": { "ja": "動作状態", "en": "Operation status" },
+      "writable": true,
+      "observable": true,
+      "schema": {
+        "type": "boolean",
+        "values": [
+          {
+            "value": true,
+            "descriptions": { "ja": "ON", "en": "ON" },
+            "edt": "0x30"
+          },
+          {
+            "value": false,
+            "descriptions": { "ja": "OFF", "en": "OFF" },
+            "edt": "0x31"
+          }
+        ]
+      }
+    },
+    {
+      "name": "installationLocation",
+      "epc": "0x81",
+      "descriptions": { "ja": "設置場所", "en": "Installation location" },
+      "writable": true,
+      "observable": true,
+      "schema": { "type": "string" }
+    },
+    {
+      "name": "protocol",
+      "epc": "0x82",
+      "descriptions": { "ja": "Protocol version情報", "en": "Protocol version information" },
+      "writable": false,
+      "observable": false,
+      "schema": {
+        "type": "object",
+        "properties": { "type": { "type": "string" }, "version": { "type": "string" } }
+      }
+    },
+    {
+      "name": "id",
+      "epc": "0x83",
+      "descriptions": { "ja": "識別番号", "en": "Identification number" },
+      "writable": false,
+      "observable": false,
+      "schema": { "type": "string" }
+    },
+    {
+      "name": "cumulativeElectricEnergy",
+      "epc": "0x85",
+      "descriptions": { "ja": "積算消費電力計測値", "en": "Measured cumulative power consumption" },
+      "writable": false,
+      "observable": false,
+      "schema": {
+        "type": "number",
+        "unit": "kWh",
+        "minimum": 0,
+        "maximum": 999999.999,
+        "multipleOf": 0.001
+      }
+    },
+    {
+      "name": "manufacturerFaultCode",
+      "epc": "0x86",
+      "descriptions": { "ja": "メーカ異常コード", "en": "Manufacturer's fault code" },
+      "writable": false,
+      "observable": false,
+      "schema": { "type": "string" }
+    },
+    {
+      "name": "faultStatus",
+      "epc": "0x88",
+      "descriptions": { "ja": "異常発生状態", "en": "Fault status" },
+      "writable": false,
+      "observable": true,
+      "schema": {
+        "type": "boolean",
+        "values": [
+          {
+            "value": true,
+            "descriptions": { "ja": "異常あり", "en": "Fault occurred" },
+            "edt": "0x41"
+          },
+          {
+            "value": false,
+            "descriptions": { "ja": "異常なし", "en": "No fault has occurred" },
+            "edt": "0x42"
+          }
+        ]
+      }
+    },
+    {
+      "name": "faultDescription",
+      "epc": "0x89",
+      "descriptions": { "ja": "異常内容", "en": "Fault description" },
+      "writable": false,
+      "observable": false,
+      "schema": { "type": "string" }
+    },
+    {
+      "name": "manufacturer",
+      "epc": "0x8A",
+      "descriptions": { "ja": "メーカー", "en": "Manufacturer" },
+      "writable": false,
+      "observable": false,
+      "schema": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "string" },
+          "descriptions": {
+            "type": "object",
+            "properties": { "ja": { "type": "string" }, "en": { "type": "string" } }
+          }
+        }
+      }
+    },
+    {
+      "name": "businessFacilityCode",
+      "epc": "0x8B",
+      "descriptions": { "ja": "事業場コード", "en": "Business facility code" },
+      "writable": false,
+      "observable": false,
+      "schema": { "type": "string" }
+    },
+    {
+      "name": "powerSaving",
+      "epc": "0x8F",
+      "descriptions": { "ja": "節電動作設定", "en": "Power-saving operation setting" },
+      "writable": true,
+      "observable": true,
+      "schema": {
+        "type": "boolean",
+        "values": [
+          {
+            "value": true,
+            "descriptions": { "ja": "節電動作中", "en": "Power Saving" },
+            "edt": "0x41"
+          },
+          {
+            "value": false,
+            "descriptions": { "ja": "通常動作中", "en": "No Power Saving" },
+            "edt": "0x42"
+          }
+        ]
+      }
+    },
+    {
+      "name": "hourMeter",
+      "epc": "0x9A",
+      "descriptions": { "ja": "積算運転時間", "en": "Cumulative operation time" },
+      "writable": false,
+      "observable": false,
+      "schema": { "type": "number", "unit": "hour", "minimum": 0, "maximum": 4294967295 }
+    },
+    {
+      "name": "airFlowLevel",
+      "epc": "0xA0",
+      "descriptions": { "ja": "風量設定", "en": "Air flow rate setting" },
+      "writable": true,
+      "observable": true,
+      "schema": {
+        "oneOf": [
+          { "type": "number", "minimum": 1, "maximum": 8 },
+          {
+            "type": "string",
+            "enum": [ "auto" ],
+            "values": [
+              {
+                "value": "auto",
+                "descriptions": {
+                  "ja": "風量自動設定",
+                  "en": "Automatic air flow rate control function used."
+                },
+                "edt": "0x41"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "automaticControlAirFlowDirection",
+      "epc": "0xA1",
+      "descriptions": {
+        "ja": "風向自動設定",
+        "en": "Automatic control of air flow direction setting"
+      },
+      "writable": true,
+      "observable": false,
+      "schema": {
+        "type": "string",
+        "enum": [ "auto", "nonAuto", "autoVertical", "autoHorizontal" ],
+        "values": [
+          {
+            "value": "auto",
+            "descriptions": { "ja": "AUTO", "en": "Automatic" },
+            "edt": "0x41"
+          },
+          {
+            "value": "nonAuto",
+            "descriptions": { "ja": "非AUTO", "en": "Non-automatic" },
+            "edt": "0x42"
+          },
+          {
+            "value": "autoVertical",
+            "descriptions": { "ja": "上下AUTO", "en": "Automatic (vertical)" },
+            "edt": "0x43"
+          },
+          {
+            "value": "autoHorizontal",
+            "descriptions": { "ja": "左右AUTO", "en": "Automatic (horizontal)" },
+            "edt": "0x44"
+          }
+        ]
+      }
+    },
+    {
+      "name": "automaticSwingAirFlow",
+      "epc": "0xA3",
+      "descriptions": { "ja": "風向スイング設定", "en": "Automatic swing of air flow setting" },
+      "writable": true,
+      "observable": false,
+      "schema": {
+        "type": "string",
+        "enum": [ "off", "vertical", "holizontal", "verticalAndHolizontal" ],
+        "values": [
+          {
+            "value": "off",
+            "descriptions": { "ja": "OFF", "en": "OFF" },
+            "edt": "0x31"
+          },
+          {
+            "value": "vertical",
+            "descriptions": { "ja": "上下", "en": "Vertical" },
+            "edt": "0x41"
+          },
+          {
+            "value": "holizontal",
+            "descriptions": { "ja": "左右", "en": "Holizontal" },
+            "edt": "0x42"
+          },
+          {
+            "value": "verticalAndHolizontal",
+            "descriptions": { "ja": "上下左右", "en": "Vertical and Holizontal" },
+            "edt": "0x43"
+          }
+        ]
+      }
+    },
+    {
+      "name": "airFlowDirectionVertical",
+      "epc": "0xA4",
+      "descriptions": { "ja": "風向上下設定", "en": "Air flow direction (vertical) setting" },
+      "writable": true,
+      "observable": false,
+      "schema": {
+        "type": "string",
+        "enum": [
+          "uppermost",
+          "lowermost",
+          "central",
+          "upperCenter",
+          "lowerCenter"
+        ],
+        "values": [
+          {
+            "value": "uppermost",
+            "descriptions": { "ja": "上", "en": "Uppermost" },
+            "edt": "0x41"
+          },
+          {
+            "value": "lowermost",
+            "descriptions": { "ja": "下", "en": "Lowermost" },
+            "edt": "0x42"
+          },
+          {
+            "value": "central",
+            "descriptions": { "ja": "中央", "en": "Central" },
+            "edt": "0x43"
+          },
+          {
+            "value": "upperCenter",
+            "descriptions": { "ja": "上中", "en": "Midpoint between uppermost and central" },
+            "edt": "0x44"
+          },
+          {
+            "value": "lowerCenter",
+            "descriptions": { "ja": "下中", "en": "Midpoint between lowermost and central" },
+            "edt": "0x45"
+          }
+        ]
+      }
+    },
+    {
+      "name": "airFlowDirectionHorizontal",
+      "epc": "0xA5",
+      "descriptions": { "ja": "風向左右設定", "en": "Air flow direction (horizontal) setting" },
+      "writable": true,
+      "observable": false,
+      "schema": {
+        "type": "string",
+        "enum": [
+          "rc_r",        "l_lc",      "lc_c_rc",
+          "l_lc_rc_r",   "r",         "rc",
+          "c",           "c_r",       "c_rc",
+          "c_rc_r",      "lc",        "lc_r",
+          "lc_rc",       "lc_rc_r",   "lc_c",
+          "lc_c_r",      "lc_c_rc_r", "l",
+          "l_r",         "l_rc",      "l_rc_r",
+          "l_c",         "l_c_r",     "l_c_rc",
+          "l_c_rc_r",    "l_lc_r",    "l_lc_rc",
+          "l_lc_c",      "l_lc_c_r",  "l_lc_c_rc",
+          "l_lc_c_rc_r"
+        ],
+        "values": [
+          {
+            "value": "rc_r",
+            "descriptions": { "ja": "右中・右", "en": "Right center and Right" },
+            "edt": "0x41"
+          },
+          {
+            "value": "l_lc",
+            "descriptions": { "ja": "左・左中", "en": "Left and Left center" },
+            "edt": "0x42"
+          },
+          {
+            "value": "lc_c_rc",
+            "descriptions": {
+              "ja": "左中・中・右中",
+              "en": "Left center, Center and Right center"
+            },
+            "edt": "0x43"
+          },
+          {
+            "value": "l_lc_rc_r",
+            "descriptions": {
+              "ja": "左・左中・右中・右",
+              "en": "Left, Left center, Right center and Right"
+            },
+            "edt": "0x44"
+          },
+          {
+            "value": "r",
+            "descriptions": { "ja": "右", "en": "Right" },
+            "edt": "0x51"
+          },
+          {
+            "value": "rc",
+            "descriptions": { "ja": "右中", "en": "Right center" },
+            "edt": "0x52"
+          },
+          {
+            "value": "c",
+            "descriptions": { "ja": "中", "en": "Center" },
+            "edt": "0x54"
+          },
+          {
+            "value": "c_r",
+            "descriptions": { "ja": "中・右", "en": "Center and right" },
+            "edt": "0x55"
+          },
+          {
+            "value": "c_rc",
+            "descriptions": { "ja": "中・右中", "en": "Center and Right center" },
+            "edt": "0x56"
+          },
+          {
+            "value": "c_rc_r",
+            "descriptions": { "ja": "中・右中・右", "en": "Center, Right center and Right" },
+            "edt": "0x57"
+          },
+          {
+            "value": "lc",
+            "descriptions": { "ja": "左中", "en": "Left center" },
+            "edt": "0x58"
+          },
+          {
+            "value": "lc_r",
+            "descriptions": { "ja": "左中・右", "en": "Left center and Right" },
+            "edt": "0x59"
+          },
+          {
+            "value": "lc_rc",
+            "descriptions": { "ja": "左中・右中", "en": "Left center and Right center" },
+            "edt": "0x5A"
+          },
+          {
+            "value": "lc_rc_r",
+            "descriptions": {
+              "ja": "左中・右中・右",
+              "en": "Left center, Right center and Right"
+            },
+            "edt": "0x5B"
+          },
+          {
+            "value": "lc_c",
+            "descriptions": { "ja": "左中・中", "en": "Left center and Center" },
+            "edt": "0x5C"
+          },
+          {
+            "value": "lc_c_r",
+            "descriptions": { "ja": "左中・中・右", "en": "Left center, Center and Right" },
+            "edt": "0x5D"
+          },
+          {
+            "value": "lc_c_rc_r",
+            "descriptions": {
+              "ja": "左中・中・右中・右",
+              "en": "Left center, Center, Right center and Right"
+            },
+            "edt": "0x5F"
+          },
+          {
+            "value": "l",
+            "descriptions": { "ja": "左", "en": "Left" },
+            "edt": "0x60"
+          },
+          {
+            "value": "l_r",
+            "descriptions": { "ja": "左・右", "en": "Left and Right" },
+            "edt": "0x61"
+          },
+          {
+            "value": "l_rc",
+            "descriptions": { "ja": "左・右中", "en": "Left and Right center" },
+            "edt": "0x62"
+          },
+          {
+            "value": "l_rc_r",
+            "descriptions": { "ja": "左・右中・右", "en": "Left, Right center and Right" },
+            "edt": "0x63"
+          },
+          {
+            "value": "l_c",
+            "descriptions": { "ja": "左・中", "en": "Left and Center" },
+            "edt": "0x64"
+          },
+          {
+            "value": "l_c_r",
+            "descriptions": { "ja": "左・中・右", "en": "Left, Center and Right" },
+            "edt": "0x65"
+          },
+          {
+            "value": "l_c_rc",
+            "descriptions": { "ja": "左・中・右中", "en": "Left, Center and Right center" },
+            "edt": "0x66"
+          },
+          {
+            "value": "l_c_rc_r",
+            "descriptions": {
+              "ja": "左・中・右中・右",
+              "en": "Left, Center, Right center and Right"
+            },
+            "edt": "0x67"
+          },
+          {
+            "value": "l_lc_r",
+            "descriptions": { "ja": "左・左中・右", "en": "Left, Left center and Right" },
+            "edt": "0x69"
+          },
+          {
+            "value": "l_lc_rc",
+            "descriptions": { "ja": "左・左中・右中", "en": "Left, Left center and Right center" },
+            "edt": "0x6A"
+          },
+          {
+            "value": "l_lc_c",
+            "descriptions": { "ja": "左・左中・中", "en": "Left, Left center and center" },
+            "edt": "0x6C"
+          },
+          {
+            "value": "l_lc_c_r",
+            "descriptions": {
+              "ja": "左・左中・中・右",
+              "en": "Left, Left center, Center and Right"
+            },
+            "edt": "0x6D"
+          },
+          {
+            "value": "l_lc_c_rc",
+            "descriptions": {
+              "ja": "左・左中・中・右中",
+              "en": "Left, Left center, Center and Right center"
+            },
+            "edt": "0x6E"
+          },
+          {
+            "value": "l_lc_c_rc_r",
+            "descriptions": {
+              "ja": "左・左中・中・右中・右",
+              "en": "Left, Left center, Center, Right center and Right"
+            },
+            "edt": "0x6F"
+          }
+        ]
+      }
+    },
+    {
+      "name": "operationMode",
+      "epc": "0xB0",
+      "descriptions": { "ja": "運転モード設定", "en": "Operation mode setting" },
+      "writable": true,
+      "observable": true,
+      "schema": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "cooling",
+          "heating",
+          "dehumidification",
+          "circulation",
+          "other"
+        ],
+        "values": [
+          {
+            "value": "auto",
+            "descriptions": { "ja": "自動", "en": "Automatic" },
+            "edt": "0x41"
+          },
+          {
+            "value": "cooling",
+            "descriptions": { "ja": "冷房", "en": "Cooling" },
+            "edt": "0x42"
+          },
+          {
+            "value": "heating",
+            "descriptions": { "ja": "暖房", "en": "Heating" },
+            "edt": "0x43"
+          },
+          {
+            "value": "dehumidification",
+            "descriptions": { "ja": "除湿", "en": "Dehumidification" },
+            "edt": "0x44"
+          },
+          {
+            "value": "circulation",
+            "descriptions": { "ja": "送風", "en": "Air circulation" },
+            "edt": "0x45"
+          },
+          {
+            "value": "other",
+            "descriptions": { "ja": "その他", "en": "Other" },
+            "edt": "0x40"
+          }
+        ]
+      }
+    },
+    {
+      "name": "targetTemperature",
+      "epc": "0xB3",
+      "descriptions": { "ja": "温度設定値", "en": "Set temperature value" },
+      "writable": true,
+      "observable": false,
+      "schema": {
+        "oneOf": [
+          { "type": "number", "unit": "Celsius", "minimum": 0, "maximum": 50 },
+          {
+            "type": "string",
+            "enum": [ "undefined" ],
+            "values": [
+              {
+                "value": "undefined",
+                "descriptions": { "ja": "不明", "en": "Undefined" },
+                "edt": "0xFD"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "roomTemperature",
+      "epc": "0xBB",
+      "descriptions": { "ja": "室内温度計測値", "en": "Measured value of room temperature" },
+      "writable": false,
+      "observable": false,
+      "schema": {
+        "oneOf": [
+          {
+            "type": "number",
+            "unit": "Celsius",
+            "minimum": -127,
+            "maximum": 125
+          },
+          {
+            "type": "string",
+            "enum": [ "unmeasurable" ],
+            "values": [
+              {
+                "value": "unmeasurable",
+                "descriptions": { "ja": "計測不能", "en": "Unmeasurable" },
+                "edt": "0x7E"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "outdoorTemperature",
+      "epc": "0xBE",
+      "descriptions": { "ja": "外気温度計測値", "en": "Measured outdoor air temperature" },
+      "writable": false,
+      "observable": false,
+      "schema": {
+        "oneOf": [
+          {
+            "type": "number",
+            "unit": "Celsius",
+            "minimum": -127,
+            "maximum": 125
+          },
+          {
+            "type": "string",
+            "enum": [ "unmeasurable" ],
+            "values": [
+              {
+                "value": "unmeasurable",
+                "descriptions": { "ja": "計測不能", "en": "Unmeasurable" },
+                "edt": "0x7E"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "protocol": { "type": "ECHONET_Lite v1.13", "version": "Rel.P" },
+  "manufacturer": { "code": "000006", "descriptions": { "en": "", "ja": "" } },
+  "propertyValues": {
+    "operationStatus": false,
+    "installationLocation": "NotSet",
+    "protocol": { "type": "ECHONET_Lite v1.13", "version": "Rel.K" },
+    "id": "fe00000601052c9ffbfffeb18384013001",
+    "cumulativeElectricEnergy": "1589",
+    "manufacturerFaultCode": "06000006000000028000",
+    "faultStatus": false,
+    "faultDescription": "0000",
+    "manufacturer": {
+      "code": "000006",
+      "descriptions": { "ja": "三菱電機株式会社", "en": "Mitsubishi Electric Corporation" }
+    },
+    "businessFacilityCode": "000029",
+    "powerSaving": false,
+    "hourMeter": 7028.5,
+    "airFlowLevel": "auto",
+    "automaticControlAirFlowDirection": "auto",
+    "automaticSwingAirFlow": "off",
+    "airFlowDirectionVertical": "uppermost",
+    "airFlowDirectionHorizontal": "l_lc_c_rc_r",
+    "operationMode": "cooling",
+    "targetTemperature": "26",
+    "roomTemperature": "23",
+    "outdoorTemperature": "unmeasurable"
+  }
+}

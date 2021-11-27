@@ -1,0 +1,29 @@
+{
+    "ts-node": {
+        "files":true
+    },
+    "compilerOptions": {
+      "lib": [
+        "es2020"
+      ],
+      "module": "commonjs",
+      "target": "es2020",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "types": [
+        "node"
+      ],
+      "sourceMap": true,
+      "inlineSourceMap": false,
+      "inlineSources": true,
+      "declaration": false,
+      "noEmit": false,
+      "outDir": "./.ts-node"
+    },
+    "include": [
+      ".",
+      "typings"
+    ]
+  }
