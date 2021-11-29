@@ -32,11 +32,11 @@ export class RestApiController
   public start = ():void=>{
     const app = express();
 
-    //app.use(express.static("build"));
-    
+    app.use(express.static("./front/build"));
+
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    
+
     app.get("/status", this.getStatus);
     //app.get("/logs", getLogs);
     app.get("/elapi", this.getVersions);

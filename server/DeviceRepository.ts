@@ -1,5 +1,5 @@
 import EL, { eldata,facilitiesType,rinfo } from "echonet-lite";
-import all from "./device_descriptions_v1.3.0/all_device_descriptions_v1.3.0.json"
+import all from "../device_descriptions_v1.3.0/all_device_descriptions_v1.3.0.json"
 import { DeviceProperty, DevicePropertySchema, DeviceType, MixedTypePropertySchema } from "./AllDeviceDescriptions";
 import { device, DeviceId, Manufacturer, Property } from "./Property";
 import { Converter } from "./echoNetLiteParser";

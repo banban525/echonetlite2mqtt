@@ -1,4 +1,4 @@
-import all from "./device_descriptions_v1.3.0/all_device_descriptions_v1.3.0.json"
+import all from "../device_descriptions_v1.3.0/all_device_descriptions_v1.3.0.json"
 import  { DevicePropertySchema, MixedTypePropertySchema } from "./AllDeviceDescriptions";
 import { device } from "./Property";
 

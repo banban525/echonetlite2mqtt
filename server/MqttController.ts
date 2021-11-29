@@ -231,6 +231,9 @@ export class MqttController
     if (typeof value === "object") {
       return JSON.stringify(value);
     }
+    if(value === undefined){
+      return "undefined"
+    }
     return (value as any).toString();
   };
 
