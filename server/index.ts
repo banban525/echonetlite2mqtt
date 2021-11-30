@@ -7,7 +7,6 @@ import fs from "fs";
 import mqtt from "mqtt";
 import { SystemStatusRepositry } from "./ApiTypes";
 import { EventRepository } from "./EventRepository";
-import uuid from "node-uuid";
 import { LogRepository } from "./LogRepository";
 
 let echonetTargetNetwork = "";
@@ -15,7 +14,7 @@ let debugLog = false;
 let restApiPort = 3000;
 let restApiHost = "0.0.0.0";
 let mqttBroker = "";
-let mqttOptionFile = "mqttOption.json";
+let mqttOptionFile = "";
 let mqttBaseTopic = "echonetlite2mqtt/elapi/v1/devices";
 let mqttCaFile = "";
 let mqttCertFile = "";
