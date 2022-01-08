@@ -47,6 +47,35 @@ JEM-A / HA terminal compatible switch (Simulator [echonet-lite-kaden-emulator](h
 
 ## How to use
 
+### Environment Variables and Commandline Parameters
+
+MQTT Options
+
+|  Environment Variables | Commandline Parameter | Description |
+| ------------------     | --------------------- | ----------- |
+|  `MQTT_BROKER`       | `--MqttBroker`     | MQTT Brocker's URL. starts with "mqtt://" or "mqtts://".  |
+|  `MQTT_OPTION_FILE`  | `--MqttOptionFile` | the MQTT option file path. The schema is [MQTT.js](https://github.com/mqttjs/MQTT.js) ClientOptions. (Default: empty)  |
+|  `MQTT_CA_FILE`      | `--MqttCaFile`     | The MQTT CA file path. If this file exists, it will be loaded and set as an "ca" option. (Default: not load)  |
+|  `MQTT_CERT_FILE`    | `--MqttCertFile`   | The MQTT cert file path. If this file exists, it will be loaded and set as an "cert" option. (Default: not load)  |
+|  `MQTT_KEY_FILE`     | `--MqttKeyFile`    |  The MQTT key file path. If this file exists, it will be loaded and set as an "key" option. (Default: not load)  |
+
+
+
+REST API Options
+
+|  Environment Variables | Commandline Parameter | Description |
+| ------------------     | --------------------- | ----------- |
+| `REST_API_HOST` | `--RestApiHost` | Host IP of the administrator page. If there are multiple IPs, specify them. (Default: 0.0.0.0) |
+| `REST_API_PORT` | `--RestApiPort` | Admin page port number. (Default: 3000) |
+
+
+ECHONET Lite Options
+
+|  Environment Variables | Commandline Parameter | Description |
+| ------------------     | --------------------- | ----------- |
+| `ECHONET_TARGET_NETWORK` | `--echonetTargetNetwor` | Specify the network for ECHONET Lite in the format "000.000.000.000/00". (Default: Auto) |
+
+
 ### Use docker
 
 1. Run the following command
@@ -55,25 +84,32 @@ docker run -d --net=host -e MQTT_BROKER="mqtt://your.mqtt.brocker" echonetlite2m
 ```
 2. Open "http://(docker host):3000" in your browser. You can view the detected devices and logs.
 
-Environment Variables
-
-MQTT Options
-* MQTT_BROKER ... MQTT Brocker's URL. starts with "mqtt://" or "mqtts://".
-* MQTT_OPTION_FILE ... the MQTT option file path. The schema is [MQTT.js](https://github.com/mqttjs/MQTT.js) ClientOptions. (Default: empty)
-* MQTT_CA_FILE ... The MQTT CA file path. If this file exists, it will be loaded and set as an "ca" option. (Default: not load)
-* MQTT_CERT_FILE ... The MQTT cert file path. If this file exists, it will be loaded and set as an "cert" option. (Default: not load)
-* MQTT_KEY_FILE ... The MQTT key file path. If this file exists, it will be loaded and set as an "key" option. (Default: not load)
-
-REST API Options
-* REST_API_HOST ... Host IP of the administrator page. If there are multiple IPs, specify them. (Default: 0.0.0.0)
-* REST_API_PORT ... Admin page port number. (Default: 3000)
-
-ECHONET Lite Options
-* ECHONET_TARGET_NETWORK ... Specify the network for ECHONET Lite in the format "xxx.xxx.xxx.xxx/yy". (Default: Auto)
 
 ### Use Node.js
 
-In writing
+1. clone this repository.
+
+```
+git clone https://github.com/banban525/echonetlite2mqtt.git
+```
+
+2. Run the following command to initialize in ripository root directory.
+
+```
+cd echonetlite2mqtt
+npm install
+cd ./front
+npm install
+npm run build
+cd ..
+```
+
+3. Run the following command to start the service.
+
+```
+npm start -- MQTT_BROKER="mqtt://your.mqtt.brocker"
+```
+
 
 
 ## HOW TO DEVELOP
