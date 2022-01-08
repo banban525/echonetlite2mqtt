@@ -69,6 +69,64 @@ if("MQTT_KEY_FILE" in process.env && process.env.MQTT_KEY_FILE !== undefined)
   mqttKeyFile = process.env.MQTT_KEY_FILE.replace(/^"/g, "").replace(/"$/g, "");
 }
 
+for(var i = 2;i < process.argv.length; i++){
+  const name = process.argv[i].toLowerCase();
+  const value = i + 1 < process.argv.length ? process.argv[i+1] : "";
+
+  if(name === "--debug".toLowerCase())
+  {
+    debugLog = true;
+  }
+
+  if(value === "")
+  {
+    continue;
+  }
+
+  if(name === "--echonetTargetNetwork".toLowerCase())
+  {
+    echonetTargetNetwork = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--RestApiPort".toLowerCase())
+  {
+    const tempNo = Number(value.replace(/^"/g, "").replace(/"$/g, ""));
+    if(isNaN(tempNo)===false)
+    {
+      restApiPort = tempNo;
+    }
+  }
+  if(name === "--RestApiHost".toLowerCase())
+  {
+    restApiHost = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--MqttBroker".toLowerCase())
+  {
+    mqttBroker = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--MqttOptionFile".toLowerCase())
+  {
+    mqttOptionFile = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--MqttBaseTopic".toLowerCase())
+  {
+    mqttBaseTopic = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--MqttCaFile".toLowerCase())
+  {
+    mqttCaFile = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--MqttCertFile".toLowerCase())
+  {
+    mqttCertFile = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--MqttKeyFile".toLowerCase())
+  {
+    mqttKeyFile = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+}
+
+
+
 const logger = new LogRepository();
 
 logger.output(`echonetTargetNetwork=${echonetTargetNetwork}`);
