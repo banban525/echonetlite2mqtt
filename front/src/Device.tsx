@@ -240,6 +240,9 @@ export default class Device extends React.Component<DeviceProps> {
       return JSON.stringify(value);
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (value === undefined) {
+      return "undefined";
+    }
     return (value as any).toString();
   };
 }
