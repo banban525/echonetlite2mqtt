@@ -80,7 +80,7 @@ ECHONET Lite Options
 
 1. Run the following command
 ```
-docker run -d --net=host -e MQTT_BROKER="mqtt://your.mqtt.brocker" echonetlite2mqtt 
+docker run -d --net=host -e MQTT_BROKER="mqtt://your.mqtt.brocker" banban525/echonetlite2mqtt 
 ```
 2. Open "http://(docker host):3000" in your browser. You can view the detected devices and logs.
 
@@ -107,7 +107,7 @@ cd ..
 3. Run the following command to start the service.
 
 ```
-npm start -- MQTT_BROKER="mqtt://your.mqtt.brocker"
+npm start -- --MqttBroker "mqtt://your.mqtt.brocker"
 ```
 
 
