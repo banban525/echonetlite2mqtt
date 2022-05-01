@@ -160,5 +160,23 @@ export class EchoNetLiteController{
     start = ():void=>{
       EL.search();
     }
+
+    requestDeviceProperty = (id:DeviceId, propertyName:string):void =>{
+      const deviceRepository = new DeviceRepository();
+      const property = deviceRepository.getProperty(id, propertyName);
+      if(property === undefined)
+      {
+        console.log(`setDeviceProperty property === undefined propertyName=${propertyName}`);
+        return;
+      }
+
+      let epc = property.epc;
+      if(epc.toLowerCase().startsWith("0x"))
+      {
+        epc = epc.replace(/^0x/gi, "");
+      }
+      console.log(`[ECHONETLite] send ${id.ip} ${id.eoj} ${EL.GET} ${epc}`);
+      EL.sendOPC1(id.ip, "05ff01", id.eoj, EL.GET, epc, [0x00]);
+    }
   }
   

@@ -249,6 +249,23 @@ mqttController.addPropertyChnagedEvent((deviceId:string, propertyName:string, va
 
   echoNetListController.setDeviceProperty({id: deviceId, ip: device.ip, eoj:device.eoj}, propertyName, value);
 });
+mqttController.addPropertyRequestedEvent((deviceId:string, propertyName:string):void=>{
+  const device = deviceStore.get(deviceId);
+  if(device === undefined){
+    logger.output('[MQTT] device not found : ' + deviceId)
+    return;
+  }
+  if((propertyName in device.propertiesValue)===false)
+  {
+    logger.output('[MQTT] property not found : ' + propertyName)
+    return;
+  }
+
+  logger.output(`[MQTT] property reuqested id:${deviceId}, property:${propertyName}`);
+  eventRepository.newEvent(`LOG`);
+
+  echoNetListController.requestDeviceProperty({id: deviceId, ip: device.ip, eoj:device.eoj}, propertyName);
+});
 
 
 mqttController.addConnectionStateChangedEvent(():void=>{

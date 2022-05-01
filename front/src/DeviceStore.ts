@@ -109,6 +109,7 @@ export interface DeviceApi {
     schema: DevicePropertySchema,
     newValue: unknown
   ): Promise<void>;
+  requestDeviceProperty(deviceId: string, propertyName: string): Promise<void>;
 }
 
 export class DeviceStore {
@@ -215,5 +216,13 @@ export class DeviceStore {
       deviceProperty.schema,
       this.editingValue
     );
+  };
+
+  public reuqestValue = async (): Promise<void> => {
+    if (this.editingPropertyName === "") {
+      return;
+    }
+
+    await this.api.requestDeviceProperty(this.id, this.editingPropertyName);
   };
 }

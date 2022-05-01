@@ -47,6 +47,8 @@ export class RestApiController
     app.get("/elapi/v1/devices/:deviceId/properties/:propertyName", this.getProperty);
     
     app.put("/elapi/v1/devices/:deviceId/properties/:propertyName", this.putProperty);
+    app.put("/elapi/v1/devices/:deviceId/properties/:propertyName/request", this.requestProperty);
+
     app.get("/events", this.getEventsWithLongPolling);
     app.get("/logs", this.getLogs);
 
@@ -61,6 +63,14 @@ export class RestApiController
   }
   private firePropertyChangedRequestEvent = (deviceId:string,propertyName:string,newValue:any):void=>{
     this.propertyChangedRequestEvents.forEach(_=>_(deviceId, propertyName, newValue));
+  }
+
+  private readonly propertyRequestedRequestEvents:((deviceId:string,propertyName:string)=>void)[] = [];
+  public addPropertyRequestedRequestEvent = (event:(deviceId:string,propertyName:string)=>void):void =>{
+    this.propertyRequestedRequestEvents.push(event);
+  }
+  private firePropertyRequestedRequestEvent = (deviceId:string,propertyName:string):void=>{
+    this.propertyRequestedRequestEvents.forEach(_=>_(deviceId, propertyName));
   }
 
 
@@ -235,6 +245,37 @@ export class RestApiController
     result[propertyName] = device.propertiesValue[propertyName];
     res.json(result);
   }
+
+  private requestProperty = (
+    req: express.Request,
+    res: express.Response
+  ): void => {
+    const deviceId = req.params.deviceId;
+    const propertyName = req.params.propertyName;
+  
+    console.log(`[RESTAPI] request property: ${deviceId}\t${propertyName}`)
+  
+    const device = this.deviceStore.get(deviceId);
+    if(device === undefined){
+      res.status(404);
+      res.end('device not found : ' + deviceId);
+      console.log('device not found : ' + deviceId)
+      return;
+    }
+    if((propertyName in device.propertiesValue)===false)
+    {
+      res.status(404);
+      res.end('property not found : ' + propertyName);
+      console.log('property not found : ' + propertyName)
+      return;
+    }
+  
+    this.firePropertyRequestedRequestEvent(deviceId, propertyName);
+  
+    res.json({});
+  }
+
+
   private getStatus = (
     req: express.Request,
     res: express.Response

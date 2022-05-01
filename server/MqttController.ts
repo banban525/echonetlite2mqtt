@@ -54,36 +54,65 @@ export class MqttController
       //console.log('subscriber.on.message', 'topic:', topic, 'message:', payload.toString());
 
       // set
-      const regex = RegExp(`${this.baseTopic}/([^/]+)/properties/([^/]+)/set`);
-      const match = topic.match(regex);
-      if(match!==null)
       {
-        const deviceId = match[1];
-        const propertyName = match[2];
-        if(this.deviceStore.exists(deviceId)===false)
+        const regex = RegExp(`${this.baseTopic}/([^/]+)/properties/([^/]+)/set`);
+        const match = topic.match(regex);
+        if(match!==null)
         {
-          //error
-          return;
-        }
+          const deviceId = match[1];
+          const propertyName = match[2];
+          if(this.deviceStore.exists(deviceId)===false)
+          {
+            //error
+            return;
+          }
 
-        const device = this.deviceStore.get(deviceId);
-        if(device===undefined){
-          //error
-          return;
-        }
-        const property = device.properties.find(_=>_.name === propertyName);
-        if(property===undefined){
-          //error
-          return;
-        }
-        
-        //データのパース
-        const bodyText = payload.toString();
-        const newValue = this.parseValueFromText(bodyText, property.schema);
+          const device = this.deviceStore.get(deviceId);
+          if(device===undefined){
+            //error
+            return;
+          }
+          const property = device.properties.find(_=>_.name === propertyName);
+          if(property===undefined){
+            //error
+            return;
+          }
+          
+          //データのパース
+          const bodyText = payload.toString();
+          const newValue = this.parseValueFromText(bodyText, property.schema);
 
-        this.firePropertyChnagedEvent(deviceId, propertyName, newValue);
+          this.firePropertyChnagedEvent(deviceId, propertyName, newValue);
+        }
       }
+      // request
+      {
+        const regex = RegExp(`${this.baseTopic}/([^/]+)/properties/([^/]+)/request`);
+        const match = topic.match(regex);
+        if(match!==null)
+        {
+          const deviceId = match[1];
+          const propertyName = match[2];
+          if(this.deviceStore.exists(deviceId)===false)
+          {
+            //error
+            return;
+          }
 
+          const device = this.deviceStore.get(deviceId);
+          if(device===undefined){
+            //error
+            return;
+          }
+          const property = device.properties.find(_=>_.name === propertyName);
+          if(property===undefined){
+            //error
+            return;
+          }
+
+          this.firePropertyRequestedEvent(deviceId, propertyName);
+        }
+      }
     });
   }
 
@@ -94,6 +123,14 @@ export class MqttController
   };
   firePropertyChnagedEvent = (deviceId:string, propertyName:string, value:any):void=>{
     this.propertyChangedEventListeners.forEach(_=>_(deviceId, propertyName, value));
+  }
+
+  propertyRequestedEventListeners:((deviceId:string, propertyName:string)=>void)[]=[];
+  addPropertyRequestedEvent = (event:(deviceId:string, propertyName:string)=>void):void =>{
+    this.propertyRequestedEventListeners.push(event);
+  };
+  firePropertyRequestedEvent = (deviceId:string, propertyName:string):void=>{
+    this.propertyRequestedEventListeners.forEach(_=>_(deviceId, propertyName));
   }
 
   connectionStateChangedEventListeners:(()=>void)[]=[];

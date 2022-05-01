@@ -164,30 +164,16 @@ export default class Device extends React.Component<DeviceProps> {
                           <Grid container>
                             <Grid item xs={12} md={6}>
                               <Paper>
-                                <table>
-                                  <tbody>
-                                    <tr>
-                                      <th>descriptions(en)</th>
-                                      <td>{property.descriptions.en}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>EPC</th>
-                                      <td>{property.epc}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>get mqtt topic</th>
-                                      <td>{property.mqttTopics}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>set mqtt topic</th>
-                                      <td>{property.mqttTopics + "/set"}</td>
-                                    </tr>
-                                    <tr>
-                                      <th>hold mqtt topic</th>
-                                      <td>{property.mqttTopics + "/hold"}</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
+                                <b>
+                                  Actions
+                                  <br />
+                                </b>
+                                <Button
+                                  variant="contained"
+                                  onClick={store.reuqestValue}
+                                >
+                                  Reload Value
+                                </Button>
                               </Paper>
                             </Grid>
                             <Grid
@@ -220,6 +206,36 @@ export default class Device extends React.Component<DeviceProps> {
                                     Set
                                   </Button>
                                 </div>
+                              </Paper>
+                            </Grid>
+                            <Grid item xs={12} md={12}>
+                              <Paper>
+                                <table>
+                                  <tbody>
+                                    <tr>
+                                      <th>descriptions(en)</th>
+                                      <td>{property.descriptions.en}</td>
+                                    </tr>
+                                    <tr>
+                                      <th>EPC</th>
+                                      <td>{property.epc}</td>
+                                    </tr>
+                                    <tr>
+                                      <th>get mqtt topic</th>
+                                      <td>{property.mqttTopics}</td>
+                                    </tr>
+                                    <tr>
+                                      <th>set mqtt topic</th>
+                                      <td>{property.mqttTopics + "/set"}</td>
+                                    </tr>
+                                    <tr>
+                                      <th>request mqtt topic</th>
+                                      <td>
+                                        {property.mqttTopics + "/request"}
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
                               </Paper>
                             </Grid>
                           </Grid>

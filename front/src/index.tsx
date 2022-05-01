@@ -82,6 +82,19 @@ class WebApi implements AppApi, DeviceApi {
       headers: { "Content-Type": "application/json" },
     });
   };
+  requestDeviceProperty = async (
+    deviceId: string,
+    propertyName: string
+  ): Promise<void> => {
+    await fetch(
+      `/elapi/v1/devices/${deviceId}/properties/${propertyName}/request`,
+      {
+        method: "put",
+        body: null,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  };
   logRegisteredListener: (() => void)[] = [];
   onLogRegistered = (ev: () => void): void => {
     this.logRegisteredListener.push(ev);
