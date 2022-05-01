@@ -110,11 +110,40 @@ cd ..
 npm start -- --MqttBroker "mqtt://your.mqtt.brocker"
 ```
 
+## FAQ
 
+### How to change MQTT broker connection options
 
-## HOW TO DEVELOP
+You can set connection options in the json file.
+The schema of the json file is [Client Options in mqtt.js](https://github.com/mqttjs/MQTT.js#client).
 
-In writing
+For example, if you want to specify a username and password:
+
+1. Save the connection options file in any folder. (Example: /(any folder)/config.json)
+
+```
+{
+  "port": 1883,
+  "username": "your-username",
+  "password": "your-password"
+}
+```
+
+2. [docker]Mount the configuration file with the -v option and set the file path with MQTT_OPTION_FILE.
+
+```shell:commandline
+docker run -d --net=host \ 
+-v /(any folder)/config.json:/app/config/config.json \
+-e MQTT_OPTION_FILE=/app/config/config.json \
+-e MQTT_BROKER="mqtt://your.mqtt.brocker" \
+banban525/echonetlite2mqtt
+```
+
+3. [node.js] Use the `--MqttOptionFile` option to set the file path of the configuration file.
+
+```
+npm start -- --MqttBroker "mqtt://your.mqtt.brocker" --MqttOptionFile /(any folder)/config.json
+```
 
 
 ## Third party use
