@@ -1,6 +1,5 @@
 import all from "../device_descriptions_v1.3.0/all_device_descriptions_v1.3.0.json"
 import  { DevicePropertySchema, MixedTypePropertySchema } from "./AllDeviceDescriptions";
-import { Device } from "./Property";
 
 
 interface ParserInfo{
@@ -95,12 +94,12 @@ const deviceInterfaceTypes:InterfaceType[] = [];
 const aliaseTypes:AliaseType[] = [];
 
 
-const Device = all.common;
-const deviceInterfaceType:InterfaceType = {name:"common", comment:Device.descriptions.ja, properties:[]};
+const device = all.common;
+const deviceInterfaceType:InterfaceType = {name:"common", comment:device.descriptions.ja, properties:[]};
 deviceInterfaceTypes.push(deviceInterfaceType);
 
-for(const propertyName in Device.properties){
-  const property = Device.properties[propertyName];
+for(const propertyName in device.properties){
+  const property = device.properties[propertyName];
   const schema = property.schema;
   let propertyType: ParserInfo;
   try
@@ -120,7 +119,7 @@ for(const propertyName in Device.properties){
 
   if(propertyType.returnType.length > 10)
   {
-    const newPropertyType = `Type_${Device.deviceType}_${propertyName}`;
+    const newPropertyType = `Type_${device.deviceType}_${propertyName}`;
     aliaseTypes.push({
       name:newPropertyType,
       type:propertyType.returnType
