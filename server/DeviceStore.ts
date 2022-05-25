@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { device } from "./Property";
 
 
@@ -30,7 +31,7 @@ export class DeviceStore{
       {
         return undefined;
       }
-      return device.propertiesValue[propertyName];
+      return device.propertiesValue[propertyName].value;
     }
     public changeProperty = (id:string, propertyName:string, newValue:any):void =>{
       const device = this.list.find(_=>_.id === id);
@@ -41,7 +42,8 @@ export class DeviceStore{
       {
         return;
       }
-      device.propertiesValue[propertyName]=newValue;
+      device.propertiesValue[propertyName].value=newValue;
+      device.propertiesValue[propertyName].updated=dayjs(Date()).format("YYYY-MM-DD HH:mm:ss");
     }
   }
   

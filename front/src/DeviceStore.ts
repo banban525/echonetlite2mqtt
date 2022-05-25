@@ -6,6 +6,15 @@ export interface DeviceInfo extends DeviceSummary {
   actions: DeviceAction[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   propertyValues: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  values: { [key: string]: ApiDevicePropertyValue };
+}
+
+export interface ApiDevicePropertyValue {
+  name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any;
+  updated: string; // YYYY-MM-DD HH:mm:ss
 }
 
 export class DeviceInfo {
@@ -14,10 +23,11 @@ export class DeviceInfo {
     eoj: "",
     ip: "",
     mqttTopics: "",
-    propertyValues: {},
     deviceType: "",
     actions: [],
     properties: [],
+    propertyValues: {},
+    values: {},
   };
 }
 export interface BooleanPropertySchema {
@@ -185,13 +195,13 @@ export class DeviceStore {
   public editingPropertyName = "";
 
   public startEdit = (propertyName: string): void => {
-    if (propertyName in this.device.propertyValues === false) {
+    if (propertyName in this.device.values === false) {
       return;
     }
 
     this.editingPropertyName = propertyName;
-    this.editingValue = this.device.propertyValues[propertyName];
-    this.editingOriginal = this.device.propertyValues[propertyName];
+    this.editingValue = this.device.values[propertyName].value;
+    this.editingOriginal = this.device.values[propertyName].value;
   };
 
   public updateEditingValue = (newValue: unknown): void => {

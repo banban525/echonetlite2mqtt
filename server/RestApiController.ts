@@ -131,26 +131,27 @@ export class RestApiController
     res: express.Response
   ): void => {
     const deviceId = req.params.deviceId;
-    const device = this.deviceStore.get(deviceId);
-    if(device === undefined){
+    const foundDevice = this.deviceStore.get(deviceId);
+    if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
       return;
     }
   
     const result: ApiDevice = {
-      id: device.id,
-      eoj: device.eoj,
+      id: foundDevice.id,
+      eoj: foundDevice.eoj,
       actions:[],
-      deviceType: device.deviceType,
+      deviceType: foundDevice.deviceType,
       events:[],
-      descriptions:device.descriptions,
+      descriptions:foundDevice.descriptions,
       properties:[],
-      ip: device.ip,
-      mqttTopics: `echonetlite2mqtt/elapi/v1/devices/${device.id}`,
-      propertyValues: device.propertiesValue
+      ip: foundDevice.ip,
+      mqttTopics: `echonetlite2mqtt/elapi/v1/devices/${foundDevice.id}`,
+      propertyValues: device.ToProperiesObject(foundDevice.propertiesValue),
+      values: foundDevice.propertiesValue
     };
-    result.properties = device.properties.map((_):ApiDeviceProperty =>({
+    result.properties = foundDevice.properties.map((_):ApiDeviceProperty =>({
       epc: _.epc,
       descriptions: _.descriptions,
       epcAtomic: _.epc,
@@ -162,7 +163,7 @@ export class RestApiController
       writable: _.writable,
       schema: _.schema,
       urlParameters:[],
-      mqttTopics: `echonetlite2mqtt/elapi/v1/devices/${device.id}/properties/${_.name}`,
+      mqttTopics: `echonetlite2mqtt/elapi/v1/devices/${foundDevice.id}/properties/${_.name}`,
       name: _.name
     }));
     res.json(result);
@@ -174,14 +175,14 @@ export class RestApiController
     res: express.Response
   ): void => {
     const deviceId = req.params.deviceId;
-    const device = this.deviceStore.get(deviceId);
-    if(device === undefined){
+    const foundDevice = this.deviceStore.get(deviceId);
+    if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
       return;
     }
     
-    res.json(device.propertiesValue);
+    res.json(device.ToProperiesObject(foundDevice.propertiesValue));
   }
   private getProperty = (
     req: express.Request,
@@ -189,13 +190,13 @@ export class RestApiController
   ): void => {
     const deviceId = req.params.deviceId;
     const propertyName = req.params.propertyName;
-    const device = this.deviceStore.get(deviceId);
-    if(device === undefined){
+    const foundDevice = this.deviceStore.get(deviceId);
+    if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
       return;
     }
-    if((propertyName in device.propertiesValue)===false)
+    if((propertyName in foundDevice.propertiesValue)===false)
     {
       res.status(404);
       res.end('property not found : ' + propertyName);
@@ -203,7 +204,7 @@ export class RestApiController
     }
     const result: {[key:string]:any} = {
     };
-    result[propertyName] = device.propertiesValue[propertyName];
+    result[propertyName] = foundDevice.propertiesValue[propertyName].value;
     res.json(result);
   }
   
@@ -217,14 +218,14 @@ export class RestApiController
   
     console.log(`[RESTAPI] put property: ${deviceId}\t${propertyName}\t${newValue}`)
   
-    const device = this.deviceStore.get(deviceId);
-    if(device === undefined){
+    const foundDevice = this.deviceStore.get(deviceId);
+    if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
       console.log('device not found : ' + deviceId)
       return;
     }
-    if((propertyName in device.propertiesValue)===false)
+    if((propertyName in foundDevice.propertiesValue)===false)
     {
       res.status(404);
       res.end('property not found : ' + propertyName);
@@ -242,7 +243,7 @@ export class RestApiController
     this.firePropertyChangedRequestEvent(deviceId, propertyName, newValue);
   
     const result:{[key:string]:any} = {};
-    result[propertyName] = device.propertiesValue[propertyName];
+    result[propertyName] = foundDevice.propertiesValue[propertyName].value;
     res.json(result);
   }
 
@@ -255,14 +256,14 @@ export class RestApiController
   
     console.log(`[RESTAPI] request property: ${deviceId}\t${propertyName}`)
   
-    const device = this.deviceStore.get(deviceId);
-    if(device === undefined){
+    const foundDevice = this.deviceStore.get(deviceId);
+    if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
       console.log('device not found : ' + deviceId)
       return;
     }
-    if((propertyName in device.propertiesValue)===false)
+    if((propertyName in foundDevice.propertiesValue)===false)
     {
       res.status(404);
       res.end('property not found : ' + propertyName);

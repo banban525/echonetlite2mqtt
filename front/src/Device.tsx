@@ -26,6 +26,7 @@ import { Link, RouteComponentProps } from "react-router-dom";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import EditProperty from "./EditProperty";
+import { isPropertyName } from "typescript";
 
 interface DeviceProps extends RouteComponentProps<{ id: string }> {
   device: DeviceStore;
@@ -108,8 +109,9 @@ export default class Device extends React.Component<DeviceProps> {
               <TableRow>
                 <TableCell></TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>description</TableCell>
+                <TableCell>Description(ja)</TableCell>
                 <TableCell>Value</TableCell>
+                <TableCell>Updated</TableCell>
                 <TableCell>Operation</TableCell>
               </TableRow>
             </TableHead>
@@ -138,9 +140,12 @@ export default class Device extends React.Component<DeviceProps> {
                       <TableCell>
                         <TextField
                           value={Device.getValueText(
-                            store.device.propertyValues[property.name]
+                            store.device.values[property.name].value
                           )}
                         />
+                      </TableCell>
+                      <TableCell>
+                        <p>{store.device.values[property.name].updated}</p>
                       </TableCell>
                       <TableCell>
                         {"get " +
@@ -154,7 +159,7 @@ export default class Device extends React.Component<DeviceProps> {
                       ></TableCell>
                       <TableCell
                         style={{ paddingBottom: 0, paddingTop: 0 }}
-                        colSpan={4}
+                        colSpan={5}
                       >
                         <Collapse
                           in={store.expandedPropertyName === property.name}

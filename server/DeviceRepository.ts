@@ -1,10 +1,10 @@
 import EL, { eldata,facilitiesType,rinfo } from "echonet-lite";
 import all from "../device_descriptions_v1.3.0/all_device_descriptions_v1.3.0.json"
 import { DeviceProperty, DevicePropertySchema, DeviceType, MixedTypePropertySchema } from "./AllDeviceDescriptions";
-import { device, DeviceId, Manufacturer, Property } from "./Property";
+import { device, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
 import { Converter } from "./echoNetLiteParser";
 import { EchoNetConverter } from "./EchoNetConverter";
-
+import dayjs from 'dayjs';
 
 export default class DeviceRepository{
   //private deviceList: device[] = [];
@@ -268,10 +268,15 @@ export default class DeviceRepository{
       console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
     }
 
-    const propertiesValue:{[key:string]:any} = {};
+    const propertiesValue:{[key:string]:PropertyValue} = {};
     for(const property of properties){
       const value = this.getPropertyValue({id,ip,eoj}, property);
-      propertiesValue[property.name] = value;
+      propertiesValue[property.name] = {
+        name: property.name,
+        deviceProperty: property,
+        value: value,
+        updated: dayjs(Date()).format("YYYY-MM-DD HH:mm:ss")
+      };
     }
   
     return {

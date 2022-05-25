@@ -67,12 +67,12 @@ export class MqttController
             return;
           }
 
-          const device = this.deviceStore.get(deviceId);
-          if(device===undefined){
+          const foundDevice = this.deviceStore.get(deviceId);
+          if(foundDevice===undefined){
             //error
             return;
           }
-          const property = device.properties.find(_=>_.name === propertyName);
+          const property = foundDevice.properties.find(_=>_.name === propertyName);
           if(property===undefined){
             //error
             return;
@@ -99,12 +99,12 @@ export class MqttController
             return;
           }
 
-          const device = this.deviceStore.get(deviceId);
-          if(device===undefined){
+          const foundDevice = this.deviceStore.get(deviceId);
+          if(foundDevice===undefined){
             //error
             return;
           }
-          const property = device.properties.find(_=>_.name === propertyName);
+          const property = foundDevice.properties.find(_=>_.name === propertyName);
           if(property===undefined){
             //error
             return;
@@ -144,11 +144,11 @@ export class MqttController
   publishAll = ():void =>{
     this.publishDevices();
     const devices = this.deviceStore.getAll();
-    for(const device of devices){
-      this.publishDevice(device.id);
-      this.publishDeviceProperties(device.id);
-      for(const propertyName in device.propertiesValue){
-        this.publishDeviceProperty(device.id, propertyName);
+    for(const foundDevice of devices){
+      this.publishDevice(foundDevice.id);
+      this.publishDeviceProperties(foundDevice.id);
+      for(const propertyName in foundDevice.propertiesValue){
+        this.publishDeviceProperty(foundDevice.id, propertyName);
       }
     }
   }
@@ -177,25 +177,26 @@ export class MqttController
     if(this.mqttClient===undefined){
       return;
     }
-    const device = this.deviceStore.get(deviceId);
-    if(device===undefined){
+    const foundDevice = this.deviceStore.get(deviceId);
+    if(foundDevice===undefined){
       // error
       return;
     }
 
     const result: ApiDevice = {
-      id: device.id,
-      eoj: device.eoj,
+      id: foundDevice.id,
+      eoj: foundDevice.eoj,
       actions:[],
-      deviceType: device.deviceType,
+      deviceType: foundDevice.deviceType,
       events:[],
-      descriptions:device.descriptions,
+      descriptions:foundDevice.descriptions,
       properties:[],
-      ip: device.ip,
-      mqttTopics: `${this.baseTopic}/${device.id}`,
-      propertyValues: device.propertiesValue
+      ip: foundDevice.ip,
+      mqttTopics: `${this.baseTopic}/${foundDevice.id}`,
+      propertyValues: device.ToProperiesObject(foundDevice.propertiesValue),
+      values: foundDevice.propertiesValue
     };
-    result.properties = device.properties.map((_):ApiDeviceProperty =>({
+    result.properties = foundDevice.properties.map((_):ApiDeviceProperty =>({
       epc: _.epc,
       descriptions: _.descriptions,
       epcAtomic: _.epc,
@@ -207,10 +208,10 @@ export class MqttController
       writable: _.writable,
       schema: _.schema,
       urlParameters:[],
-      mqttTopics: `${this.baseTopic}/${device.id}/properties/${_.name}`,
+      mqttTopics: `${this.baseTopic}/${foundDevice.id}/properties/${_.name}`,
       name: _.name
     }));
-    this.mqttClient.publish(`${this.baseTopic}/${device.id}`, JSON.stringify(result), {
+    this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}`, JSON.stringify(result), {
       retain:true
     });
   }
@@ -219,12 +220,12 @@ export class MqttController
     if(this.mqttClient===undefined){
       return;
     }
-    const device = this.deviceStore.get(deviceId);
-    if(device === undefined){
+    const foundDevice = this.deviceStore.get(deviceId);
+    if(foundDevice === undefined){
       // error
       return;
     }
-    this.mqttClient.publish(`${this.baseTopic}/${device.id}/properties`, JSON.stringify(device.propertiesValue), {
+    this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}/properties`, JSON.stringify(device.ToProperiesObject(foundDevice.propertiesValue)), {
       retain:true
     });
   }
@@ -234,13 +235,13 @@ export class MqttController
       return;
     }
 
-    const device = this.deviceStore.get(deviceId);
-    if(device === undefined){
+    const foundDevice = this.deviceStore.get(deviceId);
+    if(foundDevice === undefined){
       // error
       return;
     }
     this.publishDeviceProperties(deviceId);
-    for(const propertyName in device.propertiesValue)
+    for(const propertyName in foundDevice.propertiesValue)
     {
       this.publishDeviceProperty(deviceId, propertyName);
     }
@@ -249,17 +250,17 @@ export class MqttController
     if(this.mqttClient===undefined){
       return;
     }
-    const device = this.deviceStore.get(deviceId);
-    if(device === undefined){
+    const foundDevice = this.deviceStore.get(deviceId);
+    if(foundDevice === undefined){
       // error
       return;
     }
-    if((propertyName in device.propertiesValue)===false){
+    if((propertyName in foundDevice.propertiesValue)===false){
       // error
       return ;
     }
-    this.mqttClient.publish(`${this.baseTopic}/${device.id}/properties/${propertyName}`, 
-      this.getValueText(device.propertiesValue[propertyName]), {
+    this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}/properties/${propertyName}`, 
+      this.getValueText(foundDevice.propertiesValue[propertyName].value), {
         retain:true,
       });
   }

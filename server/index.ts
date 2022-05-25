@@ -205,13 +205,14 @@ echoNetListController.addPropertyChnagedEvent((id:DeviceId, propertyName:string,
   if(oldValue===undefined){
     return;
   }
+
+  deviceStore.changeProperty(id.id, propertyName, newValue);
+  mqttController.publishDeviceProperties(id.id);
+  mqttController.publishDeviceProperty(id.id, propertyName);
+  eventRepository.newEvent(`${id.id}`);
   if(JSON.stringify(oldValue) !== JSON.stringify(newValue))
   {
-    deviceStore.changeProperty(id.id, propertyName, newValue);
-    mqttController.publishDeviceProperties(id.id);
-    mqttController.publishDeviceProperty(id.id, propertyName);
     logger.output(`[ECHONETLite] prop changed: ${id.id} ${id.ip} ${id.eoj} ${propertyName} ${newValue}`);
-    eventRepository.newEvent(`${id.id}`);
     eventRepository.newEvent(`LOG`);
     restApiController.setNewEvent();
   }
@@ -229,7 +230,24 @@ restApiController.addPropertyChangedRequestEvent((deviceId:string, propertyName:
   eventRepository.newEvent(`LOG`);
 
   echoNetListController.setDeviceProperty({id: deviceId, ip: device.ip, eoj:device.eoj}, propertyName, newValue);
-})
+});
+restApiController.addPropertyRequestedRequestEvent((deviceId:string, propertyName:string):void=>{
+  const device = deviceStore.get(deviceId);
+  if(device === undefined){
+    logger.output('[RESTAPI] device not found : ' + deviceId)
+    return;
+  }
+  if((propertyName in device.propertiesValue)===false)
+  {
+    logger.output('[RESTAPI] property not found : ' + propertyName)
+    return;
+  }
+
+  logger.output(`[RESTAPI] property reuqested id:${deviceId}, property:${propertyName}`);
+  eventRepository.newEvent(`LOG`);
+
+  echoNetListController.requestDeviceProperty({id: deviceId, ip: device.ip, eoj:device.eoj}, propertyName);
+});
 
 const mqttController = new MqttController(deviceStore, mqttBroker, mqttOption, mqttBaseTopic);
 mqttController.addPropertyChnagedEvent((deviceId:string, propertyName:string, value:any):void=>{

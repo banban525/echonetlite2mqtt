@@ -66,6 +66,14 @@ export interface ApiDevice{
   actions:ApiDeviceAction[];
   events:object[];
   propertyValues: any;
+  values: {[key:string]:ApiDevicePropertyValue}
+}
+
+export interface ApiDevicePropertyValue
+{
+  name:string;
+  value:any;
+  updated:string;  // YYYY-MM-DD HH:mm:ss
 }
 
 export   interface ApiDeviceProperty{
