@@ -73,7 +73,7 @@ ECHONET Lite Options
 
 |  Environment Variables | Commandline Parameter | Description |
 | ------------------     | --------------------- | ----------- |
-| `ECHONET_TARGET_NETWORK` | `--echonetTargetNetwor` | Specify the network for ECHONET Lite in the format "000.000.000.000/00". (Default: Auto) |
+| `ECHONET_TARGET_NETWORK` | `--echonetTargetNetwork` | Specify the network for ECHONET Lite in the format "000.000.000.000/00". (Default: Auto) |
 
 
 ### Use docker
@@ -145,6 +145,24 @@ banban525/echonetlite2mqtt
 npm start -- --MqttBroker "mqtt://your.mqtt.brocker" --MqttOptionFile /(any folder)/config.json
 ```
 
+### Property values are not updated automatically
+
+#### (1) This application may not work properly if the execution environment has multiple IPs.
+
+If your execution environment has multiple IPs, try the environment variable `ECHONET_TARGET_NETWORK` or the command line parameter `--echonetTargetNetwork` .
+* Example 1: `-e ECHONET_TARGET_NETWORK "192.168.1.0/24" `
+* Example 2: `--echonetTargetNetwork "192.168.1.0/24"`
+
+#### (2) ECHONET Lite devices may not automatically send property values.
+
+You can reload the properties on the web screen.
+If you can reload from the web screen, you can manually update the properties by sending an MQTT topic.
+
+For example, if you want to update the room temperature value of an air conditioner, send the following MQTT topic.
+(Replace "fe00-your-device-id-00000000000000" with your device ID.)
+```
+echonetlite2mqtt/elapi/v1/devices/fe00-your-device-id-00000000000000/properties/roomTemperature/request
+```
 
 ## Third party use
 
