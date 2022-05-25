@@ -17,7 +17,7 @@ export interface PropertyValue
   updated:string; // YYYY-NN-DD HH:mm:ss
 }
 
-export interface device{
+export interface Device{
   id:string;
   ip:string;
   deviceType:string;
@@ -35,7 +35,7 @@ export interface device{
   propertiesValue: {[key:string]:PropertyValue};
 }
 
-export class device{
+export class Device{
   public static ToProperiesObject(propertyValues:{[key:string]:PropertyValue}):{[key:string]:any}
   {
     const result:{[key:string]:any}= {};

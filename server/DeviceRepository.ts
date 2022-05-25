@@ -1,7 +1,7 @@
 import EL, { eldata,facilitiesType,rinfo } from "echonet-lite";
 import all from "../device_descriptions_v1.3.0/all_device_descriptions_v1.3.0.json"
 import { DeviceProperty, DevicePropertySchema, DeviceType, MixedTypePropertySchema } from "./AllDeviceDescriptions";
-import { device, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
+import { Device, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
 import { Converter } from "./echoNetLiteParser";
 import { EchoNetConverter } from "./EchoNetConverter";
 import dayjs from 'dayjs';
@@ -54,7 +54,7 @@ export default class DeviceRepository{
     return result;
   }
 
-  public createDevice = (deviceId:DeviceId, echonetLiteFacilities:facilitiesType):device|undefined => {
+  public createDevice = (deviceId:DeviceId, echonetLiteFacilities:facilitiesType):Device|undefined => {
 
     const getPropertyNoList = this.convertGetPropertyNoList(deviceId.ip, deviceId.eoj, echonetLiteFacilities);
     if(getPropertyNoList === undefined)
@@ -177,7 +177,7 @@ export default class DeviceRepository{
       setPropertyNoList:string[], 
       notifyPropertyNoList:string[],
       echoNetRawData: {[key:string]:string},
-      manufacturer:Manufacturer):device =>
+      manufacturer:Manufacturer):Device =>
   {
     const eojClass = "0x" + eoj.substring(0, 4).toUpperCase();
     const matchedDeviceTypes = all.devices.filter(_=>_.eoj === eojClass);

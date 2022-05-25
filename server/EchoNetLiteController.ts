@@ -2,7 +2,7 @@ import EL, { eldata,rinfo } from "echonet-lite";
 import DeviceRepository from "./DeviceRepository";
 import os from "os";
 import ip from "ip";
-import { device, DeviceId } from "./Property";
+import { Device, DeviceId } from "./Property";
 
 
 export class EchoNetLiteController{
@@ -108,7 +108,7 @@ export class EchoNetLiteController{
       return this.detectedDeviceIds;
     }
   
-    getDevice = (id:DeviceId):device|undefined => {
+    getDevice = (id:DeviceId):Device|undefined => {
       const deviceRepository = new DeviceRepository();
   
       const device = deviceRepository.createDevice(id, EL.facilities);

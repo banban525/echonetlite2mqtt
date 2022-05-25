@@ -3,7 +3,7 @@ import { ApiDevice, ApiDeviceProperty, ApiDeviceSummary, ApiService, ApiVersion,
 import { DeviceStore } from "./DeviceStore";
 import { EventRepository } from "./EventRepository";
 import { LogRepository } from "./LogRepository";
-import { device } from "./Property";
+import { Device } from "./Property";
 
 export class RestApiController
 {
@@ -110,7 +110,7 @@ export class RestApiController
     req: express.Request,
     res: express.Response
   ): void => {
-    const result = this.deviceStore.getAll().map((_:device):ApiDeviceSummary=>(
+    const result = this.deviceStore.getAll().map((_:Device):ApiDeviceSummary=>(
       {
         id: _.id,
         deviceType: _.deviceType,
@@ -148,7 +148,7 @@ export class RestApiController
       properties:[],
       ip: foundDevice.ip,
       mqttTopics: `echonetlite2mqtt/elapi/v1/devices/${foundDevice.id}`,
-      propertyValues: device.ToProperiesObject(foundDevice.propertiesValue),
+      propertyValues: Device.ToProperiesObject(foundDevice.propertiesValue),
       values: foundDevice.propertiesValue
     };
     result.properties = foundDevice.properties.map((_):ApiDeviceProperty =>({
@@ -182,7 +182,7 @@ export class RestApiController
       return;
     }
     
-    res.json(device.ToProperiesObject(foundDevice.propertiesValue));
+    res.json(Device.ToProperiesObject(foundDevice.propertiesValue));
   }
   private getProperty = (
     req: express.Request,

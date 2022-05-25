@@ -1,4 +1,4 @@
-import { device, DeviceId } from "./Property";
+import { Device, DeviceId } from "./Property";
 import { MqttController } from "./MqttController";
 import { DeviceStore } from "./DeviceStore";
 import { EchoNetLiteController } from "./EchoNetLiteController";

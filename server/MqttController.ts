@@ -1,7 +1,7 @@
 import mqtt, { IPublishPacket, ISubscriptionGrant } from "mqtt";
 import { DeviceStore } from "./DeviceStore";
 import { ApiDevice, ApiDeviceProperty, ApiDeviceSummary } from "./ApiTypes";
-import { device } from "./Property";
+import { Device } from "./Property";
 import { DevicePropertySchema } from "*/device_descriptions_v1.3.0/all_device_descriptions_v1.3.0.json";
 import { isBuffer } from "util";
 
@@ -157,7 +157,7 @@ export class MqttController
     if(this.mqttClient===undefined){
       return;
     }
-    const result = this.deviceStore.getAll().map((_:device):ApiDeviceSummary=>(
+    const result = this.deviceStore.getAll().map((_:Device):ApiDeviceSummary=>(
       {
         id: _.id,
         deviceType: _.deviceType,
@@ -193,7 +193,7 @@ export class MqttController
       properties:[],
       ip: foundDevice.ip,
       mqttTopics: `${this.baseTopic}/${foundDevice.id}`,
-      propertyValues: device.ToProperiesObject(foundDevice.propertiesValue),
+      propertyValues: Device.ToProperiesObject(foundDevice.propertiesValue),
       values: foundDevice.propertiesValue
     };
     result.properties = foundDevice.properties.map((_):ApiDeviceProperty =>({
@@ -225,7 +225,7 @@ export class MqttController
       // error
       return;
     }
-    this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}/properties`, JSON.stringify(device.ToProperiesObject(foundDevice.propertiesValue)), {
+    this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}/properties`, JSON.stringify(Device.ToProperiesObject(foundDevice.propertiesValue)), {
       retain:true
     });
   }

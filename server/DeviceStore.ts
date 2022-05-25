@@ -1,21 +1,21 @@
 import dayjs from "dayjs";
-import { device } from "./Property";
+import { Device } from "./Property";
 
 
 export class DeviceStore{
 
-    private list:device[] = [];
+    private list:Device[] = [];
   
     public exists = (id:string):boolean=>{
       return this.list.find(_=>_.id === id) !== undefined;
     }
-    public add = (device:device):void=>{
+    public add = (device:Device):void=>{
       this.list.push(device);
     }
-    public get = (id:string):Readonly<device>|undefined => {
+    public get = (id:string):Readonly<Device>|undefined => {
       return this.list.find(_=>_.id === id);
     }
-    public getAll = ():Readonly<device>[] => {
+    public getAll = ():Readonly<Device>[] => {
       return this.list.slice();
     }
     public getIds = ():string[] => {
