@@ -164,6 +164,14 @@ For example, if you want to update the room temperature value of an air conditio
 echonetlite2mqtt/elapi/v1/devices/fe00-your-device-id-00000000000000/properties/roomTemperature/request
 ```
 
+#### (3) I want to specify the set temperature of the air conditioner in units of 0.5 degrees.
+
+This is not possible as the ECHONET Lite "Set temperature value" (ja:温度設定値) specification is in units of 1 degree.
+
+See specs below.
+(ja) https://echonet.jp/spec_g/#standard-05
+(en) https://echonet.jp/spec-en/#standard-05
+
 ## Third party use
 
 * The images in the repository use materials such as "いらすとや" (https://www.irasutoya.com/).
