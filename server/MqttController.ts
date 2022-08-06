@@ -22,6 +22,10 @@ export class MqttController
   public ConnectionState: "Connected"|"Disconnected" = "Disconnected";
 
   public start = ():void =>{
+    if(this.mqttBroker === "")
+    {
+      return;
+    }
     console.log(`[MQTT] connect to ${this.mqttBroker} ...`);
     this.mqttClient = mqtt.connect(this.mqttBroker, this.mqttOption);
     

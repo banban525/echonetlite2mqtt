@@ -296,5 +296,9 @@ mqttController.addConnectionStateChangedEvent(():void=>{
 
 echoNetListController.start();
 restApiController.start();
-mqttController.start();
+if(mqttBroker === "")
+{
+  logger.output(`[MQTT] mqttBroker is not configured.`);
+  mqttController.start();
+}
 
