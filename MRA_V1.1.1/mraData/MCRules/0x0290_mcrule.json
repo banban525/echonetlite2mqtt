@@ -1,0 +1,50 @@
+{
+  "eoj": "0x0290",
+  "properties": [
+    {
+      "epc": "0x80",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC0",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "1Byte目:R",
+              "en": "Byte 1: R"
+            },
+            "shortName": "red",
+            "element": {
+              "$ref": "#/definitions/number_0-255",
+              "multipleOf": 1
+            }
+          },
+          {
+            "elementName": {
+              "ja": "2Byte目:G",
+              "en": "Byte 2: G"
+            },
+            "shortName": "green",
+            "element": {
+              "$ref": "#/definitions/number_0-255",
+              "multipleOf": 1
+            }
+          },
+          {
+            "elementName": {
+              "ja": "3Byte目:B",
+              "en": "Byte 3: B"
+            },
+            "shortName": "blue",
+            "element": {
+              "$ref": "#/definitions/number_0-255",
+              "multipleOf": 1
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

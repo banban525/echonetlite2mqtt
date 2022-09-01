@@ -1,0 +1,102 @@
+{
+  "eoj": "0x0000",
+  "properties": [
+    {
+      "epc": "0x81",
+      "data": {
+        "$ref": "#/definitions/raw_17"
+      }
+    },
+    {
+      "epc": "0x82",
+      "propertyName": {
+        "ja": "Protocol version情報",
+        "en": "Protocol version information"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "shortName": "type",
+            "element": {
+              "type": "raw"
+            }
+          },
+          {
+            "shortName": "version",
+            "element": {
+              "type": "raw"
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "example: type: ECHONET_Lite v1.13, version: Rel.P",
+        "en": "example: type: ECHONET_Lite v1.13, version: Rel.P"
+      }
+    },
+    {
+      "epc": "0x8A",
+      "propertyName": {
+        "ja": "メーカー",
+        "en": "Manufacturer"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "shortName": "code",
+            "element": {
+              "type": "raw"
+            }
+          },
+          {
+            "shortName": "descriptions",
+            "element": {
+              "type": "object",
+              "properties": [
+                {
+                  "shortName": "ja",
+                  "element": {
+                    "type": "raw"
+                  }
+                },
+                {
+                  "shortName": "en",
+                  "element": {
+                    "type": "raw"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x8D",
+      "propertyName": {
+        "ja": "製造番号",
+        "en": "Serial number"
+      }
+    },
+    {
+      "epc": "0x93",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x98",
+      "propertyName": {
+        "ja": "現在日時",
+        "en": "Current date and time"
+      },
+      "data": {
+        "type": "date-time"
+      },
+      "note": {
+          "ja": "ECHONET Lite の プロパティ EPC: 0x97 と 0x98 を組み合わせて利用",
+          "en": "This property utilizes both EPC: 0x97 and 0x98."
+      }
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "eoj": "0x03D4",
+  "validRelease": {
+    "from": "F",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "業務用ショーケース向け室外機",
+    "en": "Commercial show case outdoor unit"
+  },
+  "shortName": "commercialShowcaseOutdoorUnit",
+  "elProperties": [
+    {
+      "epc": "0xAA",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "特殊状態",
+        "en": "Indicates that the showcase freezer is in an exceptional status."
+      },
+      "shortName": "exceptionalStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケース冷凍機が特殊状態にあることを示す",
+        "en": "Indicates that the showcase freezer is in an exceptional status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "除霜状態",
+              "en": "Defrosting status"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "false",
+            "descriptions": {
+              "ja": "通常状態",
+              "en": "Normal status"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "F",
+        "to": "H"
+      },
+      "propertyName": {
+        "ja": "運転モード",
+        "en": "Operation mode setting"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "冷却、非冷、その他の運転モードを設定し、設定状態を取得する",
+        "en": "Used to set cooling, non-cooling, and other operating modes and to acquire the setting status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "cooling",
+            "descriptions": {
+              "ja": "冷却",
+              "en": "Cooling"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "nonCooling",
+            "descriptions": {
+              "ja": "非冷",
+              "en": "Non-cooling"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転モード設定",
+        "en": "Operation mode setting"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "冷却、非冷、その他の運転モードを設定し、設定状態を取得する",
+        "en": "Used to set cooling, non-cooling, and other operating modes and to acquire the setting status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "cooling",
+            "descriptions": {
+              "ja": "冷却",
+              "en": "Cooling"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "nonCooling",
+            "descriptions": {
+              "ja": "非冷",
+              "en": "Non-cooling"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBE",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "外気温度計測値",
+        "en": "Used to acquire measurements of outdoor air temperature."
+      },
+      "shortName": "outdoorAirTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "外気温度の計測値を取得する",
+        "en": "Used to acquire measurements of outdoor air temperature."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-125Celsius"
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "F",
+        "to": "H"
+      },
+      "propertyName": {
+        "ja": "グループ情報",
+        "en": "Group information"
+      },
+      "shortName": "groupInformation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースとショーケース向け室外機との紐づけをするための情報",
+        "en": "Information to link showcases with outdoor units for showcases."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1"
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "グループ情報",
+        "en": "Group information"
+      },
+      "shortName": "groupInformation",
+      "accessRule": {
+        "get": "required",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースとショーケース向け室外機との紐づけをするための情報",
+        "en": "Information to link showcases with outdoor units for showcases."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-253"
+          },
+          {
+            "$ref": "#/definitions/state_None_00"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "コンプレッサ動作状態",
+        "en": "Indicates compressor ON/OFF status."
+      },
+      "shortName": "compressorOperationStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "コンプレッサのON/OFFの状態を示す",
+        "en": "Indicates compressor ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFFA_3031"
+      }
+    }
+  ]
+}

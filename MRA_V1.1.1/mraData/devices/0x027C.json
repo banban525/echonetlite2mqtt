@@ -1,0 +1,904 @@
+{
+  "eoj": "0x027C",
+  "validRelease": {
+    "from": "C",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "燃料電池",
+    "en": "Fuel cell"
+  },
+  "shortName": "fuelCell",
+  "elProperties": [
+    {
+      "epc": "0xC1",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "温水器湯温計測値",
+        "en": "Measured temperature of water in water heater"
+      },
+      "shortName": "waterTemperatureInWaterHeater",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "温水器内の現在湯温を℃で示す",
+        "en": "This property indicates the current temperature of the water in the water heater in C."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100Celsius"
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "C",
+        "to": "I"
+      },
+      "propertyName": {
+        "ja": "定格発電量",
+        "en": "Rated power generation output"
+      },
+      "shortName": "ratedElectricPowerOfGeneration",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "定格発電量をWで示す",
+        "en": "This property indicates the rated power generation output in watts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定格発電出力",
+        "en": "Rated power generation output"
+      },
+      "shortName": "ratedElectricPowerOfGeneration",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "定格発電量をWで示す",
+        "en": "This property indicates the rated power generation output in watts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xC3",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "貯湯槽熱量",
+        "en": "Heating value of hot water storage tank"
+      },
+      "shortName": "heatCapacityOfStorageTank",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "貯湯タンクの熱量をMJで示す",
+        "en": "This property indicates the heating value of the hot water storage tank in MJ."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533MJ"
+      }
+    },
+    {
+      "epc": "0xC4",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時発電電力計測値",
+        "en": "Measured instantaneous power generation output"
+      },
+      "shortName": "instantaneousElectricPowerOfGeneration",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時発電電力をWで示す",
+        "en": "This property indicates the instantaneous power generation output in watts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xC5",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算発電電力量計測値",
+        "en": "Measured cumulative power generation output"
+      },
+      "shortName": "cumulativeElectricEnergyOfGeneration",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量0.001kWhで示す",
+        "en": "This property indicates the cumulative power generation output in units of 0.001kWh."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999kWh"
+      },
+      "remark": {
+        "ja": "オーバーフロー時は0にリセット",
+        "en": "The value is reset to 0 after overflow."
+      }
+    },
+    {
+      "epc": "0xC6",
+      "validRelease": {
+        "from": "C",
+        "to": "N"
+      },
+      "propertyName": {
+        "ja": "積算発電電力量リセット設定",
+        "en": "Cumulative power generation output reset setting"
+      },
+      "shortName": "cumulativePowerGenerationOutputReset",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "0x00を書き込むことにより積算発電電力量をリセットする",
+        "en": "Resets the cumulative power generation output by writing 0x00."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reset_00"
+      },
+      "note": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      }
+    },
+    {
+      "epc": "0xC6",
+      "validRelease": {
+        "from": "P",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算発電電力量リセット設定",
+        "en": "Cumulative energy generation output reset setting"
+      },
+      "shortName": "cumulativeEnergyGenerationOutputReset",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "0x00を書き込むことにより積算発電電力量をリセットする",
+        "en": "Resets the cumulative energy generation output by writing 0x00."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reset_00"
+      },
+      "note": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      }
+    },
+    {
+      "epc": "0xC7",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時ガス消費量計測値",
+        "en": "Measured instantaneous gas consumption"
+      },
+      "shortName": "instantaneousGasConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時ガス消費量を0.001m3/hで示す",
+        "en": "This property indicates the instantaneous gas consumption in units of 0.001m3/h."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65.533m3h"
+      }
+    },
+    {
+      "epc": "0xC8",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算ガス消費量計測値",
+        "en": "Measured cumulative gas consumption"
+      },
+      "shortName": "cumulativeGasConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算ガス消費量を0.001m3で示す",
+        "en": "This property indicates the cumulative gas consumption in units of 0.001m3."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999m3"
+      },
+      "remark": {
+        "ja": "オーバーフロー時は0にリセット",
+        "en": "The value is reset to 0 after overflow."
+      }
+    },
+    {
+      "epc": "0xC9",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算ガス消費量リセット設定",
+        "en": "Cumulative gas consumption reset setting"
+      },
+      "shortName": "cumulativeGasConsumptionReset",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "0x00を書き込むことにより積算ガス消費量をリセットする",
+        "en": "Resets the cumulative gas consumption by writing 0x00."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reset_00"
+      },
+      "note": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "C",
+        "to": "C"
+      },
+      "propertyName": {
+        "ja": "発電動作設定",
+        "en": "Power generation setting"
+      },
+      "shortName": "powerGenerationSetting",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "発電の動作/停止設定を示す",
+        "en": "This property indicates the setting of start or stop of power generation."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "generationOn",
+            "descriptions": {
+              "ja": "発電動作",
+              "en": "Power generation ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "generationOff",
+            "descriptions": {
+              "ja": "発電停止",
+              "en": "Power generation OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "発電動作設定",
+        "en": "Power generation setting"
+      },
+      "shortName": "powerGenerationSetting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "発電の動作/停止設定を示す",
+        "en": "This property indicates the setting of start or stop of power generation."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "generationOn",
+            "descriptions": {
+              "ja": "発電動作",
+              "en": "Power generation ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "generationOff",
+            "descriptions": {
+              "ja": "発電停止",
+              "en": "Power generation OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCB",
+      "validRelease": {
+        "from": "C",
+        "to": "I"
+      },
+      "propertyName": {
+        "ja": "発電動作状態",
+        "en": "Power generation status"
+      },
+      "shortName": "powerGenerationStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "発電の動作状態を示す",
+        "en": "This property indicates the power generation status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "generating",
+            "descriptions": {
+              "ja": "発電中",
+              "en": "Generating"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "stopped",
+            "descriptions": {
+              "ja": "停止中",
+              "en": "Stopped"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "starting",
+            "descriptions": {
+              "ja": "起動中",
+              "en": "Starting"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "stopping",
+            "descriptions": {
+              "ja": "停止動作中",
+              "en": "Stopping"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "idling",
+            "descriptions": {
+              "ja": "アイドル中",
+              "en": "Idling"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCB",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "発電動作状態",
+        "en": "Power generation status"
+      },
+      "shortName": "powerGenerationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "発電の動作状態を示す",
+        "en": "This property indicates the power generation status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "generating",
+            "descriptions": {
+              "ja": "発電中",
+              "en": "Generating"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "stopped",
+            "descriptions": {
+              "ja": "停止中",
+              "en": "Stopped"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "starting",
+            "descriptions": {
+              "ja": "起動中",
+              "en": "Starting"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "stopping",
+            "descriptions": {
+              "ja": "停止動作中",
+              "en": "Stopping"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "idling",
+            "descriptions": {
+              "ja": "アイドル中",
+              "en": "Idling"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCC",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "宅内瞬時消費電力計測値",
+        "en": "Measured in-house instantaneous power consumption"
+      },
+      "shortName": "inHouseInstantaneousPowerConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "宅内の瞬時消費電力をWで示す",
+        "en": "This property indicates the measured in-house instantaneous power consumption in watts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xCD",
+      "validRelease": {
+        "from": "C",
+        "to": "N"
+      },
+      "propertyName": {
+        "ja": "宅内積算消費電力量計測値",
+        "en": "Measured in-house cumulative power consumption"
+      },
+      "shortName": "inHouseCumulativePowerConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "宅内の積算消費電力量を0.001kWhで示す",
+        "en": "This property indicates the measured in-house cumulative power consumption in units of 0.001kWh."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999kWh"
+      },
+      "remark": {
+        "ja": "オーバーフロー時は0にリセット",
+        "en": "The value is reset to 0 after overflow."
+      }
+    },
+    {
+      "epc": "0xCD",
+      "validRelease": {
+        "from": "P",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "宅内積算消費電力量計測値",
+        "en": "Measured in-house cumulative energy consumption"
+      },
+      "shortName": "inHouseCumulativeEnergyConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "宅内の積算消費電力量を0.001kWhで示す",
+        "en": "This property indicates the measured in-house cumulative energy consumption in units of 0.001kWh."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999kWh"
+      },
+      "remark": {
+        "ja": "オーバーフロー時は0にリセット",
+        "en": "The value is reset to 0 after overflow."
+      }
+    },
+    {
+      "epc": "0xCE",
+      "validRelease": {
+        "from": "C",
+        "to": "N"
+      },
+      "propertyName": {
+        "ja": "宅内積算消費電力量リセット設定",
+        "en": "In-house cumulative power consumption reset"
+      },
+      "shortName": "inHouseCumulativePowerConsumptionReset",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "0x00を書き込むことにより宅内の積算発電電力量をリセットする",
+        "en": "This property is set to 0x00 to reset the in-house cumulative power consumption."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reset_00"
+      },
+      "note": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      }
+    },
+    {
+      "epc": "0xCE",
+      "validRelease": {
+        "from": "P",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "宅内積算消費電力量リセット設定",
+        "en": "In-house cumulative energy consumption reset"
+      },
+      "shortName": "inHouseCumulativeEnergyConsumptionReset",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "0x00を書き込むことにより宅内の積算発電電力量をリセットする",
+        "en": "This property is set to 0x00 to reset the in-house cumulative energy consumption."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reset_00"
+      },
+      "note": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "B",
+        "to": "I"
+      },
+      "propertyName": {
+        "ja": "系統連系状態",
+        "en": "System interconnected type"
+      },
+      "shortName": "powerSystemInterconnectionStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "系統連系状態のタイプを示す",
+        "en": "This property indicates the status of interconnection with the system."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "name": "reversePowerFlowAcceptable",
+            "descriptions": {
+              "ja": "系統連系 (逆潮流可)",
+              "en": "System interconnected type (reverse power flow acceptable)"
+            }
+          },
+          {
+            "edt": "0x01",
+            "name": "independent",
+            "descriptions": {
+              "ja": "独立",
+              "en": "Independent type"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "reversePowerFlowNotAcceptable",
+            "descriptions": {
+              "ja": "系統連系 (逆潮流不可)",
+              "en": "System interconnected type (reverse power flow not acceptable)"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "系統連系状態",
+        "en": "System interconnected type"
+      },
+      "shortName": "powerSystemInterconnectionStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "系統連系状態のタイプを示す",
+        "en": "This property indicates the status of interconnection with the system."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "name": "reversePowerFlowAcceptable",
+            "descriptions": {
+              "ja": "系統連系 (逆潮流可)",
+              "en": "System interconnected type (reverse power flow acceptable)"
+            }
+          },
+          {
+            "edt": "0x01",
+            "name": "independent",
+            "descriptions": {
+              "ja": "独立",
+              "en": "Independent type"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "reversePowerFlowNotAcceptable",
+            "descriptions": {
+              "ja": "系統連系 (逆潮流不可)",
+              "en": "System interconnected type (reverse power flow not acceptable)"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "発電要請時刻設定",
+        "en": "Power generation request time setting"
+      },
+      "shortName": "requestedTimeOfGeneration",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "燃料電池が発電実施を要請されている開始時刻と終了時刻を列挙する",
+        "en": "Start times and end times that are requested power generation by fuel cells shall be listed."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": [
+              {
+                "elementName": {
+                  "ja": "開始時刻",
+                  "en": "Start time"
+                },
+                "shortName": "startTime",
+                "element": {
+                  "$ref": "#/definitions/time_2"
+                }
+              },
+              {
+                "elementName": {
+                  "ja": "終了時刻",
+                  "en": "End time"
+                },
+                "shortName": "endTime",
+                "element": {
+                  "$ref": "#/definitions/time_2"
+                }
+              }
+            ]
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_FFFFFFFF"
+          }
+        ]
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "指定発電状態",
+        "en": "Designated power generation status"
+      },
+      "shortName": "powerGenerationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "発電要請時刻内の燃料電池の発電時の発電方法を設定し、設定状態を取得する",
+        "en": "Used to specify the power generation method when a fuel cell generates power within the power generation requested time."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "maximumRating",
+            "descriptions": {
+              "ja": "定格最大での発電",
+              "en": "Power generation at the maximum rating"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "loadFollowing",
+            "descriptions": {
+              "ja": "負荷追従での発電",
+              "en": "Load following power generation"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "残湯量計測値",
+        "en": "Measured remaining hot water amount"
+      },
+      "shortName": "remainingHotWaterAmount",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "残湯量計測値を㍑で示す",
+        "en": "This property indicates the measured amount of remaining hot water in liters."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533L"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "タンク容量値",
+        "en": "Tank capacity"
+      },
+      "shortName": "tankCapacity",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タンク容量値を㍑で示す",
+        "en": "This property indicates the tank capacity in liters."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533L"
+      }
+    }
+  ]
+}

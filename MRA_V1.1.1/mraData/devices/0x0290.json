@@ -1,0 +1,874 @@
+{
+  "eoj": "0x0290",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "一般照明",
+    "en": "General lighting"
+  },
+  "shortName": "generalLighting",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operation status"
+      },
+      "shortName": "operationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ON/OFFの状態を示す",
+        "en": "This property indicates the ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0x90",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ予約設定",
+        "en": "ON timer reservation setting"
+      },
+      "shortName": "onTimerReservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切",
+        "en": "Reservation ON/OFF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "予約入",
+              "en": "Reservation ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "予約切",
+              "en": "Reservation OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x91",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ時刻設定値",
+        "en": "ON timer setting"
+      },
+      "shortName": "onTimerTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0x94",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFFタイマ予約設定",
+        "en": "OFF timer reservation setting"
+      },
+      "shortName": "offTimerReservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切",
+        "en": "Reservation ON/OFF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "予約入",
+              "en": "Reservation ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "予約切",
+              "en": "Reservation OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x95",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFFタイマ時刻設定値",
+        "en": "Time set by OFF timer"
+      },
+      "shortName": "timeOfOffTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "照明の明るさ設定",
+        "en": "Light level"
+      },
+      "shortName": "lightLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "照明の明るさを%で示す",
+        "en": "This property indicates light level in %."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "A",
+        "to": "B"
+      },
+      "propertyName": {
+        "ja": "光色設定",
+        "en": "Light color setting"
+      },
+      "shortName": "lightColor",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "光色を設定する",
+        "en": "This property indicates the color setting."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LightColor_41-44"
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "C",
+        "to": "M"
+      },
+      "propertyName": {
+        "ja": "光色設定",
+        "en": "Light color setting"
+      },
+      "shortName": "lightColor",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "光色を設定する",
+        "en": "This property indicates the color setting."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LightColor_40-44"
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "光色設定",
+        "en": "Light color setting"
+      },
+      "shortName": "lightColor",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "光色を設定する",
+        "en": "This property indicates the color setting."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LightColor_40-44FD"
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "照明の明るさ段数設定",
+        "en": "Light level step setting"
+      },
+      "shortName": "lightLevelStep",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "照明の明るさを段数で設定し、設定状態を取得する",
+        "en": "Used to specify the light level in terms of steps and acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1"
+      },
+      "note": {
+        "ja": "0x01～設定可能照明の明るさ最大値(暗～明)",
+        "en": "From 0x01 to the maximum specifiable light level value (dark to bright)"
+      }
+    },
+    {
+      "epc": "0xB3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "光色レベル段数設定",
+        "en": "Light color step setting"
+      },
+      "shortName": "lightColorLevelStep",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "光色レベルを段数で設定し、設定状態を取得する",
+        "en": "Used to specify the light color in terms of steps and acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1"
+      },
+      "note": {
+        "ja": "0x01～設定可能光色レベル最大値(電球色～白色)",
+        "en": "From 0x01 to the maximum specifiable light color value (incandescent lamp color to white)"
+      }
+    },
+    {
+      "epc": "0xB4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "設定可能レベル最大値",
+        "en": "Maximum specifiable values"
+      },
+      "shortName": "maximumSpecifiableLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常灯モード時の照明の明るさ及び光色設定可能レベル最大値を取得する",
+        "en": "Used to acquire the maximum specifiable light level value and the maximum specifiable light color value of main lighting."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "1Byte目:照明の明るさ",
+              "en": "Byte 1: light level"
+            },
+            "shortName": "lightLevel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-255"
+                },
+                {
+                  "type": "state",
+                  "size": 1,
+                  "enum": [
+                    {
+                      "edt": "0x00",
+                      "name": "notLightLevel",
+                      "descriptions": {
+                        "ja": "機能を搭載していない場合",
+                        "en": "When the function is not implemented."
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "2Byte目:光色",
+              "en": "Byte 2: light color"
+            },
+            "shortName": "color",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-255"
+                },
+                {
+                  "type": "state",
+                  "size": 1,
+                  "enum": [
+                    {
+                      "edt": "0x00",
+                      "name": "notColor",
+                      "descriptions": {
+                        "ja": "機能を搭載していない場合",
+                        "en": "When the function is not implemented."
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB5",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "常夜灯設定可能レベル最大値",
+        "en": "Maximum value of settable level for night lighting"
+      },
+      "shortName": "maximumSettableLevelForNightLighting",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "常夜灯モード時の照明の明るさ及び光色設定可能レベル最大値を取得する",
+        "en": "Used to acquire the maximum values of light level and light color settable levels for night lighting."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "1Byte目:照明の明るさ",
+              "en": "Byte 1: light level"
+            },
+            "shortName": "lightLevel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-255"
+                },
+                {
+                  "type": "state",
+                  "size": 1,
+                  "enum": [
+                    {
+                      "edt": "0x00",
+                      "name": "notLightLevel",
+                      "descriptions": {
+                        "ja": "機能を搭載していない場合",
+                        "en": "When the function is not implemented"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "2Byte目:光色",
+              "en": "Byte 2: light color"
+            },
+            "shortName": "color",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-255"
+                },
+                {
+                  "type": "state",
+                  "size": 1,
+                  "enum": [
+                    {
+                      "edt": "0x00",
+                      "name": "notColor",
+                      "descriptions": {
+                        "ja": "機能を搭載していない場合",
+                        "en": "When the function is not implemented."
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB6",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "点灯モード設定",
+        "en": "Lighting mode setting"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自動/通常灯/常夜灯/カラー灯",
+        "en": "Auto/main lighting/night lighting/color lighting"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "auto",
+            "descriptions": {
+              "ja": "自動",
+              "en": "Auto"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "normal",
+            "descriptions": {
+              "ja": "通常灯",
+              "en": "Main lighting"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "night",
+            "descriptions": {
+              "ja": "常夜灯",
+              "en": "Night lighting"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "color",
+            "descriptions": {
+              "ja": "カラー灯",
+              "en": "Color lighting"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB7",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "通常灯モード時照明の明るさ設定",
+        "en": "Light level setting for main lighting"
+      },
+      "shortName": "lightLevelForMainLighting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常灯モード時の照明の明るさを%で示す",
+        "en": "Indicates the light level of main lighting in %."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xB8",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "通常灯モード時照明の明るさ段数設定",
+        "en": "Light level step setting for main lighting"
+      },
+      "shortName": "lightLevelStepForMainLighting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常灯モード時照明の明るさを段数で設定し、設定状態を取得する",
+        "en": "Used to set the light level by the number of steps for main lighting and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1"
+      },
+      "note": {
+        "ja": "0x01～設定可能照明の明るさ最大値(暗～明)",
+        "en": "Light level step setting for night lighting (dark to bright)"
+      }
+    },
+    {
+      "epc": "0xB9",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "常夜灯モード時照明の明るさ設定",
+        "en": "Light level setting for night lighting"
+      },
+      "shortName": "lightLevelForNightLighting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "常夜灯モード時の照明の明るさを%で示す",
+        "en": "Indicates the light level of night lighting in %."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      },
+      "note": {
+        "ja": "0x00-0x64",
+        "en": "0x00-0x64"
+      }
+    },
+    {
+      "epc": "0xBA",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "常夜灯モード時照明の明るさ段数設定",
+        "en": "Light level step setting for night lighting"
+      },
+      "shortName": "lightLevelStepForNightLighting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "常夜灯モード時照明の明るさを段数で設定し、設定状態を取得する",
+        "en": "Used to set the light level by the number of steps for night lighting and to acquire the current setting status."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1"
+      },
+      "note": {
+        "ja": "0x01～設定可能照明の明るさ最大値(暗～明)",
+        "en": "0x01 to the maximum value of settable light level (dark to bright)"
+      }
+    },
+    {
+      "epc": "0xBB",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "通常灯モード時光色設定",
+        "en": "Light color setting for main lighting"
+      },
+      "shortName": "lightColorForMainLighting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常灯モード時光色を設定する",
+        "en": "Used to set the light color for main lighting."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LightColor_40-44"
+      }
+    },
+    {
+      "epc": "0xBC",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "通常灯モード時光色レベル段数設定",
+        "en": "Light color level step setting for main lighting"
+      },
+      "shortName": "lightColorLevelStepForMainLighting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常灯モード時光色レベルを段数で設定し、設定状態を取得する",
+        "en": "Used to set the light color level by the number of steps for main lighting and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1"
+      },
+      "note": {
+        "ja": "0x01～設定可能光色レベル最大値(電球色～白色)",
+        "en": "0x01 to the maximum value of settable light color level (incandescent lamp color to white)"
+      }
+    },
+    {
+      "epc": "0xBD",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "常夜灯モード時光色設定",
+        "en": "Light color setting for night lighting"
+      },
+      "shortName": "lightColorLevelForNightLighting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "常夜灯モード時光色を設定する",
+        "en": "Used to set the light color for night lighting."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LightColor_40-44"
+      }
+    },
+    {
+      "epc": "0xBE",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "常夜灯モード時光色レベル段数設定",
+        "en": "Light color level step setting for night lighting"
+      },
+      "shortName": "lightColorLevelStepForNightLighting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "常夜灯モード時光色レベルを段数で設定し、設定状態を取得する",
+        "en": "Used to set the light color level by the number of steps for night lighting and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1"
+      },
+      "note": {
+        "ja": "0x01～設定可能光色レベル最大値(電球色～白色)",
+        "en": "0x01 to the maximum value of settable light color level (incandescent lamp color to white)"
+      }
+    },
+    {
+      "epc": "0xBF",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自動モード時点灯モード状態",
+        "en": "Lighting mode status in auto mode"
+      },
+      "shortName": "autoMode",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自動モード時の点灯モード状態を取得する",
+        "en": "Used to acquire the current lighting mode in auto mode."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x42",
+            "name": "normal",
+            "descriptions": {
+              "ja": "通常灯",
+              "en": "Main lighting"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "night",
+            "descriptions": {
+              "ja": "常夜灯",
+              "en": "Night lighting"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "off",
+            "descriptions": {
+              "ja": "消灯",
+              "en": "Off"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "color",
+            "descriptions": {
+              "ja": "カラー灯",
+              "en": "Color lighting"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC0",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "カラー灯モード時RGB設定",
+        "en": "RGB setting for color lighting"
+      },
+      "shortName": "rgb",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "カラー灯モード時のRGB値を設定し、設定状態を取得する",
+        "en": "Used to set the RGB value for color lighting and to acquire the current setting."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "1Byte目:R",
+              "en": "Byte 1: R"
+            },
+            "shortName": "red",
+            "element": {
+              "$ref": "#/definitions/number_0-255"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "2Byte目:G",
+              "en": "Byte 2: G"
+            },
+            "shortName": "green",
+            "element": {
+              "$ref": "#/definitions/number_0-255"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "3Byte目:B",
+              "en": "Byte 3: B"
+            },
+            "shortName": "blue",
+            "element": {
+              "$ref": "#/definitions/number_0-255"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

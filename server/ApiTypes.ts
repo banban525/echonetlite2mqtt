@@ -1,4 +1,4 @@
-import { DevicePropertySchema } from "*/device_descriptions_v1.3.0/all_device_descriptions_v1.3.0.json";
+import { ElPropertyDescription } from "./MraTypes";
 
 
 
@@ -90,7 +90,7 @@ export   interface ApiDeviceProperty{
   writable:boolean;
   observable:boolean;
   urlParameters:string[];
-  schema:DevicePropertySchema;
+  schema:ElPropertyDescription;
   note:{
     ja:string;
     en:string;

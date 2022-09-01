@@ -1,0 +1,31 @@
+{
+  "eoj": "0x027D",
+  "properties": [
+    {
+      "epc": "0x83",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x97",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x98",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE0",
+      "descriptions": {
+        "ja": "充放電量設定値1：充電時 (プラス値)／放電時 (マイナス値)",
+        "en": "Charging/discharging amount setting 1: During charging (positive value) / During discharging (negative value)"
+      }
+    },
+    {
+      "epc": "0xE1",
+      "descriptions": {
+        "ja": "充放電量設定値2：充電時 (プラス値)／放電時 (マイナス値)",
+        "en": "Charging/discharging amount setting 2: During charging (positive value) / During discharging (negative value)"
+      }
+    }
+  ]
+}

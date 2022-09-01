@@ -1,0 +1,38 @@
+{
+  "eoj": "0x0012",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "湿度センサ",
+    "en": "Humidity sensor"
+  },
+  "shortName": "humiditySensor",
+  "elProperties": [
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "相対湿度計測値",
+        "en": "Measured value of relative humidity"
+      },
+      "shortName": "value",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "相対湿度計測値を%単位で示す。",
+        "en": "This property indicates the measured value of relative humidity in units of percentage"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    }
+  ]
+}

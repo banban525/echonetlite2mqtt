@@ -1,0 +1,42 @@
+{
+  "eoj": "0x05FD",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "スイッチ (JEM-A/HA端子対応)",
+    "en": "Switch (supporting JEM-A/HA terminals)"
+  },
+  "shortName": "switch",
+  "elProperties": [
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "接続機器",
+        "en": "Connected device"
+      },
+      "shortName": "connectedDevice",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "接続先の機器名",
+        "en": "Name of the device to connect to"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_12"
+      },
+      "note": {
+        "ja": "アスキーコードで保持 (12byte)",
+        "en": "ASCII code (12byte)"
+      }
+    }
+  ]
+}

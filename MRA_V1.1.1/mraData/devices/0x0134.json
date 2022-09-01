@@ -1,0 +1,770 @@
+{
+  "eoj": "0x0134",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "空調換気扇",
+    "en": "Air conditioner ventilation fan"
+  },
+  "shortName": "airConditionerVentilationFan",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operation status"
+      },
+      "shortName": "operationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ON/OFFの状態を示す",
+        "en": "This property indicates the ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0xA0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換気風量設定",
+        "en": "Set value of ventilation air flow rate"
+      },
+      "shortName": "airFlowLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "換気風量レベルおよび換気風量自動状態を設定。換気風量レベルを8段階で指定",
+        "en": "Sets ventilation air flow rate level and ventilation air flow rate auto status. This property specifies ventilation air flow rate level (8-step)."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0x41",
+                "name": "auto",
+                "descriptions": {
+                  "ja": "換気風量自動状態",
+                  "en": "Ventilation air flow rate auto status"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換気モード自動設定",
+        "en": "Ventilation mode automatic setting"
+      },
+      "shortName": "ventilationModeAuto",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "AUTO/非AUTO",
+        "en": "AUTO/Non-AUTO"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Auto-NonAuto_4142"
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換気方式設定",
+        "en": "Ventilation method setting"
+      },
+      "shortName": "ventilationMethod",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "送風換気/空調換気の設定、設定状態を取得する",
+        "en": "Used to set blowing (normal / heat exchange) ventilation / air conditioning ventilation setting and to acquire the setting status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "blowing",
+            "descriptions": {
+              "ja": "送風換気",
+              "en": "Blowing ventilation"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "airConditioning",
+            "descriptions": {
+              "ja": "空調換気",
+              "en": "Air conditioning ventilation"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換気モード設定",
+        "en": "Ventilation mode setting"
+      },
+      "shortName": "ventilationMode",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "普通換気/熱交換換気/冷房換気/暖房換気/除湿換気/加湿換気/その他換気の換気モードを設定し、設定状態を取得する",
+        "en": "Used to set the normal ventilation / heat exchange ventilation / cooling ventilation / heating ventilation / dehumidifying ventilation / humidifying ventilation / and other ventilation modes and acquire the setting status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "normal",
+            "descriptions": {
+              "ja": "普通換気",
+              "en": "Normal ventilation"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "heatExchange",
+            "descriptions": {
+              "ja": "熱交換換気",
+              "en": "Heat exchange ventilation"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "cooling",
+            "descriptions": {
+              "ja": "冷房換気",
+              "en": "Cooling ventilation"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "heating",
+            "descriptions": {
+              "ja": "暖房換気",
+              "en": "Heating ventilation"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "dehumidifying",
+            "descriptions": {
+              "ja": "除湿換気",
+              "en": "Dehumidifying ventilation"
+            }
+          },
+          {
+            "edt": "0x46",
+            "name": "humidifying",
+            "descriptions": {
+              "ja": "加湿換気",
+              "en": "Humidifying ventilation"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他換気",
+              "en": "Other ventilation modes"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB3",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷暖強弱設定",
+        "en": "Cooling / heating high-low setting"
+      },
+      "shortName": "highlowLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷暖強弱レベルを設定。冷暖強弱レベルを8段階で指定",
+        "en": "Used to set cooling / heating high-low setting level. Specifies cooling / heating high-low setting level in 8 steps."
+      },
+      "data": {
+        "$ref": "#/definitions/level_31-8"
+      }
+    },
+    {
+      "epc": "0xB4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室内相対湿度設定値",
+        "en": "Set value of room relative humidity"
+      },
+      "shortName": "targetHumidity",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "換気自動運転時の相対湿度設定値",
+        "en": "Set value of relative humidity at auto ventilating operation."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xB9",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "消費電流計測値",
+        "en": "Measured value of electric current consumption"
+      },
+      "shortName": "currentConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "消費電流計測値を (0.1A単位で) 示す",
+        "en": "This property indicates the measured value of electric current consumption in units of 0.1A."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-6553.3A"
+      }
+    },
+    {
+      "epc": "0xBA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室内相対湿度計測値",
+        "en": "Measured value of room relative humidity"
+      },
+      "shortName": "humidity",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "室内相対湿度計測値",
+        "en": "Measured value of room relative humidity"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-100percent"
+          },
+          {
+            "$ref": "#/definitions/state_Unmeasurable_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBE",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "外気温度計測値",
+        "en": "Measured value of outdoor air temperature"
+      },
+      "shortName": "outdoorTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "外気温度計測値を (1℃単位で) 示す",
+        "en": "This property indicates the measured value of outdoor air temperature in units of 0.1°C."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-127-125Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_UnmeasurableA_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換気自動設定",
+        "en": "Ventilation auto setting"
+      },
+      "shortName": "ventilationAuto",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "AUTO/非AUTO",
+        "en": "Auto/Non-auto"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Auto-NonAuto_4142"
+      }
+    },
+    {
+      "epc": "0xC0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "CO2濃度計測値",
+        "en": "Measured value of CO2 concentration"
+      },
+      "shortName": "co2Concentration",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "CO2濃度計測値をppmで示す",
+        "en": "This property indicates measured value of CO2 concentration in ppm."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533ppm"
+      }
+    },
+    {
+      "epc": "0xC1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "煙 (タバコ) 検知状態",
+        "en": "Smoke (cigarette) detection status"
+      },
+      "shortName": "smokeDetection",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "煙 (タバコ) 検知状況を示す",
+        "en": "This property indicates smoke (cigarette) detection status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "煙 (タバコ) 検知有",
+              "en": "Smoke (cigarette) detection status found."
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "煙 (タバコ) 検知無",
+              "en": "Smoke (cigarette) detection status not found."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "汚れ検知状態",
+        "en": "Pollution detection status"
+      },
+      "shortName": "pollutionDetection",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "汚れ検知状況を示す",
+        "en": "This property indicates pollution detection status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "汚れ検知有",
+              "en": "Pollution detected"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "汚れ検知無",
+              "en": "Pollution non-detected"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "外気相対湿度計測値",
+        "en": "Measured value of outdoor relative humidity"
+      },
+      "shortName": "outdoorHumidity",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "外気相対湿度計測値を (1%単位で) 示す",
+        "en": "This property indicates measured value of outdoor air relative humidity in 1%."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-100percent"
+          },
+          {
+            "$ref": "#/definitions/state_Unmeasurable_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "還気温度計測値",
+        "en": "Measured value of return air temperature"
+      },
+      "shortName": "returnAirTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "還気温度計測値を (1℃単位で) 示す",
+        "en": "This property indicates the measured value of return air temperature in units of 1°C."
+      },
+      "data": {
+        "type": "array",
+        "itemSize": 1,
+        "minItems": 10,
+        "maxItems": 10,
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/number_-127-125Celsius"
+            },
+            {
+              "$ref": "#/definitions/state_UnmeasurableA_7E"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "還気相対湿度計測値",
+        "en": "Measured value of return relative humidity"
+      },
+      "shortName": "returnAirHumidity",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "還気相対湿度計測値を (1%単位で) 示す",
+        "en": "This property indicates measured value of return air relative humidity in 1%."
+      },
+      "data": {
+        "type": "array",
+        "itemSize": 1,
+        "minItems": 10,
+        "maxItems": 10,
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/number_0-100percent"
+            },
+            {
+              "$ref": "#/definitions/state_Unmeasurable_FD"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "給気温度計測値",
+        "en": "Measured value of charging air temperature"
+      },
+      "shortName": "chargingAirTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "給気温度計測値を (1℃単位で) 示す",
+        "en": "This property indicates the measured value of supply air temperature in units of 1°C."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-127-125Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_UnmeasurableA_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD3",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "給気相対湿度計測値",
+        "en": "Measured value of charging relative humidity"
+      },
+      "shortName": "chargingAirHumidity",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "給気相対湿度計測値を (1%単位で) 示す",
+        "en": "This property indicates measured value of supply air relative humidity in units of 1%."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-100percent"
+          },
+          {
+            "$ref": "#/definitions/state_Unmeasurable_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "排気温度計測値",
+        "en": "Measured value of discharging air temperature"
+      },
+      "shortName": "dischargingAirTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "排気温度計測値を (1℃単位で) 示す",
+        "en": "This property indicates the measured value of exhaust air temperature in units of 0.1°C."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-127-125Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_UnmeasurableA_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD5",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "排気相対湿度計測値",
+        "en": "Measured value of discharging air relative humidity"
+      },
+      "shortName": "dischargingAirHumidity",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "排気相対湿度計測値を (1%単位で) 示す",
+        "en": "This property indicates measured value of exhaust air relative humidity in units of 1%."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-100percent"
+          },
+          {
+            "$ref": "#/definitions/state_Unmeasurable_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "熱交換機動作設定",
+        "en": "Heat exchanger operation setting"
+      },
+      "shortName": "heatExchangerOperationStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "熱交換機のON/OFF状態を示す",
+        "en": "This property indicates ON/OFF status of heat exchanger."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "熱交換機ON",
+              "en": "Heat exchanger ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "熱交換機OFF",
+              "en": "Heat exchanger ON"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

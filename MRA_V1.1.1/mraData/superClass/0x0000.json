@@ -1,0 +1,902 @@
+{
+  "eoj": "0x0000",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "スーパークラス",
+    "en": "Super class"
+  },
+  "shortName": "common",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operation status"
+      },
+      "shortName": "operationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ON/OFFの状態を示す",
+        "en": "This property indicates the ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFFA_3031"
+      }
+    },
+    {
+      "epc": "0x81",
+      "validRelease": {
+        "from": "A",
+        "to": "B"
+      },
+      "propertyName": {
+        "ja": "設置場所",
+        "en": "Installation location"
+      },
+      "shortName": "installationLocation",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "設置場所を示す",
+        "en": "This property indicates the installation location"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1"
+      },
+      "remark": {
+        "ja": "bitmap(例 0x00: 未設定(初期値), 0x08: リビング)",
+        "en": "bitmap (eg. 0x00: undefined (initial data), 0x08: living)"
+      }
+    },
+    {
+      "epc": "0x81",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "設置場所",
+        "en": "Installation location"
+      },
+      "shortName": "installationLocation",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "設置場所を示す",
+        "en": "This property indicates the installation location"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/raw_1"
+          },
+          {
+            "$ref": "#/definitions/raw_17"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "1byte bitmap(例 0x00: 未設定(初期値), 0x08: リビング)または0x01で始まる17 byte data",
+        "en": "1byte bitmap (eg. 0x00: undefined (initial data), 0x08: living) or 17 bytes data starting from 0x01"
+      }
+    },
+    {
+      "epc": "0x82",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "規格Version情報",
+        "en": "Standard version information"
+      },
+      "shortName": "protocol",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "対応するAPPENDIXのリリース番号を示す",
+        "en": "This property indicates the release number of the corresponding Appendix."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_4"
+      },
+      "remark": {
+        "ja": "1,2バイト目は0x00。3バイト目は機器オブジェクトのリリースバージョンをASCIIで表す。リリース Aのみ小文字で0x61, B以降は大文字で0x42, 0x43...。4バイト目は、そのリリースバージョンのリビジョン番ををASCIIで表す(0x00～0xFF)。",
+        "en": "1st and 2nd data is 0x00. 3rd data is the release version of Device Object in ASCII. Only release A utilize lower case letter 0x61, Release B and later utilize upper case letter such as 0x42, 0x43... 4th data is the revision number of the release version in ASCII (0x00 - 0xFF)."
+      }
+    },
+    {
+      "epc": "0x83",
+      "validRelease": {
+        "from": "A",
+        "to": "A"
+      },
+      "propertyName": {
+        "ja": "識別番号",
+        "en": "Identification number"
+      },
+      "shortName": "id",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "オブジェクトを固有に識別する番号",
+        "en": "A number that allows each object to be uniquely identified."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_17"
+      },
+      "remark": {
+        "ja": "1バイト目は0xFE。2～4バイト目はメーカコード。残りは機器毎のユニーク値",
+        "en": "1st data is 0xFE. 2nd to 4th data is manufacture code. The rest should be unique to each device."
+      }
+    },
+    {
+      "epc": "0x83",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "識別番号",
+        "en": "Identification number"
+      },
+      "shortName": "id",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "オブジェクトを固有に識別する番号",
+        "en": "A number that allows each object to be uniquely identified."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_17"
+      },
+      "remark": {
+        "ja": "1バイト目は0xFE。2～4バイト目はメーカコード。残りは機器毎のユニーク値",
+        "en": "1st data is 0xFE. 2nd to 4th data is manufacture code. The rest should be unique to each device."
+      }
+    },
+    {
+      "epc": "0x84",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時消費電力計測値",
+        "en": "Measured instantaneous power consumption"
+      },
+      "shortName": "instantaneousElectricPowerConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器の瞬時消費電力をWで示す",
+        "en": "This property indicates the instantaneous power consumption of the device in watts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0x85",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算消費電力計測値",
+        "en": "Measured cumulative power consumption"
+      },
+      "shortName": "consumedCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器の積算消費電力を0.001kWhで示す",
+        "en": "This property indicates the cumulative power consumption of the device in increments of 0.001kWh."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999kWh"
+      }
+    },
+    {
+      "epc": "0x86",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "メーカ異常コード",
+        "en": "Manufacturer's fault code"
+      },
+      "shortName": "manufacturerFaultCode",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "各メーカ独自の異常コードを示す",
+        "en": "This property indicates the manufacturer-defined fault code."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-255"
+      }
+    },
+    {
+      "epc": "0x87",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "電流制限設定",
+        "en": "Current limit setting"
+      },
+      "shortName": "currentLimit",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "電流制限の設定値を示す(0～100%)",
+        "en": "This property indicates the current limit setting (0 to 100%)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0x88",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "異常発生状態",
+        "en": "Fault status"
+      },
+      "shortName": "faultStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "何らかの異常(センサトラブル等)の発生状況を示す",
+        "en": "This property indicates whether a fault (e.g. a sensor trouble) has occurred or not."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "異常あり",
+              "en": "Fault occurred."
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "異常なし",
+              "en": "No fault has occurred."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x89",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "異常内容",
+        "en": "Fault description"
+      },
+      "shortName": "faultDescription",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "異常内容",
+        "en": "Describes the fault."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_2"
+      },
+      "remark": {
+        "ja": "Appendixの2.5章 異常内容プロパティ参照",
+        "en": "See Chapter 2.5 'Fault Description' Property of the Appendix."
+      }
+    },
+    {
+      "epc": "0x8A",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "メーカコード",
+        "en": "Manufacturer code"
+      },
+      "shortName": "manufacturer",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "3バイトで指定",
+        "en": "3-byte manufacturer code"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_3"
+      }
+    },
+    {
+      "epc": "0x8B",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "事業場コード",
+        "en": "Business facility code"
+      },
+      "shortName": "businessFacilityCode",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "3バイトの事業場コードで指定",
+        "en": "3-byte business facility code"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_3"
+      }
+    },
+    {
+      "epc": "0x8C",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "商品コード",
+        "en": "Product code"
+      },
+      "shortName": "productCode",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ASCIIコードで指定",
+        "en": "Identifies the product using ASCII code."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_12"
+      }
+    },
+    {
+      "epc": "0x8D",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "製造番号",
+        "en": "Production number"
+      },
+      "shortName": "serialNumber",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ASCIIコードで指定",
+        "en": "This property indicates the production number using ASCII code."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_12"
+      }
+    },
+    {
+      "epc": "0x8E",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "shortName": "productionDate",
+      "propertyName": {
+        "ja": "製造年月日",
+        "en": "Production date"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "4バイトで指定",
+        "en": "4-byte production date code"
+      },
+      "data": {
+        "type": "date"
+      }
+    },
+    {
+      "epc": "0x8F",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "節電動作設定",
+        "en": "Power-saving operation setting"
+      },
+      "shortName": "powerSaving",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器の節電動作状態を示す",
+        "en": "This property indicates whether the device is operating in power-saving mode."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "節電動作中",
+              "en": "Power saving Operation"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "通常動作中",
+              "en": "Normal Operation"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x93",
+      "validRelease": {
+        "from": "A",
+        "to": "A"
+      },
+      "propertyName": {
+        "ja": "位置情報",
+        "en": "Location information"
+      },
+      "shortName": "locationInformation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "位置情報",
+        "en": "Location information"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_16"
+      }
+    },
+    {
+      "epc": "0x93",
+      "validRelease": {
+        "from": "B",
+        "to": "B"
+      },
+      "propertyName": {
+        "ja": "位置情報",
+        "en": "Location information"
+      },
+      "shortName": "locationInformation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "位置情報",
+        "en": "Location information"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_16"
+      }
+    },
+    {
+      "epc": "0x93",
+      "validRelease": {
+        "from": "C",
+        "to": "G"
+      },
+      "propertyName": {
+        "ja": "遠隔操作設定",
+        "en": "Remote control setting"
+      },
+      "shortName": "remoteControl",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "公衆回線を介した操作か否かを示す。(0x41、0x42)通信回線の状態が正常か否かを示す。(0x61、0x62)",
+        "en": "This property indicates whether remote control is through a public network or not. (0x41, 0x42)This property indicates whether the status of the communication line is normal or not. (0x61, 0x62)"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "公衆回線未経由操作",
+              "en": "Not through a public network"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "公衆回線経由操作",
+              "en": "Through a public network"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x93",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "遠隔操作設定",
+        "en": "Remote controll setting"
+      },
+      "shortName": "remoteControl",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "公衆回線を介した操作か否かを示す。(0x41、0x42)通信回線の状態が正常か否かを示す。(0x61、0x62)",
+        "en": "This property indicates whether remote control is through a public network or not. (0x41, 0x42)This property indicates whether the status of the communication line is normal or not. (0x61, 0x62)"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "公衆回線未経由操作",
+              "en": "Not through a public network"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "公衆回線経由操作",
+              "en": "Through a public network"
+            }
+          },
+          {
+            "edt": "0x61",
+            "name": "true",
+            "descriptions": {
+              "ja": "通信回線正常(公衆回線経由の操作不可)",
+              "en": "Communication line is normal. (operation through a public network is not possible.)"
+            }
+          },
+          {
+            "edt": "0x62",
+            "name": "false",
+            "descriptions": {
+              "ja": "通信回線正常(公衆回線経由の操作可能)",
+              "en": "Communication line is normal. (operation through a public network is possible.)"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x97",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "現在時刻設定",
+        "en": "Current time setting"
+      },
+      "shortName": "DEL",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現在時刻HH：MM",
+        "en": "Current time (HH: MM format)"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0x98",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "現在年月日設定",
+        "en": "Current date setting"
+      },
+      "shortName": "currentDateAndTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現在年月日YYYY：MM：DD",
+        "en": "Current date (YYYY: MM: DD format)"
+      },
+      "data": {
+        "type": "date"
+      }
+    },
+    {
+      "epc": "0x99",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "電力制限設定",
+        "en": "Power limit setting"
+      },
+      "shortName": "powerLimit",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "電力制限の設定値をWで示す",
+        "en": "This property indicates the power limit setting in watts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0x9A",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算運転時間",
+        "en": "Cumulative operating time"
+      },
+      "shortName": "hourMeter",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現在までの運転時間の積算値を単位1バイト、時間4バイトで示す",
+        "en": "This property indicates the cumulative number of days, hours, minutes or seconds for which the device has operated, using 1 byte for the unit and 4 bytes for the time."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算運転時間",
+              "en": "Cumulative operating time"
+            },
+            "shortName": "unit",
+            "element": {
+              "type": "state",
+              "size": 1,
+              "enum": [
+                {
+                  "edt": "0x41",
+                  "name": "second",
+                  "descriptions": {
+                    "ja": "秒",
+                    "en": "second"
+                  }
+                },
+                {
+                  "edt": "0x42",
+                  "name": "minute",
+                  "descriptions": {
+                    "ja": "分",
+                    "en": "minute"
+                  }
+                },
+                {
+                  "edt": "0x43",
+                  "name": "hour",
+                  "descriptions": {
+                    "ja": "時",
+                    "en": "hour"
+                  }
+                },
+                {
+                  "edt": "0x44",
+                  "name": "day",
+                  "descriptions": {
+                    "ja": "日",
+                    "en": "day"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "時間",
+              "en": "time"
+            },
+            "shortName": "time",
+            "element": {
+              "$ref": "#/definitions/number_0-4294967295"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x9D",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "状変アナウンスプロパティマップ",
+        "en": "Status change announcement property map"
+      },
+      "shortName": "DEL",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "プロパティ数が15以下の場合はEPCを列挙、16以上の場合はビットマップで記述する。",
+        "en": "Enumuration of EPC in case of the count is less than 16, or bitmap in case of the count is more than 15"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-17"
+      },
+      "note": {
+        "ja": "1バイト目は個数。プロパティ数が15個以下の場合は列挙、16個以上の場合はbitmap。Appendixの付録1 参照",
+        "en": "1st byte is count of property. If the count is less than 16, enumerate. Else, bitmap. See Annex 1 of the Appendix."
+      }
+    },
+    {
+      "epc": "0x9E",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "Setプロパティマップ",
+        "en": "Set property map"
+      },
+      "shortName": "DEL",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "プロパティ数が15以下の場合はEPCを列挙、16以上の場合はビットマップで記述する。",
+        "en": "Enumuration of EPC in case of the count is less than 16, or bitmap in case of the count is more than 15"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-17"
+      },
+      "note": {
+        "ja": "1バイト目は個数。プロパティ数が15個以下の場合は列挙、16個以上の場合はbitmap。Appendixの付録1 参照",
+        "en": "1st byte is count of property. If the count is less than 16, enumerate. Else, bitmap. See Annex 1 of the Appendix."
+      }
+    },
+    {
+      "epc": "0x9F",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "Getプロパティマップ",
+        "en": "Get property map"
+      },
+      "shortName": "DEL",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "プロパティ数が15以下の場合はEPCを列挙、16以上の場合はビットマップで記述する。",
+        "en": "Enumuration of EPC in case of the count is less than 16, or bitmap in case of the count is more than 15"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-17"
+      },
+      "note": {
+        "ja": "1バイト目は個数。プロパティ数が15個以下の場合は列挙、16個以上の場合はbitmap。Appendixの付録1 参照",
+        "en": "1st byte is count of property. If the count is less than 16, enumerate. Else, bitmap. See Annex 1 of the Appendix."
+      }
+    }
+  ]
+}

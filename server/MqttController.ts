@@ -2,8 +2,7 @@ import mqtt, { IPublishPacket, ISubscriptionGrant } from "mqtt";
 import { DeviceStore } from "./DeviceStore";
 import { ApiDevice, ApiDeviceProperty, ApiDeviceSummary } from "./ApiTypes";
 import { Device } from "./Property";
-import { DevicePropertySchema } from "*/device_descriptions_v1.3.0/all_device_descriptions_v1.3.0.json";
-import { isBuffer } from "util";
+import { ElDataType, ElPropertyDescription } from "./MraTypes";
 
 export class MqttController
 {
@@ -84,7 +83,7 @@ export class MqttController
           
           //データのパース
           const bodyText = payload.toString();
-          const newValue = this.parseValueFromText(bodyText, property.schema);
+          const newValue = this.parseValueFromText(bodyText, property.schema.data);
 
           this.firePropertyChnagedEvent(deviceId, propertyName, newValue);
         }
@@ -264,53 +263,85 @@ export class MqttController
       return ;
     }
     this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}/properties/${propertyName}`, 
-      this.getValueText(foundDevice.propertiesValue[propertyName].value), {
+      this.getValueText(foundDevice.propertiesValue[propertyName].value, foundDevice.propertiesValue[propertyName].deviceProperty.schema.data), {
         retain:true,
       });
   }
 
-  private getValueText = (value: unknown): string => {
-    if (typeof value === "object") {
-      return JSON.stringify(value);
+  private getValueText = (value: unknown, dataType:ElDataType): string => {
+    if("type" in dataType)
+    {
+      if(dataType.type === "array")
+      {
+        return JSON.stringify(value);
+      }
+      if(dataType.type === "bitmap")
+      {
+        return JSON.stringify(value);
+      }
+      if(dataType.type === "date")
+      {
+        return (value as any).toString();
+      }
+      if(dataType.type === "date-time")
+      {
+        return (value as any).toString();
+      }
+      if(dataType.type === "time")
+      {
+        return (value as any).toString();
+      }
+      if(dataType.type === "level")
+      {
+        return (value as any).toString();
+      }
+      if(dataType.type === "number")
+      {
+        return (value as any).toString();
+      }
+      if(dataType.type === "numericValue")
+      {
+        return (value as any).toString();
+      }
+      if(dataType.type === "object")
+      {
+        return JSON.stringify(value);
+      }
+      if(dataType.type === "raw")
+      {
+        return (value as any).toString();
+      }
+      if(dataType.type === "state")
+      {
+        return (value as any).toString();
+      }
+      return "undefined";
     }
-    if(value === undefined){
-      return "undefined"
+    else
+    {
+      if("oneOf" in dataType)
+      {
+        if(typeof value === "object")
+        {
+          return JSON.stringify(value);
+        }
+        if(value === undefined){
+          return "undefined"
+        }
+        return (value as any).toString();
+      }
+      else
+      {
+        return "undefined";
+      }
     }
-    return (value as any).toString();
   };
 
-  private parseValueFromText = (valueText: string, schema:DevicePropertySchema): any => {
-    if("type" in schema)
+  private parseValueFromText = (valueText: string, dataType:ElDataType): any => {
+    
+    if("type" in dataType)
     {
-      if(schema.type === "boolean")
-      {
-        return valueText.toLowerCase() === "true" ? true: false;
-      }
-      if(schema.type === "string")
-      {
-        return valueText;
-      }
-      if(schema.type === "number")
-      {
-        const valueNum = Number(valueText);
-        if(isNaN(valueNum)){
-          return undefined;
-        }
-        return valueNum;
-      }
-      if(schema.type === "null")
-      {
-        return null;
-      }
-      if(schema.type === "object")
-      {
-        if(valueText.startsWith("{") === false || valueText.endsWith("}") === false)
-        {
-          return undefined;
-        }
-        return JSON.parse(valueText);
-      }
-      if(schema.type === "array")
+      if(dataType.type === "array")
       {
         if(valueText.startsWith("[") === false || valueText.endsWith("]") === false)
         {
@@ -318,83 +349,87 @@ export class MqttController
         }
         return JSON.parse(valueText);
       }
+      if(dataType.type === "bitmap")
+      {
+        if(valueText.startsWith("{") === false || valueText.endsWith("}") === false)
+        {
+          return undefined;
+        }
+        return JSON.parse(valueText);
+      }
+      if(dataType.type === "date")
+      {
+        return valueText;
+      }
+      if(dataType.type === "date-time")
+      {
+        return valueText;
+      }
+      if(dataType.type === "time")
+      {
+        return valueText;
+      }
+      if(dataType.type === "level")
+      {
+        const valueNum = Number(valueText);
+        if(isNaN(valueNum)){
+          return undefined;
+        }
+        return valueNum;
+      }
+      if(dataType.type === "number")
+      {
+        const valueNum = Number(valueText);
+        if(isNaN(valueNum)){
+          return undefined;
+        }
+        return valueNum;
+      }
+      if(dataType.type === "numericValue")
+      {
+        const valueNum = Number(valueText);
+        if(isNaN(valueNum)){
+          return undefined;
+        }
+        return valueNum;
+      }
+      if(dataType.type === "object")
+      {
+        if(valueText.startsWith("{") === false || valueText.endsWith("}") === false)
+        {
+          return undefined;
+        }
+        return JSON.parse(valueText);
+      }
+      if(dataType.type === "raw")
+      {
+        return valueText;
+      }
+      if(dataType.type === "state")
+      {
+        return valueText;
+      }
+      return undefined;
     }
     else
     {
-      for(const subSchema of schema.oneOf)
+      if("oneOf" in dataType)
       {
-        if("values" in subSchema)
+        for(const subSchema of dataType.oneOf)
         {
-          if(subSchema.type === "boolean")
+          const result = this.parseValueFromText(valueText, subSchema);
+          if(result !== undefined)
           {
-            const match = subSchema.values.find(_=>_.value.toString() === valueText);
-            if(match === undefined)
-            {
-              continue;
-            }
-            return match.value;
-          }
-          if(subSchema.type === "string")
-          {
-            const match = subSchema.values?.find(_=>_.value === valueText);
-            if(match === undefined)
-            {
-              continue;
-            }
-            return match.value;
+            return result;
           }
         }
+        return undefined;
       }
-
-      for(const subSchema of schema.oneOf)
+      else
       {
-        if(("type" in subSchema))
-        {
-          if(subSchema.type === "object")
-          {
-            const result = this.parseValueFromText(valueText, subSchema);
-            if(result !== undefined)
-            {
-              return result;
-            }
-          }
-          if(subSchema.type === "array")
-          {
-            const result = this.parseValueFromText(valueText, subSchema);
-            if(result !== undefined)
-            {
-              return result;
-            }
-          }
-          if(subSchema.type === "number")
-          {
-            const result = this.parseValueFromText(valueText, subSchema);
-            if(result !== undefined)
-            {
-              return result;
-            }
-          }
-        }
-      }
-      for(const subSchema of schema.oneOf)
-      {
-        if(("type" in subSchema))
-        {
-          if(subSchema.type === "string")
-          {
-            const result = this.parseValueFromText(valueText, subSchema);
-            if(result !== undefined)
-            {
-              return result;
-            }
-          }
-          if(subSchema.type === "null")
-          {
-            return null;
-          }
-        }
+        //data.$ref
+        return undefined;
       }
     }
-    return undefined;
   };
 }

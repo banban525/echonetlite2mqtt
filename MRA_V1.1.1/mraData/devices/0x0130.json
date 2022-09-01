@@ -1,0 +1,2603 @@
+{
+  "eoj": "0x0130",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "家庭用エアコン",
+    "en": "Home air conditioner"
+  },
+  "shortName": "homeAirConditioner",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operation status"
+      },
+      "shortName": "operationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ON/OFFの状態を示す",
+        "en": "This property indicates the ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0x8F",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "節電動作設定",
+        "en": "Power-saving operation setting"
+      },
+      "shortName": "powerSavingOperation",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "機器の節電動作を設定し、状態を取得する",
+        "en": "This property indicates whether the device is operating in power-saving mode."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "節電動作中",
+              "en": "Operating in power-saving mode"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "通常動作中",
+              "en": "Operating in normal operation mode"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x90",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ予約設定",
+        "en": "ON timer-based reservation setting"
+      },
+      "shortName": "onTimerReservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切を設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to use the ON timer (time-based reservation function, relative time-based reservation function or both), and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "timeOnRelativeTimeOn",
+            "descriptions": {
+              "ja": "時刻予約、相対時間予約共に入",
+              "en": "Both the time- and relative time-based reservation functions are ON."
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "timeOffRelativeTimeOff",
+            "descriptions": {
+              "ja": "予約切",
+              "en": "Both reservation functions are OFF."
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "timeOnRelativeTimeOff",
+            "descriptions": {
+              "ja": "時刻予約のみ入",
+              "en": "Time-based reservation function is ON."
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "timeOffRelativeTimeOn",
+            "descriptions": {
+              "ja": "相対時間予約のみ入",
+              "en": "Relative time-based reservation function is ON."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x91",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ時刻設定値",
+        "en": "ON timer setting (time)"
+      },
+      "shortName": "timeOfOnTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MMを設定し、設定状態を取得する",
+        "en": "Used to specify the time for the time-based reservation function in the HH:MM format and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0x92",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ相対時間設定値",
+        "en": "ON timer setting (relative time)"
+      },
+      "shortName": "relativeTimeOfOnTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MMを設定し、更新された時間を取得する",
+        "en": "Used to specify the relative time for the relative time-based reservation function in the HH:MM format and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/time_2_255"
+      }
+    },
+    {
+      "epc": "0x94",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFFタイマ予約設定",
+        "en": "OFF timer-based reservation setting"
+      },
+      "shortName": "offTimerReservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切を設定し、設定内容を取得する",
+        "en": "Used to specify whether or not to use the OFF timer (time-based reservation function, relative time-based reservation function or both), and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "timeBasedAndRelativeTimeBasedOn",
+            "descriptions": {
+              "ja": "時刻予約、相対時間予約共に入",
+              "en": "Both the time- and relative time-based reservation functions are ON."
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "bothOff",
+            "descriptions": {
+              "ja": "予約切",
+              "en": "Both reservation functions are OFF."
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "timeBasedOn",
+            "descriptions": {
+              "ja": "時刻予約のみ入",
+              "en": "Time-based reservation function is ON."
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "relativeTimeBasedOn",
+            "descriptions": {
+              "ja": "相対時間予約のみ入",
+              "en": "Relative time-based reservation function is ON."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x95",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFFタイマ時刻設定値",
+        "en": "OFF timer setting (time)"
+      },
+      "shortName": "timeOfOffTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MMを設定し、設定状態を取得する",
+        "en": "Used to specify the time for the time-based reservation function in the HH:MM format and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0x96",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFFタイマ相対時間設定値",
+        "en": "OFF timer setting (relative time)"
+      },
+      "shortName": "relativeTimeOfOffTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MMを設定し、更新された時間を取得する",
+        "en": "Used to specify the relative time for the relative time-based reservation function in the HH:MM format and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/time_2_255"
+      }
+    },
+    {
+      "epc": "0xA0",
+      "validRelease": {
+        "from": "A",
+        "to": "C"
+      },
+      "propertyName": {
+        "ja": "風量設定",
+        "en": "Air flow rate setting"
+      },
+      "shortName": "airFlowLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風量レベルおよび風量自動状態を設定し、設定状態を取得する。風量レベルは8段階で指定",
+        "en": "Used to specify the air flow rate or use the function to automatically control the air flow rate, and to acquire the current setting. The air flow rate shall be selected from among the 8 predefined levels."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0x41",
+                "name": "auto",
+                "descriptions": {
+                  "ja": "風量自動設定",
+                  "en": "Automatic air flow rate control function used."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA0",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風量設定",
+        "en": "Air flow rate setting"
+      },
+      "shortName": "airFlowLevel",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "風量レベルおよび風量自動状態を設定し、設定状態を取得する。風量レベルは8段階で指定",
+        "en": "Used to specify the air flow rate or use the function to automatically control the air flow rate, and to acquire the current setting. The air flow rate shall be selected from among the 8 predefined levels."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0x41",
+                "name": "auto",
+                "descriptions": {
+                  "ja": "風量自動設定",
+                  "en": "Automatic air flow rate control function used."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風向自動設定",
+        "en": "Automatic control of air flow direction setting"
+      },
+      "shortName": "automaticControlAirFlowDirection",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風向き上下左右のAUTO/非AUTOを設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to use the automatic air flow direction control function, to specify the plane(s) (vertical and/or horizontal) in which the automatic air flow direction control function is to be used, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "auto",
+            "descriptions": {
+              "ja": "AUTO",
+              "en": "Automatic"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "nonAuto",
+            "descriptions": {
+              "ja": "非AUTO",
+              "en": "Non-automatic"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "autoVertical",
+            "descriptions": {
+              "ja": "上下AUTO",
+              "en": "Automatic (vertical)"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "autoHorizontal",
+            "descriptions": {
+              "ja": "左右AUTO",
+              "en": "Automatic (horizontal)"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風向スイング設定",
+        "en": "Automatic swing of air flow setting"
+      },
+      "shortName": "automaticSwingAirFlow",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風向スイングOFF/上下/左右/上下左右を設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to use the automatic air flow swing function, to specify the plane(s) (vertical and/or horizontal) in which the automatic air flow swing function is to be used, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x31",
+            "name": "off",
+            "descriptions": {
+              "ja": "OFF",
+              "en": "OFF"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "vertical",
+            "descriptions": {
+              "ja": "上下",
+              "en": "Vertical"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "horizontal",
+            "descriptions": {
+              "ja": "左右",
+              "en": "Horizontal"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "verticalAndHorizontal",
+            "descriptions": {
+              "ja": "上下左右",
+              "en": "Vertical and Horizontal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風向上下設定",
+        "en": "Air flow direction (vertical) setting"
+      },
+      "shortName": "airFlowDirectionVertical",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "上下方向の風向きを5通りのパターンで設定し、設定状態を取得する",
+        "en": "Used to specify the air flow direction in the vertical plane by selecting a pattern from among the 5 predefined patterns, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "uppermost",
+            "descriptions": {
+              "ja": "上",
+              "en": "Uppermost"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "lowermost",
+            "descriptions": {
+              "ja": "下",
+              "en": "Lowermost"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "central",
+            "descriptions": {
+              "ja": "中央",
+              "en": "Central"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "upperCenter",
+            "descriptions": {
+              "ja": "上中",
+              "en": "Midpoint between uppermost and central"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "lowerCenter",
+            "descriptions": {
+              "ja": "下中",
+              "en": "Midpoint between lowermost and central"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風向左右設定",
+        "en": "Air flow direction (horizontal) setting"
+      },
+      "shortName": "airFlowDirectionHorizontal",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "左右方向の風向きを31通りのパターンで設定し、設定状態を取得する",
+        "en": "Used to specify the air flow direction(s) in the horizontal plane by selecting a pattern from among the 31 predefined patterns, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "rc_r",
+            "descriptions": {
+              "ja": "右中・右",
+              "en": "Right center and Right"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "l_lc",
+            "descriptions": {
+              "ja": "左・左中",
+              "en": "Left and Left center"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "lc_c_rc",
+            "descriptions": {
+              "ja": "左中・中・右中",
+              "en": "Left center, Center and Right center"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "l_lc_rc_r",
+            "descriptions": {
+              "ja": "左・左中・右中・右",
+              "en": "Left, Left center, Right center and Right"
+            }
+          },
+          {
+            "edt": "0x51",
+            "name": "r",
+            "descriptions": {
+              "ja": "右",
+              "en": "Right"
+            }
+          },
+          {
+            "edt": "0x52",
+            "name": "rc",
+            "descriptions": {
+              "ja": "右中",
+              "en": "Right center"
+            }
+          },
+          {
+            "edt": "0x54",
+            "name": "c",
+            "descriptions": {
+              "ja": "中",
+              "en": "Center"
+            }
+          },
+          {
+            "edt": "0x55",
+            "name": "c_r",
+            "descriptions": {
+              "ja": "中・右",
+              "en": "Center and right"
+            }
+          },
+          {
+            "edt": "0x56",
+            "name": "c_rc",
+            "descriptions": {
+              "ja": "中・右中",
+              "en": "Center and Right center"
+            }
+          },
+          {
+            "edt": "0x57",
+            "name": "c_rc_r",
+            "descriptions": {
+              "ja": "中・右中・右",
+              "en": "Center, Right center and Right"
+            }
+          },
+          {
+            "edt": "0x58",
+            "name": "lc",
+            "descriptions": {
+              "ja": "左中",
+              "en": "Left center"
+            }
+          },
+          {
+            "edt": "0x59",
+            "name": "lc_r",
+            "descriptions": {
+              "ja": "左中・右",
+              "en": "Left center and Right"
+            }
+          },
+          {
+            "edt": "0x5A",
+            "name": "lc_rc",
+            "descriptions": {
+              "ja": "左中・右中",
+              "en": "Left center and Right center"
+            }
+          },
+          {
+            "edt": "0x5B",
+            "name": "lc_rc_r",
+            "descriptions": {
+              "ja": "左中・右中・右",
+              "en": "Left center, Right center and Right"
+            }
+          },
+          {
+            "edt": "0x5C",
+            "name": "lc_c",
+            "descriptions": {
+              "ja": "左中・中",
+              "en": "Left center and Center"
+            }
+          },
+          {
+            "edt": "0x5D",
+            "name": "lc_c_r",
+            "descriptions": {
+              "ja": "左中・中・右",
+              "en": "Left center, Center and Right"
+            }
+          },
+          {
+            "edt": "0x5F",
+            "name": "lc_c_rc_r",
+            "descriptions": {
+              "ja": "左中・中・右中・右",
+              "en": "Left center, Center, Right center and Right"
+            }
+          },
+          {
+            "edt": "0x60",
+            "name": "l",
+            "descriptions": {
+              "ja": "左",
+              "en": "Left"
+            }
+          },
+          {
+            "edt": "0x61",
+            "name": "l_r",
+            "descriptions": {
+              "ja": "左・右",
+              "en": "Left and Right"
+            }
+          },
+          {
+            "edt": "0x62",
+            "name": "l_rc",
+            "descriptions": {
+              "ja": "左・右中",
+              "en": "Left and Right center"
+            }
+          },
+          {
+            "edt": "0x63",
+            "name": "l_rc_r",
+            "descriptions": {
+              "ja": "左・右中・右",
+              "en": "Left, Right center and Right"
+            }
+          },
+          {
+            "edt": "0x64",
+            "name": "l_c",
+            "descriptions": {
+              "ja": "左・中",
+              "en": "Left and Center"
+            }
+          },
+          {
+            "edt": "0x65",
+            "name": "l_c_r",
+            "descriptions": {
+              "ja": "左・中・右",
+              "en": "Left, Center and Right"
+            }
+          },
+          {
+            "edt": "0x66",
+            "name": "l_c_rc",
+            "descriptions": {
+              "ja": "左・中・右中",
+              "en": "Left, Center and Right center"
+            }
+          },
+          {
+            "edt": "0x67",
+            "name": "l_c_rc_r",
+            "descriptions": {
+              "ja": "左・中・右中・右",
+              "en": "Left, Center, Right center and Right"
+            }
+          },
+          {
+            "edt": "0x69",
+            "name": "l_lc_r",
+            "descriptions": {
+              "ja": "左・左中・右",
+              "en": "Left, Left center and Right"
+            }
+          },
+          {
+            "edt": "0x6A",
+            "name": "l_lc_rc",
+            "descriptions": {
+              "ja": "左・左中・右中",
+              "en": "Left, Left center and Right center"
+            }
+          },
+          {
+            "edt": "0x6C",
+            "name": "l_lc_c",
+            "descriptions": {
+              "ja": "左・左中・中",
+              "en": "Left, Left center and center"
+            }
+          },
+          {
+            "edt": "0x6D",
+            "name": "l_lc_c_r",
+            "descriptions": {
+              "ja": "左・左中・中・右",
+              "en": "Left, Left center, Center and Right"
+            }
+          },
+          {
+            "edt": "0x6E",
+            "name": "l_lc_c_rc",
+            "descriptions": {
+              "ja": "左・左中・中・右中",
+              "en": "Left, Left center, Center and Right center"
+            }
+          },
+          {
+            "edt": "0x6F",
+            "name": "l_lc_c_rc_r",
+            "descriptions": {
+              "ja": "左・左中・中・右中・右",
+              "en": "Left, Left center, Center, Right center and Right"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xAA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "特殊状態",
+        "en": "Special state"
+      },
+      "shortName": "specialState",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "エアコンが特殊状態にあることを示す",
+        "en": "This property indicates if the air conditioner is in a 'special' state (i.e. the 'defrosting','preheating', or 'heat removal' state)."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x40",
+            "name": "normal",
+            "descriptions": {
+              "ja": "通常状態",
+              "en": "Normal operation"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "defrosting",
+            "descriptions": {
+              "ja": "除霜状態",
+              "en": "Defrosting"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "preheating",
+            "descriptions": {
+              "ja": "予熱状態",
+              "en": "Preheating"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "heatRemoval",
+            "descriptions": {
+              "ja": "排熱状態",
+              "en": "Heat removal"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xAB",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "非優先状態",
+        "en": "Non-priority state"
+      },
+      "shortName": "nonPriorityState",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "エアコンが非優先状態にあることを示す",
+        "en": "Used to indicate when the air conditioner is in a “non-priority” state."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x40",
+            "name": "false",
+            "descriptions": {
+              "ja": "通常状態",
+              "en": "Normal"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "非優先状態",
+              "en": "Non-priority"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転モード設定",
+        "en": "Operation mode setting"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "自動/冷房/暖房/除湿/送風/その他の運転モードを設定し、設定状態を取得する",
+        "en": "Used to specify the operation mode ('automatic','cooling','heating','dehumidification','air circulator' or 'other'), and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "auto",
+            "descriptions": {
+              "ja": "自動",
+              "en": "Automatic"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "cooling",
+            "descriptions": {
+              "ja": "冷房",
+              "en": "Cooling"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "heating",
+            "descriptions": {
+              "ja": "暖房",
+              "en": "Heating"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "dehumidification",
+            "descriptions": {
+              "ja": "除湿",
+              "en": "Dehumidification"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "circulation",
+            "descriptions": {
+              "ja": "送風",
+              "en": "Air circulation"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Other"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "温度自動設定",
+        "en": "Automatic temperature control setting"
+      },
+      "shortName": "automaticTemperatureControl",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "AUTO/非AUTOを設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to use the automatic temperature control function, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "AUTO",
+              "en": "Automatic"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "非AUTO",
+              "en": "Non-automatic"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "急速動作モード設定",
+        "en": "Normal/highspeed/silent operation setting"
+      },
+      "shortName": "highspeedOperation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常運転/急速/静音を設定し、設定状態を取得する",
+        "en": "Used to specify the type of operation ('normal','high-speed' or 'silent'), and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "normal",
+            "descriptions": {
+              "ja": "通常運転",
+              "en": "Normal operation"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "highspeed",
+            "descriptions": {
+              "ja": "急速",
+              "en": "High-speed operation"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "silent",
+            "descriptions": {
+              "ja": "静音",
+              "en": "Silent operation"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "温度設定値",
+        "en": "Set temperature value"
+      },
+      "shortName": "targetTemperature",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "温度設定値を設定し、設定状態を取得する",
+        "en": "Used to set the temperature and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-50Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "除湿モード時相対湿度設定値",
+        "en": "Set value of relative humidity in dehumidifying mode"
+      },
+      "shortName": "relativeHumidityDehumidifying",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "除湿モード時相対湿度設定値を設定し、設定状態を取得する",
+        "en": "Used to set the relative humidity for the 'dehumidification' mode and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xB5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷房モード時温度設定値",
+        "en": "Set temperature value in cooling mode"
+      },
+      "shortName": "targetTemperatureCooling",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷房モード時設定温度値を設定し、設定状態を取得する",
+        "en": "Used to set the temperature for the 'cooling' mode and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-50Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "暖房モード時温度設定値",
+        "en": "Set temperature value in heating mode"
+      },
+      "shortName": "targetTemperatureHeating",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "暖房モード時設定温度値を設定し、設定状態を取得する",
+        "en": "Used to set the temperature for the 'heating' mode and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-50Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "除湿モード時温度設定値",
+        "en": "Set temperature value in dehumidifying mode"
+      },
+      "shortName": "targetTemperatureDehumidifying",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "除湿モード時設定温度値を設定し、設定状態を取得する",
+        "en": "Used to set the temperature for the 'dehumidification' mode and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-50Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定格消費電力値",
+        "en": "Rated power consumption"
+      },
+      "shortName": "ratedPowerConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷房/暖房/除湿/送風の各運転モード時の定格消費電力",
+        "en": "Rated power consumption in each operation mode of cooling/heating/dehumidifying/blast"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "shortName": "cooling",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-65533W"
+                },
+                {
+                  "$ref": "#/definitions/state_Unsupported_FFFE"
+                }
+              ]
+            },
+            "elementName": {
+              "ja": "冷房",
+              "en": "Cooling"
+            }
+          },
+          {
+            "shortName": "heating",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-65533W"
+                },
+                {
+                  "$ref": "#/definitions/state_Unsupported_FFFE"
+                }
+              ]
+            },
+            "elementName": {
+              "ja": "暖房",
+              "en": "Heating"
+            }
+          },
+          {
+            "shortName": "dehumidifying",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-65533W"
+                },
+                {
+                  "$ref": "#/definitions/state_Unsupported_FFFE"
+                }
+              ]
+            },
+            "elementName": {
+              "ja": "除湿",
+              "en": "Dehumidifying"
+            }
+          },
+          {
+            "shortName": "circulation",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-65533W"
+                },
+                {
+                  "$ref": "#/definitions/state_Unsupported_FFFE"
+                }
+              ]
+            },
+            "elementName": {
+              "ja": "送風",
+              "en": "Circulation"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB9",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "消費電流計測値",
+        "en": "Measured value of current consumption"
+      },
+      "shortName": "currentConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "消費電流計測値",
+        "en": "Measured value of current consumption"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-6553.3A"
+      }
+    },
+    {
+      "epc": "0xBA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室内相対湿度計測値",
+        "en": "Measured value of room relative humidity"
+      },
+      "shortName": "humidity",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "室内相対湿度計測値",
+        "en": "Measured value of room relative humidity"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-100percent"
+          },
+          {
+            "$ref": "#/definitions/state_Unmeasurable_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBB",
+      "validRelease": {
+        "from": "A",
+        "to": "C"
+      },
+      "propertyName": {
+        "ja": "室内温度計測値",
+        "en": "Measured value of room temperature"
+      },
+      "shortName": "roomTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "室内温度計測値",
+        "en": "Measured value of room temperature"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-127-125Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_UnmeasurableA_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBB",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室内温度計測値",
+        "en": "Measured value of room temperature"
+      },
+      "shortName": "roomTemperature",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "室内温度計測値",
+        "en": "Measured value of room temperature"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-127-125Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_UnmeasurableA_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBC",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ユーザリモコン温度設定値",
+        "en": "Set temperature value of user remote control"
+      },
+      "shortName": "temperatureUserRemoteControl",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ユーザリモコン温度設定値",
+        "en": "Set temperature value of user remote control"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-50Celsius"
+      }
+    },
+    {
+      "epc": "0xBD",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "吹き出し温度計測値",
+        "en": "Measured cooled air temperature"
+      },
+      "shortName": "airFlowTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "吹き出し温度計測値",
+        "en": "This property indicates the measured cooled air temperature at the outlet."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-127-125Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_UnmeasurableA_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBE",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "外気温度計測値",
+        "en": "Measured outdoor air temperature"
+      },
+      "shortName": "outdoorTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "外気温度計測値",
+        "en": "This property indicates the measured outdoor air temperature."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-127-125Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_UnmeasurableA_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "相対温度設定値",
+        "en": "Relative temperature setting"
+      },
+      "shortName": "relativeTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "エアコン動作中、動作モードにおける目標温度値に対する相対温度設定値を設定し、設定内容を取得する",
+        "en": "Used to set the relative temperature relative to the target temperature for an air conditioner operation mode, and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-12.7-12.5Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_UnmeasurableA_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換気モード設定",
+        "en": "Ventilation function setting"
+      },
+      "shortName": "ventilationFunction",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "換気の動作 (方向) を設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to use the ventilation function, to specify the ventilation direction, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "onOutlet",
+            "descriptions": {
+              "ja": "換気ON (排気方向)",
+              "en": "Ventilation function ON (outlet direction)"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "off",
+            "descriptions": {
+              "ja": "換気OFF",
+              "en": "Ventilation function OFF"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "onIntake",
+            "descriptions": {
+              "ja": "換気ON (吸気方向)",
+              "en": "Ventilation function ON (intake direction)"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "onOutletAndIntake",
+            "descriptions": {
+              "ja": "換気ON (吸排気方向)",
+              "en": "Ventilation function ON (outlet and intake direction)"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "加湿モード設定",
+        "en": "Humidifier function setting"
+      },
+      "shortName": "humidifierFunction",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "加湿のモード設定ON/OFFを設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to use the humidifier function, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "on",
+            "descriptions": {
+              "ja": "加湿ON",
+              "en": "Humidifier function ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "off",
+            "descriptions": {
+              "ja": "加湿OFF",
+              "en": "Humidifier function OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換気風量設定",
+        "en": "Ventilation air flow rate setting"
+      },
+      "shortName": "ventilationAirFlowLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "換気風量レベルを設定し、設定状態を取得する",
+        "en": "Used to specify the ventilation air flow rate by selecting a level from among the predefined levels, and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0x41",
+                "name": "auto",
+                "descriptions": {
+                  "ja": "換気風量自動",
+                  "en": "Automatic control of ventilation air flow rate"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "加湿量設定",
+        "en": "Degree of humidification setting"
+      },
+      "shortName": "humidificationLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "加湿量レベルを設定し、設定状態を取得する",
+        "en": "Used to specify the degree of humidification to achieve by selecting a level from among the predefined levels, and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0x41",
+                "name": "auto",
+                "descriptions": {
+                  "ja": "加湿量自動",
+                  "en": "Automatic control of the degree of humidification"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "搭載空気清浄方法",
+        "en": "Mounted air cleaning method"
+      },
+      "shortName": "airCleaningMethod",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "空気清浄機能を実現するために搭載されている方法をビットマップで示す",
+        "en": "A bitmap indicates mounted method of exercising air cleaning function."
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 1,
+        "bitmaps": [
+          {
+            "name": "equippedElectronic",
+            "descriptions": {
+              "ja": "電気集塵方式搭載情報",
+              "en": "Electronic dust collection"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotEquipped-Equipped_00-01"
+            }
+          },
+          {
+            "name": "equippedClusterIon",
+            "descriptions": {
+              "ja": "クラスタイオン方式搭載情報",
+              "en": "Cluster ion"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotEquipped-Equipped_00-01"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "空気清浄機能モード設定",
+        "en": "Air purifier function setting"
+      },
+      "shortName": "airPurifierFunction",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "8バイトの配列で、実現方法ごとの空気清浄機能のON/OFFおよびその制御レベルを設定し、設定状態を取得する",
+        "en": "An 8-byte array used to specify, for each type of air purifier function, whether or not to use the air purifier function and the degree of air purification to achieve with the air purifier function, and to acquire the current settings."
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 8,
+        "bitmaps": [
+          {
+            "name": "levelOfElectronic",
+            "descriptions": {
+              "ja": "電気集塵方式：制御レベル",
+              "en": "Electronic dust collection:Level"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000111"
+            },
+            "value": {
+              "$ref": "#/definitions/level_00-8"
+            }
+          },
+          {
+            "name": "modeOfElectronic",
+            "descriptions": {
+              "ja": "電気集塵方式：動作モード",
+              "en": "Electronic dust collection:Mode"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_OFF-ON_00-01"
+            }
+          },
+          {
+            "name": "autoOfElectronic",
+            "descriptions": {
+              "ja": "電気集塵方式：制御状態",
+              "en": "Electronic dust collection:Auto function"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NonAuto-Auto_00-01"
+            }
+          },
+          {
+            "name": "levelOfClusterIon",
+            "descriptions": {
+              "ja": "クラスタイオン方式：制御レベル",
+              "en": "Cluster ion:Level"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00000111"
+            },
+            "value": {
+              "$ref": "#/definitions/level_00-8"
+            }
+          },
+          {
+            "name": "modeOfClusterIon",
+            "descriptions": {
+              "ja": "クラスタイオン方式：動作モード",
+              "en": "Cluster ion:Mode"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_OFF-ON_00-01"
+            }
+          },
+          {
+            "name": "autoOfClusterIon",
+            "descriptions": {
+              "ja": "クラスタイオン方式：制御状態",
+              "en": "Cluster ion:Auto function"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NonAuto-Auto_00-01"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "搭載リフレッシュ方法",
+        "en": "Mounted air refresh method"
+      },
+      "shortName": "airRefreshMethod",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "リフレッシュ機能を実現するために搭載されている方法をビットマップで示す",
+        "en": "A bitmap indicates mounted method for exercising refresh function."
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 1,
+        "bitmaps": [
+          {
+            "name": "equippedMinusIon",
+            "descriptions": {
+              "ja": "マイナスイオン方式搭載情報",
+              "en": "Minus ion collection"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotEquipped-Equipped_00-01"
+            }
+          },
+          {
+            "name": "equippedClusterIon",
+            "descriptions": {
+              "ja": "クラスタイオン方式搭載情報",
+              "en": "Cluster ion"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotEquipped-Equipped_00-01"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC9",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "リフレッシュ機能モード設定",
+        "en": "Air refresher function setting"
+      },
+      "shortName": "airRefresherFunction",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "8バイトの配列で、実現方法ごとのリフレッシュ機能のON/OFFおよびその制御レベルを設定し、設定状態を取得する",
+        "en": "An 8-byte array used to specify, for each type of air refresher function, whether or not to use the air refresher function and the degree of air refreshing to achieve with the air refresher function, and to acquire the current settings."
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 8,
+        "bitmaps": [
+          {
+            "name": "levelOfMinusIon",
+            "descriptions": {
+              "ja": "マイナスイオン方式：制御レベル",
+              "en": "Minus ion:Level"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000111"
+            },
+            "value": {
+              "$ref": "#/definitions/level_00-8"
+            }
+          },
+          {
+            "name": "modeOfMinusIon",
+            "descriptions": {
+              "ja": "マイナスイオン方式：動作モード",
+              "en": "Minus ion:Mode"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_OFF-ON_00-01"
+            }
+          },
+          {
+            "name": "autoOfMinusIon",
+            "descriptions": {
+              "ja": "マイナスイオン方式：制御状態",
+              "en": "Minus ion:Auto function"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NonAuto-Auto_00-01"
+            }
+          },
+          {
+            "name": "levelOfClusterIon",
+            "descriptions": {
+              "ja": "クラスタイオン方式：制御レベル",
+              "en": "Cluster ion:Level"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00000111"
+            },
+            "value": {
+              "$ref": "#/definitions/level_00-8"
+            }
+          },
+          {
+            "name": "modeOfClusterIon",
+            "descriptions": {
+              "ja": "クラスタイオン方式：動作モード",
+              "en": "Cluster ion:Mode"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_OFF-ON_00-01"
+            }
+          },
+          {
+            "name": "autoOfClusterIon",
+            "descriptions": {
+              "ja": "クラスタイオン方式：制御状態",
+              "en": "Cluster ion:Auto function"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NonAuto-Auto_00-01"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "搭載自己洗浄方法",
+        "en": "Mounted self-cleaning method"
+      },
+      "shortName": "selfCleaningMethod",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自己洗浄機能を実現するために搭載されている方法をビットマップで示す",
+        "en": "A bitmap indicates mounted method for exercising self-cleaning function."
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 1,
+        "bitmaps": [
+          {
+            "name": "equippedOzone",
+            "descriptions": {
+              "ja": "オゾン洗浄方式搭載情報",
+              "en": "Information about ozone cleaning method mounting"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotEquipped-Equipped_00-01"
+            }
+          },
+          {
+            "name": "equippedDrying",
+            "descriptions": {
+              "ja": "乾燥方式搭載情報",
+              "en": "Information about drying method mounting"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotEquipped-Equipped_00-01"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCB",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自己洗浄機能モード設定",
+        "en": "Self-cleaning function setting"
+      },
+      "shortName": "selfCleaningFunction",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "8バイトの配列で、実現方法ごとの自己洗浄機能のON/OFFおよびその制御レベルを設定し、設定状態を取得する",
+        "en": "An 8-byte array used to specify, for each type of self-cleaning function, whether or not to use the self-cleaning function and the degree of self-cleaning to achieve with the self-cleaning function, and to acquire the current settings."
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 8,
+        "bitmaps": [
+          {
+            "name": "levelOfOzone",
+            "descriptions": {
+              "ja": "オゾン洗浄方式：制御レベル",
+              "en": "Ozone cleaning:Level"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000111"
+            },
+            "value": {
+              "$ref": "#/definitions/level_00-8"
+            }
+          },
+          {
+            "name": "modeOfOzone",
+            "descriptions": {
+              "ja": "オゾン洗浄方式：動作モード",
+              "en": "Ozone cleaning:Mode"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_OFF-ON_00-01"
+            }
+          },
+          {
+            "name": "autoOfOzone",
+            "descriptions": {
+              "ja": "オゾン洗浄方式：制御状態",
+              "en": "Ozone cleaning:Auto function"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NonAuto-Auto_00-01"
+            }
+          },
+          {
+            "name": "levelOfDrying",
+            "descriptions": {
+              "ja": "乾燥方式：制御レベル",
+              "en": "Drying:Level"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00000111"
+            },
+            "value": {
+              "$ref": "#/definitions/level_00-8"
+            }
+          },
+          {
+            "name": "modeOfDrying",
+            "descriptions": {
+              "ja": "乾燥方式：動作モード",
+              "en": "Drying:Mode"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_OFF-ON_00-01"
+            }
+          },
+          {
+            "name": "autoOfDrying",
+            "descriptions": {
+              "ja": "乾燥方式：制御状態",
+              "en": "Drying:Auto function"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NonAuto-Auto_00-01"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCC",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "特別運転モード設定",
+        "en": "Special function setting"
+      },
+      "shortName": "specialFunction",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "特別運転モードを設定し、設定状態を取得する",
+        "en": "Used to specify the 'special function' to use, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x40",
+            "name": "noSetting",
+            "descriptions": {
+              "ja": "設定なし",
+              "en": "No setting"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "clothesDryer",
+            "descriptions": {
+              "ja": "衣類乾燥",
+              "en": "Clothes dryer function"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "condensationSuppressor",
+            "descriptions": {
+              "ja": "結露抑制",
+              "en": "Condensation suppressor function"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "miteAndMoldControl",
+            "descriptions": {
+              "ja": "ダニカビ抑制",
+              "en": "Mite and mold control function"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "activeDefrosting",
+            "descriptions": {
+              "ja": "強制除霜",
+              "en": "Active defrosting function"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCD",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "内部動作状態",
+        "en": "Operation status of components"
+      },
+      "shortName": "componentsOperationStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "エアコンの内部動作状態をビットマップで表現する",
+        "en": "This property indicates the operation status of components of the air conditioner in a bitmap format."
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 1,
+        "bitmaps": [
+          {
+            "name": "compressor",
+            "descriptions": {
+              "ja": "コンプレッサ動作状態",
+              "en": "Operation status of the compressor"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "type": "state",
+              "size": 0,
+              "enum": [
+                {
+                  "edt": "0x00",
+                  "name": "off",
+                  "descriptions": {
+                    "ja": "停止中",
+                    "en": "Not operating"
+                  }
+                },
+                {
+                  "edt": "0x01",
+                  "name": "on",
+                  "descriptions": {
+                    "ja": "動作中",
+                    "en": "In operation"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "thermostat",
+            "descriptions": {
+              "ja": "サーモON/OFF状態",
+              "en": "Operation status of the thermostat"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_OFF-ON_00-01"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCE",
+      "validRelease": {
+        "from": "A",
+        "to": "C"
+      },
+      "propertyName": {
+        "ja": "強制サーモモード設定",
+        "en": "Thermostat setting override function"
+      },
+      "shortName": "thermostatOverride",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "エアコンのサーモ設定を無視して運転するか否かを設定する",
+        "en": "Used to specify whether or not to allow the air conditioner to operate ignoring its thermostat setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x40",
+            "name": "normal",
+            "descriptions": {
+              "ja": "通常設定",
+              "en": "Normal setting"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "on",
+            "descriptions": {
+              "ja": "強制サーモON",
+              "en": "Thermostat setting override function ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "off",
+            "descriptions": {
+              "ja": "強制サーモOFF",
+              "en": "Thermostat setting override function OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCE",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "強制サーモモード設定",
+        "en": "Thermostat setting override function"
+      },
+      "shortName": "thermostatOverride",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "エアコンのサーモ設定を無視して運転するか否かを設定する",
+        "en": "Used to specify whether or not to allow the air conditioner to operate ignoring its thermostat setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x40",
+            "name": "normal",
+            "descriptions": {
+              "ja": "通常設定",
+              "en": "Normal setting"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "on",
+            "descriptions": {
+              "ja": "強制サーモON",
+              "en": "Thermostat setting override function ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "off",
+            "descriptions": {
+              "ja": "強制サーモOFF",
+              "en": "Thermostat setting override function OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "空気清浄モード設定",
+        "en": "Air purification mode setting"
+      },
+      "shortName": "airPurification",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "空気清浄のモード設定ON/OFFを設定し、設定状態を取得する",
+        "en": "Used to set the air purification mode setting ON/OFF and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "on",
+            "descriptions": {
+              "ja": "空気清浄ON",
+              "en": "Air purification ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "off",
+            "descriptions": {
+              "ja": "空気清浄OFF",
+              "en": "Air purification OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ブザー",
+        "en": "Buzzer"
+      },
+      "shortName": "beepBuzzer",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "ブザー音を発生する",
+        "en": "Used to generate a buzzer sound."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "buzzer",
+            "descriptions": {
+              "ja": "ブザー音発生",
+              "en": "Buzzer sound generation"
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      }
+    }
+  ]
+}

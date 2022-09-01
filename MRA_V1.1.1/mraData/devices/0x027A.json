@@ -1,0 +1,667 @@
+{
+  "eoj": "0x027A",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "冷温水熱源機",
+    "en": "Cold or hot water heat source equipment"
+  },
+  "shortName": "coldOrHotWaterHeatSourceEquipment",
+  "elProperties": [
+    {
+      "epc": "0x90",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ予約設定",
+        "en": "ON timer reservation setting"
+      },
+      "shortName": "onTimerReservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切",
+        "en": "Reservation ON/OFF"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reservation_4142"
+      }
+    },
+    {
+      "epc": "0x91",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ時刻設定値",
+        "en": "ON timer setting"
+      },
+      "shortName": "timeOfOnTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0x92",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ相対時間設定値",
+        "en": "Relative ON timer setting"
+      },
+      "shortName": "relativeTimeOfOnTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0x94",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFFタイマ予約設定",
+        "en": "OFF timer reservation setting"
+      },
+      "shortName": "offTimerReservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切",
+        "en": "Reservation ON/OFF"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reservation_4142"
+      }
+    },
+    {
+      "epc": "0x95",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFFタイマ時刻設定値",
+        "en": "Time set by OFF timer"
+      },
+      "shortName": "timeOfOffTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0x96",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFFタイマ相対時間設定値",
+        "en": "Relative OFF timer setting"
+      },
+      "shortName": "relativeTimeOfOffTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷水温設定2設定可能最大レベル",
+        "en": "Cold water temperature setting 2 Maximum allowable setting level"
+      },
+      "shortName": "coldWaterTemperatue2MaximumLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "冷房(冷水)水温設定2の最大段階数",
+        "en": "The maximum number of steps for cooling (cold water) water temperature setting 2"
+      },
+      "data": {
+        "$ref": "#/definitions/number_33-47"
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      },
+      "note": {
+        "ja": "冷房(冷水)水温設定2の最大段階数",
+        "en": "The maximum number of steps for cooling (cold water) temperature setting 2"
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "温水温設定2設定可能最大レベル",
+        "en": "Warm water temperature setting 2 Maximum allowable setting level"
+      },
+      "shortName": "warmWaterTemperatue2MaximumLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "暖房(温水)水温設定2の最大段階数",
+        "en": "The maximum number of steps for heating (warm water) water temperature setting 2"
+      },
+      "data": {
+        "$ref": "#/definitions/number_49-63"
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      },
+      "note": {
+        "ja": "暖房(温水)水温設定2の最大段階数",
+        "en": "The maximum number of steps for heating (warm water) temperature setting 2"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転モード設定",
+        "en": "Operation mode setting"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "暖房(温水)/冷房(冷水)の運転モードを設定し､設定状態を取得する",
+        "en": "Set the operation mode of heating (hot water)/cooling (cold water) and gets the status"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "heating",
+            "descriptions": {
+              "ja": "暖房",
+              "en": "Heating"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "cooling",
+            "descriptions": {
+              "ja": "冷房",
+              "en": "Cooling"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "水温設定1",
+        "en": "Water temperature setting 1"
+      },
+      "shortName": "waterTemperature1",
+      "accessRule": {
+        "get": "required_c",
+        "set": "required_c",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "水温設定値を表す",
+        "en": "This property indicates water temperature setting"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-100Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_71"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "EPC=0xE1または0xE2のどちらかの実装が必須",
+        "en": "Either EPC=0xE1 or 0xE2 is required."
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "水温設定2",
+        "en": "Water temperature setting 2"
+      },
+      "shortName": "waterTemperature2",
+      "accessRule": {
+        "get": "required_c",
+        "set": "required_c",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "水温設定レベルを15段階で表す",
+        "en": "This property indicates water temperature setting level by 15 steps"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_21-15"
+          },
+          {
+            "$ref": "#/definitions/level_31-15"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_41"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "EPC=0xE1または0xE2のどちらかの実装が必須。冷房(冷水):0x21~0x2F、暖房(温水):0x31~0x3F",
+        "en": "Either EPC=0xE1 or 0xE2 is required. Cooling (cold water) : 0x21 - 0x2F, Heating (hot water) : 0x31 - 0x3F"
+      },
+      "note": {
+        "ja": "冷房(冷水):1~15、暖房(温水):17~31",
+        "en": "Cooling (cold water) : 1 - 15, Heating (hot water) : 17 - 31"
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "往き水温計測値(出口水温)",
+        "en": "Measured temperature of outward water (Exit water Temperature)"
+      },
+      "shortName": "outwardWaterTemperatureExit",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "往き水温計測値",
+        "en": "Measured temperature of outward water"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-100Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "戻り水温計測値(入口水温)",
+        "en": "Measured temperature of inward water (Entrance water Temperature)"
+      },
+      "shortName": "inwardWaterTemperatureEntrance",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "戻り水温計測値",
+        "en": "Measured temperature of inward water"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-100Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "特殊運転設定",
+        "en": "Special operation setting"
+      },
+      "shortName": "specialOperation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常運転/ひかえめ運転/ハイパワー運転を設定し､設定状態を取得する",
+        "en": "Sets Normal Operation / Modest operation / High power operation and gets the status"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "normal",
+            "descriptions": {
+              "ja": "通常運転",
+              "en": "Normal operation"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "modest",
+            "descriptions": {
+              "ja": "ひかえめ運転",
+              "en": "Modest operation"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "highPower",
+            "descriptions": {
+              "ja": "ハイパワー運転",
+              "en": "High power operation"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "デイリータイマー設定",
+        "en": "Daily timer setting"
+      },
+      "shortName": "dailyTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "デイリータイマー入/切最大2種のタイマー使用可能",
+        "en": "Daily timer ON/OFFUp to 2 kinds of timers can be used"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x40",
+            "name": "timerOff",
+            "descriptions": {
+              "ja": "タイマー切",
+              "en": "Timer OFF"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "timer1",
+            "descriptions": {
+              "ja": "タイマー1",
+              "en": "Timer 1"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "timer2",
+            "descriptions": {
+              "ja": "タイマー2",
+              "en": "Timer 2"
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "最大2種のタイマー使用可能",
+        "en": "Up to 2 kinds of timer can be used"
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "デイリータイマー1設定",
+        "en": "Daily timer setting 1"
+      },
+      "shortName": "dailyTimer1",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "デイリータイマーの設定値",
+        "en": "Time set by daily timer"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_6"
+      },
+      "remark": {
+        "ja": "24時間を30分単位で分割、全6バイトを割り当て、各bit 1:運転、0:停止",
+        "en": "Set the time in the unit of 30 minutes, dividing 24 hours by 30 minutes and allocated 6 bytes. Each bit 1: worked 0: stopped."
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "デイリータイマー2設定",
+        "en": "Daily timer setting 2"
+      },
+      "shortName": "dailyTimer2",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "デイリータイマー2の設定値",
+        "en": "Time set by daily timer"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_6"
+      },
+      "remark": {
+        "ja": "24時間を30分単位で分割、全6バイトを割り当て、各bit 1:運転、0:停止",
+        "en": "Set the time in the unit of 30 minutes, dividing 24 hours by 30 minutes and allocated 6 bytes. Each bit 1: worked 0: stopped."
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定格消費電力値",
+        "en": "Rated power consumption"
+      },
+      "shortName": "ratedPowerconsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "暖房(温水)/冷房(冷水)の各運転モード時の定格消費電力",
+        "en": "Rated power consumption of heater (hot water) / cooler (cold water) in watts for each operating mode"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "暖房(温水)運転モード時の定格消費電力",
+              "en": "Rated power consumption of heater (hot water) mode in watts"
+            },
+            "shortName": "heating",
+            "element": {
+              "$ref": "#/definitions/number_0-65533W"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "冷房(冷水)運転モード時の定格消費電力",
+              "en": "Rated power consumption of cooler (cold water) mode in watts"
+            },
+            "shortName": "cooling",
+            "element": {
+              "$ref": "#/definitions/number_0-65533W"
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "暖房(温水) : 冷房(冷水)",
+        "en": "Heater (hot water) : cooler (cold water)"
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "消費電力計測方法",
+        "en": "Power consumption measurement method"
+      },
+      "shortName": "powerConsumptionMeasurementMethod",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時消費電力計測値及び積算消費電力計測値、定格消費電力値の計測方法を示す",
+        "en": "This property indicates the method of measuring instantaneous power consumption, cumulative power consumption and rated power consumption"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "nodeUnit",
+            "descriptions": {
+              "ja": "ノード単位",
+              "en": "Node unit"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "classUnit",
+            "descriptions": {
+              "ja": "クラス単位",
+              "en": "Class unit"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "instanceUnit",
+            "descriptions": {
+              "ja": "インスタンス単位",
+              "en": "Instance unit"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 import EL, { eldata,rinfo } from "echonet-lite";
-import DeviceRepository from "./DeviceRepository";
 import os from "os";
 import ip from "ip";
 import { Device, DeviceId } from "./Property";
+import EchoNetDeviceConverter from "./EchoNetDeviceConverter";
 
 
 export class EchoNetLiteController{
@@ -23,13 +23,17 @@ export class EchoNetLiteController{
         }
       }
   
-      const deviceRepository = new DeviceRepository();
+      const deviceConverter = new EchoNetDeviceConverter();
   
       var objList = ['05ff01'];
   
       EL.initialize(objList, ( rinfo:rinfo, els:eldata ):void=>{
-        //const b = JSON.stringify(els);
-        //console.log(`recieved:` + b);
+        // if(els.SEOJ === "026302")
+        // {
+        //   const b = JSON.stringify(els);
+        //   console.log(`recieved:` + b);  
+        // }
+        
         if(els.ESV === EL.SET_RES)
         {
           for(const propertyCode in els.DETAILs)
@@ -46,11 +50,11 @@ export class EchoNetLiteController{
           }
           for(const propertyCode in els.DETAILs)
           {
-            const property = deviceRepository.getPropertyWithEpc(deviceId, propertyCode);
+            const property = deviceConverter.getPropertyWithEpc(deviceId, propertyCode);
             if(property===undefined){
               continue;
             }
-            const value = deviceRepository.getPropertyValue(deviceId, property);
+            const value = deviceConverter.getPropertyValue(deviceId, property);
             this.firePropertyChnagedEvent(deviceId, property.name, value);
           }
         }
@@ -62,11 +66,11 @@ export class EchoNetLiteController{
           }
           for(const propertyCode in els.DETAILs)
           {
-            const property = deviceRepository.getPropertyWithEpc(deviceId, propertyCode);
+            const property = deviceConverter.getPropertyWithEpc(deviceId, propertyCode);
             if(property===undefined){
               continue;
             }
-            const value = deviceRepository.getPropertyValue(deviceId, property);
+            const value = deviceConverter.getPropertyValue(deviceId, property);
             this.firePropertyChnagedEvent(deviceId, property.name, value);
           }
         }
@@ -75,7 +79,7 @@ export class EchoNetLiteController{
       
       
       EL.setObserveFacilities(1000, () => {
-        const idList = deviceRepository.getDeviceIdList(EL.facilities);
+        const idList = deviceConverter.getDeviceIdList(EL.facilities);
   
         let detected=false;
         for(const id of idList)
@@ -92,7 +96,7 @@ export class EchoNetLiteController{
         //console.dir(EL.facilities);
           // if(deviceStore.exists(id.id) === false)
           // {
-          //   const device = deviceRepository.createDevice(id, EL.facilities);
+          //   const device = deviceConverter.createDevice(id, EL.facilities);
           //   if(device !== undefined)
           //   {
           //     deviceStore.add(device);
@@ -109,9 +113,9 @@ export class EchoNetLiteController{
     }
   
     getDevice = (id:DeviceId):Device|undefined => {
-      const deviceRepository = new DeviceRepository();
+      const deviceConverter = new EchoNetDeviceConverter();
   
-      const device = deviceRepository.createDevice(id, EL.facilities);
+      const device = deviceConverter.createDevice(id, EL.facilities);
       return device;
     }
   
@@ -134,11 +138,11 @@ export class EchoNetLiteController{
     }
     
     setDeviceProperty = (id:DeviceId, propertyName:string, newValue:any):void =>{
-      const deviceRepository = new DeviceRepository();
-      const property = deviceRepository.getProperty(id, propertyName);
+      const deviceConverter = new EchoNetDeviceConverter();
+      const property = deviceConverter.getProperty(id, propertyName);
   
   
-      const echoNetData = deviceRepository.propertyToEchoNetData(id, propertyName, newValue);
+      const echoNetData = deviceConverter.propertyToEchoNetData(id, propertyName, newValue);
       if(echoNetData===undefined)
       {
         console.log(`setDeviceProperty echoNetData===undefined newValue=${newValue}`);
@@ -162,8 +166,8 @@ export class EchoNetLiteController{
     }
 
     requestDeviceProperty = (id:DeviceId, propertyName:string):void =>{
-      const deviceRepository = new DeviceRepository();
-      const property = deviceRepository.getProperty(id, propertyName);
+      const deviceConverter = new EchoNetDeviceConverter();
+      const property = deviceConverter.getProperty(id, propertyName);
       if(property === undefined)
       {
         console.log(`setDeviceProperty property === undefined propertyName=${propertyName}`);

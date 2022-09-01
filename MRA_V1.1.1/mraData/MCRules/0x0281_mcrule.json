@@ -1,0 +1,23 @@
+{
+  "eoj": "0x0281",
+  "properties": [
+    {
+      "epc": "0xE0",
+      "data": {
+        "$ref": "#/definitions/number_0-999999999m3"
+      },
+      "note": {
+        "ja": "値は0xE1の値を乗算した値。",
+        "en": "This value is already multiplied with 0xE1."
+      }
+    },
+    {
+      "epc": "0xE1",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE2",
+      "action": "DEL"
+    }
+  ]
+}

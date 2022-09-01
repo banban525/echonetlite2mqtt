@@ -1,0 +1,252 @@
+{
+  "eoj": "0x0135",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "空気清浄器",
+    "en": "Air cleaner"
+  },
+  "shortName": "airCleaner",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operation status"
+      },
+      "shortName": "operationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ON/OFFの状態を示す",
+        "en": "This property indicates the ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0xA0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風量設定",
+        "en": "Air flow rate setting"
+      },
+      "shortName": "airFlowLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風量レベルおよび風量自動状態を設定。換気風量レベルは8段階で指定",
+        "en": "Sets air flow rate level and air flow rate auto status. The ventilation air flow rate is specified (8-step)."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0x41",
+                "name": "auto",
+                "descriptions": {
+                  "ja": "換気風量自動状態",
+                  "en": "Ventilation air flow rate auto status"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "空気汚れ検知状態",
+        "en": "Air pollution detection status"
+      },
+      "shortName": "airPollutionDetection",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "空気汚れ検知状況を示す",
+        "en": "This property indicates air pollution detection status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "空気汚れ検知有",
+              "en": "Air pollution detected"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "空気汚れ検知無",
+              "en": "Air pollution non-detected"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "煙 (タバコ) 検知状態",
+        "en": "Smoke (cigarette) detection status"
+      },
+      "shortName": "smokeDetection",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "煙 (タバコ) 検知状況を示す",
+        "en": "This property indicates smoke (cigarette) detection status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "煙 (タバコ) 検知有",
+              "en": "Smoke (cigarette) detection status found."
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "煙 (タバコ) 検知無",
+              "en": "Smoke (cigarette) detection status not found."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "光触媒動作設定",
+        "en": "Optical catalyst operation setting"
+      },
+      "shortName": "opticalCatalystOperationStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "光触媒ON/OFF設定",
+        "en": "Optical catalyst ON/OFF status"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "光触媒ON",
+              "en": "Optical catalyst ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "光触媒OFF",
+              "en": "Optical catalyst OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "フィルタ交換通知状態",
+        "en": "Filter change notice"
+      },
+      "shortName": "filterChangeNotice",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "フィルタ交換時期通知有/無",
+        "en": "Filter change time notice found/not found"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "フィルタ交換時期通知有",
+              "en": "Found"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "フィルタ交換時期通知無",
+              "en": "Not found"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

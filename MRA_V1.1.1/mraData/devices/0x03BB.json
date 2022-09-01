@@ -1,0 +1,342 @@
+{
+  "eoj": "0x03BB",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "炊飯器",
+    "en": "Rice cooker"
+  },
+  "shortName": "riceCooker",
+  "elProperties": [
+    {
+      "epc": "0x90",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "炊飯予約設定",
+        "en": "Rice cooking reservation setting"
+      },
+      "shortName": "reservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "炊飯予約の有無を示す",
+        "en": "This property indicates whether rice cooking reservation is ON or OFF."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ReservationC_4142"
+      },
+      "note": {
+        "ja": "炊飯器用にプロパティ名を定義",
+        "en": "This property is named for rice cooker."
+      }
+    },
+    {
+      "epc": "0x91",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "炊飯予約設定時刻設定値",
+        "en": "Rice cooking reservation time setting"
+      },
+      "shortName": "reservationTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value (HH:MM)"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "炊飯器用にプロパティ名を定義、秒の指定は無視される",
+        "en": "This property is named for rice cooker. Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0x92",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "炊飯予約設定相対時間設定値",
+        "en": "Rice cooking reservation relative time setting"
+      },
+      "shortName": "reservationRelativeTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value (HH:MM)"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "炊飯器用にプロパティ名を定義、秒の指定は無視される",
+        "en": "This property is named for rice cooker. Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "蓋開閉状態",
+        "en": "Cover closure status"
+      },
+      "shortName": "coverStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓋開/閉状態を示す",
+        "en": "This property indicates whether the cover is open or closed."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "open",
+            "descriptions": {
+              "ja": "蓋開",
+              "en": "Cover open"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "close",
+            "descriptions": {
+              "ja": "蓋閉",
+              "en": "Cover close"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "炊飯状態",
+        "en": "Rice cooking status"
+      },
+      "shortName": "cookingStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "炊飯状態を示す",
+        "en": "This property indicates rice cooking status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "stop",
+            "descriptions": {
+              "ja": "停止",
+              "en": "Stop"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "preheating",
+            "descriptions": {
+              "ja": "予熱",
+              "en": "Preheating"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "cooking",
+            "descriptions": {
+              "ja": "炊飯",
+              "en": "Rice cooking"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "steaming",
+            "descriptions": {
+              "ja": "蒸らし",
+              "en": "Steaming"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "completion",
+            "descriptions": {
+              "ja": "炊飯完了",
+              "en": "Rice cooking completion"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "炊飯制御設定",
+        "en": "Rice cooking control setting"
+      },
+      "shortName": "cookingControl",
+      "accessRule": {
+        "get": "required_o",
+        "set": "required_o",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "炊飯制御設定を示す",
+        "en": "This property indicates rice cooking control setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "running",
+            "descriptions": {
+              "ja": "炊飯開始・炊飯再開",
+              "en": "Rice cooking start/restart"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "suspension",
+            "descriptions": {
+              "ja": "炊飯一時停止",
+              "en": "Rice cooking suspension"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "保温設定",
+        "en": "Warmer setting"
+      },
+      "shortName": "warmerOperation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "保温設定の有無を示す",
+        "en": "This property indicates whether or not warmer function is enabled."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "保温有",
+              "en": "Warmer enabled"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "保温無",
+              "en": "Warmer disabled"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "内なべ取り外し状態",
+        "en": "Inner pot removal status"
+      },
+      "shortName": "innerPotRemoved",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "内なべ取り外しの有無を示す",
+        "en": "This property indicates whether inner pot is removed or not."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Removed-NotRemoved_4142"
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "蓋取り外し状態",
+        "en": "Cover removal status"
+      },
+      "shortName": "coverRemoved",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓋取り外しの有無を示す",
+        "en": "This property indicates whether or not cover is removed."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Removed-NotRemoved_4142"
+      }
+    }
+  ]
+}

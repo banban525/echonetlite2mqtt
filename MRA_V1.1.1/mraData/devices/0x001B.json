@@ -1,0 +1,38 @@
+{
+  "eoj": "0x001B",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "CO2センサ",
+    "en": "CO2 sensor"
+  },
+  "shortName": "co2Sensor",
+  "elProperties": [
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "CO2濃度計測値",
+        "en": "Measured value of CO2 concentration"
+      },
+      "shortName": "value",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "CO2濃度計測値をppmで示す",
+        "en": "This property indicates measured value of CO2 concentration in ppm."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533ppm"
+      }
+    }
+  ]
+}

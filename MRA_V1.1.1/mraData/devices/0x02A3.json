@@ -1,0 +1,93 @@
+{
+  "eoj": "0x02A3",
+  "validRelease": {
+    "from": "I",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "照明システム",
+    "en": "Lighting system"
+  },
+  "shortName": "lightingSystem",
+  "elProperties": [
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "照明の明るさ設定",
+        "en": "Light level setting"
+      },
+      "shortName": "lightLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "照明の明るさを%で示す。0x00 を消灯とする。",
+        "en": "This property indicates light level in %. 0x00 shall be a state of lights-out."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xC0",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "シーン制御設定",
+        "en": "Scene control setting"
+      },
+      "shortName": "sceneId",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "シーン制御の番号を取得、設定する。",
+        "en": "Get or set scene control number."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-253"
+          },
+          {
+            "$ref": "#/definitions/state_NoSetting_00"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC1",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "シーン制御設定可能数",
+        "en": "Number that can assign scene control setting"
+      },
+      "shortName": "maximumNumberOfSceneId",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "シーン制御を設定可能な最大数を示す",
+        "en": "This property indicates the maximum number that can be assigned for scene control."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-253"
+      }
+    }
+  ]
+}

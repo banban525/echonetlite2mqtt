@@ -1,4 +1,4 @@
-import { DeviceProperty } from "./AllDeviceDescriptions";
+import { ElPropertyDescription } from "./MraTypes";
 
 export interface Manufacturer{
   code: string;
@@ -8,11 +8,10 @@ export interface Manufacturer{
   }
 }
 
-
 export interface PropertyValue
 {
   name:string;
-  deviceProperty:DeviceProperty;
+  deviceProperty:Property;
   value:any;
   updated:string; // YYYY-NN-DD HH:mm:ss
 }
@@ -49,8 +48,17 @@ export class Device{
 }
 
 
-export interface Property extends DeviceProperty{
+export interface Property {
   name:string;
+  epc:string;
+  descriptions:{
+      ja:string;
+      en:string;
+  },
+  readable: boolean;
+  writable:boolean;
+  observable: boolean;
+  schema:ElPropertyDescription;
 }
 
 export interface DeviceId {

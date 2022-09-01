@@ -1,0 +1,397 @@
+{
+  "eoj": "0x0288",
+  "properties": [
+    {
+      "epc": "0xD3",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xD7",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE1",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE5",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xED",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE0",
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99999999kWhNoMax",
+            "coefficient": [
+              "0xD3",
+              "0xE1"
+            ],
+            "overflowCode": false,
+            "underflowCode": false
+          },
+          {
+            "$ref": "#/definitions/state_NoData_FFFFFFFE"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE2",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                    "coefficient": [
+                      "0xD3",
+                      "0xE1"
+                    ],
+                    "overflowCode": false,
+                    "underflowCode": false
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      }
+    },
+    {
+      "epc": "0xE3",
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99999999kWhNoMax",
+            "coefficient": [
+              "0xD3",
+              "0xE1"
+            ],
+            "overflowCode": false,
+            "underflowCode": false
+          },
+          {
+            "$ref": "#/definitions/state_NoData_FFFFFFFE"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE4",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                    "coefficient": [
+                      "0xD3",
+                      "0xE1"
+                    ],
+                    "overflowCode": false,
+                    "underflowCode": false
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      }
+    },
+    {
+      "epc": "0xEA",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xE1"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEB",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xE1"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEC",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日時",
+              "en": "Date and time for which the historical data is to be retrieved"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time",
+              "size": 6
+            }
+          },
+          {
+            "elementName": {
+              "ja": "収集コマ数",
+              "en": "Number of collection segments"
+            },
+            "shortName": "numberOfCollectionSegments",
+            "element": {
+              "$ref": "#/definitions/number_1-12"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 8,
+              "maxItems": 12,
+              "items": {
+                "type": "object",
+                "properties": [
+                  {
+                    "shortName": "normalDirectionElectricEnergy",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                          "coefficient": [
+                            "0xD3",
+                            "0xE1"
+                          ],
+                          "overflowCode": false,
+                          "underflowCode": false
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                        }
+                      ]
+                    },
+                    "descriptions": {
+                      "ja": "正方向",
+                      "en": "Normal direction"
+                    }
+                  },
+                  {
+                    "shortName": "reverseDirectionElectricEnergy",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                          "coefficient": [
+                            "0xD3",
+                            "0xE1"
+                          ],
+                          "overflowCode": false,
+                          "underflowCode": false
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                        }
+                      ]
+                    },
+                    "descriptions": {
+                      "ja": "逆方向",
+                      "en": "Reverse direction"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "dateAndTime": {
+          "descriptions": {
+            "ja": "積算履歴収集日時",
+            "en": "Date and time for which the historical data is to be retrieved"
+          },
+          "data": {
+            "type": "date-time"
+          },
+          "required": true
+        },
+        "numberOfCollectionSegments": {
+          "descriptions": {
+            "ja": "収集コマ数",
+            "en": "Number of collection segments"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "required": true
+        }
+      }
+    }
+  ]
+}
