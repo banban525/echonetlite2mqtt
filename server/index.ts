@@ -10,6 +10,7 @@ import { EventRepository } from "./EventRepository";
 import { LogRepository } from "./LogRepository";
 
 let echonetTargetNetwork = "";
+let echonetIntervalToGetProperties = 100;
 let debugLog = false;
 let restApiPort = 3000;
 let restApiHost = "0.0.0.0";
@@ -26,6 +27,19 @@ if (
 ) {
   echonetTargetNetwork = process.env.ECHONET_TARGET_NETWORK.replace(/^"/g, "").replace(/"$/g, "");
 }
+if (
+  "ECHONET_INTERVAL_TO_GET_PROPERTIES" in process.env &&
+  process.env.ECHONET_INTERVAL_TO_GET_PROPERTIES !== undefined
+) {
+  const tempText = process.env.ECHONET_INTERVAL_TO_GET_PROPERTIES.replace(/^"/g, "").replace(/"$/g, "");
+  const tempNo = Number(tempText);
+  if(isNaN(tempNo) === false)
+  {
+    echonetIntervalToGetProperties = tempNo;
+  }
+}
+
+
 if ("DEBUG" in process.env && process.env.DEBUG !== undefined) {
   debugLog =
     process.env.DEBUG.toUpperCase() === "TRUE" || process.env.DEBUG === "1" || 
@@ -87,6 +101,15 @@ for(var i = 2;i < process.argv.length; i++){
   {
     echonetTargetNetwork = value.replace(/^"/g, "").replace(/"$/g, "");
   }
+  if(name === "--echonetIntervalToGetProperties".toLowerCase())
+  {
+    const tempText = value.replace(/^"/g, "").replace(/"$/g, "");
+    const tempNo = Number(tempText);
+    if(isNaN(tempNo) === false)
+    {
+      echonetIntervalToGetProperties = tempNo;
+    }
+  }
   if(name === "--RestApiPort".toLowerCase())
   {
     const tempNo = Number(value.replace(/^"/g, "").replace(/"$/g, ""));
@@ -130,6 +153,7 @@ for(var i = 2;i < process.argv.length; i++){
 const logger = new LogRepository();
 
 logger.output(`echonetTargetNetwork=${echonetTargetNetwork}`);
+logger.output(`echonetIntervalToGetProperties=${echonetIntervalToGetProperties}`)
 logger.output(`debugLog=${debugLog}`);
 logger.output(`restApiPort=${restApiPort}`);
 logger.output(`restApiHost=${restApiHost}`);
@@ -173,7 +197,7 @@ const systemStatusRepository = new SystemStatusRepositry();
 
 const deviceStore = new DeviceStore();
 
-const echoNetListController = new EchoNetLiteController(echonetTargetNetwork);
+const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, echonetIntervalToGetProperties);
 
 echoNetListController.addDeviceDetectedEvent(()=>{
   const deviceIds = echoNetListController.getDetectedDeviceIds();

@@ -74,6 +74,7 @@ ECHONET Lite Options
 |  Environment Variables | Commandline Parameter | Description |
 | ------------------     | --------------------- | ----------- |
 | `ECHONET_TARGET_NETWORK` | `--echonetTargetNetwork` | Specify the network for ECHONET Lite in the format "000.000.000.000/00". (Default: Auto) |
+| `ECHONET_INTERVAL_TO_GET_PROPERTIES` | `--echonetIntervalToGetProperties` | Specifies the time interval for acquiring ECHONET Lite properties. (Unit: ms) (Default: 100) |
 
 
 ### Use docker

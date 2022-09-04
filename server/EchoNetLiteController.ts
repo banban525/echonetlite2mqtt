@@ -7,7 +7,7 @@ import { Device, DeviceId } from "./Property";
 
 export class EchoNetLiteController{
   
-    constructor(echonetTargetNetwork:string){
+    constructor(echonetTargetNetwork:string, intervalToGetProperties:number){
   
       let usedIpByEchoNet = "";
       if (echonetTargetNetwork.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+/)) {
@@ -71,7 +71,7 @@ export class EchoNetLiteController{
           }
         }
   
-      }, 4, {v4:usedIpByEchoNet, autoGetDelay:100, autoGetProperties:true});
+      }, 4, {v4:usedIpByEchoNet, autoGetDelay:intervalToGetProperties, autoGetProperties:true});
       
       
       EL.setObserveFacilities(1000, () => {
