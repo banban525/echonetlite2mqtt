@@ -4,6 +4,19 @@ import { DeviceStore } from "./DeviceStore";
 import { EventRepository } from "./EventRepository";
 import { LogRepository } from "./LogRepository";
 import { Device } from "./Property";
+import expressLayouts from 'express-ejs-layouts';
+
+interface ViewProperty{
+  propertyName:string;
+  valueText: string;
+}
+
+interface selectedOneOf
+{
+  propertyChain:string[];
+  selectedIndex:number;
+}
+
 
 export class RestApiController
 {
@@ -32,13 +45,21 @@ export class RestApiController
   public start = ():void=>{
     const app = express();
 
-    app.use(express.static("./front/build"));
+    app.use(expressLayouts);
+    app.use(express.static("public"));
+    app.set("view engine", "ejs");
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
-    app.get("/status", this.getStatus);
-    //app.get("/logs", getLogs);
+    // Views
+    app.get("/", this.viewIndex);
+    app.get("/logs", this.viewLogs);
+    app.get("/devices", this.viewIndex);
+    app.get("/devices/:deviceId", this.viewDevice);
+
+
+    // APIs
     app.get("/elapi", this.getVersions);
     app.get("/elapi/v1", this.getServices);
     app.get("/elapi/v1/devices", this.getDevices);
@@ -49,8 +70,9 @@ export class RestApiController
     app.put("/elapi/v1/devices/:deviceId/properties/:propertyName", this.putProperty);
     app.put("/elapi/v1/devices/:deviceId/properties/:propertyName/request", this.requestProperty);
 
-    app.get("/events", this.getEventsWithLongPolling);
-    app.get("/logs", this.getLogs);
+    app.get("/api/status", this.getStatus);
+    app.get("/api/events", this.getEventsWithLongPolling);
+    app.get("/api/logs", this.getLogs);
 
     const server = app.listen(this.port, this.hostName, ():void => {
       console.log(`[RESTAPI] Start listening to web server. ${this.hostName}:${this.port}`);
@@ -71,6 +93,83 @@ export class RestApiController
   }
   private firePropertyRequestedRequestEvent = (deviceId:string,propertyName:string):void=>{
     this.propertyRequestedRequestEvents.forEach(_=>_(deviceId, propertyName));
+  }
+
+  private viewIndex = (
+    req: express.Request,
+    res: express.Response
+  ): void => {
+    res.render("./index.ejs");
+  }
+
+  private viewLogs = (
+    req: express.Request,
+    res: express.Response
+  ): void => {
+    res.render("./logs.ejs");
+  }
+
+  private viewDevice = (
+    req: express.Request,
+    res: express.Response
+  ): void => {
+    const deviceId = req.params.deviceId;
+    const foundDevice = this.deviceStore.get(deviceId);
+    if(foundDevice === undefined){
+      res.status(404);
+      res.end('device not found : ' + deviceId);
+      return;
+    }
+    const propertyViewModels = this.toUIData(foundDevice);
+
+
+    const allProperties = JSON.stringify(Device.ToProperiesObject(foundDevice.propertiesValue), null, 2);
+    res.render("./device.ejs", {device:foundDevice, allProperties, propertyViewModels});
+  }
+
+  private toUIData(device: Device):{[key:string]:ViewProperty}
+  {
+    const result:{[key:string]:ViewProperty} = {};
+
+    for(const prop of device.properties)
+    {
+      const dataType = prop.schema.data;
+      const viewProperty:ViewProperty={
+        propertyName:"",
+        valueText:""
+      }
+      if(viewProperty !== undefined)
+      {
+        viewProperty.propertyName = prop.name;
+
+        if(device.propertiesValue[prop.name].value !== undefined)
+        {
+          if(typeof(device.propertiesValue[prop.name].value) === "object")
+          {
+            viewProperty.valueText =JSON.stringify(device.propertiesValue[prop.name].value);
+          }
+          else
+          {
+            viewProperty.valueText = device.propertiesValue[prop.name].value.toString();
+          }
+        }
+        else
+        {
+          viewProperty.valueText = "undefined";
+        }
+
+        result[prop.name] = viewProperty;
+      }
+      else
+      {
+        result[prop.name] = {
+          propertyName: prop.name,
+          valueText: "undefined"
+        };
+      }
+    }
+
+    return result;
   }
 
 

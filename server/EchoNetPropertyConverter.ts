@@ -542,6 +542,15 @@ export class EchoNetPropertyConverter
       case "uint32":
         returnValue = parseInt(value.substr(0, 8), 16);
     }
+    if(schema.maximum !== undefined && schema.maximum < returnValue)
+    {
+      return undefined;
+    }
+    if(schema.minimum !== undefined && schema.minimum > returnValue)
+    {
+      return undefined;
+    }
+
     returnValue *= (schema.multiple ?? 1);
 
     return returnValue;

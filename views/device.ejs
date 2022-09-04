@@ -1,0 +1,338 @@
+<% include("./deviceInput.ejs")%>
+
+<div class="container">
+    <div class="row">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Devices</a></li>
+          <li class="breadcrumb-item active" aria-current="page"><%= device.id %></li>
+        </ol>
+      </nav>
+      <h2>Id: <%= device.id %></h2>
+      <dl class="row">
+        <dt class="col-2">Type</dt>
+        <dd class="col-10"><%= device.deviceType %></dd>
+        <dt class="col-2">IP</dt>
+        <dd class="col-10"><%= device.ip %></dd>
+        <dt class="col-2">EOJ</dt>
+        <dd class="col-10"><%= device.eoj %></dd>
+        <dt class="col-2">mqtt topic</dt>
+        <dd class="col-10">echonetlite2mqtt/elapi/v1/devices/<%= device.id %></dd>
+      </dl>
+      <h3>All Properties</h3>
+
+      <div class="accordion" id="accordionExample1">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne1">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne1" aria-expanded="true" aria-controls="collapseOne">
+              All Properties
+            </button>
+          </h2>
+          <div id="collapseOne1" class="accordion-collapse collapse" aria-labelledby="headingOne1" data-bs-parent="#accordionExample1">
+            <div class="accordion-body">
+              <pre>
+<%= allProperties %>
+              </pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <h3>Properties</h3>
+      <div class="container">
+        <div class="row border-bottom border-dark">
+          <div class="col col-md-1"></div>
+          <div class="col col-md-2">Name</div>
+          <div class="col col-md-3">Description(ja)</div>
+          <div class="col col-md-2">Value</div>
+          <div class="col col-md-2">Updated</div>
+          <div class="col col-md-2">Operation</div>
+        </div>
+
+        <% for(const prop of device.properties) { %>
+
+        <div class="row border-bottom">
+          <div class="col col-md-1">
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#prop-<%= prop.name %>" aria-expanded="false" aria-controls="collapseExample">
+              v
+            </button>
+          </div>
+          <div class="col col-md-2 text-break"><p><%= prop.name %></p></div>
+          <div class="col col-md-3 text-break"><p><%= prop.schema.propertyName.ja  %></p></div>
+          <div class="col col-md-2"><p><input id="prop-value-<%= prop.name %>" type="text" value="<%= propertyViewModels[prop.name].valueText %>"></p></div>
+          <div class="col col-md-2 text-break"><p id="prop-updated-<%= prop.name %>"><%= device.propertiesValue[prop.name].updated %></p></div>
+          <div class="col col-md-2 text-break">
+            <p>
+              <% if(prop.readable){ %>
+                get
+              <% } %>
+              <% if(prop.writable){ %>
+                set
+              <% } %>
+              <% if(prop.observable){ %>
+                notify
+              <% } %>
+            </p>
+          </div>
+        </div>
+        <div class="row collapse" id="prop-<%= prop.name %>">
+          <div class="col col-md-6 card card-body">
+            <h5 class="card-title">Actions</h5>
+            <div>
+              <button type="button" class="btn btn-secondary" onclick="requestParameter('<%=prop.name%>');">Request New</button>
+            </div>
+          </div>
+          <div class="col col-md-6 card card-body">
+            <% if(prop.writable){ %>
+              <h5 class="card-title">Edit Parameter</h5>
+              <div>
+                <%- deviceInput(prop.schema.data, [prop.name])%>
+                <button type="button" class="btn btn-primary" onclick="sendParameter('<%=prop.name%>');">Send</button>
+              </div>
+            <% } %>
+          </div>
+          <div class="col col-md-12 card card-body">
+            <dl class="row">
+              <dt class="col-2" style="margin-bottom: 0px;">descriptions(en)	</dt>
+              <dd class="col-10" style="margin-bottom: 0px;"><%= prop.schema.propertyName.en  %></dd>
+              <dt class="col-2" style="margin-bottom: 0px;">EPC</dt>
+              <dd class="col-10" style="margin-bottom: 0px;"><%= prop.epc  %></dd>
+              <dt class="col-2" style="margin-bottom: 0px;">get mqtt topic</dt>
+              <dd class="col-10" style="margin-bottom: 0px;">echonetlite2mqtt/elapi/v1/devices/<%= device.id %>/properties/<%= prop.name %></dd>
+              <dt class="col-2" style="margin-bottom: 0px;">set mqtt topic</dt>
+              <dd class="col-10" style="margin-bottom: 0px;">echonetlite2mqtt/elapi/v1/devices/<%= device.id %>/properties/<%= prop.name %>/set</dd>
+              <dt class="col-2" style="margin-bottom: 0px;">request mqtt topic</dt>
+              <dd class="col-10" style="margin-bottom: 0px;">echonetlite2mqtt/elapi/v1/devices/<%= device.id %>/properties/<%= prop.name %>/request</dd>
+            </dl>
+          </div>
+        </div>
+        <% } %>
+
+      </div>
+    </div>
+  </div>
+
+
+  <script type="text/javascript">
+
+    $(function() {
+  
+      $("#rootmenu-devices").addClass("active");
+
+      function updateSystem()
+      {
+        $.ajax({
+            type: "GET",
+            url: "/api/status",
+            dataType : "json"
+          }).done((data)=>{
+  
+            $("#mqtt-state").val(data.mqttState);
+            $("#footer-version").text(data.systemVersion)
+        });
+      }
+      updateSystem();
+
+      function updateProperties()
+      {
+        $.ajax({
+            type: "GET",
+            url: "/elapi/v1/devices/<%= device.id %>",
+            dataType : "json"
+          }).done((data)=>{
+  
+            for(let propName in data.values)
+            {
+              const propValue = data.values[propName];
+
+              const valueText = typeof(propValue.value) === "object" ? 
+                JSON.stringify(propValue.value) : 
+                propValue.value !== undefined ? propValue.value.toString() : "";
+
+              $(`#prop-value-${propName}`).val(valueText);
+              $(`#prop-updated-${propName}`).text(propValue.updated);
+            }
+        });
+
+        
+      }
+
+  
+      let eventId="";
+      function getEvents()
+      {
+        $.ajax({
+          type: "GET",
+          url: `/api/events?lastEvent=${eventId}`,
+          dataType : "json"
+        }).done((data)=>{
+          eventId = data.id;
+  
+          
+          for(const eventType of data.events)
+          {
+            if(eventType === "<%= device.id %>")
+            {
+              updateProperties();
+            }
+          }
+  
+          setTimeout(getEvents, 500);
+        });
+      }
+  
+      getEvents();
+
+    });
+
+    const editingObject = JSON.parse(`<%- allProperties %>`);
+
+function changeValue(id)
+{
+  // idを分割してプロパティ名のリストにする
+  const propNames = id.split("-");
+
+  // oneOfでラジオボタンがuncheckedなら処理しない
+  for(let i = 2; i < propNames.length; i++)
+  {
+    let propName = propNames[i];
+    if(propName.startsWith("_oneof"))
+    {
+      const oneOfId = [...propNames.slice(0, i), propName.replace("_oneof", "_select")].join("-");
+      const checked = $(`#${oneOfId}`).prop('checked');
+      if(checked === false)
+      {
+        return;
+      }
+    }
+  }
+
+  // 値と型を取得
+  let val = $(`#${id}`).val();
+  const dataType = $(`#${id}`).data("type");
+
+  // 数値型ならテキストから数値に変換する
+  if(dataType === "numericValue" || dataType === "number" || dataType ==="level")
+  {
+    val = Number(val);
+  }
+
+  //console.log(`${id} = ${val} (${typeof(val)}) (${dataType})`);
+
+  // oneOfは対応するプロパティが無いので除外
+  const propNamesWithoutOneOf = propNames.filter(_=>_.startsWith("_oneof")===false);
+
+  // プロパティを順にたどって値をセットする
+  let currentObject = editingObject;
+  for(let i = 1; i < propNamesWithoutOneOf.length; i++)
+  {
+    let propName = propNamesWithoutOneOf[i];
+
+    // プロパティ名リストの最後なら値をセットする
+    if(i === propNamesWithoutOneOf.length-1)
+    {
+      if(propName.startsWith("_array"))
+      {
+        const arrayIndex = Number(propName.replace("_array", ""));
+        currentObject[arrayIndex] = val;
+      }
+      else
+      {
+        currentObject[propName] = val;
+      }
+    }
+    else
+    {
+      // プロパティリストの途中なら、currentObjectを更新して次のプロパティに進む
+
+      if(i+1 < propNamesWithoutOneOf.length && propNamesWithoutOneOf[i+1].startsWith("_array"))
+      {
+        // 次のプロパティが配列なら、値の設定先は配列になるはず
+        if((propName in currentObject)===false || Array.isArray(currentObject[propName])===false)
+        {
+          if(propName.startsWith("_array"))
+          {
+            const arrayIndex = Number(propName.replace("_array", ""));
+            currentObject[arrayIndex] = [];
+          }
+          else
+          {
+            currentObject[propName] = [];
+          }
+        }
+      }
+      else
+      {
+        // 配列でないなら値の設定先はオブジェクトになる
+        if((propName in currentObject) === false || typeof(currentObject) !== "object" )
+        {
+          if(propName.startsWith("_array"))
+          {
+            const arrayIndex = Number(propName.replace("_array", ""));
+            currentObject[arrayIndex] = {};
+          }
+          else
+          {
+            currentObject[propName] = {};
+          }
+        }
+      }
+
+      
+      if(propName.startsWith("_array"))
+      {
+        const arrayIndex = Number(propName.replace("_array", ""));
+        currentObject = currentObject[arrayIndex];
+      }
+      else
+      {
+        currentObject = currentObject[propName];
+      }
+    }
+  }
+
+
+}
+
+function changeOneOf(id)
+{
+  const selectedIndex = $(`input[name=${id}]:checked`).val();
+  
+  //console.log(`${id} selected ${selectedIndex}`);
+  
+  const targetIdStartsWith = id+`-_oneof${selectedIndex}`;
+  const vals = $(`[id^=${targetIdStartsWith}]`).each(function(){
+    const targetId = $(this).attr("id");
+    changeValue(targetId);
+  })
+  
+}
+
+function sendParameter(propertyName)
+{
+  const body = {};
+  body[propertyName] = editingObject[propertyName];
+  $.ajax({
+    url:`/elapi/v1/devices/<%= device.id %>/properties/${propertyName}`,
+    type: "put",
+    data: JSON.stringify( body ),
+    contentType: 'application/json', //request type
+    dataType: 'json', // response type
+  }).done(function(data1,textStatus,jqXHR){
+    
+  });
+}
+
+function requestParameter(propertyName)
+{
+  $.ajax({
+    url:`/elapi/v1/devices/<%= device.id %>/properties/${propertyName}/request`,
+    type: "put",
+    data: "",
+    dataType: 'json', // response type
+  }).done(function(data1,textStatus,jqXHR){
+    
+  });
+}
+
+  </script>

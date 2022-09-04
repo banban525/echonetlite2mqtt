@@ -1,0 +1,137 @@
+<%
+deviceInput = function(dataType, propertyChain){
+  const id = `property-${propertyChain.join("-")}`;
+  if("type" in dataType)
+  {
+    if(dataType.type === "array")
+    {
+      const results = [];
+      results.push(`<table class="table table-bordered"><tbody>`);
+      
+      for(let i = 0; i < dataType.maxItems; i++)
+      {
+        results.push(`<tr><td>${i}</td><td>`);
+        const subTypeHtml = deviceInput(dataType.items, [...propertyChain, `_array${i}`]);
+        results.push(subTypeHtml);
+        results.push(`</td></tr>`);
+      }
+
+      results.push(`</tbody></table>`);
+      return results.join("\n");
+    }
+    if(dataType.type === "bitmap")
+    {
+      const results = [];
+      results.push(`<table class="table table-bordered"><tbody>`);
+      
+      for(const prop of dataType.bitmaps)
+      {
+        results.push(`<tr><td>${prop.name}</td><td>`);
+        const subTypeHtml = deviceInput(prop.value, [...propertyChain, prop.name]);
+        results.push(subTypeHtml);
+        results.push(`</td></tr>`);
+      }
+
+      results.push(`</tbody></table>`);
+      return results.join("\n");
+    }
+    if(dataType.type === "date")
+    {
+      return `<input type="text" class="form-control" id="${id}" placeholder="yyyy-MM-dd" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+    }
+    if(dataType.type === "date-time")
+    {
+      return `<input type="text" class="form-control" id="${id}" placeholder="yyyy-MM-dd HH:mm:ss" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+    }
+    if(dataType.type === "time")
+    {
+      return `<input type="text" class="form-control" id="${id}" placeholder="HH:mm:ss" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+    }
+    if(dataType.type === "level")
+    {
+      return `<input type="number" class="form-control" id="${id}" placeholder="" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+    }
+    if(dataType.type === "number")
+    {
+      return `<input type="number" class="form-control" id="${id}" placeholder="" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+    }
+    if(dataType.type === "numericValue")
+    {
+      const results = [];
+      results.push(`<select class="form-select" id="${id}" aria-label="" data-type="${dataType.type}" onchange="changeValue('${id}');">`);
+
+      for(const item of dataType.enum)
+      {
+        results.push(`<option value="${item.numericValue}">${item.numericValue}</option>`);
+      }
+      results.push(`</select>`);
+
+      return results.join("\n");
+    }
+    if(dataType.type === "object")
+    {
+      const results = [];
+      results.push(`<table class="table table-bordered"><tbody>`);
+      
+      for(const prop of dataType.properties)
+      {
+        results.push(`<tr><td>${prop.shortName}</td><td>`);
+        const subTypeHtml = deviceInput(prop.element,  [...propertyChain, prop.shortName]);
+        results.push(subTypeHtml);
+        results.push(`</td></tr>`);
+      }
+
+      results.push(`</tbody></table>`);
+      return results.join("\n");
+    }
+    if(dataType.type === "raw")
+    {
+      return `<input type="text" class="form-control" id="${id}" placeholder="" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+    }
+    if(dataType.type === "state")
+    {
+      const results = [];
+      results.push(`<select class="form-select" id="${id}" aria-label="" data-type="${dataType.type}" onchange="changeValue('${id}');">`);
+
+      for(const item of dataType.enum)
+      {
+        results.push(`<option value="${item.name}">${item.name}</option>`);
+      }
+      results.push(`</select>`);
+
+      return results.join("\n");
+    }
+    return "undefined";
+  }
+  else
+  {
+    if("oneOf" in dataType)
+    {
+      const results = [];
+      results.push(`<table class="table table-bordered"><tbody>`);
+      
+      for(let i=0; i<dataType.oneOf.length; i++)  //>
+      {
+        const radioButtonPropertyChain = [...propertyChain, `_select${i}`]
+        const radioButtonId = `property-${radioButtonPropertyChain.join("-")}`;
+        const subType = dataType.oneOf[i];
+        results.push(`<tr><td><input type="radio" id="${radioButtonId}" name="${id}" value="${i}" onchange="changeOneOf('${id}');" /></td><td>`);
+        const subTypeHtml = deviceInput(subType, [...propertyChain, `_oneof${i}`]);
+        results.push(subTypeHtml);
+        results.push(`</td></tr>`);
+      }
+
+      results.push(`</tbody></table>`);
+      return results.join("\n");
+    }
+    else
+    {
+      return "<div></div>";
+    }
+  }
+
+  return "";
+}
+
+%>
+

@@ -124,6 +124,8 @@ export interface ElNumberType{
 
 export type ElDataType = ElNumberType|ElStateType|ElNumericValueType|ElLevelType|ElDateType|ElDateTimeType|ElTimeType|ElBitmapType|ElRawType|ElArrayType|ElObjectType|ElMixedOneOfType|ElRefType;
 
+
+
 export interface ElPropertyDescription
 {
   epc: string;
