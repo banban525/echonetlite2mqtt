@@ -130,6 +130,16 @@ export default class App extends React.Component<AppProps> {
             </TableContainer>
           </Grid>
         </Grid>
+        <div
+          style={{
+            borderTop: "1px solid #bbb",
+            textAlign: "center",
+            color: "gray",
+            fontSize: "0.9em",
+          }}
+        >
+          ECHONETLite2mqtt ver.{store.status.systemVersion}
+        </div>
       </div>
     );
   }

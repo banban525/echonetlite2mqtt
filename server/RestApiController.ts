@@ -283,6 +283,7 @@ export class RestApiController
   ): void => {
     const result:ServerStatus = {
       mqttState: this.systemStatusRepository.SystemStatus.mqttState,
+      systemVersion: process.env.npm_package_version ?? "",
       devices:[]
     };
     result.devices = this.deviceStore.getAll().map((_):ApiDeviceSummary=>(

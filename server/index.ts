@@ -152,6 +152,10 @@ for(var i = 2;i < process.argv.length; i++){
 
 const logger = new LogRepository();
 
+
+console.log(`${process.env.npm_package_name} ver.${process.env.npm_package_version}`);
+console.log("");
+
 logger.output(`echonetTargetNetwork=${echonetTargetNetwork}`);
 logger.output(`echonetIntervalToGetProperties=${echonetIntervalToGetProperties}`)
 logger.output(`debugLog=${debugLog}`);
@@ -317,6 +321,7 @@ mqttController.addConnectionStateChangedEvent(():void=>{
   eventRepository.newEvent(`LOG`);
   restApiController.setNewEvent();
 });
+
 
 echoNetListController.start();
 restApiController.start();

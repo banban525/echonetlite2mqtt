@@ -4,12 +4,14 @@ import { DevicePropertySchema } from "*/device_descriptions_v1.3.0/all_device_de
 
 export interface ServerStatus {
   mqttState: "Connected" | "Disconnected";
+  systemVersion: string,
   devices: ApiDeviceSummary[];
 }
 
 export class ServerStatus{
   static empty:ServerStatus = {
     mqttState: "Disconnected",
+    systemVersion: "0.0.0",
     devices:[]
   }
 }

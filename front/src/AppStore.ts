@@ -2,6 +2,7 @@ import { makeAutoObservable, observable } from "mobx";
 
 export interface ServerStatus {
   mqttState: string;
+  systemVersion: string;
   devices: DeviceSummary[];
 }
 
@@ -9,6 +10,7 @@ export class ServerStatus {
   static Empty: Readonly<ServerStatus> = {
     devices: [],
     mqttState: "Unknown",
+    systemVersion: "0.0.0",
   };
 }
 
