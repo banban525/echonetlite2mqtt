@@ -1,0 +1,62 @@
+{
+  "eoj": "0x05FD",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "スイッチ（JEM-A / HA 端子対応）",
+    "en": "Switch (supporting JEM-A/HA terminals)"
+  },
+  "shortName": "switch",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operation status"
+      },
+      "shortName": "operationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ON/OFFの状態を示す",
+        "en": "This property indicates the ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "接続先の機器名",
+        "en": "Name of the device to connect to"
+      },
+      "shortName": "lightLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器の形名を保持する",
+        "en": "Stores the name of the type of the device."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_12"
+      }
+    }
+  ]
+}
