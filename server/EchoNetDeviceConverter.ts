@@ -24,11 +24,6 @@ export default class EchoNetDeviceConverter
         {
           continue;
         }
-        const notGetPropertyCount = getPropertyNoList.filter(_=>(_ in echonetLiteFacilities[ip][eoj])===false).length
-        if(notGetPropertyCount !== 0)
-        {
-          continue;
-        }
   
         let id = this.getDeviceId(ip, eoj, echonetLiteFacilities);
         if(id === "")
@@ -413,12 +408,6 @@ export default class EchoNetDeviceConverter
       console.log(`propertyToEchoNetData deviceProperty === undefined`)
       return undefined;
     }
-    const epc = foundProperty.epc.toLowerCase().replace(/^0x/gi, "");
-    if((epc in EL.facilities[deviceId.ip][deviceId.eoj])===false)
-    {
-      console.log(`propertyToEchoNetData (epc in EL.facilities[deviceId.ip][deviceId.eoj])===false  epc=${epc}`);
-      return undefined;
-    }
 
     const echoNetData = this.echoNetPropertyConverter.toEchoNetLiteData(foundProperty.data, value);
     
@@ -443,11 +432,6 @@ export default class EchoNetDeviceConverter
       property.schema.data,
       data
     );
-    
-    if(property.name === "channelRangeForCumulativeElectricPowerConsumptionSimplex")
-    {
-      console.log(`channelRangeForCumulativeElectricPowerConsumptionSimplex ${data}->${JSON.stringify(value)}`)
-    }
     return value;
   }
 }

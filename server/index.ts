@@ -230,9 +230,6 @@ echoNetListController.addDeviceDetectedEvent(()=>{
 echoNetListController.addPropertyChnagedEvent((id:DeviceId, propertyName:string, newValue:any):void =>{
   
   const oldValue = deviceStore.getProperty(id.id, propertyName);
-  if(oldValue===undefined){
-    return;
-  }
 
   deviceStore.changeProperty(id.id, propertyName, newValue);
   mqttController.publishDeviceProperties(id.id);
