@@ -293,7 +293,7 @@ export class EchoNetPropertyConverter
     {
       return undefined;
     }
-    return matchEnum.edt;
+    return matchEnum.edt.substring(2);  // remove "0x"
   }
 
   private NumericValueToEchoNetLiteData(schema:ElNumericValueType, value:any):string|undefined
@@ -307,7 +307,7 @@ export class EchoNetPropertyConverter
     {
       return undefined;
     }
-    return matchEnum.edt;
+    return matchEnum.edt.substring(2);  // remove "0x"
   }
 
   private LevelToEchoNetLiteData(schema:ElLevelType, value:any):string|undefined
