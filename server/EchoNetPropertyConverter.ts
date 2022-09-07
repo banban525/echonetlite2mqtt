@@ -36,12 +36,25 @@ export class EchoNetPropertyConverter
     const superClass = JSON.parse(superClassText) as ElDeviceDescription;
 
     let device:ElDeviceDescription|undefined = undefined;
-    const deviceJsonPath = path.join(__dirname, `../MRA_V1.1.1/mraData/devices/${eojClass}.json`);
-    if(fs.existsSync(deviceJsonPath))
+    if(device === undefined)
     {
-      const deviceText = fs.readFileSync(deviceJsonPath, {encoding:"utf8"});
-      device = JSON.parse(deviceText) as ElDeviceDescription;
-      device.elProperties.push(...superClass.elProperties);
+      const deviceJsonPath = path.join(__dirname, `../MRA_custom/${eojClass}.json`);
+      if(fs.existsSync(deviceJsonPath))
+      {
+        const deviceText = fs.readFileSync(deviceJsonPath, {encoding:"utf8"});
+        device = JSON.parse(deviceText) as ElDeviceDescription;
+        device.elProperties.push(...superClass.elProperties);
+      }
+    }
+    if(device === undefined)
+    {
+      const deviceJsonPath = path.join(__dirname, `../MRA_V1.1.1/mraData/devices/${eojClass}.json`);
+      if(fs.existsSync(deviceJsonPath))
+      {
+        const deviceText = fs.readFileSync(deviceJsonPath, {encoding:"utf8"});
+        device = JSON.parse(deviceText) as ElDeviceDescription;
+        device.elProperties.push(...superClass.elProperties);
+      }
     }
 
     if(device === undefined && eojClass.toLowerCase() === "0x0ef0")
