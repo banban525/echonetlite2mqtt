@@ -5,16 +5,12 @@ import { EventRepository } from "./EventRepository";
 import { LogRepository } from "./LogRepository";
 import { Device } from "./Property";
 import expressLayouts from 'express-ejs-layouts';
+import { ElDataType, ElMixedOneOfType } from "./MraTypes";
 
 interface ViewProperty{
   propertyName:string;
   valueText: string;
-}
-
-interface selectedOneOf
-{
-  propertyChain:string[];
-  selectedIndex:number;
+  inputHtml: string;
 }
 
 
@@ -127,6 +123,171 @@ export class RestApiController
     res.render("./device.ejs", {device:foundDevice, allProperties, propertyViewModels});
   }
 
+
+  private createDeviceInputHtml(dataType:ElDataType, propertyChain:string[], propertiesValue:unknown):string{
+    const id = `property-${propertyChain.join("-")}`;
+    if("type" in dataType)
+    {
+      if(dataType.type === "array")
+      {
+        const results = [];
+        results.push(`<table class="table table-bordered"><tbody>`);
+        
+        for(let i = 0; i < dataType.maxItems; i++)
+        {
+          const itemValue = Array.isArray(propertiesValue) ? propertiesValue[i] : undefined;
+
+          results.push(`<tr><td>${i}</td><td>`);
+          const subTypeHtml = this.createDeviceInputHtml(dataType.items, [...propertyChain, `_array${i}`], itemValue);
+          results.push(subTypeHtml);
+          results.push(`</td></tr>`);
+        }
+  
+        results.push(`</tbody></table>`);
+        return results.join("\n");
+      }
+      if(dataType.type === "bitmap")
+      {
+        const results = [];
+        results.push(`<table class="table table-bordered"><tbody>`);
+        
+        for(const prop of dataType.bitmaps)
+        {
+          const itemValue = 
+            propertiesValue !== null && typeof(propertiesValue) === "object" && prop.name in propertiesValue ? 
+              (propertiesValue as any)[prop.name] : undefined;
+
+          results.push(`<tr><td>${prop.name}</td><td>`);
+          const subTypeHtml = this.createDeviceInputHtml(prop.value, [...propertyChain, prop.name], itemValue);
+          results.push(subTypeHtml);
+          results.push(`</td></tr>`);
+        }
+  
+        results.push(`</tbody></table>`);
+        return results.join("\n");
+      }
+      if(dataType.type === "date")
+      {
+        const text = typeof(propertiesValue) === "string" ? propertiesValue : "";
+        return `<input type="text" class="form-control" id="${id}" placeholder="yyyy-MM-dd" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+      }
+      if(dataType.type === "date-time")
+      {
+        const text = typeof(propertiesValue) === "string" ? propertiesValue : "";
+        return `<input type="text" class="form-control" id="${id}" placeholder="yyyy-MM-dd HH:mm:ss" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+      }
+      if(dataType.type === "time")
+      {
+        const text = typeof(propertiesValue) === "string" ? propertiesValue : "";
+        return `<input type="text" class="form-control" id="${id}" placeholder="HH:mm:ss" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+      }
+      if(dataType.type === "level")
+      {
+        const text = typeof(propertiesValue) === "number" ? propertiesValue.toString() : "";
+        return `<input type="number" class="form-control" id="${id}" placeholder="" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+      }
+      if(dataType.type === "number")
+      {
+        const text = typeof(propertiesValue) === "number" ? propertiesValue.toString() : "";
+        return `<input type="number" class="form-control" id="${id}" placeholder="" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+      }
+      if(dataType.type === "numericValue")
+      {
+        const results = [];
+        results.push(`<select class="form-select" id="${id}" aria-label="" data-type="${dataType.type}" onchange="changeValue('${id}');">`);
+  
+        for(const item of dataType.enum)
+        {
+          const match = item.numericValue === propertiesValue;
+          results.push(`<option value="${item.numericValue}" ${match?"selected":""}>${item.numericValue}</option>`);
+        }
+        results.push(`</select>`);
+  
+        return results.join("\n");
+      }
+      if(dataType.type === "object")
+      {
+        const results = [];
+        results.push(`<table class="table table-bordered"><tbody>`);
+        
+        for(const prop of dataType.properties)
+        {
+          const itemValue = 
+          propertiesValue !== null && typeof(propertiesValue) === "object" && prop.shortName in propertiesValue ? 
+            (propertiesValue as any)[prop.shortName] : undefined;
+
+          results.push(`<tr><td>${prop.shortName}</td><td>`);
+          const subTypeHtml = this.createDeviceInputHtml(prop.element,  [...propertyChain, prop.shortName], itemValue);
+          results.push(subTypeHtml);
+          results.push(`</td></tr>`);
+        }
+  
+        results.push(`</tbody></table>`);
+        return results.join("\n");
+      }
+      if(dataType.type === "raw")
+      {
+        const text = typeof(propertiesValue) === "string" ? propertiesValue : "";
+        return `<input type="text" class="form-control" id="${id}" placeholder="" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+      }
+      if(dataType.type === "state")
+      {
+        const results = [];
+        results.push(`<select class="form-select" id="${id}" aria-label="" data-type="${dataType.type}" onchange="changeValue('${id}');">`);
+  
+        for(const item of dataType.enum)
+        {
+          const match = item.name === propertiesValue;
+
+          results.push(`<option value="${item.name}" ${match?"selected":""}>${item.name}</option>`);
+        }
+        results.push(`</select>`);
+  
+        return results.join("\n");
+      }
+      return "undefined";
+    }
+    else
+    {
+      if("oneOf" in dataType)
+      {
+        const results = [];
+        results.push(`<table class="table table-bordered"><tbody>`);
+        
+        let selectedIndex = 0;
+        if( typeof(propertiesValue) === "number" || typeof(propertiesValue)==="string" || typeof(propertiesValue)==="object" )
+        {
+          if(propertiesValue !== null && propertiesValue !== undefined)
+          {
+            selectedIndex = ElMixedOneOfType.searchSelectedIndex(dataType, propertiesValue);
+          }
+        }
+      
+        for(let i=0; i<dataType.oneOf.length; i++)  //>
+        {
+          const radioButtonPropertyChain = [...propertyChain, `_select${i}`]
+          const radioButtonId = `property-${radioButtonPropertyChain.join("-")}`;
+          const subType = dataType.oneOf[i];
+          results.push(`<tr><td><input type="radio" id="${radioButtonId}" name="${id}" value="${i}" onchange="changeOneOf('${id}');" ${i === selectedIndex?"checked":""} /></td><td>`);
+          const subTypeHtml = this.createDeviceInputHtml(subType, [...propertyChain, `_oneof${i}`], i === selectedIndex ? propertiesValue : undefined);
+          results.push(subTypeHtml);
+          results.push(`</td></tr>`);
+        }
+  
+        results.push(`</tbody></table>`);
+        return results.join("\n");
+      }
+      else
+      {
+        return "<div></div>";
+      }
+    }
+  
+    return "";
+  }
+
+
+
   private toUIData(device: Device):{[key:string]:ViewProperty}
   {
     const result:{[key:string]:ViewProperty} = {};
@@ -134,39 +295,31 @@ export class RestApiController
     for(const prop of device.properties)
     {
       const dataType = prop.schema.data;
-      const viewProperty:ViewProperty={
-        propertyName:"",
-        valueText:""
-      }
-      if(viewProperty !== undefined)
-      {
-        viewProperty.propertyName = prop.name;
 
-        if(device.propertiesValue[prop.name].value !== undefined)
+      const inputHtml = this.createDeviceInputHtml(dataType, [prop.name], device.propertiesValue[prop.name].value);
+
+      let valueText = "undefined";
+      if(device.propertiesValue[prop.name].value !== undefined)
+      {
+        if(typeof(device.propertiesValue[prop.name].value) === "object")
         {
-          if(typeof(device.propertiesValue[prop.name].value) === "object")
-          {
-            viewProperty.valueText =JSON.stringify(device.propertiesValue[prop.name].value);
-          }
-          else
-          {
-            viewProperty.valueText = device.propertiesValue[prop.name].value.toString();
-          }
+          valueText =JSON.stringify(device.propertiesValue[prop.name].value);
         }
         else
         {
-          viewProperty.valueText = "undefined";
+          valueText = device.propertiesValue[prop.name].value.toString();
         }
-
-        result[prop.name] = viewProperty;
       }
       else
       {
-        result[prop.name] = {
-          propertyName: prop.name,
-          valueText: "undefined"
-        };
+        valueText = "undefined";
       }
+      result[prop.name] = {
+        propertyName:prop.name,
+        valueText:valueText,
+        inputHtml:inputHtml
+      };
+  
     }
 
     return result;

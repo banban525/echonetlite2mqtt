@@ -1,5 +1,3 @@
-<% include("./deviceInput.ejs")%>
-
 <div class="container">
     <div class="row">
       <nav aria-label="breadcrumb">
@@ -86,7 +84,7 @@
             <% if(prop.writable){ %>
               <h5 class="card-title">Edit Parameter</h5>
               <div>
-                <%- deviceInput(prop.schema.data, [prop.name])%>
+                <%- propertyViewModels[prop.name].inputHtml %>
                 <button type="button" class="btn btn-primary" onclick="sendParameter('<%=prop.name%>');">Send</button>
               </div>
             <% } %>
