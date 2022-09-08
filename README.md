@@ -58,7 +58,7 @@ MQTT Options
 |  `MQTT_CA_FILE`      | `--MqttCaFile`     | The MQTT CA file path. If this file exists, it will be loaded and set as an "ca" option. (Default: not load)  |
 |  `MQTT_CERT_FILE`    | `--MqttCertFile`   | The MQTT cert file path. If this file exists, it will be loaded and set as an "cert" option. (Default: not load)  |
 |  `MQTT_KEY_FILE`     | `--MqttKeyFile`    |  The MQTT key file path. If this file exists, it will be loaded and set as an "key" option. (Default: not load)  |
-
+| `MQTT_BASE_TOPIC`    | `--MqttBaseTopic`  | MQTT topic prefix. (Default:"echonetlite2mqtt/elapi/v2/devices") |
 
 
 REST API Options
@@ -111,6 +111,24 @@ cd ..
 npm start -- --MqttBroker "mqtt://your.mqtt.brocker"
 ```
 
+## How to migrate from version 1.x to version 2.x
+
+the major changes from version 1.x to version 2.x:
+* (1) Default MQTT topic name changed from "echonetlite2mqtt/elapi/v1" to "echonetlite2mqtt/elapi/v2".
+* (2) The Id has changed on some devices.
+* (3) The property "schema" specification changed.
+
+If you want to keep compatibility with version 1.x as much as possible, you can use the `MQTT_BASE_TOPIC` (or `--MqttBaseTopic` ) option.
+
+```
+docker run -d --net=host -e MQTT_BROKER="mqtt://your.mqtt.brocker" -e MQTT_BASE_TOPIC="echonetlite2mqtt/elapi/v1/devices" banban525/echonetlite2mqtt 
+
+or 
+
+npm start -- --MqttBroker "mqtt://your.mqtt.brocker" --MqttBaseTopic "echonetlite2mqtt/elapi/v1/devices"
+```
+
+
 ## FAQ
 
 ### How to change MQTT broker connection options
@@ -162,7 +180,7 @@ If you can reload from the web screen, you can manually update the properties by
 For example, if you want to update the room temperature value of an air conditioner, send the following MQTT topic.
 (Replace "fe00-your-device-id-00000000000000" with your device ID.)
 ```
-echonetlite2mqtt/elapi/v1/devices/fe00-your-device-id-00000000000000/properties/roomTemperature/request
+echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/roomTemperature/request
 ```
 
 ### I want to specify the set temperature of the air conditioner in units of 0.5 degrees.
@@ -176,6 +194,7 @@ See specs below.
 ## Third party use
 
 * The images in the repository use materials such as "いらすとや" (https://www.irasutoya.com/).
+* Machine Readable Appendix (MRA) Version 1.1.1 is ​​used as the definition of ECHONET Lite. (https://echonet.jp/spec_mra_rp1/)
 
 ## LISENCE
 
