@@ -4,10 +4,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-WORKDIR /app/front
-COPY front/package*.json ./
-RUN npm install
-
 WORKDIR /app
 COPY . .
 RUN npm run build
