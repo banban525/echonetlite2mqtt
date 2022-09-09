@@ -8,14 +8,16 @@
       </nav>
       <h2>Id: <%= device.id %></h2>
       <dl class="row">
-        <dt class="col-2">Type</dt>
-        <dd class="col-10"><%= device.deviceType %></dd>
-        <dt class="col-2">IP</dt>
-        <dd class="col-10"><%= device.ip %></dd>
-        <dt class="col-2">EOJ</dt>
-        <dd class="col-10"><%= device.eoj %></dd>
-        <dt class="col-2">mqtt topic</dt>
-        <dd class="col-10">echonetlite2mqtt/elapi/v1/devices/<%= device.id %></dd>
+        <dt class="col-2" style="margin-bottom: 0px;">Type</dt>
+        <dd class="col-10" style="margin-bottom: 0px;"><%= device.deviceType %></dd>
+        <dt class="col-2" style="margin-bottom: 0px;">IP</dt>
+        <dd class="col-10" style="margin-bottom: 0px;"><%= device.ip %></dd>
+        <dt class="col-2" style="margin-bottom: 0px;">EOJ</dt>
+        <dd class="col-10" style="margin-bottom: 0px;"><%= device.eoj %></dd>
+        <dt class="col-2" style="margin-bottom: 0px;">description</dt>
+        <dd class="col-10" style="margin-bottom: 0px;"><%= device.descriptions.ja %> (en: <%= device.descriptions.en %>)</dd>
+        <dt class="col-2" style="margin-bottom: 0px;">mqtt topic</dt>
+        <dd class="col-10" style="margin-bottom: 0px;"><%= context.mqttTopic %></dd>
       </dl>
       <h3>All Properties</h3>
 
@@ -95,12 +97,18 @@
               <dd class="col-10" style="margin-bottom: 0px;"><%= prop.schema.propertyName.en  %></dd>
               <dt class="col-2" style="margin-bottom: 0px;">EPC</dt>
               <dd class="col-10" style="margin-bottom: 0px;"><%= prop.epc  %></dd>
-              <dt class="col-2" style="margin-bottom: 0px;">get mqtt topic</dt>
-              <dd class="col-10" style="margin-bottom: 0px;">echonetlite2mqtt/elapi/v1/devices/<%= device.id %>/properties/<%= prop.name %></dd>
+              <% if(prop.readable){ %>
+                <dt class="col-2" style="margin-bottom: 0px;">get mqtt topic</dt>
+              <dd class="col-10" style="margin-bottom: 0px;"><%= context.mqttTopic %>/properties/<%= prop.name %></dd>
+              <% } %>
+              <% if(prop.writable){ %>
               <dt class="col-2" style="margin-bottom: 0px;">set mqtt topic</dt>
-              <dd class="col-10" style="margin-bottom: 0px;">echonetlite2mqtt/elapi/v1/devices/<%= device.id %>/properties/<%= prop.name %>/set</dd>
+              <dd class="col-10" style="margin-bottom: 0px;"><%= context.mqttTopic %>/properties/<%= prop.name %>/set</dd>
+              <% } %>
+              <% if(prop.readable){ %>
               <dt class="col-2" style="margin-bottom: 0px;">request mqtt topic</dt>
-              <dd class="col-10" style="margin-bottom: 0px;">echonetlite2mqtt/elapi/v1/devices/<%= device.id %>/properties/<%= prop.name %>/request</dd>
+              <dd class="col-10" style="margin-bottom: 0px;"><%= context.mqttTopic %>/properties/<%= prop.name %>/request</dd>
+              <% } %>
             </dl>
           </div>
         </div>
@@ -332,5 +340,4 @@ function requestParameter(propertyName)
     
   });
 }
-
   </script>

@@ -3,7 +3,7 @@ import { ElPropertyDescription } from "./MraTypes";
 
 
 export interface ServerStatus {
-  mqttState: "Connected" | "Disconnected";
+  mqttState: "Connected" | "Disconnected" | "NotConfigure";
   systemVersion: string,
   devices: ApiDeviceSummary[];
 }

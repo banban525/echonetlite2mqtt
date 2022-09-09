@@ -18,11 +18,13 @@ export class MqttController
     this.baseTopic = baseTopic;
   }
 
-  public ConnectionState: "Connected"|"Disconnected" = "Disconnected";
+  public ConnectionState: "Connected"|"Disconnected"|"NotConfigure" = "Disconnected";
 
   public start = ():void =>{
     if(this.mqttBroker === "")
     {
+      this.ConnectionState = "NotConfigure";
+      this.fireConnectionStateChangedEvent();
       return;
     }
     console.log(`[MQTT] connect to ${this.mqttBroker} ...`);

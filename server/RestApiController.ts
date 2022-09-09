@@ -21,12 +21,14 @@ export class RestApiController
   private readonly logRepository:LogRepository;
   private readonly hostName:string;
   private readonly port:number;
+  private readonly mqttBaseTopic:string;
   constructor(deviceStore:DeviceStore, 
     systemStatusRepository:SystemStatusRepositry,
     eventRepository:EventRepository, 
     logRepository:LogRepository,
-     hostName:string, 
-     port:number){
+    hostName:string, 
+    port:number,
+    mqttBaseTopic:string){
 
     this.deviceStore = deviceStore;
     this.systemStatusRepository = systemStatusRepository;
@@ -34,6 +36,7 @@ export class RestApiController
     this.logRepository = logRepository;
     this.hostName = hostName;
     this.port = port;
+    this.mqttBaseTopic = mqttBaseTopic;
 
     setInterval(this.timeoutLongPolling, 10*1000);
   }
@@ -118,9 +121,10 @@ export class RestApiController
     }
     const propertyViewModels = this.toUIData(foundDevice);
 
+    const mqttTopic = `${this.mqttBaseTopic}/${foundDevice.id}`;
 
     const allProperties = JSON.stringify(Device.ToProperiesObject(foundDevice.propertiesValue), null, 2);
-    res.render("./device.ejs", {device:foundDevice, allProperties, propertyViewModels});
+    res.render("./device.ejs", {device:foundDevice, allProperties, propertyViewModels, context:{mqttTopic}});
   }
 
 
@@ -370,7 +374,7 @@ export class RestApiController
         manufacturer: _.manufacturer,
         eoj: _.eoj,
         ip: _.ip,
-        mqttTopics: `echonetlite2mqtt/elapi/v1/devices/${_.id}`
+        mqttTopics: `${this.mqttBaseTopic}/${_.id}`
       }
     ));
     
@@ -399,7 +403,7 @@ export class RestApiController
       descriptions:foundDevice.descriptions,
       properties:[],
       ip: foundDevice.ip,
-      mqttTopics: `echonetlite2mqtt/elapi/v1/devices/${foundDevice.id}`,
+      mqttTopics: `${this.mqttBaseTopic}/${foundDevice.id}`,
       propertyValues: Device.ToProperiesObject(foundDevice.propertiesValue),
       values: foundDevice.propertiesValue
     };
@@ -415,7 +419,7 @@ export class RestApiController
       writable: _.writable,
       schema: _.schema,
       urlParameters:[],
-      mqttTopics: `echonetlite2mqtt/elapi/v1/devices/${foundDevice.id}/properties/${_.name}`,
+      mqttTopics: `${this.mqttBaseTopic}/${foundDevice.id}/properties/${_.name}`,
       name: _.name
     }));
     res.json(result);
@@ -545,7 +549,7 @@ export class RestApiController
         ip: _.ip,
         deviceType: _.deviceType,
         manufacturer: _.manufacturer,
-        mqttTopics: `echonetlite2mqtt/elapi/v1/devices/${_.id}`,
+        mqttTopics: `${this.mqttBaseTopic}/${_.id}`,
         protocol:_.protocol
       }
     ))
