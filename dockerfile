@@ -21,10 +21,11 @@ USER node
 RUN npm install --only=production
 COPY --chown=node:node --from=build /app/MRA_V1.1.1 ./MRA_V1.1.1
 COPY --chown=node:node --from=build /app/MRA_custom ./MRA_custom
+COPY --chown=node:node --from=build /app/views ./views
 COPY --chown=node:node --from=build /app/public ./public
 COPY --chown=node:node --from=build /app/.ts-node ./.ts-node
 
 EXPOSE 3000
 
-ENTRYPOINT ["node", "/app/.ts-node/index.js"]
+ENTRYPOINT ["npm", "run start:built"]
 

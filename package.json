@@ -5,7 +5,8 @@
   "main": "server/index.ts",
   "scripts": {
     "start": "ts-node server/index.ts",
-    "build": "tsc --build tsconfig.json"
+    "build": "tsc --build tsconfig.json",
+    "start:built":  "ts-node .ts-node/index.js"
   },
   "author": "",
   "license": "ISC",
