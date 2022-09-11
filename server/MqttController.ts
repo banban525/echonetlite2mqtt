@@ -271,6 +271,10 @@ export class MqttController
   }
 
   private getValueText = (value: unknown, dataType:ElDataType): string => {
+    if(value === undefined){
+      return "undefined"
+    }
+    
     if("type" in dataType)
     {
       if(dataType.type === "array")
