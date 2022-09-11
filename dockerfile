@@ -27,5 +27,5 @@ COPY --chown=node:node --from=build /app/.ts-node ./.ts-node
 
 EXPOSE 3000
 
-ENTRYPOINT ["npm", "run start:built"]
+ENTRYPOINT ["npm", "run", "start:built"]
 
