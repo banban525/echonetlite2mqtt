@@ -1,14 +1,16 @@
 import EL, { eldata,rinfo } from "echonet-lite";
 import os from "os";
 import ip from "ip";
-import { Device, DeviceId } from "./Property";
+import { AliasOption, Device, DeviceAlias, DeviceId } from "./Property";
 import EchoNetDeviceConverter from "./EchoNetDeviceConverter";
 
 
 export class EchoNetLiteController{
   
-    constructor(echonetTargetNetwork:string, intervalToGetProperties:number){
+  private readonly aliasOption: AliasOption;
+    constructor(echonetTargetNetwork:string, intervalToGetProperties:number, aliasOption: AliasOption){
   
+      this.aliasOption = aliasOption;
       let usedIpByEchoNet = "";
       if (echonetTargetNetwork.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+/)) {
         const interfaces = os.networkInterfaces();
@@ -23,7 +25,7 @@ export class EchoNetLiteController{
         }
       }
   
-      const deviceConverter = new EchoNetDeviceConverter();
+      const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
   
       var objList = ['05ff01'];
   
@@ -113,7 +115,7 @@ export class EchoNetLiteController{
     }
   
     getDevice = (id:DeviceId):Device|undefined => {
-      const deviceConverter = new EchoNetDeviceConverter();
+      const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
   
       const device = deviceConverter.createDevice(id, EL.facilities);
       return device;
@@ -138,7 +140,7 @@ export class EchoNetLiteController{
     }
     
     setDeviceProperty = (id:DeviceId, propertyName:string, newValue:any):void =>{
-      const deviceConverter = new EchoNetDeviceConverter();
+      const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
       const property = deviceConverter.getProperty(id, propertyName);
   
   
@@ -166,7 +168,7 @@ export class EchoNetLiteController{
     }
 
     requestDeviceProperty = (id:DeviceId, propertyName:string):void =>{
-      const deviceConverter = new EchoNetDeviceConverter();
+      const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
       const property = deviceConverter.getProperty(id, propertyName);
       if(property === undefined)
       {

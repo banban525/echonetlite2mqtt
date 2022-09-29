@@ -89,6 +89,40 @@ JEM-A / HA terminal compatible switch (Simulator [echonet-lite-kaden-emulator](h
 
 ## How to use
 
+### Use docker
+
+1. Run the following command
+```
+docker run -d --net=host -e MQTT_BROKER="mqtt://your.mqtt.brocker" banban525/echonetlite2mqtt 
+```
+2. Open "http://(docker host):3000" in your browser. You can view the detected devices and logs.
+
+
+### Use Node.js
+
+1. clone this repository.
+
+```
+git clone https://github.com/banban525/echonetlite2mqtt.git
+```
+
+2. Run the following command to initialize in ripository root directory.
+
+```
+cd echonetlite2mqtt
+npm install
+```
+
+3. Run the following command to start the service.
+
+```
+npm start -- --MqttBroker "mqtt://your.mqtt.brocker"
+```
+
+4. Open "http://localhost:3000" in your browser. You can view the detected devices and logs.
+
+
+
 ### Environment Variables and Commandline Parameters
 
 MQTT Options
@@ -116,42 +150,37 @@ ECHONET Lite Options
 |  Environment Variables | Commandline Parameter | Description |
 | ------------------     | --------------------- | ----------- |
 | `ECHONET_TARGET_NETWORK` | `--echonetTargetNetwork` | Specify the network for ECHONET Lite in the format "000.000.000.000/00". (Default: Auto) |
+| `ECHONET_ALIAS_FILE`   | `--echonetAliasFile`  | The file path for alias option file. (Defalt: (empty)) |
 | `ECHONET_INTERVAL_TO_GET_PROPERTIES` | `--echonetIntervalToGetProperties` | Specifies the time interval for acquiring ECHONET Lite properties. (Unit: ms) (Default: 100) |
 
+### Alias Option File Format
 
-### Use docker
+You can alias device Ids using `ECHONET_ALIAS_FILE` ( or `--echonetAliasFile` ) option.
+This option specifies the path of the Alias Option File.
 
-1. Run the following command
+The Alias ​​Option File is a Json file with the following format:
 ```
-docker run -d --net=host -e MQTT_BROKER="mqtt://your.mqtt.brocker" banban525/echonetlite2mqtt 
-```
-2. Open "http://(docker host):3000" in your browser. You can view the detected devices and logs.
+{
+  "aliases":[
+    {
+      "id":"fe00-your-device-id-00000000000000",
+      "name":"alias name"
+    },
 
+...
 
-### Use Node.js
-
-1. clone this repository.
-
-```
-git clone https://github.com/banban525/echonetlite2mqtt.git
-```
-
-2. Run the following command to initialize in ripository root directory.
-
-```
-cd echonetlite2mqtt
-npm install
-cd ./front
-npm install
-npm run build
-cd ..
+    {
+      "id":"fe0000251c4190000081e5bb0000000000",
+      "name":"shutter"
+    },
+    {
+      "id":"fe000008dcfe23ba1ff000000000000000",
+      "name":"airconditioner-living"
+    }
+  ]
+}
 ```
 
-3. Run the following command to start the service.
-
-```
-npm start -- --MqttBroker "mqtt://your.mqtt.brocker"
-```
 
 ## How to migrate from version 1.x to version 2.x
 
@@ -159,15 +188,16 @@ the major changes from version 1.x to version 2.x:
 * (1) Default MQTT topic name changed from "echonetlite2mqtt/elapi/v1" to "echonetlite2mqtt/elapi/v2".
 * (2) The Id has changed on some devices.
 * (3) The property "schema" specification changed.
+* (4) Redesigned the web front end.
 
-If you want to keep compatibility with version 1.x as much as possible, you can use the `MQTT_BASE_TOPIC` (or `--MqttBaseTopic` ) option.
+If you want to keep compatibility with version 1.x as much as possible, you can use the `MQTT_BASE_TOPIC` (or `--MqttBaseTopic` ) option for (1) and the `ECHONET_ALIAS_FILE` ( or `--echonetAliasFile` ) option for (2).
 
 ```
-docker run -d --net=host -e MQTT_BROKER="mqtt://your.mqtt.brocker" -e MQTT_BASE_TOPIC="echonetlite2mqtt/elapi/v1/devices" banban525/echonetlite2mqtt 
+docker run -d --net=host -e MQTT_BROKER="mqtt://your.mqtt.brocker" -e MQTT_BASE_TOPIC="echonetlite2mqtt/elapi/v1/devices" -e ECHONET_ALIAS_FILE=/app/configure/alias.json -v (some folder):/app/configure banban525/echonetlite2mqtt 
 
 or 
 
-npm start -- --MqttBroker "mqtt://your.mqtt.brocker" --MqttBaseTopic "echonetlite2mqtt/elapi/v1/devices"
+npm start -- --MqttBroker "mqtt://your.mqtt.brocker" --MqttBaseTopic "echonetlite2mqtt/elapi/v1/devices" --echonetAliasFile ./alias.json
 ```
 
 

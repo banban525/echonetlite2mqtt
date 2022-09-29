@@ -36,6 +36,7 @@ export  interface ApiService
 export interface ApiDeviceSummary
 {
   id:string;
+  name:string;
   deviceType:string;
   eoj:string;
   ip:string;
@@ -56,6 +57,7 @@ export interface ApiDeviceSummary
 // /elapi/v1/devices/<device id> → ApiDevice
 export interface ApiDevice{
   id:string;
+  name:string;
   deviceType:string;
   eoj:string;
   ip:string;

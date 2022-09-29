@@ -18,6 +18,7 @@ export interface PropertyValue
 
 export interface Device{
   id:string;
+  name:string;
   ip:string;
   deviceType:string;
   eoj:string;
@@ -65,4 +66,46 @@ export interface DeviceId {
   id:string;
   ip:string;
   eoj:string;
+}
+
+export interface DeviceAlias
+{
+  id:string;
+  name:string;
+}
+
+export interface AliasOption
+{
+  aliases: DeviceAlias[];
+}
+
+export class AliasOption
+{
+  public static empty: Readonly<AliasOption> = {
+    aliases: []
+  };
+  public static validate(aliasOption:AliasOption):boolean
+  {
+    if(aliasOption.aliases===undefined)
+    {
+      return false;
+    }
+    if(Array.isArray(aliasOption.aliases)===false)
+    {
+      return false;
+    }
+    for(const deviceAlias of aliasOption.aliases)
+    {
+      if(deviceAlias.id === undefined)
+      {
+        return false;
+      }
+      if(deviceAlias.name === undefined)
+      {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }

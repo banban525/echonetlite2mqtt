@@ -15,6 +15,14 @@ export class DeviceStore{
     public get = (id:string):Readonly<Device>|undefined => {
       return this.list.find(_=>_.id === id);
     }
+    public getFromNameOrId = (id:string):Readonly<Device>|undefined => {
+      const found = this.list.find(_=>_.name === id);
+      if(found !== undefined)
+      {
+        return found;
+      }
+      return this.get(id);
+    }
     public getAll = ():Readonly<Device>[] => {
       return this.list.slice();
     }

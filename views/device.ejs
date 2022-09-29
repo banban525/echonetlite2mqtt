@@ -3,11 +3,13 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/">Devices</a></li>
-          <li class="breadcrumb-item active" aria-current="page"><%= device.id %></li>
+          <li class="breadcrumb-item active" aria-current="page"><%= device.name %></li>
         </ol>
       </nav>
-      <h2>Id: <%= device.id %></h2>
+      <h2>Name: <%= device.name %></h2>
       <dl class="row">
+        <dt class="col-2" style="margin-bottom: 0px;">Id</dt>
+        <dd class="col-10" style="margin-bottom: 0px;"><%= device.id %></dd>
         <dt class="col-2" style="margin-bottom: 0px;">Type</dt>
         <dd class="col-10" style="margin-bottom: 0px;"><%= device.deviceType %></dd>
         <dt class="col-2" style="margin-bottom: 0px;">IP</dt>
@@ -59,7 +61,7 @@
           </div>
           <div class="col col-md-2 text-break"><p><%= prop.name %></p></div>
           <div class="col col-md-3 text-break"><p><%= prop.schema.propertyName.ja  %></p></div>
-          <div class="col col-md-2"><p><input id="prop-value-<%= prop.name %>" type="text" value="<%= propertyViewModels[prop.name].valueText %>"></p></div>
+          <div class="col col-md-2"><p><input id="prop-value-<%= prop.name %>" type="text" value="<%= propertyViewModels[prop.name].valueText %>" style="width:100%"></p></div>
           <div class="col col-md-2 text-break"><p id="prop-updated-<%= prop.name %>"><%= device.propertiesValue[prop.name].updated %></p></div>
           <div class="col col-md-2 text-break">
             <p>
@@ -143,7 +145,7 @@
       {
         $.ajax({
             type: "GET",
-            url: "/elapi/v1/devices/<%= device.id %>",
+            url: "/elapi/v1/devices/<%= device.name %>",
             dataType : "json"
           }).done((data)=>{
   
@@ -178,6 +180,10 @@
           for(const eventType of data.events)
           {
             if(eventType === "<%= device.id %>")
+            {
+              updateProperties();
+            }
+            else if(eventType === "<%= device.name %>")
             {
               updateProperties();
             }
@@ -319,7 +325,7 @@ function sendParameter(propertyName)
   const body = {};
   body[propertyName] = editingObject[propertyName];
   $.ajax({
-    url:`/elapi/v1/devices/<%= device.id %>/properties/${propertyName}`,
+    url:`/elapi/v1/devices/<%= device.name %>/properties/${propertyName}`,
     type: "put",
     data: JSON.stringify( body ),
     contentType: 'application/json', //request type
@@ -332,7 +338,7 @@ function sendParameter(propertyName)
 function requestParameter(propertyName)
 {
   $.ajax({
-    url:`/elapi/v1/devices/<%= device.id %>/properties/${propertyName}/request`,
+    url:`/elapi/v1/devices/<%= device.name %>/properties/${propertyName}/request`,
     type: "put",
     data: "",
     dataType: 'json', // response type

@@ -4,7 +4,7 @@
     <table id="deviceListTable" class="table table-striped" style="min-height:400px">
       <thead>
         <tr>
-          <th scope="col">id</th>
+          <th scope="col">name</th>
           <th scope="col">type</th>
           <th scope="col">ip</th>
         </tr>
@@ -34,7 +34,7 @@
           {
             if($(`#device-${device.id}`).length === 0)
             {
-              $("#deviceListTable tbody").append(`<tr id="device-${device.id}"><th><a href="devices/${device.id}">${device.id}</a></th><td>${device.deviceType}</td><td>${device.ip}</td></tr>`);
+              $("#deviceListTable tbody").append(`<tr id="device-${device.id}"><th><a href="devices/${device.name}">${device.name}</a></th><td>${device.deviceType}</td><td>${device.ip}</td></tr>`);
             }
           }
       });

@@ -1,11 +1,17 @@
 import EL, { facilitiesType } from "echonet-lite";
-import { Device, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
+import { AliasOption, Device, DeviceAlias, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
 import dayjs from 'dayjs';
 import { EchoNetPropertyConverter } from "./EchoNetPropertyConverter";
 
 export default class EchoNetDeviceConverter
 {
   private echoNetPropertyConverter:EchoNetPropertyConverter = new EchoNetPropertyConverter();
+
+  private readonly aliasOption:AliasOption;
+  public constructor(aliasOption:AliasOption)
+  {
+    this.aliasOption = aliasOption;
+  }
 
   public getDeviceIdList =  (echonetLiteFacilities:facilitiesType): DeviceId[] =>{
     const result:DeviceId[] = [];
@@ -102,6 +108,7 @@ export default class EchoNetDeviceConverter
       console.log("ERROR class not found.");
       return {
         id,
+        name:"",
         ip,
         eoj,
         properties:[],
@@ -146,7 +153,7 @@ export default class EchoNetDeviceConverter
         properties.push(matchedDeviceProperties[0]);
         continue;
       }
-      console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
+      console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in id: ${id}, ip:${ip}, eoj:${eoj}`);
     }
     
     for(const propertyNo of getPropertyNoList)
@@ -161,7 +168,7 @@ export default class EchoNetDeviceConverter
         matchedProperties[0].readable = true;
         continue;
       }
-      console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
+      //console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
     }
 
     for(const propertyNo of setPropertyNoList)
@@ -176,7 +183,7 @@ export default class EchoNetDeviceConverter
         matchedProperties[0].writable = true;
         continue;
       }
-      console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
+      //console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
     }
   
     for(const propertyNo of notifyPropertyNoList)
@@ -191,7 +198,7 @@ export default class EchoNetDeviceConverter
         matchedProperties[0].observable = true;
         continue;
       }
-      console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
+      //console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
     }
 
     const propertiesValue:{[key:string]:PropertyValue} = {};
@@ -204,9 +211,12 @@ export default class EchoNetDeviceConverter
         updated: dayjs(Date()).format("YYYY-MM-DD HH:mm:ss")
       };
     }
-  
+
+    const name = this.aliasOption.aliases.find(_=>_.id === id)?.name ?? id;
+
     return {
       id,
+      name,
       ip,
       eoj,
       deviceType: deviceType.shortName,

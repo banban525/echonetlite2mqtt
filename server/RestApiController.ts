@@ -113,7 +113,7 @@ export class RestApiController
     res: express.Response
   ): void => {
     const deviceId = req.params.deviceId;
-    const foundDevice = this.deviceStore.get(deviceId);
+    const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
@@ -121,7 +121,7 @@ export class RestApiController
     }
     const propertyViewModels = this.toUIData(foundDevice);
 
-    const mqttTopic = `${this.mqttBaseTopic}/${foundDevice.id}`;
+    const mqttTopic = `${this.mqttBaseTopic}/${foundDevice.name}`;
 
     const allProperties = JSON.stringify(Device.ToProperiesObject(foundDevice.propertiesValue), null, 2);
     res.render("./device.ejs", {device:foundDevice, allProperties, propertyViewModels, context:{mqttTopic}});
@@ -369,6 +369,7 @@ export class RestApiController
     const result = this.deviceStore.getAll().map((_:Device):ApiDeviceSummary=>(
       {
         id: _.id,
+        name: _.name,
         deviceType: _.deviceType,
         protocol: _.protocol,
         manufacturer: _.manufacturer,
@@ -387,7 +388,7 @@ export class RestApiController
     res: express.Response
   ): void => {
     const deviceId = req.params.deviceId;
-    const foundDevice = this.deviceStore.get(deviceId);
+    const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
@@ -397,6 +398,7 @@ export class RestApiController
     const result: ApiDevice = {
       id: foundDevice.id,
       eoj: foundDevice.eoj,
+      name: foundDevice.name,
       actions:[],
       deviceType: foundDevice.deviceType,
       events:[],
@@ -431,7 +433,7 @@ export class RestApiController
     res: express.Response
   ): void => {
     const deviceId = req.params.deviceId;
-    const foundDevice = this.deviceStore.get(deviceId);
+    const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
@@ -446,7 +448,7 @@ export class RestApiController
   ): void => {
     const deviceId = req.params.deviceId;
     const propertyName = req.params.propertyName;
-    const foundDevice = this.deviceStore.get(deviceId);
+    const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
@@ -474,7 +476,7 @@ export class RestApiController
   
     console.log(`[RESTAPI] put property: ${deviceId}\t${propertyName}\t${newValue}`)
   
-    const foundDevice = this.deviceStore.get(deviceId);
+    const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
@@ -512,7 +514,7 @@ export class RestApiController
   
     console.log(`[RESTAPI] request property: ${deviceId}\t${propertyName}`)
   
-    const foundDevice = this.deviceStore.get(deviceId);
+    const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
@@ -547,6 +549,7 @@ export class RestApiController
         id: _.id,
         eoj: _.eoj,
         ip: _.ip,
+        name: _.name,
         deviceType: _.deviceType,
         manufacturer: _.manufacturer,
         mqttTopics: `${this.mqttBaseTopic}/${_.id}`,

@@ -72,7 +72,7 @@ export class MqttController
             return;
           }
 
-          const foundDevice = this.deviceStore.get(deviceId);
+          const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
           if(foundDevice===undefined){
             //error
             return;
@@ -104,7 +104,7 @@ export class MqttController
             return;
           }
 
-          const foundDevice = this.deviceStore.get(deviceId);
+          const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
           if(foundDevice===undefined){
             //error
             return;
@@ -165,12 +165,13 @@ export class MqttController
     const result = this.deviceStore.getAll().map((_:Device):ApiDeviceSummary=>(
       {
         id: _.id,
+        name: _.name,
         deviceType: _.deviceType,
         protocol: _.protocol,
         manufacturer: _.manufacturer,
         eoj: _.eoj,
         ip: _.ip,
-        mqttTopics: `${this.baseTopic}/${_.id}`
+        mqttTopics: `${this.baseTopic}/${_.name}`
       }
     ));
 
@@ -182,7 +183,7 @@ export class MqttController
     if(this.mqttClient===undefined){
       return;
     }
-    const foundDevice = this.deviceStore.get(deviceId);
+    const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice===undefined){
       // error
       return;
@@ -191,13 +192,14 @@ export class MqttController
     const result: ApiDevice = {
       id: foundDevice.id,
       eoj: foundDevice.eoj,
+      name: foundDevice.name,
       actions:[],
       deviceType: foundDevice.deviceType,
       events:[],
       descriptions:foundDevice.descriptions,
       properties:[],
       ip: foundDevice.ip,
-      mqttTopics: `${this.baseTopic}/${foundDevice.id}`,
+      mqttTopics: `${this.baseTopic}/${foundDevice.name}`,
       propertyValues: Device.ToProperiesObject(foundDevice.propertiesValue),
       values: foundDevice.propertiesValue
     };
@@ -213,26 +215,39 @@ export class MqttController
       writable: _.writable,
       schema: _.schema,
       urlParameters:[],
-      mqttTopics: `${this.baseTopic}/${foundDevice.id}/properties/${_.name}`,
+      mqttTopics: `${this.baseTopic}/${foundDevice.name}/properties/${_.name}`,
       name: _.name
     }));
-    this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}`, JSON.stringify(result), {
+    this.mqttClient.publish(`${this.baseTopic}/${foundDevice.name}`, JSON.stringify(result), {
       retain:true
     });
+
+    if(foundDevice.id !== foundDevice.name)
+    {
+      this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}`, JSON.stringify(result), {
+        retain:true
+      });
+    }
   }
 
   publishDeviceProperties = (deviceId:string):void =>{
     if(this.mqttClient===undefined){
       return;
     }
-    const foundDevice = this.deviceStore.get(deviceId);
+    const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
       // error
       return;
     }
-    this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}/properties`, JSON.stringify(Device.ToProperiesObject(foundDevice.propertiesValue)), {
+    this.mqttClient.publish(`${this.baseTopic}/${foundDevice.name}/properties`, JSON.stringify(Device.ToProperiesObject(foundDevice.propertiesValue)), {
       retain:true
     });
+    if(foundDevice.id !== foundDevice.name)
+    {
+      this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}/properties`, JSON.stringify(Device.ToProperiesObject(foundDevice.propertiesValue)), {
+        retain:true
+      });
+    }
   }
   
   publishDevicePropertiesAndAllProperty = (deviceId:string):void =>{
@@ -240,7 +255,7 @@ export class MqttController
       return;
     }
 
-    const foundDevice = this.deviceStore.get(deviceId);
+    const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
       // error
       return;
@@ -255,7 +270,7 @@ export class MqttController
     if(this.mqttClient===undefined){
       return;
     }
-    const foundDevice = this.deviceStore.get(deviceId);
+    const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
       // error
       return;
@@ -264,10 +279,12 @@ export class MqttController
       // error
       return ;
     }
-    this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}/properties/${propertyName}`, 
-      this.getValueText(foundDevice.propertiesValue[propertyName].value, foundDevice.propertiesValue[propertyName].deviceProperty.schema.data), {
-        retain:true,
-      });
+    const valueText = this.getValueText(foundDevice.propertiesValue[propertyName].value, foundDevice.propertiesValue[propertyName].deviceProperty.schema.data);
+    this.mqttClient.publish(`${this.baseTopic}/${foundDevice.name}/properties/${propertyName}`, valueText, {retain:true});
+    if(foundDevice.id !== foundDevice.name)
+    {
+      this.mqttClient.publish(`${this.baseTopic}/${foundDevice.id}/properties/${propertyName}`, valueText, {retain:true});
+    }
   }
 
   private getValueText = (value: unknown, dataType:ElDataType): string => {
