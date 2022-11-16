@@ -180,60 +180,127 @@ export class EchoNetPropertyConverter
   private DateTimeToEchoNetLiteData(dataType:ElDateTimeType, value:any):string|undefined
   {
     const valueText = value.toString();
-    const year  = valueText.substr(0,4);
-    const month = valueText < 7  ? "01" : valueText.substr(5,2);
-    const day   = valueText < 10 ? "01" : valueText.substr(8,2);
-    const hour  = valueText < 13 ? "00" : valueText.substr(11,2);
-    const minute= valueText < 16 ? "00" : valueText.substr(14,2);
-    const second= valueText < 19 ? "00" : valueText.substr(17,2); 
+
+    let year = 1900;
+    let month = 1;
+    let day = 1;
+    let hour = 0;
+    let minute = 0;
+    let second = 0;
+    if(valueText.match(/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}/)!==null)
+    {
+      year  = parseInt(valueText.substring(0,4), 10);
+      month = parseInt(valueText.substring(5,7), 10);
+      day   = parseInt(valueText.substring(8,10), 10);
+      hour  = parseInt(valueText.substring(11,13), 10);
+      minute= parseInt(valueText.substring(14,16), 10);
+      second= parseInt(valueText.substring(17,19), 10);
+    }
+    else if(valueText.match(/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}/)!==null)
+    {
+      year  = parseInt(valueText.substring(0,4), 10);
+      month = parseInt(valueText.substring(5,7), 10);
+      day   = parseInt(valueText.substring(8,10), 10);
+      hour  = parseInt(valueText.substring(11,13), 10);
+      minute= parseInt(valueText.substring(14,16), 10);
+    }
+    else if(valueText.match(/[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}/)!==null)
+    {
+      year  = parseInt(valueText.substring(0,4), 10);
+      month = parseInt(valueText.substring(5,7), 10);
+      day   = parseInt(valueText.substring(8,10), 10);
+      hour  = parseInt(valueText.substring(11,13), 10);
+    }
+    else if(valueText.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}/)!==null)
+    {
+      year  = parseInt(valueText.substring(0,4), 10);
+      month = parseInt(valueText.substring(5,7), 10);
+      day   = parseInt(valueText.substring(8,10), 10);
+    }
+    else if(valueText.match(/[0-9]{4}-[0-9]{2}/)!==null)
+    {
+      year  = parseInt(valueText.substring(0,4), 10);
+      month = parseInt(valueText.substring(5,7), 10);
+    }
+    else if(valueText.match(/[0-9]{4}/)!==null)
+    {
+      year  = parseInt(valueText.substring(0,4), 10);
+    }
+    else
+    {
+      return undefined;
+    }
+
     const size = dataType?.size ?? 7;
     let result = "";
     if(size >= 2)
     {
-      result += parseInt(year, 10).toString(16);
+      result += year.toString(16);
     }
     if(size >= 3)
     {
-      result += parseInt(month, 10).toString(16);
+      result += month.toString(16);
     }
     if(size >= 4)
     {
-      result += parseInt(day, 10).toString(16);
+      result += day.toString(16);
     }
     if(size >= 5)
     {
-      result += parseInt(hour, 10).toString(16);
+      result += hour.toString(16);
     }
     if(size >= 6)
     {
-      result += parseInt(minute, 10).toString(16);
+      result += minute.toString(16);
     }
     if(size >= 7)
     {
-      result += parseInt(second, 10).toString(16);
+      result += second.toString(16);
     }
     return result;
   }
   
   private DateToEchoNetLiteData(schema:ElDateType, value:any):string|undefined
   {
-    const valueText = value.toString();
-    const year  = valueText.substr(0,4);
-    const month = valueText < 7  ? "01" : valueText.substr(5,2);
-    const day   = valueText < 10 ? "01" : valueText.substr(8,2);
+    const valueText = value.toString() as string;
+
+    let year = 1900;
+    let month = 1;
+    let day = 1;
+    if(valueText.match(/[0-9]{4}-[0-9]{2}-[0-9]{2}/)!==null)
+    {
+      year  = parseInt(valueText.substring(0,4), 10);
+      month = parseInt(valueText.substring(5,7), 10);
+      day   = parseInt(valueText.substring(8,10), 10);
+    }
+    else if(valueText.match(/[0-9]{4}-[0-9]{2}/)!==null)
+    {
+      year  = parseInt(valueText.substring(0,4), 10);
+      month = parseInt(valueText.substring(5,7), 10);
+    }
+    else if(valueText.match(/[0-9]{4}/)!==null)
+    {
+      year  = parseInt(valueText.substring(0,4), 10);
+    }
+    else
+    {
+      return undefined;
+    }
+
+
     const size = schema?.size ?? 4;
     let result = "";
     if(size >= 2)
     {
-      result += parseInt(year, 10).toString(16);
+      result += year.toString(16);
     }
     if(size >= 3)
     {
-      result += parseInt(month, 10).toString(16);
+      result += month.toString(16);
     }
     if(size >= 4)
     {
-      result += parseInt(day, 10).toString(16);
+      result += day.toString(16);
     }
     return result;
   }
@@ -241,22 +308,40 @@ export class EchoNetPropertyConverter
   private TimeToEchoNetLiteData(schema:ElTimeType, value:any):string|undefined
   {
     const valueText = value.toString();
-    const hour  = valueText < 0 ? "00" : valueText.substr(0,2);
-    const minute= valueText < 5 ? "00" : valueText.substr(3,2);
-    const second= valueText < 8 ? "00" : valueText.substr(6,2); 
+
+    let hour = 0;
+    let minute = 0;
+    let second = 0;
+    if(valueText.match(/[0-9]{2}:[0-9]{2}:[0-9]{2}/)!==null)
+    {
+      hour  = parseInt(valueText.substring(11,13), 10);
+      minute= parseInt(valueText.substring(14,16), 10);
+      second= parseInt(valueText.substring(17,19), 10);
+    }
+    else if(valueText.match(/[0-9]{2}:[0-9]{2}/)!==null)
+    {
+      hour  = parseInt(valueText.substring(11,13), 10);
+      minute= parseInt(valueText.substring(14,16), 10);
+    }
+    else if(valueText.match(/[0-9]{2}/)!==null)
+    {
+      hour  = parseInt(valueText.substring(11,13), 10);
+    }
+
+
     const size = schema?.size ?? 3;
     let result = "";
     if(size >= 1)
     {
-      result += parseInt(hour, 10).toString(16);
+      result += hour.toString(16);
     }
     if(size >= 2)
     {
-      result += parseInt(minute, 10).toString(16);
+      result += minute.toString(16);
     }
     if(size >= 3)
     {
-      result += parseInt(second, 10).toString(16);
+      result += second.toString(16);
     }
     return result;
   }
@@ -481,16 +566,23 @@ export class EchoNetPropertyConverter
     const hours = parseInt( value.substr(8, 2), 16);
     const minutes = value.length >=12 ? parseInt( value.substr(10, 2), 16) : -1;
     const seconds = value.length >=14 ? parseInt( value.substr(12, 2), 16) : -1;
-
+    
+    const yearText = year.toString().padStart(4, "0");
+    const monthText = month.toString().padStart(2, "0");
+    const dayText = day.toString().padStart(2, "0");
+    const hoursText = hours.toString().padStart(2, "0");
+    const minutesText = minutes.toString().padStart(2, "0");
+    const secondsText = seconds.toString().padStart(2, "0");
+    
     if(minutes === -1)
     {
-      return `${year}-${month}-${day} ${hours}:00:00`;
+      return `${yearText}-${monthText}-${dayText} ${hoursText}:00:00`;
     }
     if(seconds === -1)
     {
-      return `${year}-${month}-${day} ${hours}:${minutes}:00`;
+      return `${yearText}-${monthText}-${dayText} ${hoursText}:${minutesText}:00`;
     }
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    return `${yearText}-${monthText}-${dayText} ${hoursText}:${minutesText}:${secondsText}`;
   }
   private EchoNetLiteDataToDate(schema:ElDateType, value:string):string|undefined{
     const size = schema.size ?? 7
@@ -502,16 +594,19 @@ export class EchoNetPropertyConverter
     const year = parseInt( value.substr(0, 4), 16);
     const month = value.length >=6 ?parseInt( value.substr(4, 2), 16) : -1;
     const day = value.length >=8 ? parseInt( value.substr(6, 2), 16) : -1;
+    const yearText = year.toString().padStart(4, "0");
+    const monthText = month.toString().padStart(2, "0");
+    const dayText = day.toString().padStart(2, "0");
 
     if(month === -1)
     {
-      return `${year}`;
+      return `${yearText}`;
     }
     if(day === -1)
     {
-      return `${year}-${month}`;
+      return `${yearText}-${monthText}`;
     }
-    return `${year}-${month}-${day}`;
+    return `${yearText}-${monthText}-${dayText}`;
   }
   private EchoNetLiteDataToTime(schema:ElTimeType, value:string):string|undefined{
     const size = schema.size ?? 7
@@ -524,22 +619,26 @@ export class EchoNetPropertyConverter
     const minutes = value.length >=4 ? parseInt( value.substr(2, 2), 16) : -1;
     const seconds = value.length >=6 ? parseInt( value.substr(4, 2), 16) : -1;
 
+    const hoursText = hours.toString().padStart(2, "0");
+    const minutesText = minutes.toString().padStart(2, "0");
+    const secondsText = seconds.toString().padStart(2, "0");
+
     if(minutes === -1)
     {
-      return `${hours}:00:00`;
+      return `${hoursText}:00:00`;
     }
     if(seconds === -1)
     {
-      return `${hours}:${minutes}:00`;
+      return `${hoursText}:${minutesText}:00`;
     }
-    return `${hours}:${minutes}:${seconds}`;
+    return `${hoursText}:${minutesText}:${secondsText}`;
   }
 
   
 
   private EchoNetLiteDataToNumber(schema:ElNumberType, value:string):number|undefined
   {
-    let returnValue = 0;
+      let returnValue = 0;
     switch(schema.format)
     {
       case "int8":
