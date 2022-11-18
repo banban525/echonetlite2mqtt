@@ -242,6 +242,23 @@ export const CommonConverter: Partial<commonConverterType> = {
 };
 
 export const homeAirConditionerConverter : Partial<homeAirConditionerConverterType> = {
+
+  airFlowLevel: {
+    toEchoNetLiteData : (schema:DevicePropertySchema, rootProperty:Property,data:number|"auto", currentData:string): string | undefined=>{
+      return EL.bytesToString([data === 'auto' ? 0x41 : 0x30 + data]);
+    },
+    toValue : (echoNetData:EchoNetParseData):number|"auto"|undefined =>{
+      const value = EL.toHexArray(echoNetData.data)[0];
+      if (value === 0x41) {
+        return 'auto';
+      } else if (0x31 <= value && value <= 0x38) {
+        return value - 0x30;
+      } else {
+        return undefined;
+      }
+    }
+  },
+
   ratedPowerConsumption: {
     toEchoNetLiteData : (schema:DevicePropertySchema, rootProperty:Property,data:{cooling:Number|"unsupported",heating:Number|"unsupported",dehumidifying:Number|"unsupported",circulation:Number|"unsupported"}, currentData:string): string | undefined=>{
       return undefined;
