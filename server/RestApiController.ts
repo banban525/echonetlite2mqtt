@@ -172,18 +172,31 @@ export class RestApiController
       }
       if(dataType.type === "date")
       {
+        const dataSize = dataType.size ?? 4;
+        const placeholder = dataSize >= 4 ? "yyyy-MM-dd" : dataSize == 3 ? "yyyy-MM" : "yyyy";
         const text = typeof(propertiesValue) === "string" ? propertiesValue : "";
-        return `<input type="text" class="form-control" id="${id}" placeholder="yyyy-MM-dd" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+        return `<input type="text" class="form-control" id="${id}" placeholder="${placeholder}" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
       }
       if(dataType.type === "date-time")
       {
+        const dataSize = dataType.size ?? 7;
+        const placeholder = dataSize >= 7 ? "yyyy-MM-dd HH:mm:ss" : 
+          dataSize == 5 ? "yyyy-MM-dd HH:mm:ss" : 
+          dataSize == 4 ? "yyyy-MM-dd HH:mm" : 
+          dataSize == 3 ? "yyyy-MM-dd HH" : 
+          dataSize == 2 ? "yyyy-MM-dd" : 
+          dataSize == 1 ? "yyyy-MM" : 
+          "yyyy";
+
         const text = typeof(propertiesValue) === "string" ? propertiesValue : "";
-        return `<input type="text" class="form-control" id="${id}" placeholder="yyyy-MM-dd HH:mm:ss" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+        return `<input type="text" class="form-control" id="${id}" placeholder="${placeholder}" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
       }
       if(dataType.type === "time")
       {
+        const dataSize = dataType.size ?? 3;
+        const placeholder = dataSize >= 3 ? "HH:mm:ss" : dataSize == 2 ? "HH:mm" : "HH";
         const text = typeof(propertiesValue) === "string" ? propertiesValue : "";
-        return `<input type="text" class="form-control" id="${id}" placeholder="HH:mm:ss" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
+        return `<input type="text" class="form-control" id="${id}" placeholder="${placeholder}" value="${text}" data-type="${dataType.type}" onchange="changeValue('${id}');">`;
       }
       if(dataType.type === "level")
       {

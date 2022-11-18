@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node server/index.ts",
     "build": "tsc --build tsconfig.json",
-    "start:built":  "ts-node .ts-node/index.js"
+    "start:built": "ts-node .ts-node/index.js",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -26,8 +27,11 @@
     "@types/express": "^4.17.13",
     "@types/express-ejs-layouts": "^2.5.0",
     "@types/ip": "^1.1.0",
+    "@types/jest": "^29.2.3",
     "@types/jquery": "^3.5.14",
     "@types/mqtt": "^2.5.0",
-    "@types/node": "^16.11.10"
+    "@types/node": "^16.11.10",
+    "jest": "^29.3.1",
+    "ts-jest": "^29.0.3"
   }
 }
