@@ -329,7 +329,7 @@ export interface ElBitmapType{
     },
     position: {
       index: number;
-      bitMask: string;
+      bitMask: number;
     };
     value: ElDataType;
   }[]
