@@ -13,7 +13,7 @@ This application publishes ECHONET Lite devices to MQTT.
 And uses MQTT to work with ECHONET Lite devices.
 This will allow you to operate your ECHONET Lite device from a smart home application that supports MQTT.
 
-![topimage](example/topimage.jpg)
+![topimage](images/topimage.jpg)
 
 
 The supported devices are as follows.
@@ -69,23 +69,13 @@ The supported devices are as follows.
 * Television (0x0602)
 
 
-## DEMO with Home Assistant
+## DEMO
 
-Air conditioner (Physical)
+![demo-webui](demo/demo_webUI.gif)
 
-![demo-aircon1](example/demo1.gif)
+![demo-aircon](demo/demo-AirCnditioner-daikin.gif)
 
-Air conditioner (Simulator [moekaden](https://github.com/SonyCSL/MoekadenRoom))
-
-![demo-aircon2](example/demo2.gif)
-
-Electric shutter (Simulator [echonet-lite-kaden-emulator](https://github.com/banban525/echonet-lite-kaden-emulator))
-
-![demo-shutter](example/demo3.gif)
-
-JEM-A / HA terminal compatible switch (Simulator [echonet-lite-kaden-emulator](https://github.com/banban525/echonet-lite-kaden-emulator))
-
-![demo-shutter](example/demo4.gif)
+### [more demo movies and settings examples](demo/demo.md)
 
 ## How to use
 
