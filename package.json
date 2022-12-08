@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dayjs": "^1.11.2",
     "echonet-lite": "^2.6.0",
     "ejs": "^3.1.8",
     "express": "^4.17.1",

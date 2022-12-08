@@ -1,7 +1,7 @@
 import EL, { facilitiesType } from "echonet-lite";
 import { AliasOption, Device, DeviceAlias, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
-import dayjs from 'dayjs';
 import { EchoNetPropertyConverter } from "./EchoNetPropertyConverter";
+import { getUtcNowDateTimeText } from "./datetimeLib";
 
 export default class EchoNetDeviceConverter
 {
@@ -201,6 +201,7 @@ export default class EchoNetDeviceConverter
       //console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
     }
 
+    const updated = getUtcNowDateTimeText();
     const propertiesValue:{[key:string]:PropertyValue} = {};
     for(const property of properties){
       const value = this.getPropertyValue({id,ip,eoj}, property);
@@ -208,7 +209,7 @@ export default class EchoNetDeviceConverter
         name: property.name,
         deviceProperty: property,
         value: value,
-        updated: dayjs(Date()).format("YYYY-MM-DD HH:mm:ss")
+        updated: updated
       };
     }
 

@@ -5,7 +5,7 @@
         <thead>
           <tr>
             <th scope="col">id</th>
-            <th scope="col">Date & Time</th>
+            <th scope="col" style="width:12em">Date & Time</th>
             <th scope="col">Message</th>
           </tr>
         </thead>
@@ -44,7 +44,7 @@
             data.reverse();
             for(let log of data)
             {
-              $("#logsTable tbody").append(`<tr id="log-${log.id}"><th>${log.id}</th><td>${log.datetime}</td><td>${log.message}</td></tr>`);
+              $("#logsTable tbody").append(`<tr id="log-${log.id}"><th>${log.id}</th><td>${utcTextToLocalText(log.datetime)}</td><td>${log.message}</td></tr>`);
             }
         });
       }

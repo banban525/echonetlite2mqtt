@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import { getUtcNowDateTimeText } from "./datetimeLib";
 import { Device } from "./Property";
 
 
@@ -51,7 +51,7 @@ export class DeviceStore{
         return;
       }
       device.propertiesValue[propertyName].value=newValue;
-      device.propertiesValue[propertyName].updated=dayjs(Date()).format("YYYY-MM-DD HH:mm:ss");
+      device.propertiesValue[propertyName].updated=getUtcNowDateTimeText();
     }
   }
   

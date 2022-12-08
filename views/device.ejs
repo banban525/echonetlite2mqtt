@@ -158,7 +158,7 @@
                 propValue.value !== undefined ? propValue.value.toString() : "";
 
               $(`#prop-value-${propName}`).val(valueText);
-              $(`#prop-updated-${propName}`).text(propValue.updated);
+              $(`#prop-updated-${propName}`).text(utcTextToLocalText(propValue.updated));
             }
         });
 
@@ -194,6 +194,10 @@
       }
   
       getEvents();
+
+// <% for(const prop of device.properties) { %>
+      $(`#prop-updated-<%= prop.name %>`).text(utcTextToLocalText("<%= device.propertiesValue[prop.name].updated %>"));
+// <% } %>
 
     });
 

@@ -77,7 +77,7 @@ export interface ApiDevicePropertyValue
 {
   name:string;
   value:any;
-  updated:string;  // YYYY-MM-DD HH:mm:ss
+  updated:string;  // YYYY-MM-DD HH:mm:ssZ (UTC)
 }
 
 export   interface ApiDeviceProperty{

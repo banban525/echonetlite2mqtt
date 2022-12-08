@@ -13,7 +13,7 @@ export interface PropertyValue
   name:string;
   deviceProperty:Property;
   value:any;
-  updated:string; // YYYY-NN-DD HH:mm:ss
+  updated:string; // YYYY-NN-DD HH:mm:ssZ (UTC)
 }
 
 export interface Device{
