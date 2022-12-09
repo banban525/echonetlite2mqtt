@@ -1,0 +1,359 @@
+{
+  "eoj": "0x0281",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "水流量メータ",
+    "en": "Water flowmeter"
+  },
+  "shortName": "waterFlowMeter",
+  "elProperties": [
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "水流量メータ区分",
+        "en": "Water flowmeter classification"
+      },
+      "shortName": "waterFlowMeterClassification",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "水流量メータの種別を示す。",
+        "en": "This property indicates the water flowmeter type."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x30",
+            "name": "runningWater",
+            "descriptions": {
+              "ja": "上水",
+              "en": "running water"
+            }
+          },
+          {
+            "edt": "0x31",
+            "name": "recycledWater",
+            "descriptions": {
+              "ja": "中水",
+              "en": "recycled water"
+            }
+          },
+          {
+            "edt": "0x32",
+            "name": "sewageWater",
+            "descriptions": {
+              "ja": "下水",
+              "en": "sewage water"
+            }
+          },
+          {
+            "edt": "0x33",
+            "name": "otherWater",
+            "descriptions": {
+              "ja": "その他",
+              "en": "other water"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "所有者区分",
+        "en": "Owner classification"
+      },
+      "shortName": "ownerClassification",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "メータの所有者を区分で示す。",
+        "en": "This property indicates the owner of the meter in the form of owner classification."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x30",
+            "name": "notSpecified",
+            "descriptions": {
+              "ja": "指定なし",
+              "en": "Not specified"
+            }
+          },
+          {
+            "edt": "0x31",
+            "name": "publicWaterworksCompany",
+            "descriptions": {
+              "ja": "事業体",
+              "en": "Public waterworks company"
+            }
+          },
+          {
+            "edt": "0x32",
+            "name": "privateSectorCompany",
+            "descriptions": {
+              "ja": "民間会社",
+              "en": "Private sector company"
+            }
+          },
+          {
+            "edt": "0x33",
+            "name": "individual",
+            "descriptions": {
+              "ja": "個人",
+              "en": "Individual"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算水流量計測値",
+        "en": "Measured cumulative amount of flowing water"
+      },
+      "shortName": "cumulativeFlowingWater",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算水流量の消費量を9 桁で示す。",
+        "en": "This property indicates the cumulative amount (consumption) of flowing water using a 9-digit number."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999m3",
+        "coefficient": [
+          "0xE1"
+        ]
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算水流量計測値単位",
+        "en": "Unit for measured Cumulative amounts of flowing water"
+      },
+      "shortName": "unitForCumulativeFlowingWater",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算水流量及び履歴の計測値の単位（乗率）を示す。",
+        "en": "This property indicates the unit (multiplying factor) for the measured cumulative amount of flowing water and the historical data of measured cumulative amount of flowing water."
+      },
+      "data": {
+        "type": "numericValue",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "numericValue": 1
+          },
+          {
+            "edt": "0x01",
+            "numericValue": 0.1
+          },
+          {
+            "edt": "0x02",
+            "numericValue": 0.01
+          },
+          {
+            "edt": "0x03",
+            "numericValue": 0.001
+          },
+          {
+            "edt": "0x04",
+            "numericValue": 0.0001
+          },
+          {
+            "edt": "0x05",
+            "numericValue": 1e-05
+          },
+          {
+            "edt": "0x06",
+            "numericValue": 1e-06
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算水流量計測値履歴",
+        "en": "Historical data of measured cumulative amount of flowing water"
+      },
+      "shortName": "cumulativeFlowingWaterLog",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算水流量消費量の計測結果履歴を、30 分毎データを過去24 時間で示す。",
+        "en": "This property indicates the historical data of measured cumulative amount (consumptions) of running water, which consists of 48 pieces of halfhourly data for the preceding 24 hours."
+      },
+      "data": {
+        "type": "array",
+        "itemSize": 4,
+        "minItems": 48,
+        "maxItems": 48,
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/number_0-999999.999m3"
+            },
+            {
+              "$ref": "#/definitions/state_NoData_FFFFFFFE"
+            }
+          ]
+        }
+      },
+      "remark": {
+        "ja": "計測値に0xE1 から算出された値を乗算し、1000倍し、少数部分を切り捨てた値。",
+        "en": "Each value is caluculated by multiplying measured value by the value from 0xE1, then multiplying 1000, then rounding down."
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "検針データ異常検知状態",
+        "en": "Detection of abnormal value in metering data"
+      },
+      "shortName": "abnormalDetection",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "メータが検針データの異常を検知した状態を示す。",
+        "en": "This property indicates whether the meter has detected an abnormal value in the metering data."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Detected-NotDetected_4142"
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "セキュリティデータ情報",
+        "en": "Security data information"
+      },
+      "shortName": "securityDataInformation",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "メータが作動した保安情報をビット割付で定義するセキュリティデータを示す。",
+        "en": "Provides security information about the abnormal states detected by the meter in the form of security data that identifies the abnormal states by means of bit assignment."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-4294967295"
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ID番号設定",
+        "en": "ID number setting"
+      },
+      "shortName": "idNumber",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "メータのID 番号を表す。ASCII コードで指定。初期値は '000000'。",
+        "en": "This property indicates the ID number of the meter. The ID number is specified using ASCII code. Initial value is '000000'."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_6"
+      },
+      "remark": {
+        "ja": "初期値は '000000'",
+        "en": "ID number setting"
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "検定満期情報",
+        "en": "Verification expiration information"
+      },
+      "shortName": "verificationExpirationInformation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "メータの検定満了年月を示す。YYYYMM書式のASCII コードで指定。",
+        "en": "This property indicates the month and year in which the verification of the meter will expire. The month and year are specified using ASCII code."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_6"
+      },
+      "remark": {
+        "ja": "ASCII コード、YYYYMM",
+        "en": "ASCII code, YYYYMM."
+      }
+    }
+  ]
+}

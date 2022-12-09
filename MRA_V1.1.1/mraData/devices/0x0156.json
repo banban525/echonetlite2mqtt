@@ -1,0 +1,376 @@
+{
+  "eoj": "0x0156",
+  "validRelease": {
+    "from": "I",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "業務用パッケージエアコン室内機 (設備用を除く)",
+    "en": "Package-type commercial air conditioner (indoor unit) (except those for facilities)"
+  },
+  "shortName": "commercialAirConditionerIndoorUnit",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operation status"
+      },
+      "shortName": "operationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ON/OFFの状態を示す",
+        "en": "This property indicates the ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0xAC",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "サーモ状態",
+        "en": "Thermostat state"
+      },
+      "shortName": "thermostatState",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "サーモON/OFF状態を示す",
+        "en": "This property indicates the state (ON or OFF) of the thermostat."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "サーモON",
+              "en": "Thermostat ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "サーモOFF",
+              "en": "Thermostat OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xAE",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自動運転時運転モード状態",
+        "en": "Current function (automatic operation mode)"
+      },
+      "shortName": "automaticOperationModeStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷房/暖房/除湿/送風/その他",
+        "en": "This property indicates, when the air conditioner is operating in the 'automatic' operation mode, the function ('cooling', 'heating', 'dehumidification', 'air circulation' or 'other') that is currently being used."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x42",
+            "name": "cooling",
+            "descriptions": {
+              "ja": "冷房",
+              "en": "Cooling"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "heating",
+            "descriptions": {
+              "ja": "暖房",
+              "en": "Heating"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "dehumidification",
+            "descriptions": {
+              "ja": "除湿",
+              "en": "Dehumidification"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "circulation",
+            "descriptions": {
+              "ja": "送風",
+              "en": "Air circulation"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Other"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転モード設定",
+        "en": "Operation mode setting"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "自動/冷房/暖房/除湿/送風の運転モードを設定し、設定状態を取得する",
+        "en": "Used to specify the operation mode ('automatic', 'cooling', 'heating', 'dehumidification' or 'air circulation') and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "auto",
+            "descriptions": {
+              "ja": "自動",
+              "en": "Automatic"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "cooling",
+            "descriptions": {
+              "ja": "冷房",
+              "en": "Cooling"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "heating",
+            "descriptions": {
+              "ja": "暖房",
+              "en": "Heating"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "dehumidification",
+            "descriptions": {
+              "ja": "除湿",
+              "en": "Dehumidification"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "circulation",
+            "descriptions": {
+              "ja": "送風",
+              "en": "Air circulation"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB3",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "温度設定値",
+        "en": "Temperature setting"
+      },
+      "shortName": "targetTemperature",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "温度設定値を設定し、設定状態を取得する",
+        "en": "Used to set the temperature setting volume and acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-50Celsius"
+      }
+    },
+    {
+      "epc": "0xBB",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室内機温度計測値",
+        "en": "Measured indoor unit temperature"
+      },
+      "shortName": "roomTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "室内機の温度計測値を取得する",
+        "en": "Used to acquire the measured indoor unit temperature (°C)."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-127-125Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Unmeasurable_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "グループ情報",
+        "en": "Group information"
+      },
+      "shortName": "groupInformation",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "室内機と室外機との紐付けをするための情報",
+        "en": "Used to specify information to link indoor units with outdoor units."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-253"
+          },
+          {
+            "$ref": "#/definitions/state_NoSetting_00"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDB",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室内機消費電力範囲",
+        "en": "Power consumption range for indoor units"
+      },
+      "shortName": "powerConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "室内機の消費電力を5グループに分けて示す",
+        "en": "Power consumption for indoor units is classified into five groups."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x01",
+            "name": "less50W",
+            "descriptions": {
+              "ja": "50W未満",
+              "en": "Up to 50W"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "less100W",
+            "descriptions": {
+              "ja": "50W以上～100W未満",
+              "en": "50W-100W"
+            }
+          },
+          {
+            "edt": "0x03",
+            "name": "less150W",
+            "descriptions": {
+              "ja": "100W以上～150W未満",
+              "en": "100W-150W"
+            }
+          },
+          {
+            "edt": "0x04",
+            "name": "less200W",
+            "descriptions": {
+              "ja": "150W以上～200W未満",
+              "en": "150W-200W"
+            }
+          },
+          {
+            "edt": "0x05",
+            "name": "200WOrMore",
+            "descriptions": {
+              "ja": "200W以上",
+              "en": "200W-"
+            }
+          },
+          {
+            "edt": "0x00",
+            "name": "undefined",
+            "descriptions": {
+              "ja": "未定",
+              "en": "Undefined"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

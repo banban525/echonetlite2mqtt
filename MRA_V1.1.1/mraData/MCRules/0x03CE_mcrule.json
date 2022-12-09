@@ -1,0 +1,99 @@
+{
+  "eoj": "0x03CE",
+  "properties": [
+    {
+      "epc": "0xBD",
+      "data": {
+        "$ref": "#/definitions/number_-127-125Celsius",
+        "multipleOf": 1
+      }
+    },
+    {
+      "epc": "0xE3",
+      "data": {
+        "$ref": "#/definitions/number_-127-125Celsius",
+        "multipleOf": 1
+      }
+    },
+    {
+      "epc": "0xE4",
+      "data": {
+        "$ref": "#/definitions/number_0-65533W",
+        "multipleOf": 1
+      }
+    },
+    {
+      "epc": "0xE5",
+      "data": {
+        "$ref": "#/definitions/number_0-65533W",
+        "multipleOf": 1
+      }
+    },
+    {
+      "epc": "0xE6",
+      "data": {
+        "$ref": "#/definitions/number_0-65533W",
+        "multipleOf": 1
+      }
+    },
+    {
+      "epc": "0xEE",
+      "data": {
+        "$ref": "#/definitions/number_0-100percent",
+        "multipleOf": 1
+      }
+    },
+    {
+      "epc": "0xEF",
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius",
+        "multipleOf": 1
+      }
+    },
+    {
+      "epc": "0xFF",
+      "note": {
+        "ja": "WebAPIの'devices'で管理されている機器のIDおよびその'deviceType'を記述",
+        "en": "Describe the ID of the device managed in 'devices' of WebAPI and its 'deviceType'."
+      },
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": [
+            {
+              "shortName": "deviceId",
+              "element": {
+                "type": "raw"
+              }
+            },
+            {
+              "shortName": "deviceType",
+              "element": {
+                "type": "raw"
+              }
+            }
+          ]
+        }
+      },
+      "propertyName": {
+        "ja": "グループ内デバイスリスト",
+        "en": "List of devices in group"
+      },
+      "shortName": "groupDeviceList",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "accessRule": {
+        "inf": "notApplicable",
+        "set": "notApplicable",
+        "get": "optional"
+      },
+      "descriptions": {
+        "ja": "系統連系状態のタイプを示す",
+        "en": "This property indicates the status of interconnection with the system."
+      }
+    }
+  ]
+}

@@ -1,0 +1,293 @@
+{
+  "eoj": "0x0157",
+  "validRelease": {
+    "from": "I",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "業務用パッケージエアコン室外機 (設備用を除く)",
+    "en": "Package-type commercial air conditioner (outdoor unit)"
+  },
+  "shortName": "commercialAirConditionerOutdoorUnit",
+  "elProperties": [
+    {
+      "epc": "0xAB",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "特殊状態",
+        "en": "Special state"
+      },
+      "shortName": "specialState",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "エアコンが特殊状態にあることを示す",
+        "en": "This property indicates when the air conditioner is in the 'special' state."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x40",
+            "name": "false",
+            "descriptions": {
+              "ja": "通常状態",
+              "en": "Normal operation"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "特殊状態",
+              "en": "Special state"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB8",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室外機定格消費電力値",
+        "en": "Rated power consumption of outdoor unit"
+      },
+      "shortName": "ratedPowerConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷房/暖房の各運転モード時の定格消費電力",
+        "en": "Used to acquire the rated power consumption for the cooling and heating modes."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "shortName": "cooling",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-4294967293W"
+                },
+                {
+                  "$ref": "#/definitions/state_Unsupported_FFFFFFFE"
+                }
+              ]
+            },
+            "elementName": {
+              "ja": "冷房",
+              "en": "Cooling"
+            }
+          },
+          {
+            "shortName": "heating",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-4294967293W"
+                },
+                {
+                  "$ref": "#/definitions/state_Unsupported_FFFFFFFE"
+                }
+              ]
+            },
+            "elementName": {
+              "ja": "暖房",
+              "en": "Heating"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBE",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室外機温度計測値",
+        "en": "Measured outdoor unit temperature"
+      },
+      "shortName": "outdoorTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "室外機の温度計測値を取得する",
+        "en": "Used to acquire the measured outdoor unit temperature (°C)."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-127-125Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Unmeasurable_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "グループ情報",
+        "en": "Group information"
+      },
+      "shortName": "groupInformation",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "室内機と室外機との紐付けをするための情報",
+        "en": "Used to acquire information to link indoor units with outdoor units."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-253"
+          },
+          {
+            "$ref": "#/definitions/state_NoSetting_00"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDB",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室外機消費電力計測値",
+        "en": "Measured power consumption of outdoor unit"
+      },
+      "shortName": "powerConsumption",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "室外機の消費電力計測値",
+        "en": "Used to acquire the measured power consumption of the outdoor unit."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-4294967293W"
+      }
+    },
+    {
+      "epc": "0xDD",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室外機節電可能消費電力",
+        "en": "Possible power savings for outdoor units"
+      },
+      "shortName": "powerConsumptionWillBeSaved",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現運転状況から節電可能な電力 (W) を示す",
+        "en": "This property indicates possible power savings (W) based on current operation status."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-4294967293W"
+      }
+    },
+    {
+      "epc": "0xDE",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室外機消費電力制限設定",
+        "en": "Settings restricting power consumption of outdoor units"
+      },
+      "shortName": "powerConsumptionLimit",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "節電する電力 (W) を設定する/読み出す",
+        "en": "Setting/reading power (W) to be saved."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-4294967293W"
+          },
+          {
+            "type": "state",
+            "size": 4,
+            "enum": [
+              {
+                "edt": "0x00000000",
+                "name": "canceling",
+                "descriptions": {
+                  "ja": "電力制限解除",
+                  "en": "Canceling the restriction"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDF",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室外機抑制最低消費電力",
+        "en": "Minimum power consumption for restricted outdoor unit"
+      },
+      "shortName": "restrictedMinimumPowerConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "抑制可能な最低消費電力を示す",
+        "en": "This property indicates the minimum possible power consumption savings."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-4294967293W"
+      }
+    }
+  ]
+}

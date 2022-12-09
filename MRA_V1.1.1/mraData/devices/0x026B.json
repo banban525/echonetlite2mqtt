@@ -1,0 +1,2192 @@
+{
+  "eoj": "0x026B",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "電気温水器",
+    "en": "Electric water heater"
+  },
+  "shortName": "electricWaterHeater",
+  "elProperties": [
+    {
+      "epc": "0x90",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ予約設定",
+        "en": "ON timer setting"
+      },
+      "shortName": "onTimerReservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切",
+        "en": "Reservation ON/OFF"
+      },
+      "data": {
+        "$ref": "#/definitions/state_ReservationA_4142"
+      }
+    },
+    {
+      "epc": "0x91",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ時刻設定値",
+        "en": "ON timer setting"
+      },
+      "shortName": "onTimerTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "時刻 HH:MM",
+        "en": "ON timer setting (HH:MM)"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "A",
+        "to": "H"
+      },
+      "propertyName": {
+        "ja": "沸き上げ自動設定",
+        "en": "Automatic water heating setting"
+      },
+      "shortName": "automaticWaterHeating",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自動沸き上げON/OFFを表す",
+        "en": "Used to specify whether or not to use the automatic water heating function, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "auto",
+            "descriptions": {
+              "ja": "自動沸き上げ",
+              "en": "Automatic water heating function used"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "manualNoHeating",
+            "descriptions": {
+              "ja": "手動沸き上げ停止",
+              "en": "Non-automatic water heating function stopped"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "manualHeating",
+            "descriptions": {
+              "ja": "手動沸き上げ",
+              "en": "Non-automatic water heating function used"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "沸き上げ自動設定",
+        "en": "Automatic water heating setting"
+      },
+      "shortName": "automaticWaterHeating",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "自動沸き上げON/OFFを表す",
+        "en": "Used to specify whether or not to use the automatic water heating function, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "auto",
+            "descriptions": {
+              "ja": "自動沸き上げ",
+              "en": "Automatic water heating function used"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "manualNoHeating",
+            "descriptions": {
+              "ja": "手動沸き上げ停止",
+              "en": "Non-automatic water heating function stopped"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "manualHeating",
+            "descriptions": {
+              "ja": "手動沸き上げ",
+              "en": "Non-automatic water heating function used"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "沸き上げ湯温自動設定",
+        "en": "Automatic water temperature control setting"
+      },
+      "shortName": "automaticWaterHeatingTemperatureControl",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "AUTO/非AUTO",
+        "en": "Used to specify whether or not to use the automatic water temperature control function, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "Auto",
+              "en": "Automatic water temperature control function used"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "非Auto",
+              "en": "Automatic water temperature control function not used"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "A",
+        "to": "H"
+      },
+      "propertyName": {
+        "ja": "沸き上げ中状態",
+        "en": "Water heater status"
+      },
+      "shortName": "waterHeatingStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "沸き上げ中状態を示す",
+        "en": "This property indicates the current status of the water heater in terms of whether it is heating water or not."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "沸き上げ中",
+              "en": "Heating"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "非沸き上げ中",
+              "en": "Not heating"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "沸き上げ中状態",
+        "en": "Water heater status"
+      },
+      "shortName": "waterHeatingStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "沸き上げ中状態を示す",
+        "en": "This property indicates the current status of the water heater in terms of whether it is heating water or not."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "沸き上げ中",
+              "en": "Heating"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "非沸き上げ中",
+              "en": "Not heating"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "沸き上げ湯温設定値",
+        "en": "Water heating temperature setting"
+      },
+      "shortName": "targetWaterHeatingTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "沸き上げ湯温設定値をCelsiusで示す",
+        "en": "Used to specify (in Celsius) the temperature of heated water to be achieved, and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-100Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB4",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "手動沸き上げ停止日数設定値",
+        "en": "Manual water heating stop days setting"
+      },
+      "shortName": "heatingStopDays",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "手動沸き上げ停止日数を日で示す",
+        "en": "Used to specify manually the number of days to stop 'automatic water heating'."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-252days"
+          },
+          {
+            "$ref": "#/definitions/state_Infinite_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB5",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "手動沸き上げOFFタイマ相対時間設定値",
+        "en": "Relative time setting value for manual water heating OFF"
+      },
+      "shortName": "relativeTimeHeatingOff",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value, HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0xB6",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "タンク運転モード設定",
+        "en": "Tank operation mode setting"
+      },
+      "shortName": "tankOperationMode",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "運転モード設定を示す",
+        "en": "Used to specify the setting of operation mode."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "standard",
+            "descriptions": {
+              "ja": "標準",
+              "en": "Standard"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "saving",
+            "descriptions": {
+              "ja": "節約",
+              "en": "Saving"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "extra",
+            "descriptions": {
+              "ja": "多め",
+              "en": "Extra"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC0",
+      "validRelease": {
+        "from": "A",
+        "to": "C"
+      },
+      "propertyName": {
+        "ja": "昼間沸き増し許可設定",
+        "en": "Daytime reheating permission setting"
+      },
+      "shortName": "daytimeReheatingPermission",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "昼間沸き増しの許可/禁止を示す",
+        "en": "Used to specify whether or not to permit daytime reheating, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "昼間沸き増し許可",
+              "en": "Daytime reheating permitted"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "昼間沸き増し禁止",
+              "en": "Daytime reheating not permitted"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC0",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "昼間沸き増し許可設定",
+        "en": "Daytime reheating permission setting"
+      },
+      "shortName": "daytimeReheatingPermission",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "昼間沸き増しの許可/禁止を示す",
+        "en": "Used to specify whether or not to permit daytime reheating, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "昼間沸き増し許可",
+              "en": "Daytime reheating permitted"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "昼間沸き増し禁止",
+              "en": "Daytime reheating not permitted"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "温水器湯温計測値",
+        "en": "Measured temperature of water in water heater"
+      },
+      "shortName": "tankWaterTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "温水器内の現在湯温を℃で示す",
+        "en": "This property indicates the current temperature of the water in the water heater."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100Celsius"
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "警報発生状態",
+        "en": "Alarm status"
+      },
+      "shortName": "alarmStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "何らかの警報の発生を示す",
+        "en": "This property indicates the status of an alarm."
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 4,
+        "bitmaps": [
+          {
+            "name": "noHotWater",
+            "descriptions": {
+              "ja": "湯切れ警報",
+              "en": "No Hot Water"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "type": "state",
+              "size": 0,
+              "enum": [
+                {
+                  "edt": "0x01",
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "発生",
+                    "en": "Alarm"
+                  }
+                },
+                {
+                  "edt": "0x00",
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "正常",
+                    "en": "No Alarm"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "leaking",
+            "descriptions": {
+              "ja": "漏水警報",
+              "en": "Leaking"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "type": "state",
+              "size": 0,
+              "enum": [
+                {
+                  "edt": "0x01",
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "発生",
+                    "en": "Alarm"
+                  }
+                },
+                {
+                  "edt": "0x00",
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "正常",
+                    "en": "No Alarm"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "freezing",
+            "descriptions": {
+              "ja": "凍結警報",
+              "en": "Freezing"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "type": "state",
+              "size": 0,
+              "enum": [
+                {
+                  "edt": "0x01",
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "発生",
+                    "en": "Alarm"
+                  }
+                },
+                {
+                  "edt": "0x00",
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "正常",
+                    "en": "No Alarm"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC3",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "給湯中状態",
+        "en": "Hot water supply status"
+      },
+      "shortName": "hotWaterSupplyStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "給湯中状態を示す",
+        "en": "This property indicates the status of supplying hot water."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "給湯中",
+              "en": "Supplying hot water"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "非給湯中",
+              "en": "Not supplying hot water"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC4",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂保温運転相対時間設定値",
+        "en": "Relative time setting for keeping bath temperature"
+      },
+      "shortName": "relativeTimeKeepingTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0xC7",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "エネルギーシフト参加状態",
+        "en": "Participation in energy shift"
+      },
+      "shortName": "energyShiftParticipation",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "エネルギーシフトへの対応を示す。「参加要請確定時刻」に、値が確定し、沸き上げシフト時刻にクリア(0x00)される",
+        "en": "This property indicates a response in energy shift. The value is set when a value is determined at participation request and cleared at the heating shift time (0x00)."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x01",
+            "name": "true",
+            "descriptions": {
+              "ja": "参加",
+              "en": "Participation"
+            }
+          },
+          {
+            "edt": "0x00",
+            "name": "false",
+            "descriptions": {
+              "ja": "不参加",
+              "en": "Non Participation"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "サービス提供者と本クラス搭載機器の利用者間で、エネルギーシフト(昼間沸き上げ)に対し合意が得られている前提で利用する。また、沸き上げ開始基準時刻は、契約時に決定されていることとする",
+        "en": "Use the device on the assumption that an agreement between service provider and user of devices implementing this class is obtained for energy shift (daytime heating). Note that the standard time to start heating may be determined when establishing a contract."
+      }
+    },
+    {
+      "epc": "0xC8",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "沸き上げ開始基準時刻",
+        "en": "Standard time to start heating"
+      },
+      "shortName": "standardTimeToStartHeating",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "「昼間沸き上げシフト時刻1及び昼間沸き上げシフト時刻2(エネルギーシフトの回数が2回の機器のみ)」を確定する時刻",
+        "en": "Time when daytime heating shift time 1 and daytime heating shift time 2 are determined (only for devices that carry out energy shifts twice)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-20-21-22-23-24"
+      },
+      "note": {
+        "ja": "20:00,21:00,22:00,23:00,24:00,01:00",
+        "en": "20:00,21:00,22:00,23:00,24:00,01:00"
+      },
+      "remark": {
+        "ja": "サービス提供者と本クラス搭載機器の利用者間で、エネルギーシフト(昼間沸き上げ)に対し合意が得られている前提で利用する。また、沸き上げ開始基準時刻は、契約時に決定されていることとする",
+        "en": "Use the device on the assumption that an agreement between service provider and user of devices implementing this class is obtained for energy shift (daytime heating). Note that the standard time to start heating may be determined when establishing a contract."
+      }
+    },
+    {
+      "epc": "0xC9",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "エネルギーシフト回数",
+        "en": "Number of energy shifts"
+      },
+      "shortName": "numberOfEnergyShifts",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "エネルギーシフトする回数を確認する",
+        "en": "Check the number of energy shifts carried out"
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-2"
+      },
+      "remark": {
+        "ja": "サービス提供者と本クラス搭載機器の利用者間で、エネルギーシフト(昼間沸き上げ)に対し合意が得られている前提で利用する。また、沸き上げ開始基準時刻は、契約時に決定されていることとする",
+        "en": "Use the device on the assumption that an agreement between service provider and user of devices implementing this class is obtained for energy shift (daytime heating). Note that the standard time to start heating may be determined when establishing a contract."
+      },
+      "note": {
+        "ja": "1回／2回(0x01、0x02)",
+        "en": "Once/twice (0x01, 0x02)"
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "昼間沸き上げシフト時刻1",
+        "en": "Daytime heating shift time 1"
+      },
+      "shortName": "waterHeatingShiftTime1",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "1回目の「昼間沸き上げシフト時刻」を示す。また、未設定時の値を0x00と定義する",
+        "en": "This property indicates 'daytime heating shift time 1' for the first time. The value when there are no settings shall be defined as 0x00."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0x09",
+                "name": "at0900",
+                "descriptions": {
+                  "ja": "9時",
+                  "en": "09:00"
+                }
+              },
+              {
+                "edt": "0x0A",
+                "name": "at1000",
+                "descriptions": {
+                  "ja": "10時",
+                  "en": "10:00"
+                }
+              },
+              {
+                "edt": "0x0B",
+                "name": "at1100",
+                "descriptions": {
+                  "ja": "11時",
+                  "en": "11:00"
+                }
+              },
+              {
+                "edt": "0x0C",
+                "name": "at1200",
+                "descriptions": {
+                  "ja": "12時",
+                  "en": "12:00"
+                }
+              },
+              {
+                "edt": "0x0D",
+                "name": "at1300",
+                "descriptions": {
+                  "ja": "13時",
+                  "en": "13:00"
+                }
+              },
+              {
+                "edt": "0x0E",
+                "name": "at1400",
+                "descriptions": {
+                  "ja": "14時",
+                  "en": "14:00"
+                }
+              },
+              {
+                "edt": "0x0F",
+                "name": "at1500",
+                "descriptions": {
+                  "ja": "15時",
+                  "en": "15:00"
+                }
+              },
+              {
+                "edt": "0x10",
+                "name": "at1600",
+                "descriptions": {
+                  "ja": "16時",
+                  "en": "16:00"
+                }
+              },
+              {
+                "edt": "0x11",
+                "name": "at1700",
+                "descriptions": {
+                  "ja": "17時(エネルギーシフト回数が2回の場合はこの値無効になる)",
+                  "en": "17:00 (this value is nullified if energy shifts occur twice.)"
+                }
+              }
+            ]
+          },
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0x00",
+                "name": "cleared",
+                "descriptions": {
+                  "ja": "クリア状態",
+                  "en": "Undefined"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "remark": {
+        "ja": "サービス提供者と本クラス搭載機器の利用者間で、エネルギーシフト(昼間沸き上げ)に対し合意が得られている前提で利用する。また、沸き上げ開始基準時刻は、契約時に決定されていることとする",
+        "en": "Use the device on the assumption that an agreement between service provider and user of devices implementing this class is obtained for energy shift (daytime heating). Note that the standard time to start heating may be determined when establishing a contract."
+      }
+    },
+    {
+      "epc": "0xCB",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "昼間沸き上げシフト時刻1での沸き上げ予測電力量",
+        "en": "Expected electric energy at daytime heating shift time 1"
+      },
+      "shortName": "estimatedElectricEnergyAtShiftTime1",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "「昼間沸き上げ開始基準時刻」に設定された「昼間沸き上げシフト時刻1」での沸き上げに要する電力量予測値1を示すシフト時刻に応じ、順に10時、13時、15時､17時の各時刻に対応する電力量をWhで示す「シフト時刻毎消費電力確定時刻」に値が確定し、「昼間沸き上げシフト時刻1」に、時刻毎のデータはクリア(0x00000000)される",
+        "en": "This property indicates the expected electric energy 1 required for heating for 'daytime heating shift time 1' set as 'daytime standard time to start heating'.This property indicates electric power in Wh according to shift time, corresponding to these times in sequence: 10:00, 13:00, 15:00, and 17:00.The value is set when a value is determined at a time to determine consumption of electric energy at every shift time and a data at every time is cleared (0x00000000) at the daytime heating shift time 1."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "10時",
+              "en": "10:00"
+            },
+            "shortName": "at1000",
+            "element": {
+              "$ref": "#/definitions/number_0-4294967293Wh"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "13時",
+              "en": "13:00"
+            },
+            "shortName": "at1300",
+            "element": {
+              "$ref": "#/definitions/number_0-4294967293Wh"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "15時",
+              "en": "15:00"
+            },
+            "shortName": "at1500",
+            "element": {
+              "$ref": "#/definitions/number_0-4294967293Wh"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "17時",
+              "en": "17:00"
+            },
+            "shortName": "at1700",
+            "element": {
+              "$ref": "#/definitions/number_0-4294967293Wh"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "サービス提供者と本クラス搭載機器の利用者間で、エネルギーシフト(昼間沸き上げ)に対し合意が得られている前提で利用する。また、沸き上げ開始基準時刻は、契約時に決定されていることとする",
+        "en": "Use the device on the assumption that an agreement between service provider and user of devices implementing this class is obtained for energy shift (daytime heating). Note that the standard time to start heating may be determined when establishing a contract."
+      }
+    },
+    {
+      "epc": "0xCC",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "時間あたり消費電力量1",
+        "en": "Consumption of electric energy per hour 1"
+      },
+      "shortName": "electricEnergyConsumptionRate1",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "「昼間沸き上げシフト時刻1」にシフトした時にHP給湯機が、時間当たりに消費する電力量1を示す「シフト時刻毎消費電力確定時刻」に値が確定し、「昼間沸き上げシフト時刻1」に、時刻毎データはクリア(0x0000)される",
+        "en": "This property indicates electric energy 1 that the HP water heater consumes per hour when shifting to 'daytime heating shift time 1'.The value is set when a value is determined at a time to determine consumption of electric energy at every shift time and a data at every time is cleared (0x0000) at the daytime heating shift time 1."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "10時シフト時",
+              "en": "10:00"
+            },
+            "shortName": "at1000",
+            "element": {
+              "$ref": "#/definitions/number_0-65533Wh"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "13時シフト時",
+              "en": "13:00"
+            },
+            "shortName": "at1300",
+            "element": {
+              "$ref": "#/definitions/number_0-65533Wh"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "15時シフト時",
+              "en": "15:00"
+            },
+            "shortName": "at1500",
+            "element": {
+              "$ref": "#/definitions/number_0-65533Wh"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "17時シフト時",
+              "en": "17:00"
+            },
+            "shortName": "at1700",
+            "element": {
+              "$ref": "#/definitions/number_0-65533Wh"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "サービス提供者と本クラス搭載機器の利用者間で、エネルギーシフト(昼間沸き上げ)に対し合意が得られている前提で利用する。また、沸き上げ開始基準時刻は、契約時に決定されていることとする",
+        "en": "Use the device on the assumption that an agreement between service provider and user of devices implementing this class is obtained for energy shift (daytime heating). Note that the standard time to start heating may be determined when establishing a contract."
+      }
+    },
+    {
+      "epc": "0xCD",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "昼間沸き上げシフト時刻2",
+        "en": "Daytime heating shift time 2"
+      },
+      "shortName": "waterHeatingShiftTime2",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "1回目の「昼間沸き上げシフト時刻」を示す。また、未設定時の値を0x00と定義する",
+        "en": "This property indicates 'daytime heating shift time 1' for the first time The value when no setting shall be defined as 0x00."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0x0A",
+                "name": "at1000",
+                "descriptions": {
+                  "ja": "10時",
+                  "en": "10:00"
+                }
+              },
+              {
+                "edt": "0x0B",
+                "name": "at1100",
+                "descriptions": {
+                  "ja": "11時",
+                  "en": "11:00"
+                }
+              },
+              {
+                "edt": "0x0C",
+                "name": "at1200",
+                "descriptions": {
+                  "ja": "12時",
+                  "en": "12:00"
+                }
+              },
+              {
+                "edt": "0x0D",
+                "name": "at1300",
+                "descriptions": {
+                  "ja": "13時",
+                  "en": "13:00"
+                }
+              },
+              {
+                "edt": "0x0E",
+                "name": "at1400",
+                "descriptions": {
+                  "ja": "14時",
+                  "en": "14:00"
+                }
+              },
+              {
+                "edt": "0x0F",
+                "name": "at1500",
+                "descriptions": {
+                  "ja": "15時",
+                  "en": "15:00"
+                }
+              },
+              {
+                "edt": "0x10",
+                "name": "at1600",
+                "descriptions": {
+                  "ja": "16時",
+                  "en": "16:00"
+                }
+              },
+              {
+                "edt": "0x11",
+                "name": "at1700",
+                "descriptions": {
+                  "ja": "17時",
+                  "en": "17:00"
+                }
+              }
+            ]
+          },
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0x00",
+                "name": "cleared",
+                "descriptions": {
+                  "ja": "クリア状態",
+                  "en": "Undefined"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "remark": {
+        "ja": "サービス提供者と本クラス搭載機器の利用者間で、エネルギーシフト(昼間沸き上げ)に対し合意が得られている前提で利用する。また、沸き上げ開始基準時刻は、契約時に決定されていることとする。エネルギーシフト回数が2回である機器は搭載必須とする",
+        "en": "Use the device on the assumption that an agreement between service provider and user of devices implementing this class is obtained for energy shift (daytime heating). Note that the standard time to start heating may be determined when establishing a contract. Devices with two energy shifts must implement this function."
+      }
+    },
+    {
+      "epc": "0xCE",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "昼間沸き上げシフト時刻2での沸き上げ予測電力量",
+        "en": "Expected electric energy at daytime heating shift time 2"
+      },
+      "shortName": "estimatedElectricEnergyAtShiftTime2",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "「昼間沸き上げ開始基準時刻」に設定された「昼間沸き上げシフト時刻2」での沸き上げに要するシフト2回目の電力量予測値2を示すシフト時刻に応じ、順に13時、15時､17時の各時刻に対応する電力量をWhで示す「シフト時刻毎消費電力確定時刻」に、値が確定し、「昼間沸き上げシフト時刻2」に、各時刻毎データはクリア(0x00000000)される",
+        "en": "This property indicates expected electric energy 2 required for heating (for second time in the shift) for 'daytime heating shift time 2' set as 'daytime standard time to start heating'.This property indicates electric power in Wh according to shift time, corresponding to these times in sequence: 13:00, 15:00, and 17:00.The value is set when a value is determined at a time to determine consumption of electric energy at every shift time and a data at every time is cleared (0x00000000) at the daytime heating shift time 2."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "13時",
+              "en": "13:00"
+            },
+            "shortName": "at1300",
+            "element": {
+              "$ref": "#/definitions/number_0-4294967293Wh"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "15時",
+              "en": "15:00"
+            },
+            "shortName": "at1500",
+            "element": {
+              "$ref": "#/definitions/number_0-4294967293Wh"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "17時",
+              "en": "17:00"
+            },
+            "shortName": "at1700",
+            "element": {
+              "$ref": "#/definitions/number_0-4294967293Wh"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "サービス提供者と本クラス搭載機器の利用者間で、エネルギーシフト(昼間沸き上げ)に対し合意が得られている前提で利用する。また、沸き上げ開始基準時刻は、契約時に決定されていることとする。エネルギーシフト回数が2回である機器は搭載必須とする",
+        "en": "Use the device on the assumption that an agreement between service provider and user of devices implementing this class is obtained for energy shift (daytime heating). Note that the standard time to start heating may be determined when establishing a contract. Devices with two energy shifts must implement this function."
+      }
+    },
+    {
+      "epc": "0xCF",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "時間あたり消費電力量2",
+        "en": "Consumption of electric energy per hour 2"
+      },
+      "shortName": "electricEnergyConsumptionRate2",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "「昼間沸き上げシフト時刻2」にシフトした時にHP給湯機が、時間当たり消費電力量2を示す「シフト時刻毎消費電力確定時刻」に、値が確定し、「昼間沸き上されるげシフト時刻2」に、各時刻毎データはクリア(0x0000)される",
+        "en": "This property indicates electric energy 2 that the HP water heater consumes per hour when shifting 'daytime heating shift time 2'.The value is set when a value is determined at a time to determine consumption of electric energy at every shift time and a data at every time is cleared (0x0000) at the daytime heating shift time 2."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "13時シフト時",
+              "en": "13:00"
+            },
+            "shortName": "at1300",
+            "element": {
+              "$ref": "#/definitions/number_0-65533Wh"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "15時シフト時",
+              "en": "15:00"
+            },
+            "shortName": "at1500",
+            "element": {
+              "$ref": "#/definitions/number_0-65533Wh"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "17時シフト時",
+              "en": "17:00"
+            },
+            "shortName": "at1700",
+            "element": {
+              "$ref": "#/definitions/number_0-65533Wh"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "サービス提供者と本クラス搭載機器の利用者間で、エネルギーシフト(昼間沸き上げ)に対し合意が得られている前提で利用する。また、沸き上げ開始基準時刻は、契約時に決定されていることとする。エネルギーシフト回数が2回である機器は搭載必須とする",
+        "en": "Use the device on the assumption that an agreement between service provider and user of devices implementing this class is obtained for energy shift (daytime heating). Note that the standard time to start heating may be determined when establishing a contract. Devices with two energy shifts must implement this function."
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "給湯温度設定値",
+        "en": "Temperature of supplied water setting"
+      },
+      "shortName": "targetSuppliedWaterTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "給湯温度設定値を℃で示す",
+        "en": "Used to specify the temperature of water supplied from the water heater in Celsius, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100Celsius"
+      }
+    },
+    {
+      "epc": "0xD3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂温度設定値",
+        "en": "Bath water temperature setting"
+      },
+      "shortName": "targetBathWaterTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂温度設定値を℃で示す",
+        "en": "Used to specify (in Celsius) the temperature up to which the water heater will heat bath water, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100Celsius"
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂湯量設定4",
+        "en": "Bath water volume setting4"
+      },
+      "shortName": "bathWaterVolume4",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂湯量を段階数で指定",
+        "en": "The bath hot water volume is specified by a number of steps."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-255"
+      },
+      "note": {
+        "ja": "設定可能なステップの最大値は「風呂湯量設定4設定可能最大レベル」で取得する",
+        "en": "The maximum allowable step setting shall be acquired with the 'maximum allowable water volume 4' property."
+      }
+    },
+    {
+      "epc": "0xD5",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂湯量設定4設定可能最大レベル",
+        "en": "Bath water volume setting4 maximum settable level"
+      },
+      "shortName": "maximumAllowableWaterVolume4",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂湯量設定4の最大段階数",
+        "en": "The maximum settable level is the top step of Bath water volume setting 4."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-255"
+      }
+    },
+    {
+      "epc": "0xD6",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "音量設定値",
+        "en": "Volume setting"
+      },
+      "shortName": "volume",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "操作部から出力される音量設定値を設定し、設定状態を取得する",
+        "en": "Used to set the volume output from the operating units and to acquire the setting status."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xD7",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ミュート設定",
+        "en": "Mute setting"
+      },
+      "shortName": "mute",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "操作部から出力される音量ミュート状態を設定し、設定状態を取得する",
+        "en": "Used to set the volume mute status output from the operating units and to acquire the setting status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x30",
+            "name": "true",
+            "descriptions": {
+              "ja": "ミュートON",
+              "en": "Mute ON"
+            }
+          },
+          {
+            "edt": "0x31",
+            "name": "false",
+            "descriptions": {
+              "ja": "ミュートOFF",
+              "en": "Mute OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD8",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "給湯可能湯量値",
+        "en": "Remaining hot water volume"
+      },
+      "shortName": "remainingWaterVolume",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "給湯可能な湯量を㍑で示す",
+        "en": "This property indicate the remaining hot water volume in liters."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533L"
+      }
+    },
+    {
+      "epc": "0xD9",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "余剰電力量予測値",
+        "en": "Surplus electric energy power prediction value"
+      },
+      "shortName": "surplusPowerPrediction",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "余剰電力量予測値を基点となる時刻を含めて未来24時間分を時系列順に上位バイトからプロパティ値として示す月、日、時",
+        "en": "A 24-hour period in the future, including the time at which the surplus electric power prediction value serves as the base point, is indicated as a property value in time series, beginning with the high-order byte.Month, date, hour."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "基点日時：月",
+              "en": "Base date and time: Month"
+            },
+            "shortName": "month",
+            "element": {
+              "$ref": "#/definitions/number_1-12"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "基点日時：日",
+              "en": "Base date and time: Day"
+            },
+            "shortName": "day",
+            "element": {
+              "$ref": "#/definitions/number_1-31"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "基点日時：時",
+              "en": "Base date and time: Hour"
+            },
+            "shortName": "hour",
+            "element": {
+              "$ref": "#/definitions/number_0-23"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "１時間単位の余剰電力量予測値",
+              "en": "Surplus power prediction value in units of 1 hour"
+            },
+            "shortName": "surplusEnergyPredictionValue",
+            "element": {
+              "type": "array",
+              "itemSize": 2,
+              "minItems": 24,
+              "maxItems": 24,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_-327670-327650Wh"
+                  },
+                  {
+                    "$ref": "#/definitions/state_Invalid_8000"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "surplusEnergyPredictionValueの配列要素の値が-327680である要素は、無効値を意味する",
+        "en": "If the value of an element of surplusEnergyPredictionValue is -327680, the element means invalid value."
+      }
+    },
+    {
+      "epc": "0xDB",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冬季H/Pユニット定格消費電力",
+        "en": "Rated power consumption of H/P unit in wintertime"
+      },
+      "shortName": "winterRatedPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冬季(12、1、2、3月)の沸き上げ時の定格消費電力を示す",
+        "en": "This property indicates the rated power consumption of the heat pump in wintertime. (December to March)"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xDC",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "中間期H/Pユニット定格消費電力",
+        "en": "Rated power consumption of H/P unit in in-between seasons"
+      },
+      "shortName": "betweenSeasonRatedPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "中間期(4、5、10、11月)の沸き上げ時の定格消費電力を示す",
+        "en": "This property indicates the rated power consumption of the heat pump in in-between seasons. (April, May, October, November)"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xDD",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "夏季H/Pユニット定格消費電力",
+        "en": "Rated power consumption of H/P unit in summertime"
+      },
+      "shortName": "summerRatedPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "夏季(6、7、8、9月)の沸き上げ時の定格消費電力を示す",
+        "en": "This property indicates the rated power consumption of the heat pump in summertime. (June to September)"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "沸き上げ湯量設定値",
+        "en": "Bath water volume setting"
+      },
+      "shortName": "targetWaterHeatingVolume",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "沸き上げ湯量設定値を％で示す",
+        "en": "Used to specify (in %) the volume of bath water the bathtub will contain upon completion of heating, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "残湯量計測値",
+        "en": "Measured amount of water remaining in tank"
+      },
+      "shortName": "remainingWater",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "残湯量計測値を㍑で示す",
+        "en": "This property indicates the measured amount of water left in the tank in liters."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533L"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "タンク容量値",
+        "en": "Tank capacity"
+      },
+      "shortName": "tankCapacity",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タンク容量値を㍑で示す",
+        "en": "This property indicates the tank capacity in liters."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533L"
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂自動モード設定",
+        "en": "Automatic Bath Water Heating Mode Setting"
+      },
+      "shortName": "automaticBathOperation",
+      "accessRule": {
+        "get": "required_o",
+        "set": "required_o",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂自動モード入/解除",
+        "en": "Used to specify whether or not to use the 'automatic bath water heating' mode, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "自動入",
+              "en": "Automatic bath water heating mode ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "自動解除",
+              "en": "Automatic bath water heating mode OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "手動風呂追い焚き動作設定",
+        "en": "Manual bath reheating operation setting"
+      },
+      "shortName": "bathReheatingOperation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "追い焚き入/切",
+        "en": "Used to specify whether or not to use the function to reheat."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "追い焚き入",
+              "en": "Bath reheating ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "追い焚き切",
+              "en": "Bath reheating OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "C"
+      },
+      "propertyName": {
+        "ja": "風呂足し湯動作設定",
+        "en": "Addition of hot water function setting"
+      },
+      "shortName": "bathHotWaterAddition",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "足し湯入/切",
+        "en": "Used to specify whether or not to use the function to add hot water to the bath water in the bathtub, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "足し湯",
+              "en": "Addition of hot water function ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "足し湯切",
+              "en": "Addition of hot water function OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "手動風呂足し湯動作設定",
+        "en": "Manual bath hot water addition function setting"
+      },
+      "shortName": "bathHotWaterAddition",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "足し湯入/切",
+        "en": "Used to specify whether or not to use the function to add hot water to the bath water in the bathtub, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "足し湯入",
+              "en": "Addition of hot water function ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "足し湯切",
+              "en": "Addition of hot water function OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "C"
+      },
+      "propertyName": {
+        "ja": "風呂ぬるめ動作設定",
+        "en": "Slight bath water temperature lowering function setting"
+      },
+      "shortName": "bathLukewarmWaterFunction",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ぬるめ入/切",
+        "en": "Used to specify whether or not to use the 'lukewarm water temperature lowering' function, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "ぬるめ入",
+              "en": "Lukewarm water temperature function ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "ぬるめ切",
+              "en": "Lukewarm water temperature function OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "手動風呂ぬるめ動作設定",
+        "en": "Manual lukewarm water temperature lowering function setting."
+      },
+      "shortName": "bathLukewarmWaterFunction",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ぬるめ入/切",
+        "en": "Used to specify whether or not to use the 'lukewarm water temperature lowering' function, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "ぬるめ入",
+              "en": "Lukewarm water temperature function ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "ぬるめ切",
+              "en": "Lukewarm water temperature function OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂湯量設定1",
+        "en": "Bath water volume setting 1"
+      },
+      "shortName": "bathWaterVolume1",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂湯量を㍑の単位で示す",
+        "en": "Used to specify the bath water volume in liters, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-253L"
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂湯量設定2",
+        "en": "Bath water volume setting 2"
+      },
+      "shortName": "bathWaterVolume2",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂湯量を8段階で指定",
+        "en": "Used to specify the bath water volume by selecting a level from among the eight predefined levels, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/level_31-8"
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "浴室優先設定",
+        "en": "Bathroom priority setting"
+      },
+      "shortName": "bathroomPriority",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "浴室優先入/切",
+        "en": "Used to specify whether or not to use the function of priority bathroom."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "浴室優先入",
+              "en": "Priority bath ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "浴室優先切",
+              "en": "Priority bath OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂動作状態監視",
+        "en": "Bath Operation Status Monitor"
+      },
+      "shortName": "bathOperationStatusMonitor",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "風呂の状態を示す",
+        "en": "This property indicates the status of bath operation."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "runningHotWater",
+            "descriptions": {
+              "ja": "湯張り中",
+              "en": "Filling hot water"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "noOperation",
+            "descriptions": {
+              "ja": "停止中",
+              "en": "Stopped"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "keepingTemperature",
+            "descriptions": {
+              "ja": "保温中",
+              "en": "Keeping temperature"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEE",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂湯量設定3",
+        "en": "Bath water volume setting 3"
+      },
+      "shortName": "bathWaterVolume3",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂湯量を㍑の単位で示す",
+        "en": "Used to specify the bath water volume in liters, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533L"
+      }
+    }
+  ]
+}

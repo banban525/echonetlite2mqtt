@@ -1,0 +1,659 @@
+{
+  "eoj": "0x0263",
+  "validRelease": {
+    "from": "D",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "電動雨戸・シャッター",
+    "en": "Electrically operated rain sliding door/shutter"
+  },
+  "shortName": "electricRainDoor",
+  "elProperties": [
+    {
+      "epc": "0x89",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "異常内容(復帰可能な異常)",
+        "en": "Fault description (Recoverable faults)"
+      },
+      "shortName": "faultDescription",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "異常内容",
+        "en": "Fault description"
+      },
+      "data": {
+        "type": "state",
+        "size": 2,
+        "enum": [
+          {
+            "edt": "0x0402",
+            "name": "obstacleCaught",
+            "descriptions": {
+              "ja": "障害物挟込み",
+              "en": "Obstacle caught"
+            }
+          },
+          {
+            "edt": "0x0502",
+            "name": "outageRecovery",
+            "descriptions": {
+              "ja": "停電復帰",
+              "en": "Recovery from outage"
+            }
+          },
+          {
+            "edt": "0x0602",
+            "name": "timeOut",
+            "descriptions": {
+              "ja": "タイムアウト",
+              "en": "Time out"
+            }
+          },
+          {
+            "edt": "0x0702",
+            "name": "batteryLow",
+            "descriptions": {
+              "ja": "電池残量低下",
+              "en": "Battery low"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      },
+      "note": {
+        "ja": "下位1バイトは、スーパークラスのリセットボタンを押し再操作(0x02)固定。上位1バイトは、復帰可能な異常内容を小分類まで定義。0x45～0xFFはユーザ定義",
+        "en": "Lower-order one byte: Restarting the device by performing a reset operation = 0x02. Higher-order one byte: The detailed fault classification. 0x45 to 0xFF are defined by user."
+      }
+    },
+    {
+      "epc": "0x90",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "タイマ動作設定",
+        "en": "Timer operation setting"
+      },
+      "shortName": "timerOperationMode",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "タイマ動作のON・OFF",
+        "en": "Turns the timer operation ON or OFF."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFFA_4142"
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "開速度設定",
+        "en": "Opening speed setting"
+      },
+      "shortName": "openingSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常使う開速度を3段階で指定",
+        "en": "Used to specify the normal opening speed by three levels."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "low",
+            "descriptions": {
+              "ja": "低",
+              "en": "Low"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "medium",
+            "descriptions": {
+              "ja": "中",
+              "en": "Medium"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "high",
+            "descriptions": {
+              "ja": "高",
+              "en": "High"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "閉速度設定",
+        "en": "Closing speed setting"
+      },
+      "shortName": "closingSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常使う閉速度を3段階で指定",
+        "en": "Used to specify the normal closing speed by three levels."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "low",
+            "descriptions": {
+              "ja": "低",
+              "en": "Low"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "medium",
+            "descriptions": {
+              "ja": "中",
+              "en": "Medium"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "high",
+            "descriptions": {
+              "ja": "高",
+              "en": "High"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作時間設定値",
+        "en": "Operation time"
+      },
+      "shortName": "operationTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "動作させる時間を秒数で指定",
+        "en": "Used to specify the operation time in seconds."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-253second"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "開閉動作設定",
+        "en": "Open/close operation setting"
+      },
+      "shortName": "openCloseOperation",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "開/閉/停止",
+        "en": "Open/Close/Stop"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "open",
+            "descriptions": {
+              "ja": "開",
+              "en": "Open"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "close",
+            "descriptions": {
+              "ja": "閉",
+              "en": "Close"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "stop",
+            "descriptions": {
+              "ja": "停止",
+              "en": "Stop"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "開度レベル設定",
+        "en": "Degree-of-opening setting"
+      },
+      "shortName": "degreeOfOpening",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "開度レベルを％で指定",
+        "en": "Used to specify the degree-of-opening in %."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ブラインド角度設定値",
+        "en": "Blind angle setting"
+      },
+      "shortName": "blindAngle",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ブラインド角度値",
+        "en": "Blind angle"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-180degree"
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "開閉速度設定",
+        "en": "Opening/closing speed setting"
+      },
+      "shortName": "openCloseSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "低/中/高",
+        "en": "Low/Medium/High"
+      },
+      "data": {
+        "$ref": "#/definitions/state_LMH_41-43"
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "電気錠設定",
+        "en": "Electric lock setting"
+      },
+      "shortName": "electricLock",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "電気錠の施錠・開錠",
+        "en": "Locks or unlocks an electric lock."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Lock-Unlock_4142"
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "遠隔操作設定状態",
+        "en": "Remote operation setting status"
+      },
+      "shortName": "remoteOperation",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "遠隔操作の許可・禁止の設定状態を示す",
+        "en": "Indicates whether remote operation is permitted or prohibited."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "ON (許可)",
+              "en": "ON (permitted)"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "OFF (禁止)",
+              "en": "OFF (prohibited)"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "選択開度動作設定",
+        "en": "Selective degree-of-opening setting"
+      },
+      "shortName": "selectiveDegreeOfOpening",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "指定された値で停止させる設定",
+        "en": "Sets a stop at a specified value."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "degreeOfOpening",
+            "descriptions": {
+              "ja": "開度レベル設定位置開",
+              "en": "Degree-of-opening setting position: Open"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "operationTimeOfOpening",
+            "descriptions": {
+              "ja": "動作時間設定値開",
+              "en": "Operation time setting value: Open"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "operationTimeOfClosing",
+            "descriptions": {
+              "ja": "動作時間設定値閉",
+              "en": "Operation time setting value: Close"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "localSetting",
+            "descriptions": {
+              "ja": "ローカル設定位置",
+              "en": "Local setting position"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "slitDegreeOfOpening",
+            "descriptions": {
+              "ja": "スリット開度設定",
+              "en": "Slit degree-of-opening setting"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      },
+      "note": {
+        "ja": "0x46以降はユーザ定義(開度レベル設定のショートカットなど)",
+        "en": "0x46 to 0xFF are defined by user. (Shortcut to degree-of-opening setting, etc.)"
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "開閉状態",
+        "en": "Open/closed status"
+      },
+      "shortName": "openCloseStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "開閉状態を示す",
+        "en": "Indicates the open/closed status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "fullyOpen",
+            "descriptions": {
+              "ja": "全開",
+              "en": "Fully open"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "fullyClosed",
+            "descriptions": {
+              "ja": "全閉",
+              "en": "Fully closed"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "opening",
+            "descriptions": {
+              "ja": "開動作中",
+              "en": "Opening"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "closing",
+            "descriptions": {
+              "ja": "閉動作中",
+              "en": "Closing"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "stoppedHalfway",
+            "descriptions": {
+              "ja": "途中停止",
+              "en": "Stopped halfway"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xED",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "スリット開度設定",
+        "en": "Slit degree-of-opening"
+      },
+      "shortName": "slitDegreeOfOpening",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "開度レベルを8段階で指定",
+        "en": "Used to specify the degree-of-opening by 8 levels."
+      },
+      "data": {
+        "$ref": "#/definitions/level_31-8"
+      },
+      "remark": {
+        "ja": "開度レベルを8段階で指定。0x31が最も開状態、0x38が最も閉状態(全閉ではない)",
+        "en": "Used to specify the degree-of-opening by 8 levels. The property value is 0x31 for the most open status and 0x38 for the most closed status (not fully closed)."
+      },
+      "note": {
+        "ja": "開度レベルを8段階で指定。1が最も開状態、8が最も閉状態(全閉ではない)",
+        "en": "Used to specify the degree-of-opening by 8 levels. The property value is 1 for the most open status and 8 for the most closed status (not fully closed)."
+      }
+    },
+    {
+      "epc": "0xEE",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ワンタイム開速度設定",
+        "en": "One-time opening speed setting"
+      },
+      "shortName": "oneTimeOpeningSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "開動作1回のみの速度を3段階で指定",
+        "en": "Used to specify the speed of single opening operation by three levels."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LMHN_41-44"
+      }
+    },
+    {
+      "epc": "0xEF",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ワンタイム閉速度設定",
+        "en": "One-time closing speed setting"
+      },
+      "shortName": "oneTimeClosingSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "閉動作1回のみの速度を3段階で指定",
+        "en": "Used to specify the speed of single closing operation by three levels."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LMHN_41-44"
+      }
+    }
+  ]
+}

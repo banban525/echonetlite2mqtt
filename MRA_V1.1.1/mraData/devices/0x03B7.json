@@ -1,0 +1,1180 @@
+{
+  "eoj": "0x03B7",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "冷凍冷蔵庫",
+    "en": "Refrigerator"
+  },
+  "shortName": "refrigerator",
+  "elProperties": [
+    {
+      "epc": "0xA0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "急速冷凍動作設定",
+        "en": "Quick freeze function setting"
+      },
+      "shortName": "quickFreeze",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "急速冷凍の動作を設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to use the 'Quick freeze' function of the refrigerator, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "normal",
+            "descriptions": {
+              "ja": "通常冷凍",
+              "en": "Normal operation"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "quick",
+            "descriptions": {
+              "ja": "急速冷凍",
+              "en": "Quick freeze"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "standby",
+            "descriptions": {
+              "ja": "急速冷凍待機",
+              "en": "Standby for quick freezing"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "急速冷蔵動作設定",
+        "en": "Quick refrigeration function setting"
+      },
+      "shortName": "quickRefrigeration",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "急速冷蔵の動作を設定し、設定状態を取得する",
+        "en": " Used to specify whether or not to use the 'quick refrigeration' function of the refrigerator, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "normal",
+            "descriptions": {
+              "ja": "通常冷蔵",
+              "en": "Normal operation"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "quick",
+            "descriptions": {
+              "ja": "急速冷蔵",
+              "en": "Quick refrigeration"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "standby",
+            "descriptions": {
+              "ja": "急速冷蔵待機",
+              "en": "Standby for quick refrigeration"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "製氷許可設定",
+        "en": "Icemaker setting"
+      },
+      "shortName": "icemaker",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "製氷機能の製氷許可を設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to enable the automatic icemaker of the refrigerator, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "enable",
+            "descriptions": {
+              "ja": "製氷許可",
+              "en": "Enable icemaker"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "disable",
+            "descriptions": {
+              "ja": "製氷禁止",
+              "en": "Disable icemaker"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "standby",
+            "descriptions": {
+              "ja": "製氷一定時間禁止",
+              "en": "Temporarily disable icemaker"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "製氷動作状態",
+        "en": "Icemaker operation status"
+      },
+      "shortName": "icemakerStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "製氷機能の動作状態を取得する",
+        "en": "Used to acquire the status of the automatic icemaker of the refrigerator."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "running",
+            "descriptions": {
+              "ja": "運転中",
+              "en": "Ice-making in progress"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "stopped",
+            "descriptions": {
+              "ja": "停止中",
+              "en": "Ice-making stopped."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "製氷用給水タンク状態",
+        "en": "Icemaker tank status"
+      },
+      "shortName": "icemakerTankStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "製氷用給水タンクの水あり/タンクなしor水なしの状態を取得する",
+        "en": "Used to acquire the status of the tank of the automatic icemaker of the refrigerator in terms of whether it contains water or not."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "normal",
+            "descriptions": {
+              "ja": "タンク水あり",
+              "en": "Icemaker tank contains water."
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "warning",
+            "descriptions": {
+              "ja": "タンクなし or 水なし",
+              "en": "There is no water left in the icemaker tank or the icemaker tank has not been positioned correctly in the refrigerator."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷蔵室加湿動作設定",
+        "en": "Refrigerator compartment humidification function setting"
+      },
+      "shortName": "refrigeratorHumidification",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷蔵室加湿機能の動作を設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to use the refrigerator compartment humidification function, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "on",
+            "descriptions": {
+              "ja": "加湿ON",
+              "en": "ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "off",
+            "descriptions": {
+              "ja": "加湿OFF",
+              "en": "OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA9",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "野菜室加湿動作設定",
+        "en": "Vegetable compartment humidification function setting"
+      },
+      "shortName": "vegetableHumidification",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "野菜室加湿機能の動作を設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to use the vegetable compartment humidification function, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "on",
+            "descriptions": {
+              "ja": "加湿ON",
+              "en": "ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "off",
+            "descriptions": {
+              "ja": "加湿OFF",
+              "en": "OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xAD",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "脱臭動作設定",
+        "en": "Deodorization function setting"
+      },
+      "shortName": "deodorization",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "脱臭機能の動作を設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to use the deodorization function of the refrigerator, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "on",
+            "descriptions": {
+              "ja": "脱臭ON",
+              "en": "ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "off",
+            "descriptions": {
+              "ja": "脱臭OFF",
+              "en": "OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ドア開閉状態",
+        "en": "Door open/close status"
+      },
+      "shortName": "doorOpenCloseStatus",
+      "accessRule": {
+        "get": "required_o",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ドア開/閉状態",
+        "en": "Door open/close status"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "anyOpen",
+            "descriptions": {
+              "ja": "ドア開",
+              "en": "Door open"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "allClose",
+            "descriptions": {
+              "ja": "ドア閉",
+              "en": "Door close"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ドア開放警告状態",
+        "en": "Door open warning"
+      },
+      "shortName": "doorOpenWarning",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ドア開放警告状態",
+        "en": "Door open warning status"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "ドア開放警告有",
+              "en": "Door open warning found"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "ドア開放警告無",
+              "en": "Door open warning not found"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷蔵室ドア開閉状態",
+        "en": "Refrigerator compartment door status"
+      },
+      "shortName": "refrigeratorCompartmentDoorStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷蔵室ドア開/閉状態を取得する",
+        "en": "Used to acquire the status (i.e. open or closed) of the refrigerator compartment door."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Open-ClosedA_4142"
+      }
+    },
+    {
+      "epc": "0xB3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷凍室ドア開閉状態",
+        "en": "Freezer compartment door status"
+      },
+      "shortName": "freezerCompartmentDoorStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷凍室ドア開/閉状態を取得する",
+        "en": "Used to acquire the status (i.e. open or closed) of the freezer compartment door."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Open-ClosedA_4142"
+      }
+    },
+    {
+      "epc": "0xB4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "氷温室ドア開閉状態",
+        "en": "Ice compartment door status"
+      },
+      "shortName": "iceCompartmentDoorStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "氷温室ドア開/閉状態を取得する",
+        "en": "Used to acquire the status (i.e. open or closed) of the ice compartment door."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Open-ClosedA_4142"
+      }
+    },
+    {
+      "epc": "0xB5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "野菜室ドア開閉状態",
+        "en": "Vegetable compartment door status"
+      },
+      "shortName": "vegetableCompartmentDoorStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "野菜室ドア開/閉状態を取得する",
+        "en": "Used to acquire the status (i.e. open or closed) of the vegetable compartment door."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Open-ClosedA_4142"
+      }
+    },
+    {
+      "epc": "0xB6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "切換室ドア開閉状態",
+        "en": "Multi-refrigerating mode compartment door status"
+      },
+      "shortName": "multiModeCompartmentDoorStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "切換室ドア開/閉状態を取得する",
+        "en": "Used to acquire the status (i.e. open or closed) of the multi-refrigerating mode compartment door."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Open-ClosedA_4142"
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷蔵室温度計測値",
+        "en": "Measured refrigerator compartment temperature"
+      },
+      "shortName": "measuredRefrigeratorTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷蔵室温度計測値を取得する",
+        "en": "Used to acquire the measured refrigerator compartment temperature (°C)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius"
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷凍室温度計測値",
+        "en": "Measured freezer compartment temperature"
+      },
+      "shortName": "measuredFreezerTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷凍室温度計測値を取得する",
+        "en": "Used to acquire the measured freezer compartment temperature (°C)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius"
+      }
+    },
+    {
+      "epc": "0xD3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "氷温室温度計測値",
+        "en": "Measured subzero-fresh compartment temperature"
+      },
+      "shortName": "measuredIceTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "氷温室温度計測値を取得する",
+        "en": "Used to acquire the measured meat and fish compartment temperature (°C)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius"
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "野菜室温度計測値",
+        "en": "Measured vegetable compartment temperature"
+      },
+      "shortName": "measuredVegetableTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "野菜室温度計測値を取得する",
+        "en": "Used to acquire the measured vegetable compartment temperature (°C)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius"
+      }
+    },
+    {
+      "epc": "0xD5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "切換室温度計測値",
+        "en": "Measured multi-refrigerating mode compartment temperature"
+      },
+      "shortName": "measuredMultiModeTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "切換室温度計測値を取得する",
+        "en": "Used to acquire the measured multi-refrigerating mode compartment temperature (°C)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius"
+      }
+    },
+    {
+      "epc": "0xD8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "圧縮機回転数レベル",
+        "en": "Compressor rotation speed"
+      },
+      "shortName": "compressorRotationSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "圧縮機の回転数レベルを取得する",
+        "en": "Used to acquire the rotation speed of the compressor. The rotation speed is expressed in terms of a level."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "shortName": "maximumRotationSpeed",
+            "element": {
+              "$ref": "#/definitions/number_1-255"
+            },
+            "elementName": {
+              "ja": "最大回転数レベル",
+              "en": "Maximum rotation speed level"
+            }
+          },
+          {
+            "shortName": "rotationSpeed",
+            "element": {
+              "$ref": "#/definitions/number_0-255"
+            },
+            "elementName": {
+              "ja": "回転数レベル(0は停止を示す)",
+              "en": "Rotation speed level(Value 0 represents Stop)"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "0x00:停止",
+        "en": "0x00:Stopped"
+      }
+    },
+    {
+      "epc": "0xDA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "消費電流計測値",
+        "en": "Measured electric current consumption"
+      },
+      "shortName": "electricCurrentConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "消費電流計測値を取得する",
+        "en": "Used to acquire the measured electric current consumption."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-6553.3A"
+      }
+    },
+    {
+      "epc": "0xDC",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定格消費電力値",
+        "en": "Rated power consumption"
+      },
+      "shortName": "ratedPowerConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "定格消費電力を取得する",
+        "en": "Used to acquire the rated power consumption."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "設定可能温度レベル最大値",
+        "en": "Maximum allowable temperature setting level"
+      },
+      "shortName": "maximumAllowableTemperatureLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷蔵庫各室の設定可能温度レベル最大値を取得する",
+        "en": "Used to acquire the maximum allowable temperature setting levels for the individual compartments of the refrigerator"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "shortName": "refrigeratorCompartmentLevel",
+            "element": {
+              "$ref": "#/definitions/number_0-255"
+            },
+            "elementName": {
+              "ja": "冷蔵室",
+              "en": "Refrigerator compartment"
+            }
+          },
+          {
+            "shortName": "freezerCompartmentLevel",
+            "element": {
+              "$ref": "#/definitions/number_0-255"
+            },
+            "elementName": {
+              "ja": "冷凍室",
+              "en": "Freezer compartment"
+            }
+          },
+          {
+            "shortName": "iceCompartmentLevel",
+            "element": {
+              "$ref": "#/definitions/number_0-255"
+            },
+            "elementName": {
+              "ja": "氷温室",
+              "en": "Subzero-fresh compartment"
+            }
+          },
+          {
+            "shortName": "vegetableCompartmentLevel",
+            "element": {
+              "$ref": "#/definitions/number_0-255"
+            },
+            "elementName": {
+              "ja": "野菜室",
+              "en": "Vegetable compartment"
+            }
+          },
+          {
+            "shortName": "multiModeCompartmentLevel",
+            "element": {
+              "$ref": "#/definitions/number_0-255"
+            },
+            "elementName": {
+              "ja": "切換室",
+              "en": "Multi-refrigerating mode compartment"
+            }
+          },
+          {
+            "shortName": "RFU",
+            "element": {
+              "$ref": "#/definitions/raw_3"
+            },
+            "elementName": {
+              "ja": "for future reserved",
+              "en": "Reserved for future use"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "0x00:室を搭載していない場合",
+        "en": "0x00:no compartment"
+      },
+      "note": {
+        "ja": "値0は室未搭載を表す",
+        "en": "Value 0 represents no compartment."
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷蔵室温度設定値",
+        "en": "Refrigerator compartment temperature setting"
+      },
+      "shortName": "refrigeratorTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷蔵室温度設定値を設定し、設定状態を取得する",
+        "en": "Used to specify the refrigerator compartment temperature in °C, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius"
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷凍室温度設定値",
+        "en": "Freezer compartment temperature setting"
+      },
+      "shortName": "freezerTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷凍室温度設定値を設定し、設定状態を取得する",
+        "en": "Used to specify the freezer compartment temperature in °C, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius"
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "氷温室温度設定値",
+        "en": "Ice compartment temperature setting"
+      },
+      "shortName": "iceTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "氷温室温度設定値を設定し、設定状態を取得する",
+        "en": "Used to specify the ice compartment temperature in °C, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius"
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "野菜室温度設定値",
+        "en": "Vegetable compartment temperature setting"
+      },
+      "shortName": "vegetableTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "野菜室温度設定値を設定し、設定状態を取得する",
+        "en": "Used to specify the vegetable compartment temperature in °C, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius"
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "切換室温度設定値",
+        "en": "Multi-refrigerating mode compartment temperature setting"
+      },
+      "shortName": "multiModeTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "切換室温度設定値を設定し、設定状態を取得する",
+        "en": "Used to specify the multi-refrigerating mode compartment temperature in °C, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius"
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷蔵室温度レベル設定",
+        "en": "Refrigerator compartment temperature level setting"
+      },
+      "shortName": "refrigeratorTemperatureLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷蔵室温度レベルを設定し、設定状態を取得する",
+        "en": "Used to specify the refrigerator compartment temperature by selecting a level from among the predefined levels, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-255"
+      },
+      "remark": {
+        "ja": "最大値はEPC=0xE0の値",
+        "en": "maximum value is at EPC=0xE0"
+      },
+      "note": {
+        "ja": "設定可能な温度レベルの最大値は'設定可能温度レベル最大値'で取得する",
+        "en": "The maximum allowable temperature setting level shall be acquired with the 'maximum allowable temperature setting level' property."
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷凍室温度レベル設定",
+        "en": "Freezer compartment temperature level setting"
+      },
+      "shortName": "freezerTemperatureLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷凍室温度レベルを設定し、設定状態を取得する",
+        "en": "Used to specify the freezer compartment temperature by selecting a level from among the predefined levels, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-255"
+      },
+      "remark": {
+        "ja": "最大値はEPC=0xE0の値",
+        "en": "maximum value is at EPC=0xE0"
+      },
+      "note": {
+        "ja": "設定可能な温度レベルの最大値は'設定可能温度レベル最大値'で取得する",
+        "en": "The maximum allowable temperature setting level shall be acquired with the 'maximum allowable temperature setting level' property."
+      }
+    },
+    {
+      "epc": "0xEB",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "氷温室温度レベル設定",
+        "en": "Ice compartment temperature level setting"
+      },
+      "shortName": "iceTemperatureLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "氷温室温度レベルを設定し、設定状態を取得する",
+        "en": "Used to specify ice compartment temperature by selecting a level from among the predefined levels, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-255"
+      },
+      "remark": {
+        "ja": "最大値はEPC=0xE0の値",
+        "en": "maximum value is at EPC=0xE0"
+      },
+      "note": {
+        "ja": "設定可能な温度レベルの最大値は'設定可能温度レベル最大値'で取得する",
+        "en": "The maximum allowable temperature setting level shall be acquired with the 'maximum allowable temperature setting level' property."
+      }
+    },
+    {
+      "epc": "0xEC",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "野菜室温度レベル設定",
+        "en": "Vegetable compartment temperature level setting"
+      },
+      "shortName": "vegetableTemperatureLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "野菜室温度レベルを設定し、設定状態を取得する",
+        "en": "Used to specify the vegetable compartment temperature by selecting a level from among the predefined levels, and to acquire the current setting"
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-255"
+      },
+      "remark": {
+        "ja": "最大値はEPC=0xE0の値",
+        "en": "maximum value is at EPC=0xE0"
+      },
+      "note": {
+        "ja": "設定可能な温度レベルの最大値は'設定可能温度レベル最大値'で取得する",
+        "en": "The maximum allowable temperature setting level shall be acquired with the 'maximum allowable temperature setting level' property."
+      }
+    },
+    {
+      "epc": "0xED",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "切換室温度レベル設定",
+        "en": "Multi-refrigerating mode compartment temperature level setting"
+      },
+      "shortName": "multiModeTemperatureLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "切換室温度レベルを設定し、設定状態を取得する",
+        "en": "Used to specify the multi-refrigerating mode compartment temperature by selecting a level from among the predefined levels, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-255"
+      },
+      "remark": {
+        "ja": "最大値はEPC=0xE0の値",
+        "en": "maximum value is at EPC=0xE0"
+      },
+      "note": {
+        "ja": "設定可能な温度レベルの最大値は'設定可能温度レベル最大値'で取得する",
+        "en": "The maximum allowable temperature setting level shall be acquired with the 'maximum allowable temperature setting level' property."
+      }
+    }
+  ]
+}

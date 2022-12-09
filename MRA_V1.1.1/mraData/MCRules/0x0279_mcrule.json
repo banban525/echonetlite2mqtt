@@ -1,0 +1,78 @@
+{
+  "eoj": "0x0279",
+  "properties": [
+    {
+      "epc": "0xB0",
+      "note": {
+        "ja": "本プロパティには、数値が30分毎であることを示すため「intervalTime」が追加されている",
+        "en": "intervalTime is added to this property to indicate that the value is every 30 minutes."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "shortName": "startDateAndTime",
+            "element": {
+              "oneOf": [
+                {
+                  "size": 4,
+                  "type": "date-time"
+                },
+                {
+                  "$ref": "#/definitions/state_Unknown_FFFFFFFF"
+                }
+              ]
+            },
+            "elementName": {
+              "ja": "現在年月日",
+              "en": "Current date (YYYY: MM: DD)"
+            }
+          },
+          {
+            "shortName": "intervalTime",
+            "element": {
+              "$ref": "#/definitions/number_0-60minutes",
+              "multipleOf": 30
+            }
+          },
+          {
+            "shortName": "powerControlRatio",
+            "elementName": {
+              "ja": "0x00～0x64 (0～100%) x 96 (30分毎の値、2日分)",
+              "en": "0x00-0x64 (0-100%) x 96 (values every 30 minutes, for 2 days)"
+            },
+            "element": {
+              "minItems": 96,
+              "maxItems": 96,
+              "itemSize": 1,
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-100percent"
+                  },
+                  {
+                    "$ref": "#/definitions/state_Undefined_FF"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x83",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x97",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x98",
+      "action": "DEL"
+    }
+
+  ]
+}

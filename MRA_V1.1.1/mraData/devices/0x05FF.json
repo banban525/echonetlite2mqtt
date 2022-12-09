@@ -1,0 +1,661 @@
+{
+  "eoj": "0x05FF",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "コントローラ",
+    "en": "Controller"
+  },
+  "shortName": "controller",
+  "elProperties": [
+    {
+      "epc": "0xC0",
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "コントローラID",
+        "en": "Controller ID"
+      },
+      "shortName": "controllerId",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "コントローラのIDを示す",
+        "en": "This property indicates the ID of a controller"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-40"
+      },
+      "remark": {
+        "ja": "他のシステムと連携する場合は本プロパティに該当するデータを必ず保持すること。ただし、ECHONET Liteドメイン内でこのデータを共有させてないコントローラは、該当するプロパティをコントローラクラスに搭載する必要は無い",
+        "en": "When linking with other systems, data corresponding to this property must be retained without fail. However, controllers not sharing these data inside the ECONET Lite domain do not need to have the relevant properties installed in the controller class."
+      }
+    },
+    {
+      "epc": "0xC1",
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "管理台数",
+        "en": "Number of devices controlled"
+      },
+      "shortName": "numberOfDevices",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "該当するコントローラIDのコントローラが管理する機器の台数",
+        "en": "The number of devices controlled by a controller with a given controller ID"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533"
+      },
+      "remark": {
+        "ja": "他のシステムと連携する場合は本プロパティに該当するデータを必ず保持すること。ただし、ECHONET Liteドメイン内でこのデータを共有させてないコントローラは、該当するプロパティをコントローラクラスに搭載する必要は無い",
+        "en": "When linking with other systems, data corresponding to this property must be retained without fail. However, controllers not sharing these data inside the ECONET Lite domain do not need to have the relevant properties installed in the controller class."
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "インデックス",
+        "en": "Index"
+      },
+      "shortName": "deviceListIndex",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器リストのインデックスを示す",
+        "en": "This property indicates the index of the device list"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533"
+      }
+    },
+    {
+      "epc": "0xC3",
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "機器ID",
+        "en": "Device ID"
+      },
+      "shortName": "deviceId",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器のIDを示す",
+        "en": "This property indicates the ID of a device"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-40"
+      },
+      "remark": {
+        "ja": "他のシステムと連携する場合は本プロパティに該当するデータを必ず保持すること。ただし、ECHONET Liteドメイン内でこのデータを共有させてないコントローラは、該当するプロパティをコントローラクラスに搭載する必要は無い",
+        "en": "When linking with other systems, data corresponding to this property must be retained without fail. However, controllers not sharing these data inside the ECONET Lite domain do not need to have the relevant properties installed in the controller class."
+      }
+    },
+    {
+      "epc": "0xC4",
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "機種",
+        "en": "Device type"
+      },
+      "shortName": "deviceType",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器IDが示す機器の機種を示す",
+        "en": "This property indicates the type of a device showing a device ID"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_2"
+      },
+      "remark": {
+        "ja": "他のシステムと連携する場合は本プロパティに該当するデータを必ず保持すること。ただし、ECHONET Liteドメイン内でこのデータを共有させてないコントローラは、該当するプロパティをコントローラクラスに搭載する必要は無い",
+        "en": "When linking with other systems, data corresponding to this property must be retained without fail. However, controllers not sharing these data inside the ECONET Lite domain do not need to have the relevant properties installed in the controller class."
+      },
+      "note": {
+        "ja": "クラスグループコード+クラスコード",
+        "en": "Class group code + class code"
+      }
+    },
+    {
+      "epc": "0xC5",
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "名称",
+        "en": "Name"
+      },
+      "shortName": "name",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器IDが示す機器の名称を示す",
+        "en": "This property indicates the name of a device showing a device ID"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-64"
+      },
+      "remark": {
+        "ja": "他のシステムと連携する場合は本プロパティに該当するデータを必ず保持すること。ただし、ECHONET Liteドメイン内でこのデータを共有させてないコントローラは、該当するプロパティをコントローラクラスに搭載する必要は無い",
+        "en": "When linking with other systems, data corresponding to this property must be retained without fail. However, controllers not sharing these data inside the ECONET Lite domain do not need to have the relevant properties installed in the controller class."
+      },
+      "note": {
+        "ja": "UTF-8 (BOM無し)で指定",
+        "en": "Specified using UTF-8 (no BOM)"
+      }
+    },
+    {
+      "epc": "0xC6",
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "接続状態",
+        "en": "Connection status"
+      },
+      "shortName": "connectionStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器IDが示す機器の状態を示す",
+        "en": "This property indicates the status of a device showing a device ID"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "connected",
+            "descriptions": {
+              "ja": "接続中",
+              "en": "Connected"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "disconnected",
+            "descriptions": {
+              "ja": "離脱中",
+              "en": "Disconnected"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "notRegistered",
+            "descriptions": {
+              "ja": "未登録",
+              "en": "Not registered"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "deleted",
+            "descriptions": {
+              "ja": "削除",
+              "en": "Deleted"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC7",
+      "validRelease": {
+        "from": "G",
+        "to": "H"
+      },
+      "propertyName": {
+        "ja": "管理機器事業者コード",
+        "en": "Business code of the device to be controlled"
+      },
+      "shortName": "businessCode",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "3バイトで指定",
+        "en": "Specified in 3 bytes"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_3"
+      },
+      "remark": {
+        "ja": "他のシステムと連携する場合は本プロパティに該当するデータを必ず保持すること。ただし、ECHONET Liteドメイン内でこのデータを共有させてないコントローラは、該当するプロパティをコントローラクラスに搭載する必要は無い",
+        "en": "When linking with other systems, data corresponding to this property must be retained without fail. However, controllers not sharing these data inside the ECONET Lite domain do not need to have the relevant properties installed in the controller class."
+      },
+      "note": {
+        "ja": "(ECHONETコンソーシアムで規定)",
+        "en": "(Assigned by the ECHONET Consortium)"
+      }
+    },
+    {
+      "epc": "0xC7",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "管理対象機器事業者コード",
+        "en": "Business code of the device to be controlled"
+      },
+      "shortName": "businessCode",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "3バイトで指定",
+        "en": "Specified in 3 bytes"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_3"
+      },
+      "remark": {
+        "ja": "他のシステムと連携する場合は本プロパティに該当するデータを必ず保持すること。ただし、ECHONET Liteドメイン内でこのデータを共有させてないコントローラは、該当するプロパティをコントローラクラスに搭載する必要は無い",
+        "en": "When linking with other systems, data corresponding to this property must be retained without fail. However, controllers not sharing these data inside the ECONET Lite domain do not need to have the relevant properties installed in the controller class."
+      },
+      "note": {
+        "ja": "(ECHONETコンソーシアムで規定)",
+        "en": "(Assigned by the ECHONET Consortium)"
+      }
+    },
+    {
+      "epc": "0xC8",
+      "validRelease": {
+        "from": "G",
+        "to": "H"
+      },
+      "propertyName": {
+        "ja": "管理機器商品コード",
+        "en": "Product code of the device to be controlled"
+      },
+      "shortName": "productCode",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ASCIIコードで指定",
+        "en": "Specified in ASCII code"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-12"
+      },
+      "note": {
+        "ja": "(各メーカ毎に規定)",
+        "en": "(Assigned by each manufacturer)"
+      }
+    },
+    {
+      "epc": "0xC8",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "管理対象機器商品コード",
+        "en": "Product code of the device to be controlled"
+      },
+      "shortName": "productCode",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ASCIIコードで指定",
+        "en": "Specified in ASCII code"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-12"
+      },
+      "note": {
+        "ja": "(各メーカ毎に規定)",
+        "en": "(Assigned by each manufacturer)"
+      }
+    },
+    {
+      "epc": "0xC9",
+      "validRelease": {
+        "from": "G",
+        "to": "H"
+      },
+      "propertyName": {
+        "ja": "管理機器製造年月日",
+        "en": "Manufacture date of the device to be controlled"
+      },
+      "shortName": "manufactureDate",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "4バイトで指定",
+        "en": "Specified in 4 bytes"
+      },
+      "data": {
+        "type": "date"
+      },
+      "note": {
+        "ja": "YYMD (1文字1バイト)で示す",
+        "en": "This property indicates the date as YYMD (1 character = 1 byte)"
+      }
+    },
+    {
+      "epc": "0xC9",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "管理対象機器製造年月日",
+        "en": "Manufacture date of the device to be controlled"
+      },
+      "shortName": "manufactureDate",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "4バイトで指定",
+        "en": "Specified in 4 bytes"
+      },
+      "data": {
+        "type": "date"
+      },
+      "note": {
+        "ja": "YYMD (1文字1バイト)で示す",
+        "en": "This property indicates the date as YYMD (1 character = 1 byte)"
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "G",
+        "to": "H"
+      },
+      "propertyName": {
+        "ja": "管理機器登録情報更新年月日",
+        "en": "Registerd information renewal date of the device to be controlled"
+      },
+      "shortName": "renewalDate",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "4バイトで指定",
+        "en": "Specified in 4 bytes"
+      },
+      "data": {
+        "type": "date"
+      },
+      "note": {
+        "ja": "YYMD (1文字1バイト)で示す",
+        "en": "This property indicates the date as YYMD (1 character = 1 byte)"
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "管理対象機器登録情報更新年月日",
+        "en": "Registerd information renewal date of the device to be controlled"
+      },
+      "shortName": "renewalDate",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "4バイトで指定",
+        "en": "Specified in 4 bytes"
+      },
+      "data": {
+        "type": "date"
+      },
+      "note": {
+        "ja": "YYMD (1文字1バイト)で示す",
+        "en": "This property indicates the date as YYMD (1 character = 1 byte)"
+      }
+    },
+    {
+      "epc": "0xCB",
+      "validRelease": {
+        "from": "G",
+        "to": "H"
+      },
+      "propertyName": {
+        "ja": "管理機器登録情報更新バージョン情報",
+        "en": "Registerd information renewal version information of the device to be controlled"
+      },
+      "shortName": "renewalVersionInformation",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "管理する機器が追加、削除されるたびに、更新するバージョン情報",
+        "en": "Version information renewed each time a controlled device is added or deleted"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533"
+      }
+    },
+    {
+      "epc": "0xCB",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "管理対象機器登録情報更新バージョン情報",
+        "en": "Registerd information renewal version information of the device to be controlled"
+      },
+      "shortName": "renewalVersionInformation",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "管理する機器が追加、削除されるたびに、更新するバージョン情報",
+        "en": "Version information renewed each time a controlled device is added or deleted"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533"
+      }
+    },
+    {
+      "epc": "0xCC",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "管理対象機器設置場所",
+        "en": "Place to install device to be controlled"
+      },
+      "shortName": "place",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器IDが示す機器の設置場所を示す",
+        "en": "This property indicates the place where a device showing a device ID is installed."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1"
+      },
+      "note": {
+        "ja": "2.2 設置場所プロパティを参照",
+        "en": "See '2.2 Installation location property'"
+      }
+    },
+    {
+      "epc": "0xCD",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "管理対象機器異常発生状態",
+        "en": "Fault status of device to be controlled"
+      },
+      "shortName": "faultStatusOfDevice",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器IDが示す機器の異常発生状態を示す",
+        "en": "This property indicates the fault occurred status of a device showing a device ID."
+      },
+      "data": {
+        "$ref": "#/definitions/state_YES-NO_4142"
+      }
+    },
+    {
+      "epc": "0xCE",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "管理対象機器Setプロパティマップ",
+        "en": "Set property map for device to be controlled"
+      },
+      "shortName": "setPropertyMapForDevice",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器IDが示す機器のSetプロパティマップを示す",
+        "en": "This property indicates Set property map of device indicated by device ID."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-17"
+      },
+      "note": {
+        "ja": "付録1を参照のこと",
+        "en": "Refer to Appendix 1"
+      }
+    },
+    {
+      "epc": "0xCF",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "管理対象機器Getプロパティマップ",
+        "en": "Get property map for device to be controlled"
+      },
+      "shortName": "getPropertyMapForDevice",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "機器IDが示す機器のGetプロパティマップを示す",
+        "en": "This property indicates 'get property map' of the device indicated by the device ID."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-17"
+      },
+      "note": {
+        "ja": "付録1を参照のこと",
+        "en": "Refer to Appendix 1"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "設置住所",
+        "en": "Address of installation location"
+      },
+      "shortName": "address",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "コントローラが設置されている場所の住所を示す",
+        "en": "This property indicates the address where the controller is installed."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-255"
+      },
+      "note": {
+        "ja": "UTF-8 (BOM無し)で指定",
+        "en": "Specified using UTF-8 (no BOM)"
+      }
+    }
+  ]
+}

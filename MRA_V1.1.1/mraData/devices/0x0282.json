@@ -1,0 +1,75 @@
+{
+  "eoj": "0x0282",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "ガスメータ",
+    "en": "Gas meter"
+  },
+  "shortName": "gasMeter",
+  "elProperties": [
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算ガス消費量計測値",
+        "en": "Cumulative amount of gas consumption measurement value"
+      },
+      "shortName": "cumulativeGasConsumption",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算ガス消費量を0.001m3 で示す。",
+        "en": "This property indicates cumulative amount of gas consumption in units of 0.001 m3."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999m3"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算ガス消費量計測値履歴",
+        "en": "Cumulative amounts of gas consumption measurement log"
+      },
+      "shortName": "cumulativeGasConsumptionLog",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "毎正時及び、毎正時から30分経過した時刻における積算ガス消費量計測値の24時間分の履歴を示す。",
+        "en": "This property indicates cumulative amount of gas consumption measurement value log for past 24 hours at every hour on the hour and at the following 30 minutes."
+      },
+      "data": {
+        "type": "array",
+        "itemSize": 4,
+        "minItems": 48,
+        "maxItems": 48,
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/number_0-999999.999m3"
+            },
+            {
+              "$ref": "#/definitions/state_NoData_FFFFFFFE"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

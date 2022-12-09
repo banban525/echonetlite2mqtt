@@ -1,0 +1,113 @@
+{
+  "eoj": "0x027A",
+  "properties": [
+    {
+      "epc": "0xD2",
+      "data": {
+        "$ref": "#/definitions/number_17-31",
+        "multipleOf": 1
+      }
+    },
+    {
+      "epc": "0xD1",
+      "data": {
+        "$ref": "#/definitions/number_1-15",
+        "multipleOf": 1
+      }
+    },
+    {
+      "epc": "0xE2",
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-31",
+            "multipleOf": 1
+          },
+          {
+            "$ref": "#/definitions/state_Auto_41"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE8",
+      "data": {
+        "minItems": 0,
+        "maxItems": 24,
+        "itemSize": 0,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": [
+            {
+              "shortName": "startTime",
+              "element": {
+                "size": 2,
+                "type": "time"
+              },
+              "elementName": {
+                "ja": "運転開始時間",
+                "en": "Start time"
+              }
+            },
+            {
+              "shortName": "endTime",
+              "element": {
+                "size": 2,
+                "type": "time"
+              },
+              "elementName": {
+                "ja": "運転停止時間",
+                "en": "End time"
+              }
+            }
+          ]
+        }
+      },
+      "note": {
+        "ja": "開始分は0分もしくは30分",
+        "en": "Time is fixed at 0 or 30 min."
+      }
+    },
+    {
+      "epc": "0xE7",
+      "data": {
+        "minItems": 0,
+        "maxItems": 24,
+        "itemSize": 0,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": [
+            {
+              "shortName": "startTime",
+              "element": {
+                "size": 2,
+                "type": "time"
+              },
+              "elementName": {
+                "ja": "運転開始時間",
+                "en": "Start time"
+              }
+            },
+            {
+              "shortName": "endTime",
+              "element": {
+                "size": 2,
+                "type": "time"
+              },
+              "elementName": {
+                "ja": "運転停止時間",
+                "en": "End time"
+              }
+            }
+          ]
+        }
+      },
+      "note": {
+        "ja": "開始分は0分もしくは30分",
+        "en": "Time is fixed at 0 or 30 min."
+      }
+    }
+  ]
+}

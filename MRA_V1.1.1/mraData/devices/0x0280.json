@@ -1,0 +1,128 @@
+{
+  "eoj": "0x0280",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "電力量メータ",
+    "en": "Watt-hour meter"
+  },
+  "shortName": "wattHourMeter",
+  "elProperties": [
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値",
+        "en": "Cumulative amounts of electric energy measurement value"
+      },
+      "shortName": "cumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量を10進表記において、8桁で示す",
+        "en": "This property indicates cumulative amounts of electric energy in decimal (8 digits)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-99999999kWh",
+        "coefficient": [
+          "0xE2"
+        ],
+        "overflowCode": false,
+        "underflowCode": false
+      },
+      "remark": {
+        "ja": "0xE2の値を乗算する必要あり",
+        "en": "It is necessary to mutiply the value of 0xE2."
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量単位",
+        "en": "Cumulative amounts of electric energy unit"
+      },
+      "shortName": "cumulativeAmountsOfElectricEnergyUnit",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量計測値(0xE0)の単位を示す",
+        "en": "This property indicates number of decimal places of cumulative amounts of electric energy (0xE0)."
+      },
+      "data": {
+        "type": "numericValue",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x01",
+            "numericValue": 0.1
+          },
+          {
+            "edt": "0x02",
+            "numericValue": 0.01
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値履歴1",
+        "en": "Cumulative amounts of electric energy measurement log 1"
+      },
+      "shortName": "cumulativeElectricEnergyLog1",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量(8桁)の計測結果履歴を、30分毎データを過去24時間で示す",
+        "en": "This property indicates cumulative amounts of electric energy (8 digits) measurement result log in 30-minute segments for past 24 hours."
+      },
+      "data": {
+        "type": "array",
+        "itemSize": 4,
+        "minItems": 48,
+        "maxItems": 48,
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/number_0-99999999kWh",
+              "coefficient": [
+                "0xE2"
+              ],
+              "overflowCode": false,
+              "underflowCode": false
+            },
+            {
+              "$ref": "#/definitions/state_NoData_FFFFFFFE"
+            }
+          ]
+        }
+      },
+      "remark": {
+        "ja": "0xE2の値を乗算する必要あり",
+        "en": "It is necessary to mutiply the value of 0xE2."
+      }
+    }
+  ]
+}

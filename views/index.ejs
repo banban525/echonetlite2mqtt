@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="row">
+    <h2>Devices</h2>
+    <table id="deviceListTable" class="table table-striped" style="min-height:400px">
+      <thead>
+        <tr>
+          <th scope="col">name</th>
+          <th scope="col">type</th>
+          <th scope="col">ip</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script type="text/javascript">
+
+  $(function() {
+    $("#rootmenu-devices").addClass("active");
+
+    function updateSystem()
+    {
+      $.ajax({
+          type: "GET",
+          url: "/api/status",
+          dataType : "json"
+        }).done((data)=>{
+
+          $("#mqtt-state").val(data.mqttState);
+          $("#footer-version").text(data.systemVersion)
+
+          for(const device of data.devices)
+          {
+            if($(`#device-${device.id}`).length === 0)
+            {
+              $("#deviceListTable tbody").append(`<tr id="device-${device.id}"><th><a href="devices/${device.name}">${device.name}</a></th><td>${device.deviceType}</td><td>${device.ip}</td></tr>`);
+            }
+          }
+      });
+    }
+    updateSystem();
+
+    let eventId="";
+    function getEvents()
+    {
+      $.ajax({
+        type: "GET",
+        url: `/api/events?lastEvent=${eventId}`,
+        dataType : "json"
+      }).done((data)=>{
+        eventId = data.id;
+
+        for(const eventType of data.events)
+        {
+          if(eventType === "SYSTEM")
+          {
+            updateSystem();
+          }
+        }
+
+        setTimeout(getEvents, 500);
+      });
+    }
+
+    getEvents();
+
+
+  });
+  
+</script>

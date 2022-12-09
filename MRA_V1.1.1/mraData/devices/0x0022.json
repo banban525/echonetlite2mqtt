@@ -1,0 +1,213 @@
+{
+  "eoj": "0x0022",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "電力量センサ",
+    "en": "Electric energy sensor"
+  },
+  "shortName": "electricEnergySensor",
+  "elProperties": [
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値",
+        "en": "Cumulative amounts of electric energy"
+      },
+      "shortName": "cumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量を0.001kWhで示す",
+        "en": "This property indicates cumulative amounts of electric energy in 0.001kWh."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999kWh"
+      },
+      "note": {
+        "ja": "オーバーフロー時は0にリセット",
+        "en": "The value is reset to 0 after overflow."
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "中容量センサ瞬時電力値計測値",
+        "en": "Medium-capacity sensor instantaneous electric energy"
+      },
+      "shortName": "mediumCapacitySensorValue",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時電力値をWで示す",
+        "en": "This property indicates measured instantaneous electric energy in watts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-999999999-999999999W"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "小容量センサ瞬時電力値計測値",
+        "en": "Small-capacity sensor instantaneous electric energy"
+      },
+      "shortName": "smallCapacitySensorValue",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時電力値を0.1Wで示す",
+        "en": "This property indicates instantaneous electric energy in units of 0.1 W."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-3276.7-3276.6W"
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "大容量センサ瞬時電力値計測値",
+        "en": "Large-capacity sensor instantaneous electric energy"
+      },
+      "shortName": "largeCapacitySensorValue",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時電力値を0.1kWで示す",
+        "en": "This property indicates instantaneous electric energy in units of 0.1 kW."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-3276.7-3276.6kW"
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "A",
+        "to": "K"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測履歴情報",
+        "en": "Cumulative amounts of electric energy measurement log"
+      },
+      "shortName": "log",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量(0.001kWh)の計測結果履歴を、30分毎データを過去24時間で示す",
+        "en": "This property indicates measurement result log of cumulative amounts of electric energy (0.001kWh) for the past 24 hours in 30-minute sections."
+      },
+      "data": {
+        "type": "array",
+        "itemSize": 4,
+        "minItems": 48,
+        "maxItems": 48,
+        "items": {
+          "$ref": "#/definitions/number_0-999999.999kWh"
+        }
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測履歴情報",
+        "en": "Cumulative amounts of electric energy measurement log"
+      },
+      "shortName": "log",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量(0.001kWh)の計測結果履歴を、30分毎データを過去24時間で示す",
+        "en": "This property indicates measurement result log of cumulative amounts of electric energy (0.001kWh) for the past 24 hours in 30-minute sections."
+      },
+      "data": {
+        "type": "array",
+        "itemSize": 4,
+        "minItems": 48,
+        "maxItems": 48,
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/number_0-999999.999kWh"
+            },
+            {
+              "$ref": "#/definitions/state_NoData_FFFFFFFE"
+            }
+          ]
+        }
+      },
+      "note": {
+        "ja": "積算電力量(0.001kWh)の計測結果履歴を、30分毎データを過去24時間で示す",
+        "en": "This property indicates measurement result log of cumulative amounts of electric energy (0.001kWh) fir the past 24 hours in 30-minute sections."
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "実効電圧値計測値",
+        "en": "Effective voltage value"
+      },
+      "shortName": "effectiveVoltageValue",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "実効電圧値をVで示す",
+        "en": "This property indicates effective voltage value in volts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533V"
+      },
+      "note": {
+        "ja": "実行電圧値をVで示す。本プロパティは、計測定格電圧値として固定値で実装してもよい",
+        "en": "This property indicates effective voltage value in volts. This property may be implemeented as a fixed value of the rated voltage of measurement."
+      }
+    }
+  ]
+}

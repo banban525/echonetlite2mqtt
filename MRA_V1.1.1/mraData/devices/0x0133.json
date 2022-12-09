@@ -1,0 +1,104 @@
+{
+  "eoj": "0x0133",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "換気扇",
+    "en": "Ventilation fan"
+  },
+  "shortName": "ventilationFan",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operation status"
+      },
+      "shortName": "operationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ON/OFFの状態を示す",
+        "en": "This property indicates the ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0xA0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換気風量設定",
+        "en": "Set value of ventilation air flow rate"
+      },
+      "shortName": "airFlowLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "換気風量レベルおよび換気風量自動状態を設定。換気風量レベルを8段階で指定",
+        "en": "Sets ventilation air flow rate level and ventilation air flow rate auto status. This property specifies ventilation air flow rate level (8-step)."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0x41",
+                "name": "auto",
+                "descriptions": {
+                  "ja": "換気風量自動状態",
+                  "en": "Ventilation air flow rate auto status"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換気自動設定",
+        "en": "Ventilation Auto setting"
+      },
+      "shortName": "automaticVentilationOperation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "AUTO/非AUTO",
+        "en": "Auto/Non-auto"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Auto-NonAuto_4142"
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import { getUtcNowDateTimeText } from "./datetimeLib";
 import { Device } from "./Property";
 
 
@@ -14,6 +14,14 @@ export class DeviceStore{
     }
     public get = (id:string):Readonly<Device>|undefined => {
       return this.list.find(_=>_.id === id);
+    }
+    public getFromNameOrId = (id:string):Readonly<Device>|undefined => {
+      const found = this.list.find(_=>_.name === id);
+      if(found !== undefined)
+      {
+        return found;
+      }
+      return this.get(id);
     }
     public getAll = ():Readonly<Device>[] => {
       return this.list.slice();
@@ -43,7 +51,7 @@ export class DeviceStore{
         return;
       }
       device.propertiesValue[propertyName].value=newValue;
-      device.propertiesValue[propertyName].updated=dayjs(Date()).format("YYYY-MM-DD HH:mm:ss");
+      device.propertiesValue[propertyName].updated=getUtcNowDateTimeText();
     }
   }
   

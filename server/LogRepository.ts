@@ -1,3 +1,4 @@
+import { getUtcNowDateTimeText } from "./datetimeLib";
 
 export interface log
 {
@@ -16,7 +17,7 @@ export class LogRepository
     this.lastId++;
     this.logs.push({
       id: this.lastId,
-      datetime: new Date().toISOString(),
+      datetime: getUtcNowDateTimeText(),
       message: message
     });
     if(this.logs.length > 200){

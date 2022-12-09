@@ -1,0 +1,299 @@
+{
+  "eoj": "0x026F",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "電気錠",
+    "en": "Electric lock"
+  },
+  "shortName": "electricLock",
+  "elProperties": [
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "施錠設定1",
+        "en": "Lock setting1"
+      },
+      "shortName": "mainElectricLock",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "主電気錠の施錠・解錠",
+        "en": "Lock/unlock of main electric lock"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Lock-Unlock_4142"
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "施錠設定2",
+        "en": "Lock setting 2"
+      },
+      "shortName": "subElectricLock",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "副電気錠の施錠・解錠",
+        "en": "Lock/unlock of sub electric lock"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Lock-Unlock_4142"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ドアガード施錠状態",
+        "en": "Lock status of door guard"
+      },
+      "shortName": "doorGuardLocked",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ドアガードの施錠状態",
+        "en": "Lock status of door guard."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Lock-Unlock_4142"
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "扉開閉状態",
+        "en": "Door open/close status"
+      },
+      "shortName": "doorOpened",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "扉の開閉状態",
+        "en": "Open/close status of door"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Open-Closed_4142"
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "在室・不在状態",
+        "en": "Occupant/ non-occupant status"
+      },
+      "shortName": "occupant",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "人の在室・不在状態",
+        "en": "Occupant/ non-occupant status of persons"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "在室",
+              "en": "Occupant"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "不在",
+              "en": "Non-occupant"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "警報状態",
+        "en": "Alarm status"
+      },
+      "shortName": "alarmStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "電気錠の警報状態",
+        "en": "Alarm status of electric lock"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x40",
+            "name": "normal",
+            "descriptions": {
+              "ja": "通常状態(警報なし)",
+              "en": "Normal (no alarm)"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "breakOpen",
+            "descriptions": {
+              "ja": "こじ開け",
+              "en": "Break open"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "doorOpen",
+            "descriptions": {
+              "ja": "扉開放",
+              "en": "Door open"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "manualUnlocked",
+            "descriptions": {
+              "ja": "手動解錠",
+              "en": "Manual unlocked"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "tampered",
+            "descriptions": {
+              "ja": "タンパ",
+              "en": "Tampered"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自動施錠モード設定",
+        "en": "Auto lock mode setting"
+      },
+      "shortName": "autoLockMode",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自動施錠モードの入切を設定し、設定状態を取得する",
+        "en": "Sets ON/OFF of auto lock mode and get the status"
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_4142"
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "電池残量状態",
+        "en": "Battery level"
+      },
+      "shortName": "replaceBatteryLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "電池残量が低下し、電池交換が必要な状態を取得する",
+        "en": "This property indicates the battery level to get the status of a battery level lower and in need of replacement."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "交換通知有",
+              "en": "Notification of battery replacement"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "false",
+            "descriptions": {
+              "ja": "通常",
+              "en": "Ordinary level"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    }
+  ]
+}

@@ -1,0 +1,955 @@
+{
+  "eoj": "0x0272",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "瞬間式給湯器",
+    "en": "Instantaneous water heater"
+  },
+  "shortName": "instantaneousWaterHeater",
+  "elProperties": [
+    {
+      "epc": "0x90",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂自動ONタイマ予約設定",
+        "en": "ON timer reservation setting"
+      },
+      "shortName": "onTimerReservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切",
+        "en": "Reservation ON/Reservation OFF"
+      },
+      "data": {
+        "$ref": "#/definitions/state_ReservationA_4142"
+      }
+    },
+    {
+      "epc": "0x91",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ時刻設定値",
+        "en": "ON timer setting"
+      },
+      "shortName": "onTimerTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value (HH:MM)"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0x92",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂自動ONタイマ相対時間設定値",
+        "en": "Set value of ON timer relative time"
+      },
+      "shortName": "onTimerRelativeTimeSettingValue",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value (HH:MM)"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "給湯器燃焼状態",
+        "en": "Hot water heating status"
+      },
+      "shortName": "hotWaterHeatingStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "給湯器燃焼状態を示す",
+        "en": "This property indicates the hot water heating status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "給湯燃焼状態有",
+              "en": "Hot water heating status found"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "無",
+              "en": "Hot water heating status not found"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "給湯温度設定値",
+        "en": "Set value of hot water temperature"
+      },
+      "shortName": "targetSuppliedWaterTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "給湯温度設定値を℃で示す",
+        "en": "This property indicates the set value of the hot water temperature in C."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100Celsius"
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "給湯保温設定",
+        "en": "Hot water warmer setting"
+      },
+      "shortName": "hotWaterWarmerSetting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "給湯保温設定",
+        "en": "Hot water warmer setting"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "給湯保温動作",
+              "en": "Hot water warmer operation"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "給湯保温動作解除",
+              "en": "Hot water warmer operation resetting"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂湯量設定4",
+        "en": "Bath water volume setting 4"
+      },
+      "shortName": "bathWaterVolume4",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂湯量を段階数で指定",
+        "en": "The bath hot water volume is specified by the number of steps."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-255"
+      }
+    },
+    {
+      "epc": "0xD5",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂湯量設定4 設定可能最大レベル",
+        "en": "Bath water volume setting 4 Maximum settable level"
+      },
+      "shortName": "maximumAllowableWaterVolume4",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂湯量設定4の最大段階数",
+        "en": "The maximum settable level is the top step of Bath hot water volume setting 4."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-255"
+      }
+    },
+    {
+      "epc": "0xD6",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "音量設定値",
+        "en": "Volume setting"
+      },
+      "shortName": "volume",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "操作部から出力される音量設定値を設定し、設定状態を取得する",
+        "en": "This property sets the volume output from the operating units and acquires the setting status."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xD7",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ミュート設定",
+        "en": "Mute setting"
+      },
+      "shortName": "mute",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "操作部から出力される音量ミュート状態を設定し、設定状態を取得する",
+        "en": "This property sets the volume mute status output from the operating units and acquires the setting status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x30",
+            "name": "true",
+            "descriptions": {
+              "ja": "ミュートON",
+              "en": "Mute ON"
+            }
+          },
+          {
+            "edt": "0x31",
+            "name": "false",
+            "descriptions": {
+              "ja": "ミュートOFF",
+              "en": "Mute OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自動運転時間設定値",
+        "en": "Duration of Automatic operation setting"
+      },
+      "shortName": "targetAutomaticOeprationTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value (HH:MM)"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/time_2"
+          },
+          {
+            "$ref": "#/definitions/state_Limitless_FFFF"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDB",
+      "propertyName": {
+        "ja": "自動運転残時間",
+        "en": "Remaining Automatic operation time"
+      },
+      "shortName": "remainingAutomaticOperationTime",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value (HH:MM)"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/time_2"
+          },
+          {
+            "$ref": "#/definitions/state_Limitless_FFFF"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂温度設定値",
+        "en": "Set value of bath temperature"
+      },
+      "shortName": "targetBathWaterTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂温度設定値を℃で示す",
+        "en": "This property indicates the set value of the bath temperature in C."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100Celsius"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂給湯器燃焼状態",
+        "en": "Bath water heater status"
+      },
+      "shortName": "bathWaterHeatingStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂給湯器の燃焼状態を示す",
+        "en": "This property indicates whether or not the bath water heater is heating the bath water."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "燃焼状態有",
+              "en": "Heating"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "燃焼状態無",
+              "en": "Not Heating"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂自動モード設定",
+        "en": "Bath Auto mode setting"
+      },
+      "shortName": "automaticBathOperation",
+      "accessRule": {
+        "get": "required_o",
+        "set": "required_o",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂自動モード入/解除",
+        "en": "Bath auto mode ON/OFF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "自動入",
+              "en": "Auto ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "自動切",
+              "en": "Auto OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂追い炊き動作設定",
+        "en": "Bath additional boil-up operation setting"
+      },
+      "shortName": "targetBathAdditionalBoilupOperation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "追い焚き入/切",
+        "en": "Additional boil-up ON/OFF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "追い焚き入",
+              "en": "Additional boil-up ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "追い焚き切",
+              "en": "Additional boil-up OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "shortName": "bathHotWaterAddition",
+      "propertyName": {
+        "ja": "風呂足し湯動作設定",
+        "en": "Bath hot water adding operation setting"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "足し湯入/切",
+        "en": "Hot water addition ON/OFF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "足し湯入",
+              "en": "Hot water addition ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "足し湯切",
+              "en": "Hot water addition OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂ぬるめ動作設定",
+        "en": "Bath water temperature lowering operation setting"
+      },
+      "shortName": "bathLukewarmWaterFunction",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ぬるめ入/切",
+        "en": "Hot water temperature lowering ON/OFF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "ぬるめ入",
+              "en": "Hot water temperature lowering ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "ぬるめ切",
+              "en": "Hot water temperature lowering OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂湯量設定1",
+        "en": "Bath hot water volume setting 1"
+      },
+      "shortName": "bathWaterVolume1",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂湯量を㍑の単位で示す",
+        "en": "This property indicates bath hot water volume in liters."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-253L"
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "shortName": "bathWaterVolume2",
+      "propertyName": {
+        "ja": "風呂湯量設定2",
+        "en": "Bath hot water volume setting 2"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂湯量を8段階で指定",
+        "en": "This property indicates the bath hot water volume (in 8 steps)."
+      },
+      "data": {
+        "$ref": "#/definitions/level_31-8"
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "A",
+        "to": "D"
+      },
+      "propertyName": {
+        "ja": "浴室優先設定",
+        "en": "Bathroom priority setting"
+      },
+      "shortName": "bathroomPriority",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "浴室優先入/切",
+        "en": "Bathroom priority ON/OFF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "浴室優先入",
+              "en": "Bathroom priority ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "入浴優先切",
+              "en": "Bathroom priority OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "浴室優先設定",
+        "en": "Bathroom priority setting"
+      },
+      "shortName": "bathroomPriority",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "浴室優先入/切",
+        "en": "Bathroom priority ON/OFF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "浴室優先入",
+              "en": "Bathroom priority ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "入浴優先切",
+              "en": "Bathroom priority OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "シャワー給湯状態",
+        "en": "Shower hot water supply status"
+      },
+      "shortName": "showerHotWaterSupplyStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "シャワー給湯状態有/無",
+        "en": "Shower hot water supply ON/OFF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "シャワー給湯状態有",
+              "en": "Shower hot water supply ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "シャワー給湯状態無",
+              "en": "Shower hot water supply OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEB",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "台所給湯状態",
+        "en": "Kitchen hot water supply status"
+      },
+      "shortName": "kitchenHotWaterSupplyStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "台所給湯状態有/無",
+        "en": "Kitchen hot water supply ON/OFF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "台所湯量状態有",
+              "en": "Kitchen hot water supply ON"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "台所湯量状態無",
+              "en": "Kitchen hot water supply OFF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEC",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "給湯保温ONタイマ予約設定",
+        "en": "Hot water warmer ON timer reservation setting"
+      },
+      "shortName": "hotWaterWarmerOnTimerReservationSetting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切",
+        "en": "Reservation ON/OFF"
+      },
+      "data": {
+        "$ref": "#/definitions/state_ReservationE_4142"
+      }
+    },
+    {
+      "epc": "0xED",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "給湯保温ONタイマ時刻設定値",
+        "en": "Set value of hot water warmer ON timer time"
+      },
+      "shortName": "targetHotWaterWarmerOnTimerTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value (HH:MM)"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0xEE",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂湯量設定3",
+        "en": "Bath hot water volume setting 3"
+      },
+      "shortName": "bathWaterVolume3",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂湯量を㍑の単位で示す",
+        "en": "This property indicates the bath hot water volume in liters."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533L"
+      }
+    },
+    {
+      "epc": "0xEF",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂動作状態監視",
+        "en": "Bath operation status monitor"
+      },
+      "shortName": "bathOperationStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "風呂の状態を示す",
+        "en": "This property indicates the status of a bath."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "runningHotWater",
+            "descriptions": {
+              "ja": "湯張り中",
+              "en": "Supplying hot water"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "noOperation",
+            "descriptions": {
+              "ja": "停止中",
+              "en": "Stopped"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "keepingTemperature",
+            "descriptions": {
+              "ja": "保温中",
+              "en": "Keeping bath temperature"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,697 @@
+{
+  "eoj": "0x028D",
+  "validRelease": {
+    "from": "N",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "スマート電力量サブメータ",
+    "en": "Smart electric energy meter for sub-metering"
+  },
+  "shortName": "smartElectricEnergySubMeter",
+  "elProperties": [
+    {
+      "epc": "0xD3",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "電力係数",
+        "en": "Electric energy coefficient"
+      },
+      "shortName": "coefficientForElectricEnergy",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量計測値、積算電力量、計測値履歴、瞬時電力計測値、定時積算電力量計測値を実使用量に換算する係数",
+        "en": "Coefficient for measured cumulative amount of electric energy, historical data of measured cumulative amount of electric energy, measured instantaneous electric energy, cumulative amount of electric energy measured at a fixed time"
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-999999"
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量単位（正方向、逆方向計測値）",
+        "en": "Unit for cumulative amount of electric energy (normal and reverse directions)"
+      },
+      "shortName": "unitForCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量計測値、積算電力量計測値履歴、定時積算電力量計測値の乗率",
+        "en": "Multiplying factor for themeasured cumulative amount of electric energy, historical data of measured cumulative amount of electric energy and cumulative amount of electric energy measured at a fixed time"
+      },
+      "data": {
+        "type": "numericValue",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "numericValue": 1
+          },
+          {
+            "edt": "0x01",
+            "numericValue": 0.1
+          },
+          {
+            "edt": "0x02",
+            "numericValue": 0.01
+          },
+          {
+            "edt": "0x03",
+            "numericValue": 0.001
+          },
+          {
+            "edt": "0x04",
+            "numericValue": 0.0001
+          },
+          {
+            "edt": "0x0A",
+            "numericValue": 10
+          },
+          {
+            "edt": "0x0B",
+            "numericValue": 100
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD7",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量有効桁数",
+        "en": "Number of effective digits for cumulative amounts of electric energy"
+      },
+      "shortName": "numberOfEffectiveDigitsCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量計測値、積算電力量計測値履歴、定時積算電力量計測値の有効桁数を示す。",
+        "en": "This property indicates the number of effective digits for measured cumulative amount of electric energy, historical data of measured cumulative amount of electric energy, and cumulative amount of electric energy measured at a fixed time."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-8digit"
+      }
+    },
+    {
+      "epc": "0xD8",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "電流係数",
+        "en": "Electric current coefficient"
+      },
+      "shortName": "coefficientForElectricCurrent",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時電流計測値を実電流値に換算する係数",
+        "en": "Coefficient for converting measured instantaneous current to actual value"
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-999"
+      }
+    },
+    {
+      "epc": "0xD9",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "電圧係数",
+        "en": "Voltage coefficient"
+      },
+      "shortName": "coefficientForVoltage",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時電圧計測値を実電圧値に換算する係数",
+        "en": "Coefficient for converting measured instantaneous voltage to actual value"
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-999"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算履歴収集日",
+        "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+      },
+      "shortName": "dayForTheHistoricalDataOfCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "30 分毎の計測値履歴データを収集する日を示す。",
+        "en": "This property indicates the day on which the historical data of measured cumulative amount of electric energy is to be retrieved."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99"
+          },
+          {
+            "$ref": "#/definitions/state_DefaultValue_FF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "Atomic operation with EPC=0xE2 and 0xE4",
+        "en": "Atomic operation with EPC=0xE2 and 0xE4"
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値（正方向計測値）",
+        "en": "Measured cumulative amount of electric energy(normal direction)"
+      },
+      "shortName": "normalDirectionCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量計測値 (正方向計測値)",
+        "en": "Measured cumulative amount of electric energy (normal direction)"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99999999kWh",
+            "coefficient": [
+              "0xD3",
+              "0xD4"
+            ]
+          },
+          {
+            "$ref": "#/definitions/state_NoData_FFFFFFFE"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値履歴（正方向計測値）",
+        "en": "Historical data of measured cumulative amounts of electric energy (normal direction)"
+      },
+      "shortName": "normalDirectionCumulativeElectricEnergyLog",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xE0",
+      "descriptions": {
+        "ja": "積算履歴収集日 (0xE0) の30分毎 (00:00 ～ 23:30) の積算電力量計測値（正方向）を取得する。",
+        "en": "This property indicates measured cumulative amount of electric energy (normal direction) for the duration of 00:00 and 23:30 at every 30 minute on the day specified by the EPC: 0xE0."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWh",
+                    "coefficient": [
+                      "0xD3",
+                      "0xD4"
+                    ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "あらかじめ EPC=0xE0 に値を Set すること。",
+        "en": "EPC=0xE0 should be set before accessing this property"
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値（逆方向計測値）",
+        "en": "Measured cumulative amount of electric energy (reverse direction)"
+      },
+      "shortName": "reverseDirectionCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量計測値（逆方向計測値）",
+        "en": "Measured cumulative amount of electric energy (reverse direction)"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99999999kWh",
+            "coefficient": [
+              "0xD3",
+              "0xD4"
+            ]
+          },
+          {
+            "$ref": "#/definitions/state_NoData_FFFFFFFE"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値履歴（逆方向計測値）",
+        "en": "Historical data of measured cumulative amounts of electric energy (reverse direction)"
+      },
+      "shortName": "reverseDirectionCumulativeElectricEnergyLog",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xE0",
+      "descriptions": {
+        "ja": "積算履歴収集日 (0xE0) の30分毎 (00:00 ～ 23:30) の積算電力量計測値（逆方向）を取得する。",
+        "en": "This property indicates measured cumulative amount of electric energy (reverse direction) for the duration of 00:00 and 23:30 at every 30 minute on the day specified by the EPC: 0xE0."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWh",
+                    "coefficient": [
+                      "0xD3",
+                      "0xD4"
+                    ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "あらかじめ EPC=0xE0 に値を Set すること。",
+        "en": "EPC=0xE0 should be set before accessing this property"
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電力計測値",
+        "en": "Measured instantaneous electric power"
+      },
+      "shortName": "instantaneousElectricPower",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "電力実効値の瞬時値を示す。変圧器(VT)及び変流器(CT)付き計器の場合には2次側の電力計測値。",
+        "en": "This property indicates the measured effective instantaneous electric power. In case the device has voltage transformer (VT) and/or current transformer (CT), the value at the secondary side shall be used."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-2147483647-2147483645W"
+          },
+          {
+            "$ref": "#/definitions/state_NoData_7FFFFFFE"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電流計測値",
+        "en": "Measured instantaneous currents"
+      },
+      "shortName": "instantaneousCurrent",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "実効電流値の瞬時値 (R相およびT相) を示す。単相2線式の場合はT相の値は0x7FFE。変流器(CT)付き計器の場合には2次側の電流計測値。",
+        "en": "This property indicates the measured effective instantaneous currents (R and T phase ). In case of a two-wire single-phase power line, the value of T phase is 0x7FFE. In case the device has current transformer (CT), the value at the secondary side shall be used."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "R 相",
+              "en": "R Phase"
+            },
+            "shortName": "rPhase",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_-3276.7-3276.5A",
+                  "coefficient": [
+                    "0xD8"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_7FFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "T 相",
+              "en": "T Phase"
+            },
+            "shortName": "tPhase",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_-3276.7-3276.5A",
+                  "coefficient": [
+                    "0xD8"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_7FFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電圧計測値",
+        "en": "Measured instantaneous voltages"
+      },
+      "shortName": "instantaneousVoltage",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "実効電圧値の瞬時値 (R-S(N)間,S(N)-T間) を示す。単相2線式の場合はS(N)-T間の値は0xFFFE。変圧器(VT)付き計器の場合には2次側の値。",
+        "en": "This property indicates the measured effective instantaneous voltages (R-S(N) and S(N)-T). In case of a two-wire single-phase power line, the value of S(N)-T is 0xFFFE. In case the device has voltage transformer (VT), the value at the secondary side shall be used."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "R-S(N)間",
+              "en": "Between R and S(N)"
+            },
+            "shortName": "rS",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-6553.3V",
+                  "coefficient": [
+                    "0xD9"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "S(N)-T間",
+              "en": "Between S(N) and T"
+            },
+            "shortName": "sT",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-6553.3V",
+                  "coefficient": [
+                    "0xD9"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定時積算電力量計測値（正方向計測値）",
+        "en": "Cumulative amounts of electric energy measured at fixed time(normal direction)"
+      },
+      "shortName": "normalDirectionCumulativeElectricEnergyAtEvery30Min",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "30分毎の最新の計測時刻における積算電力量(正方向計測値)",
+        "en": "The latest cumulative amount of electric energy (normal direction) at every 30 minute"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWh",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEB",
+      "validRelease": {
+        "from": "N",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定時積算電力量計測値（逆方向計測値）",
+        "en": "Cumulative amounts of electric energy measured at fixed time(reverse direction)"
+      },
+      "shortName": "reverseDirectionCumulativeElectricEnergyAtEvery30Min",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "30分毎の最新の計測時刻における積算電力量(逆方向計測値)",
+        "en": "The latest cumulative amount of electric energy (reverse direction) at every 30 minute"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWh",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

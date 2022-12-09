@@ -1,0 +1,402 @@
+{
+  "eoj": "0x028D",
+  "properties": [
+    {
+      "epc": "0xD3",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xD4",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xD7",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xD8",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xD9",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE0",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE1",
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99999999kWhNoMax",
+            "coefficient": [
+              "0xD3",
+              "0xD4"
+            ]
+          },
+          {
+            "$ref": "#/definitions/state_NoData_FFFFFFFE"
+          }
+        ]
+      },
+      "note": {
+        "ja": "値は0xD3と0xD4の値を乗算した値。",
+        "en": "This value is already multiplied with 0xD3 and 0xD4."
+      }
+    },
+    {
+      "epc": "0xE2",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                    "coefficient": [
+                      "0xD3",
+                      "0xD4"
+                    ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      },
+      "note": {
+        "ja": "積算履歴収集日(EPC:0xE0)をqueryで設定する。値は0xD3と0xD4の値を乗算した値。",
+        "en": "Day for the log(EPC:0xE0) should be set as a query. The value is already multiplied with 0xD3 and 0xD4."
+      }
+    },
+    {
+      "epc": "0xE3",
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99999999kWhNoMax",
+            "coefficient": [
+              "0xD3",
+              "0xD4"
+            ]
+          },
+          {
+            "$ref": "#/definitions/state_NoData_FFFFFFFE"
+          }
+        ]
+      },
+      "note": {
+        "ja": "値は0xD3と0xD4の値を乗算した値。",
+        "en": "This value is already multiplied with 0xD3 and 0xD4."
+      }
+    },
+    {
+      "epc": "0xE4",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                    "coefficient": [
+                      "0xD3",
+                      "0xD4"
+                    ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      },
+      "note": {
+        "ja": "積算履歴収集日(EPC:0xE0)をqueryで設定する。値は0xD3と0xD4の値を乗算した値。",
+        "en": "Day for the log(EPC:0xE0) should be set as a query. The value is already multiplied with 0xD3 and 0xD4."
+      }
+    },
+    {
+      "epc": "0xE7",
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_Int32WNoMinMax"
+          },
+          {
+            "$ref": "#/definitions/state_NoData_7FFFFFFE"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE8",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "R 相",
+              "en": "R Phase"
+            },
+            "shortName": "rPhase",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_Int16ANoMinMax"
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_7FFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "T 相",
+              "en": "T Phase"
+            },
+            "shortName": "tPhase",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_Int16ANoMinMax"
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_7FFE"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "値は0xD8の値を乗算した値。",
+        "en": "The value is already multiplied with 0xD8."
+      }
+    },
+    {
+      "epc": "0xE9",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "R-S(N)間",
+              "en": "Between R and S(N)"
+            },
+            "shortName": "rS",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-Uint16VNoMax"
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "S(N)-T間",
+              "en": "Between S(N) and T"
+            },
+            "shortName": "sT",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-Uint16VNoMax"
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFE"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "値は0xD9の値を乗算した値。",
+        "en": "The value is already multiplied with 0xD9."
+      }
+    },
+    {
+      "epc": "0xEA",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "値は0xD3と0xD4の値を乗算した値。",
+        "en": "This value is already multiplied with 0xD3 and 0xD4."
+      }
+    },
+    {
+      "epc": "0xEB",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4"
+                  ]      
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "値は0xD3と0xD4の値を乗算した値。",
+        "en": "This value is already multiplied with 0xD3 and 0xD4."
+      }
+    }
+  ]
+}

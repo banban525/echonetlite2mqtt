@@ -1,0 +1,62 @@
+{
+  "eoj": "0x0291",
+  "validRelease": {
+    "from": "F",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "単機能照明",
+    "en": "Mono functional lighting"
+  },
+  "shortName": "monoFunctionalLighting",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operation status"
+      },
+      "shortName": "operationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ON/OFFの状態を示す",
+        "en": "This property indicates the ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "照明の明るさ設定",
+        "en": "Light level Setting"
+      },
+      "shortName": "lightLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "照明の明るさを % で示す",
+        "en": "This property indicates light level in %."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    }
+  ]
+}

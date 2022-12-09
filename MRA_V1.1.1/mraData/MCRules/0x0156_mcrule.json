@@ -1,0 +1,54 @@
+{
+  "eoj": "0x0156",
+  "properties": [
+    {
+      "epc": "0x80",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xFF",
+      "propertyName": {
+        "ja": "グループ内デバイスリスト",
+        "en": "List of devices in group"
+      },
+      "shortName": "groupDeviceList",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "accessRule": {
+        "inf": "notApplicable",
+        "set": "notApplicable",
+        "get": "optional"
+      },
+      "descriptions": {
+        "ja": "系統連系状態のタイプを示す",
+        "en": "This property indicates the status of interconnection with the system."
+      },
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": [
+            {
+              "shortName": "deviceId",
+              "element": {
+                "type": "raw"
+              }
+            },
+            {
+              "shortName": "deviceType",
+              "element": {
+                "type": "raw"
+              }
+            }
+          ]
+        }
+      },
+      "note": {
+        "ja": "WebAPIの'devices'で管理されている機器のIDおよびその'deviceType'を記述",
+        "en": "Describe the ID of the device managed in 'devices' of WebAPI and its 'deviceType'."
+      }
+    }
+  ]
+}

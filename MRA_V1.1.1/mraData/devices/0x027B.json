@@ -1,0 +1,2111 @@
+{
+  "eoj": "0x027B",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "床暖房",
+    "en": "Floor heater"
+  },
+  "shortName": "floorHeater",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operation status"
+      },
+      "shortName": "operationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ON/OFFの状態を示す",
+        "en": "This property indicates the ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0x90",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ON タイマ予約設定",
+        "en": "ON timer reservation setting"
+      },
+      "shortName": "onTimerReservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切",
+        "en": "Reservation ON/OFF"
+      },
+      "data": {
+        "$ref": "#/definitions/state_ReservationB_4142"
+      }
+    },
+    {
+      "epc": "0x91",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ON タイマ時刻設定値",
+        "en": "Time set by ON timer"
+      },
+      "shortName": "timeOfOnTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0x92",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ON タイマ相対時間設定値",
+        "en": "Relative ON timer setting"
+      },
+      "shortName": "relativeTimeOfOnTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0x94",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFF タイマ予約設定",
+        "en": "OFF timer reservation setting"
+      },
+      "shortName": "offTimerReservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切",
+        "en": "Reservation ON/OFF"
+      },
+      "data": {
+        "$ref": "#/definitions/state_ReservationB_4142"
+      }
+    },
+    {
+      "epc": "0x95",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFF タイマ時刻設定値",
+        "en": "Time set by OFF timer"
+      },
+      "shortName": "timeOfOffTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0x96",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFF タイマ相対時間設定値",
+        "en": "Relative OFF timer setting"
+      },
+      "shortName": "relativeTimeOfOffTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値HH:MM",
+        "en": "Timer value HH:MM"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "温度設定2設定可能最大レベル",
+        "en": "Maximum temperature level"
+      },
+      "shortName": "maximumTargetTemperature2",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "温度設定2の最大段階数",
+        "en": "The maximum settable level is the top step of temperature setting 2."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-15"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "温度設定1",
+        "en": "Set temperature value"
+      },
+      "shortName": "targetTemperature1",
+      "accessRule": {
+        "get": "required_c",
+        "set": "required_c",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "温度設定値を表す",
+        "en": "This property indicates set temperature."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-50Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_41"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "EPC=0xE0または0xE1のどちらかの実装が必須",
+        "en": "Either EPC=0xE0 or 0xE1 is required."
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "温度設定2",
+        "en": "Set temperature level by 15 steps"
+      },
+      "shortName": "targetTemperature2",
+      "accessRule": {
+        "get": "required_c",
+        "set": "required_c",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "温度設定レベルを15段階で表す",
+        "en": "This property indicates set temperature level by 15 steps."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-15"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_41"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "EPC=0xE0または0xE1のどちらかの実装が必須",
+        "en": "Either EPC=0xE0 or 0xE1 is required."
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "室内温度計測値",
+        "en": "Measured room temperature"
+      },
+      "shortName": "measuredRoomTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "室内温度計測値",
+        "en": "Measured room temperature"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-127-125Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "B"
+      },
+      "propertyName": {
+        "ja": "床温度計測値",
+        "en": "Measured floor temperature"
+      },
+      "shortName": "measuredFloorTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "床温度計測値",
+        "en": "Measured floor temperature"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-50Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "床温度計測値",
+        "en": "Measured floor temperature"
+      },
+      "shortName": "measuredFloorTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "床温度計測値",
+        "en": "Measured floor temperature"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-127-125Celsius"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_7E"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ゾーン切替え設定",
+        "en": "Zone change setting"
+      },
+      "shortName": "controllableZone",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "制御の対象とする領域を設定し、対象可能な領域数を取得する",
+        "en": "Sets the target zone for control and gets the number of controllable zones."
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 1,
+        "bitmaps": [
+          {
+            "name": "zone0",
+            "descriptions": {
+              "ja": "ゾーン0",
+              "en": "Zone 0"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_WoCtrl-WCtrl_00-01"
+            }
+          },
+          {
+            "name": "zone1",
+            "descriptions": {
+              "ja": "ゾーン1",
+              "en": "Zone 1"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_WoCtrl-WCtrl_00-01"
+            }
+          },
+          {
+            "name": "zone2",
+            "descriptions": {
+              "ja": "ゾーン2",
+              "en": "Zone 2"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_WoCtrl-WCtrl_00-01"
+            }
+          },
+          {
+            "name": "zone3",
+            "descriptions": {
+              "ja": "ゾーン3",
+              "en": "Zone 3"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_WoCtrl-WCtrl_00-01"
+            }
+          },
+          {
+            "name": "zone4",
+            "descriptions": {
+              "ja": "ゾーン4",
+              "en": "Zone 4"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_WoCtrl-WCtrl_00-01"
+            }
+          },
+          {
+            "name": "zone5",
+            "descriptions": {
+              "ja": "ゾーン5",
+              "en": "Zone 5"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_WoCtrl-WCtrl_00-01"
+            }
+          },
+          {
+            "name": "zone6",
+            "descriptions": {
+              "ja": "ゾーン6",
+              "en": "Zone 6"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_WoCtrl-WCtrl_00-01"
+            }
+          },
+          {
+            "name": "zone7",
+            "descriptions": {
+              "ja": "ゾーン7",
+              "en": "Zone 7"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_WoCtrl-WCtrl_00-01"
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "対象となるフロアを最大8ゾーンに分割し制御する場合に、制御するゾーンを設定し、設定可能なゾーンを取得する",
+        "en": "Sets the target zone for control and gets the number of controllable zones. The maximum number of zones for the floor is 8."
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "特殊運転設定",
+        "en": "Special operation setting"
+      },
+      "shortName": "specialOperationMode",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常運転/ひかえめ運転/ハイパワー運転を設定し､設定状態を取得する",
+        "en": "Sets normal operation/modest operation/high power operation and gets the status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "normal",
+            "descriptions": {
+              "ja": "通常運転",
+              "en": "Normal"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "modest",
+            "descriptions": {
+              "ja": "ひかえめ運転",
+              "en": "Modest"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "highPower",
+            "descriptions": {
+              "ja": "ハイパワー運転",
+              "en": "High power"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "デイリータイマー設定",
+        "en": "Daily timer setting"
+      },
+      "shortName": "dailyTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "デイリータイマー入/切最大2種のタイマー使用可能",
+        "en": "Daily timer ON/OFF up to 2 kinds of timers can be used."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x40",
+            "name": "off",
+            "descriptions": {
+              "ja": "タイマー切",
+              "en": "OFF"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "timer1",
+            "descriptions": {
+              "ja": "タイマー1",
+              "en": "Timer1"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "timer2",
+            "descriptions": {
+              "ja": "タイマー2",
+              "en": "Timer2"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "デイリータイマー1設定",
+        "en": "Daily timer setting 1"
+      },
+      "shortName": "workedDailyTimer1",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "デイリータイマー1の設定値",
+        "en": "Time set by daily timer"
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 6,
+        "bitmaps": [
+          {
+            "name": "at0000",
+            "descriptions": {
+              "ja": "00:00-00:29",
+              "en": "00:00-00:29"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0030",
+            "descriptions": {
+              "ja": "00:30-00:59",
+              "en": "00:30-00:59"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0100",
+            "descriptions": {
+              "ja": "01:00-01:29",
+              "en": "01:00-01:29"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0130",
+            "descriptions": {
+              "ja": "01:30-01:59",
+              "en": "01:30-01:59"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0200",
+            "descriptions": {
+              "ja": "02:00-02:29",
+              "en": "02:00-02:29"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0230",
+            "descriptions": {
+              "ja": "02:30-02:59",
+              "en": "02:30-02:59"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0300",
+            "descriptions": {
+              "ja": "03:00-03:29",
+              "en": "03:00-03:29"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0330",
+            "descriptions": {
+              "ja": "03:30-03:59",
+              "en": "03:30-03:59"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0400",
+            "descriptions": {
+              "ja": "04:00-04:29",
+              "en": "04:00-04:29"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0430",
+            "descriptions": {
+              "ja": "04:30-04:59",
+              "en": "04:30-04:59"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0500",
+            "descriptions": {
+              "ja": "05:00-05:29",
+              "en": "05:00-05:29"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0530",
+            "descriptions": {
+              "ja": "05:30-05:59",
+              "en": "05:30-05:59"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0600",
+            "descriptions": {
+              "ja": "06:00-06:29",
+              "en": "06:00-06:29"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0630",
+            "descriptions": {
+              "ja": "06:30-06:59",
+              "en": "06:30-06:59"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0700",
+            "descriptions": {
+              "ja": "07:00-07:29",
+              "en": "07:00-07:29"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0730",
+            "descriptions": {
+              "ja": "07:30-07:59",
+              "en": "07:30-07:59"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0800",
+            "descriptions": {
+              "ja": "08:00-08:29",
+              "en": "08:00-08:29"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0830",
+            "descriptions": {
+              "ja": "08:30-08:59",
+              "en": "08:30-08:59"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0900",
+            "descriptions": {
+              "ja": "09:00-09:29",
+              "en": "09:00-09:29"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0930",
+            "descriptions": {
+              "ja": "09:30-09:59",
+              "en": "09:30-09:59"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1000",
+            "descriptions": {
+              "ja": "10:00-10:29",
+              "en": "10:00-10:29"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1030",
+            "descriptions": {
+              "ja": "10:30-10:59",
+              "en": "10:30-10:59"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1100",
+            "descriptions": {
+              "ja": "11:00-11:29",
+              "en": "11:00-11:29"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1130",
+            "descriptions": {
+              "ja": "11:30-11:59",
+              "en": "11:30-11:59"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1200",
+            "descriptions": {
+              "ja": "12:00-12:29",
+              "en": "12:00-12:29"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1230",
+            "descriptions": {
+              "ja": "12:30-12:59",
+              "en": "12:30-12:59"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1300",
+            "descriptions": {
+              "ja": "13:00-13:29",
+              "en": "13:00-13:29"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1330",
+            "descriptions": {
+              "ja": "13:30-13:59",
+              "en": "13:30-13:59"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1400",
+            "descriptions": {
+              "ja": "14:00-14:29",
+              "en": "14:00-14:29"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1430",
+            "descriptions": {
+              "ja": "14:30-14:59",
+              "en": "14:30-14:59"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1500",
+            "descriptions": {
+              "ja": "15:00-15:29",
+              "en": "15:00-15:29"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1530",
+            "descriptions": {
+              "ja": "15:30-15:59",
+              "en": "15:30-15:59"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1600",
+            "descriptions": {
+              "ja": "16:00-16:29",
+              "en": "16:00-16:29"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1630",
+            "descriptions": {
+              "ja": "16:30-16:59",
+              "en": "16:30-16:59"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1700",
+            "descriptions": {
+              "ja": "17:00-17:29",
+              "en": "17:00-17:29"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1730",
+            "descriptions": {
+              "ja": "17:30-17:59",
+              "en": "17:30-17:59"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1800",
+            "descriptions": {
+              "ja": "18:00-18:29",
+              "en": "18:00-18:29"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1830",
+            "descriptions": {
+              "ja": "18:30-18:59",
+              "en": "18:30-18:59"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1900",
+            "descriptions": {
+              "ja": "19:00-19:29",
+              "en": "19:00-19:29"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1930",
+            "descriptions": {
+              "ja": "19:30-19:59",
+              "en": "19:30-19:59"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2000",
+            "descriptions": {
+              "ja": "20:00-20:29",
+              "en": "20:00-20:29"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2030",
+            "descriptions": {
+              "ja": "20:30-20:59",
+              "en": "20:30-20:59"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2100",
+            "descriptions": {
+              "ja": "21:00-21:29",
+              "en": "21:00-21:29"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2130",
+            "descriptions": {
+              "ja": "21:30-21:59",
+              "en": "21:30-21:59"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2200",
+            "descriptions": {
+              "ja": "22:00-22:29",
+              "en": "22:00-22:29"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2230",
+            "descriptions": {
+              "ja": "22:30-22:59",
+              "en": "22:30-22:59"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2300",
+            "descriptions": {
+              "ja": "23:00-23:29",
+              "en": "23:00-23:29"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2330",
+            "descriptions": {
+              "ja": "23:30-23:59",
+              "en": "23:30-23:59"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "24 時間を30 分単位で分割、全6 バイトを使用し、各ビット 1：運転 0：停止 とする",
+        "en": "24 hours is divided by 30 minutes. The timer is set in the unit of 30 minutes and allocated 6 bytes. 1:operated or 0:stopped is indicated for each bit."
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "デイリータイマー2設定",
+        "en": "Daily timer setting 2"
+      },
+      "shortName": "workedDailyTimer2",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "デイリータイマー2の設定値",
+        "en": "Time set by daily timer"
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 6,
+        "bitmaps": [
+          {
+            "name": "at0000",
+            "descriptions": {
+              "ja": "00:00-00:29",
+              "en": "00:00-00:29"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0030",
+            "descriptions": {
+              "ja": "00:30-00:59",
+              "en": "00:30-00:59"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0100",
+            "descriptions": {
+              "ja": "01:00-01:29",
+              "en": "01:00-01:29"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0130",
+            "descriptions": {
+              "ja": "01:30-01:59",
+              "en": "01:30-01:59"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0200",
+            "descriptions": {
+              "ja": "02:00-02:29",
+              "en": "02:00-02:29"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0230",
+            "descriptions": {
+              "ja": "02:30-02:59",
+              "en": "02:30-02:59"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0300",
+            "descriptions": {
+              "ja": "03:00-03:29",
+              "en": "03:00-03:29"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0330",
+            "descriptions": {
+              "ja": "03:30-03:59",
+              "en": "03:30-03:59"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0400",
+            "descriptions": {
+              "ja": "04:00-04:29",
+              "en": "04:00-04:29"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0430",
+            "descriptions": {
+              "ja": "04:30-04:59",
+              "en": "04:30-04:59"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0500",
+            "descriptions": {
+              "ja": "05:00-05:29",
+              "en": "05:00-05:29"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0530",
+            "descriptions": {
+              "ja": "05:30-05:59",
+              "en": "05:30-05:59"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0600",
+            "descriptions": {
+              "ja": "06:00-06:29",
+              "en": "06:00-06:29"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0630",
+            "descriptions": {
+              "ja": "06:30-06:59",
+              "en": "06:30-06:59"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0700",
+            "descriptions": {
+              "ja": "07:00-07:29",
+              "en": "07:00-07:29"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0730",
+            "descriptions": {
+              "ja": "07:30-07:59",
+              "en": "07:30-07:59"
+            },
+            "position": {
+              "index": 1,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0800",
+            "descriptions": {
+              "ja": "08:00-08:29",
+              "en": "08:00-08:29"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0830",
+            "descriptions": {
+              "ja": "08:30-08:59",
+              "en": "08:30-08:59"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0900",
+            "descriptions": {
+              "ja": "09:00-09:29",
+              "en": "09:00-09:29"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at0930",
+            "descriptions": {
+              "ja": "09:30-09:59",
+              "en": "09:30-09:59"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1000",
+            "descriptions": {
+              "ja": "10:00-10:29",
+              "en": "10:00-10:29"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1030",
+            "descriptions": {
+              "ja": "10:30-10:59",
+              "en": "10:30-10:59"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1100",
+            "descriptions": {
+              "ja": "11:00-11:29",
+              "en": "11:00-11:29"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1130",
+            "descriptions": {
+              "ja": "11:30-11:59",
+              "en": "11:30-11:59"
+            },
+            "position": {
+              "index": 2,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1200",
+            "descriptions": {
+              "ja": "12:00-12:29",
+              "en": "12:00-12:29"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1230",
+            "descriptions": {
+              "ja": "12:30-12:59",
+              "en": "12:30-12:59"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1300",
+            "descriptions": {
+              "ja": "13:00-13:29",
+              "en": "13:00-13:29"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1330",
+            "descriptions": {
+              "ja": "13:30-13:59",
+              "en": "13:30-13:59"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1400",
+            "descriptions": {
+              "ja": "14:00-14:29",
+              "en": "14:00-14:29"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1430",
+            "descriptions": {
+              "ja": "14:30-14:59",
+              "en": "14:30-14:59"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1500",
+            "descriptions": {
+              "ja": "15:00-15:29",
+              "en": "15:00-15:29"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1530",
+            "descriptions": {
+              "ja": "15:30-15:59",
+              "en": "15:30-15:59"
+            },
+            "position": {
+              "index": 3,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1600",
+            "descriptions": {
+              "ja": "16:00-16:29",
+              "en": "16:00-16:29"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1630",
+            "descriptions": {
+              "ja": "16:30-16:59",
+              "en": "16:30-16:59"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1700",
+            "descriptions": {
+              "ja": "17:00-17:29",
+              "en": "17:00-17:29"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1730",
+            "descriptions": {
+              "ja": "17:30-17:59",
+              "en": "17:30-17:59"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1800",
+            "descriptions": {
+              "ja": "18:00-18:29",
+              "en": "18:00-18:29"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1830",
+            "descriptions": {
+              "ja": "18:30-18:59",
+              "en": "18:30-18:59"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1900",
+            "descriptions": {
+              "ja": "19:00-19:29",
+              "en": "19:00-19:29"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at1930",
+            "descriptions": {
+              "ja": "19:30-19:59",
+              "en": "19:30-19:59"
+            },
+            "position": {
+              "index": 4,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2000",
+            "descriptions": {
+              "ja": "20:00-20:29",
+              "en": "20:00-20:29"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2030",
+            "descriptions": {
+              "ja": "20:30-20:59",
+              "en": "20:30-20:59"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2100",
+            "descriptions": {
+              "ja": "21:00-21:29",
+              "en": "21:00-21:29"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2130",
+            "descriptions": {
+              "ja": "21:30-21:59",
+              "en": "21:30-21:59"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2200",
+            "descriptions": {
+              "ja": "22:00-22:29",
+              "en": "22:00-22:29"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2230",
+            "descriptions": {
+              "ja": "22:30-22:59",
+              "en": "22:30-22:59"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2300",
+            "descriptions": {
+              "ja": "23:00-23:29",
+              "en": "23:00-23:29"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          },
+          {
+            "name": "at2330",
+            "descriptions": {
+              "ja": "23:30-23:59",
+              "en": "23:30-23:59"
+            },
+            "position": {
+              "index": 5,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_Stop-Operate_00-01"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "24 時間を30 分単位で分割、全6 バイトを使用し、各ビット 1：運転 0：停止 とする",
+        "en": "24 hours is divided by 30 minutes. The timer is set in the unit of 30 minutes and allocated 6 bytes. 1:operated or 0:stopped is indicated for each bit."
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定格消費電力値",
+        "en": "Rated power consumption"
+      },
+      "shortName": "ratedPowerConsumption",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "定格消費電力をWで示す",
+        "en": "This property indicates the rated power consumption in watts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "消費電力計測方法",
+        "en": "Power consumption measurement method"
+      },
+      "shortName": "powerMeasurementMethod",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時消費電力計測値及び積算消費電力計測値、定格消費電力値の計測方法を示す",
+        "en": "This property indicates the method of measuring instantaneous power consumption, cumulative power consumption and rated power consumption."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "node",
+            "descriptions": {
+              "ja": "ノード単位",
+              "en": "Node unit"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "class",
+            "descriptions": {
+              "ja": "クラス単位",
+              "en": "Class unit"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "instance",
+            "descriptions": {
+              "ja": "インスタンス単位",
+              "en": "Instance unit"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

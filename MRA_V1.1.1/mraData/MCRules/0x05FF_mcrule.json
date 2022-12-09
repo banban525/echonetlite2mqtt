@@ -1,0 +1,155 @@
+{
+  "eoj": "0x05FF",
+  "properties": [
+    {
+      "epc": "0xC3",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC4",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC5",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC6",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC7",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC8",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC9",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xCA",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xCB",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xCC",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xCD",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xCE",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xCF",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE0",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC2",
+      "shortName": "deviceList",
+      "note": {
+        "ja": "EPC=0xC2, C3, C4, C6, C7に対応した値をobjectのarrayで表現する",
+        "en": "This property deals with info from 0xC2, C3, C4, C6 and 0xC7 altogether."
+      },
+      "data": {
+        "minItems": 0,
+        "maxItems": 65533,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": [
+            {
+              "shortName": "deviceId",
+              "element": {
+                "type": "raw"
+              }
+            },
+            {
+              "shortName": "deviceType",
+              "element": {
+                "type": "raw"
+              }
+            },
+            {
+              "shortName": "connection",
+              "element": {
+                "size": 4,
+                "type": "state",
+                "enum": [
+                  {
+                    "edt": "0x41",
+                    "name": "connected",
+                    "descriptions": {
+                      "ja": "接続中",
+                      "en": "Connected"
+                    }
+                  },
+                  {
+                    "edt": "0x42",
+                    "name": "disconnected",
+                    "descriptions": {
+                      "ja": "離脱中",
+                      "en": "Disconnected"
+                    }
+                  },
+                  {
+                    "edt": "0x43",
+                    "name": "notRegistered",
+                    "descriptions": {
+                      "ja": "未登録",
+                      "en": "Not registered"
+                    }
+                  },
+                  {
+                    "edt": "0x44",
+                    "name": "deleted",
+                    "descriptions": {
+                      "ja": "削除",
+                      "en": "Deleted"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "shortName": "manufactureCode",
+              "element": {
+                "type": "raw"
+              }
+            }
+          ]
+        }
+      },
+      "propertyName": {
+        "ja": "機器情報リスト",
+        "en": "List of device information"
+      },
+      "validRelease": {
+        "from": "G",
+        "to": "latest"
+      },
+      "accessRule": {
+        "inf": "optional",
+        "set": "notApplicable",
+        "get": "optional"
+      },
+      "descriptions": {
+        "ja": "機器リストのインデックスを示す",
+        "en": "This property indicates the index of the device list"
+      }
+    }
+  ]
+}

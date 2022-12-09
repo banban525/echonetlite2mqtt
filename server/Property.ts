@@ -1,4 +1,4 @@
-import { DeviceProperty } from "./AllDeviceDescriptions";
+import { ElPropertyDescription } from "./MraTypes";
 
 export interface Manufacturer{
   code: string;
@@ -8,17 +8,17 @@ export interface Manufacturer{
   }
 }
 
-
 export interface PropertyValue
 {
   name:string;
-  deviceProperty:DeviceProperty;
+  deviceProperty:Property;
   value:any;
-  updated:string; // YYYY-NN-DD HH:mm:ss
+  updated:string; // YYYY-NN-DD HH:mm:ssZ (UTC)
 }
 
 export interface Device{
   id:string;
+  name:string;
   ip:string;
   deviceType:string;
   eoj:string;
@@ -49,12 +49,63 @@ export class Device{
 }
 
 
-export interface Property extends DeviceProperty{
+export interface Property {
   name:string;
+  epc:string;
+  descriptions:{
+      ja:string;
+      en:string;
+  },
+  readable: boolean;
+  writable:boolean;
+  observable: boolean;
+  schema:ElPropertyDescription;
 }
 
 export interface DeviceId {
   id:string;
   ip:string;
   eoj:string;
+}
+
+export interface DeviceAlias
+{
+  id:string;
+  name:string;
+}
+
+export interface AliasOption
+{
+  aliases: DeviceAlias[];
+}
+
+export class AliasOption
+{
+  public static empty: Readonly<AliasOption> = {
+    aliases: []
+  };
+  public static validate(aliasOption:AliasOption):boolean
+  {
+    if(aliasOption.aliases===undefined)
+    {
+      return false;
+    }
+    if(Array.isArray(aliasOption.aliases)===false)
+    {
+      return false;
+    }
+    for(const deviceAlias of aliasOption.aliases)
+    {
+      if(deviceAlias.id === undefined)
+      {
+        return false;
+      }
+      if(deviceAlias.name === undefined)
+      {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }

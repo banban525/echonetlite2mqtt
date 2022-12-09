@@ -1,0 +1,1047 @@
+{
+  "eoj": "0x0279",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "住宅用太陽光発電",
+    "en": "Household solar power generation"
+  },
+  "shortName": "pvPowerGeneration",
+  "elProperties": [
+    {
+      "epc": "0x83",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "識別番号",
+        "en": "Identification number"
+      },
+      "shortName": "id",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "オブジェクトを固有に識別する番号",
+        "en": "A number that allows each object to be uniquely identified."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_17"
+      },
+      "note": {
+        "ja": "1バイト目は0xFE。2〜4バイト目はメーカコード。残りは機器毎のユニーク値",
+        "en": "1st data is 0xFE. 2nd to 4th data is manufacture code. The rest should be unique to each device."
+      }
+    },
+    {
+      "epc": "0x97",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "現在時刻設定",
+        "en": "Current time setting"
+      },
+      "shortName": "currentTime",
+      "accessRule": {
+        "get": "required_c",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現在時刻HH：MM",
+        "en": "Current time (HH: MM format)"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "remark": {
+        "ja": "出力制御スケジュールにより出力制御を行う場合は必須",
+        "en": "required if output control by schedule is capable."
+      }
+    },
+    {
+      "epc": "0x98",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "現在年月日設定",
+        "en": "Current date setting"
+      },
+      "shortName": "currentDate",
+      "accessRule": {
+        "get": "required_c",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現在年月日YYYY：MM：DD",
+        "en": "Current date (YYYY: MM: DD format)"
+      },
+      "data": {
+        "type": "date"
+      },
+      "remark": {
+        "ja": "出力制御スケジュールにより出力制御を行う場合は必須",
+        "en": "required if output control by schedule is capable."
+      }
+    },
+    {
+      "epc": "0xA0",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "出力制御設定1",
+        "en": "Output power control setting 1"
+      },
+      "shortName": "outputPowerControl1",
+      "accessRule": {
+        "get": "required_c",
+        "set": "required_c",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "出力制御設定値を設備認定容量の％で設定し、設定状態を取得する",
+        "en": "Used to set the output power control setting value in % of capacity approved by the equipment and acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      },
+      "remark": {
+        "ja": "出力制御が可能な場合は、0xA0または0xA1のいずれか及び0xA2が必須",
+        "en": "either 0xA0 or 0xA1 and 0xA2 are required if output control is capable."
+      }
+    },
+    {
+      "epc": "0xA1",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "出力制御設定2",
+        "en": "Output power control setting 2"
+      },
+      "shortName": "outputPowerControl2",
+      "accessRule": {
+        "get": "required_c",
+        "set": "required_c",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "出力制御設定値をWで設定し、設定状態を取得する",
+        "en": "Used to set the output power control setting value in W and acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      },
+      "remark": {
+        "ja": "出力制御が可能な場合は、0xA0または0xA1のいずれか及び0xA2が必須",
+        "en": "either 0xA0 or 0xA1 and 0xA2 are required if output control is capable."
+      }
+    },
+    {
+      "epc": "0xA2",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "余剰買取制御機能設定",
+        "en": "Function to control purchase surplus electricity setting"
+      },
+      "shortName": "surplusPurchaseControl",
+      "accessRule": {
+        "get": "required_c",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "余剰買取制御機能を示す",
+        "en": "This property indicates function to control purchasing surplus electricity."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Valid-Invalid_4142"
+      },
+      "remark": {
+        "ja": "出力制御が可能な場合は、0xA0または0xA1のいずれか及び0xA2が必須",
+        "en": "either 0xA0 or 0xA1 and 0xA2 are required if output control is capable."
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "出力制御スケジュール",
+        "en": "Output power controlling schedule"
+      },
+      "shortName": "outputPowerControlSchedule",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現在年月日と現在年月日翌日の30分毎の出力制御率を示す",
+        "en": "This property indicates the output power control ratio every 30 minutes for the current date and the day following the current date."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "element": {
+              "oneOf": [
+                {
+                  "type": "date"
+                },
+                {
+                  "$ref": "#/definitions/state_Unknown_FFFFFFFF"
+                }
+              ]
+            },
+            "elementName": {
+              "ja": "現在年月日",
+              "en": "Current date (YYYY: MM: DD)"
+            },
+            "shortName": "date"
+          },
+          {
+            "elementName": {
+              "ja": "0x00～0x64 (0～100%) x 96 (30分毎の値、2日分)",
+              "en": "0x00-0x64 (0-100%) x 96 (values every 30 minutes, for 2 days)"
+            },
+            "shortName": "powerControlRatio",
+            "element": {
+              "type": "array",
+              "itemSize": 1,
+              "minItems": 96,
+              "maxItems": 96,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-100percent"
+                  },
+                  {
+                    "$ref": "#/definitions/state_Unknown_FF"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "出力制御スケジュールにより出力制御を行う場合は必須",
+        "en": "Required if output control by schedule is capable."
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "次回アクセス日時",
+        "en": "Next access date and time"
+      },
+      "shortName": "updateScheduleDateAndTime",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "remark": {
+        "ja": "出力制御スケジュールにより出力制御を行う場合は必須",
+        "en": "required if output control by schedule is capable."
+      },
+      "descriptions": {
+        "ja": "出力制御スケジュールの次回更新日時を示す",
+        "en": "This property indicates the next date and time for updating the output power controlling schedule."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "type": "date-time"
+          },
+          {
+            "$ref": "#/definitions/state_NoControlNoSchedule_FFFFFFFFFFFFFF"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "余剰買取制御機能タイプ",
+        "en": "Function to control the type of surplus electricity purchase"
+      },
+      "shortName": "surplusPurchaseControlType",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "出力制御スケジュールによる出力制御時の余剰買取制御機能タイプを取得する",
+        "en": "A function to control the type of surplus electricity purchase, when output power is controlled by the output power controlling schedule shall be acquired"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Valid-Invalid_4142"
+      },
+      "remark": {
+        "ja": "出力制御スケジュールにより出力制御を行う場合は必須",
+        "en": "required if output control by schedule is capable."
+      }
+    },
+    {
+      "epc": "0xB3",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "出力変化時間設定値",
+        "en": "Output power change time setting value"
+      },
+      "shortName": "outputPowerChangeTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "出力制御スケジュールにより発電電力を定格発電電力値(系統連系時)の100~0%(0~100%)に変化させる時間を秒で示す",
+        "en": "This property indicates the time when output power is changed to 100-0% (0-100%) of the rated power generation output (when the system is interconnected) by the output power controlling schedule in units of seconds."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533second"
+      }
+    },
+    {
+      "epc": "0xB4",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "上限クリップ設定値",
+        "en": "Upper limit clip setting value"
+      },
+      "shortName": "upperLimitClip",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "上限クリップ制御を行う場合の設定値をWで示す",
+        "en": "This property indicates the setting value when controlling the upper clip in units of W."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-65533W"
+          },
+          {
+            "$ref": "#/definitions/state_NoSetting_FFFF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "出力制御スケジュールにより出力制御を行う場合は必須",
+        "en": "Required if output control by schedule is capable."
+      },
+      "note": {
+        "ja": "0xFFFFは未設定を示す",
+        "en": "0xFFFF means No setting."
+      }
+    },
+    {
+      "epc": "0xC0",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転力率設定値",
+        "en": "Operation power factor setting value"
+      },
+      "shortName": "operatingPowerFactor",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "運転力率設定値を%で示す",
+        "en": "This property indicates that the operation power factor setting value shall be indicated in units of %."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xC1",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "FIT契約タイプ",
+        "en": "FIT contract type"
+      },
+      "shortName": "contractType",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "FIT契約のタイプを示す",
+        "en": "This property indicates the FIT contract type."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "fit",
+            "descriptions": {
+              "ja": "FIT",
+              "en": "FIT"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "non_fit",
+            "descriptions": {
+              "ja": "非FIT",
+              "en": "Non-FIT"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "undefined",
+            "descriptions": {
+              "ja": "未設定",
+              "en": "No setting"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自家消費タイプ",
+        "en": "Self-consumption type"
+      },
+      "shortName": "selfConsumptionType",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自家消費のタイプを示す",
+        "en": "This property indicates the self-consumption type."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "withSelfConsumption",
+            "descriptions": {
+              "ja": "自家消費有",
+              "en": "With self-consumption"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "withoutSelfConsumption",
+            "descriptions": {
+              "ja": "自家消費無",
+              "en": "Without self-consumption"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "unknown",
+            "descriptions": {
+              "ja": "不明",
+              "en": "Unknown"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC3",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "設備認定容量",
+        "en": "Capacity approved by equipment"
+      },
+      "shortName": "approvedCapacity",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "設備認定容量をWで示す",
+        "en": "This property indicates the capacity approved by equipment in units of W."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-65533W"
+          },
+          {
+            "$ref": "#/definitions/state_NoSetting_FFFF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "0xC3または0xC4のいずれかが必須",
+        "en": "Either 0xC3 or 0xC4 is required."
+      },
+      "note": {
+        "ja": "0xFFFFは未設定を示す",
+        "en": "0xFFFF means No setting."
+      }
+    },
+    {
+      "epc": "0xC4",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換算係数",
+        "en": "Conversion coefficient"
+      },
+      "shortName": "conversionCoefficient",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "定格発電電力値(系統連系時)から設備認定容量への換算率",
+        "en": "The ratio that converts the rated power generation output (when the system is interconnected) into the capacity approved by equipment."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      },
+      "remark": {
+        "ja": "0xC3または0xC4のいずれかが必須",
+        "en": "either 0xC3 or 0xC4 is required."
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "A",
+        "to": "J"
+      },
+      "propertyName": {
+        "ja": "系統連系状態",
+        "en": "System-interconnected type"
+      },
+      "shortName": "powerSystemInterconnectionStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "系統連系状態のタイプを示す",
+        "en": "This property indicates system interconnection status"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "name": "reversePowerFlowAcceptable",
+            "descriptions": {
+              "ja": "系統連系(逆潮流可)",
+              "en": "System-interconnected type (reverse power flow acceptable)"
+            }
+          },
+          {
+            "edt": "0x01",
+            "name": "independent",
+            "descriptions": {
+              "ja": "独立",
+              "en": "Independent type"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "reversePowerFlowNotAcceptable",
+            "descriptions": {
+              "ja": "系統連系(逆潮流不可)",
+              "en": "System-interconnected type (reverse power flow not acceptable)"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "系統連系状態",
+        "en": "System-interconnected type"
+      },
+      "shortName": "powerSystemInterconnectionStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "系統連系状態のタイプを示す",
+        "en": "This property indicates system interconnection status"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "name": "reversePowerFlowAcceptable",
+            "descriptions": {
+              "ja": "系統連系(逆潮流可)",
+              "en": "System-interconnected type (reverse power flow acceptable)"
+            }
+          },
+          {
+            "edt": "0x01",
+            "name": "independent",
+            "descriptions": {
+              "ja": "独立",
+              "en": "Independent type"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "reversePowerFlowNotAcceptable",
+            "descriptions": {
+              "ja": "系統連系(逆潮流不可)",
+              "en": "System-interconnected type (reverse power flow not acceptable)"
+            }
+          },
+          {
+            "edt": "0x03",
+            "name": "unknown",
+            "descriptions": {
+              "ja": "不明",
+              "en": "Unknown"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "出力抑制状態",
+        "en": "Output power restraint status"
+      },
+      "shortName": "outputPowerRestraintStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "出力抑制の実施状態を示す",
+        "en": "This property indicates the implementation status of output power restraint."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "outputControl",
+            "descriptions": {
+              "ja": "抑制中(出力制御)",
+              "en": "Ongoing restraint (output power control)"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "exceptControl",
+            "descriptions": {
+              "ja": "抑制中(出力制御以外)",
+              "en": "Ongoing restraint (except output power control)"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "reasonUnknown",
+            "descriptions": {
+              "ja": "抑制中(抑制要因不明)",
+              "en": "Ongoing restraint (reason for restraint is unknown)"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "notPowerRestraint",
+            "descriptions": {
+              "ja": "抑制未実施",
+              "en": "Not restraining"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "unknown",
+            "descriptions": {
+              "ja": "不明",
+              "en": "Unknown"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時発電電力計測値",
+        "en": "Measured instantaneous amount of electricity generated"
+      },
+      "shortName": "instantaneousElectricPowerGeneration",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時発電電力をWで示す",
+        "en": "This property indicates instantaneous generated power in watts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算発電電力量計測値",
+        "en": "Measured cumulative amount of electric energy generated"
+      },
+      "shortName": "cumulativeElectricEnergyOfGeneration",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量を0.001kWhで示す",
+        "en": "This property indicates cumulative amounts of electric energy in 0.001 kWh."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999kWh"
+      },
+      "note": {
+        "ja": "積算電力量を0.001kWhで示す。オーバーフロー時は0にリセット",
+        "en": "This property indicates cumulative amounts of electric energy in 0.001kWh. The value is reset to 0 after overflow."
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算発電電力量リセット設定",
+        "en": "Resetting cumulative amount of electric energy generated"
+      },
+      "shortName": "resetCumulativeElectricEnergyOfGeneration",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "0x00を書き込むことにより積算発電電力量をリセットする",
+        "en": "Resets cumulative amount of electric energy generated by setting 0x00."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reset_00"
+      },
+      "remark": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      },
+      "note": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算売電電力量計測値",
+        "en": "Measured cumulative amount of electric energy sold"
+      },
+      "shortName": "cumulativeElectricEnergySold",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "売電電力の積算値を0.001kWhで示す",
+        "en": "This property indicates cumulative value of sold power in 0.001 kWh."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999kWh"
+      },
+      "note": {
+        "ja": "売電電力の積算値を0.001kWhで示す。オーバーフロー時は0にリセット",
+        "en": "This property indicates cumulative value of sold power in 0.001kWh. The value is reset to 0 after overflow."
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算売電電力量リセット設定",
+        "en": "Resetting cumulative amount of electric energy sold"
+      },
+      "shortName": "resetCumulativeElectricEnergySold",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "0x00を書き込むことにより積算買電電力量をリセットする",
+        "en": "Resets cumulative amount of electric energy sold by setting 0x00."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reset_00"
+      },
+      "remark": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      },
+      "note": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "発電電力制限設定1",
+        "en": "Power generation output limit setting 1"
+      },
+      "shortName": "powerGenerationOutputLimit1",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "発電電力制限値を定格発電電力値の％で設定し、設定状態を取得する",
+        "en": "Specifies the power generation output as a percentage of the rated power generation output and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "発電電力制限設定2",
+        "en": "Power generation output limit setting 2"
+      },
+      "shortName": "powerGenerationOutputLimit2",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "発電電力制限値をWで設定し、設定状態を取得する",
+        "en": "Specifies the power generation output in watts and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "売電電力制限設定",
+        "en": "Limit setting for the amount of electricity sold"
+      },
+      "shortName": "limitElectricEnergySold",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "売電電力制限値をWで設定し、設定状態を取得する",
+        "en": "Specifies, in watts, the amount of electricity sold and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "A",
+        "to": "J"
+      },
+      "propertyName": {
+        "ja": "定格発電電力値(系統連系時)",
+        "en": "Rated power generation output (System-interconnected)"
+      },
+      "shortName": "ratedElectricPowerOfgeneration",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "系統連系時の定格発電電力値をWで示す",
+        "en": "This property indicates the rated power output in the system-interconnection status in watts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定格発電電力値(系統連系時)",
+        "en": "Rated power generation output (System-interconnected)"
+      },
+      "shortName": "ratedElectricPowerOfgeneration",
+      "accessRule": {
+        "get": "required",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "系統連系時の定格発電電力値をWで示す",
+        "en": "This property indicates the rated power output in the system-interconnection status in watts."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-65533W"
+          },
+          {
+            "$ref": "#/definitions/state_NoSetting_FFFF"
+          }
+        ]
+      },
+      "note": {
+        "ja": "0xFFFFは未設定を示す",
+        "en": "0xFFFF means No setting."
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定格発電電力値(独立時)",
+        "en": "Rated power generation output (Independent)"
+      },
+      "shortName": "ratedElectricPowerOfgenerationIndependent",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "独立時の定格発電電力値をWで示す",
+        "en": "This property indicates the rated power output in the independent status in watts."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    }
+  ]
+}

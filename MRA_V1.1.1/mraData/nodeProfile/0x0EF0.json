@@ -1,0 +1,614 @@
+{
+  "eoj": "0x0EF0",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "ノードプロファイル",
+    "en": "Node profile"
+  },
+  "shortName": "nodeProfile",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operating status"
+      },
+      "shortName": "operatingStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ノードの動作状態を示す",
+        "en": "Indicates the node operating status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x30",
+            "name": "true",
+            "descriptions": {
+              "ja": "起動中",
+              "en": "Booting"
+            }
+          },
+          {
+            "edt": "0x31",
+            "name": "false",
+            "descriptions": {
+              "ja": "未起動中",
+              "en": "Not booting"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0x82",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "Version情報",
+        "en": "Version information"
+      },
+      "shortName": "version",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通信ミドルウェアが適用しているECHONET LiteのVersion、および通信ミドルウェアがサポートする電文タイプを示す",
+        "en": "Indicates ECHONET Lite version used by communication middleware and message types supported by communication middleware."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_4"
+      },
+      "note": {
+        "ja": "1バイト目:メジャーバージョン。2バイト目:マイナーバージョン。3バイト目:電文形式をbitmapで示す。4バイト目:0x00",
+        "en": "1st byte: major version, 2nd byte: minor version, 3rd data: bitmap of data format, 4th byte: 0x00"
+      }
+    },
+    {
+      "epc": "0x83",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "shortName": "id",
+      "propertyName": {
+        "ja": "識別番号",
+        "en": "Identification number"
+      },
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "オブジェクトを、ドメイン内で一意に識別するための番号",
+        "en": "Number to identify the node implementing the device object in the domain."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_17"
+      },
+      "note": {
+        "ja": "1バイト目は0xFE。2~4バイト目はメーカコード。残りは機器毎のユニーク値",
+        "en": "1st data is 0xFE. 2nd to 4th data is manufacture code. The rest should be unique to each device."
+      }
+    },
+    {
+      "epc": "0x88",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "異常発生状態",
+        "en": "Fault status"
+      },
+      "shortName": "faultStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "何らかの異常の発生状況を示す",
+        "en": "This property indicates whether a fault has occurred or not."
+      },
+      "data": {
+        "$ref": "#/definitions/state_YES-NO_4142"
+      }
+    },
+    {
+      "epc": "0x89",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "異常内容",
+        "en": "Fault description"
+      },
+      "shortName": "faultDescription",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "異常内容",
+        "en": "Fault content"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-1004"
+      }
+    },
+    {
+      "epc": "0x8A",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "メーカコード",
+        "en": "Manufacturer code"
+      },
+      "shortName": "manufacturer(MC)",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "3バイトで指定",
+        "en": "3-byte manufacturer code"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_3"
+      }
+    },
+    {
+      "epc": "0x8B",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "事業場コード",
+        "en": "Business facility code"
+      },
+      "shortName": "businessFacilityCode",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "3バイトの事業場コードで指定",
+        "en": "3-byte business facility code"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_3"
+      }
+    },
+    {
+      "epc": "0x8C",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "商品コード",
+        "en": "Product code"
+      },
+      "shortName": "productCode",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ASCIIコードで指定",
+        "en": "Identifies the product using ASCII code."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_12"
+      }
+    },
+    {
+      "epc": "0x8D",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "製造番号",
+        "en": "Production number"
+      },
+      "shortName": "serialNumber",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ASCIIコードで指定",
+        "en": "This property indicates the production number using ASCII code."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_12"
+      }
+    },
+    {
+      "epc": "0x8E",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "shortName": "productionDate",
+      "propertyName": {
+        "ja": "製造年月日",
+        "en": "Production date"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "4バイトで指定",
+        "en": "4-byte production date code"
+      },
+      "data": {
+        "type": "date"
+      }
+    },
+    {
+      "epc": "0x9D",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "状変アナウンスプロパティマップ",
+        "en": "Status change announcement property map"
+      },
+      "shortName": "DEL",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "プロパティ数が15以下の場合はEPCを列挙、16以上の場合はビットマップで記述する。",
+        "en": "Enumuration of EPC in case of the count is less than 16, or bitmap in case of the count is more than 15"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-17"
+      },
+      "note": {
+        "ja": "1バイト目は個数。プロパティ数が15個以下の場合は列挙、16個以上の場合はbitmap。Appendixの付録1 参照",
+        "en": "1st byte is count of property. If the count is less than 16, enumerate. Else, bitmap. Refer Annex 1 of the Appendix."
+      }
+    },
+    {
+      "epc": "0x9E",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "Setプロパティマップ",
+        "en": "Set property map"
+      },
+      "shortName": "DEL",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "プロパティ数が15以下の場合はEPCを列挙、16以上の場合はビットマップで記述する。",
+        "en": "Enumuration of EPC in case of the count is less than 16, or bitmap in case of the count is more than 15"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-17"
+      },
+      "note": {
+        "ja": "1バイト目は個数。プロパティ数が15個以下の場合は列挙、16個以上の場合はbitmap。Appendixの付録1 参照",
+        "en": "1st byte is count of property. If the count is less than 16, enumerate. Else, bitmap. Refer Annex 1 of the Appendix."
+      }
+    },
+    {
+      "epc": "0x9F",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "Getプロパティマップ",
+        "en": "Get property map"
+      },
+      "shortName": "DEL",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "プロパティ数が15以下の場合はEPCを列挙、16以上の場合はビットマップで記述する。",
+        "en": "Enumuration of EPC in case of the count is less than 16, or bitmap in case of the count is more than 15"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1-17"
+      },
+      "note": {
+        "ja": "1バイト目は個数。プロパティ数が15個以下の場合は列挙、16個以上の場合はbitmap。Appendixの付録1 参照",
+        "en": "1st byte is count of property. If the count is less than 16, enumerate. Else, bitmap. Refer Annex 1 of the Appendix."
+      }
+    },
+    {
+      "epc": "0xBF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "個体識別情報",
+        "en": "Unique identifier data"
+      },
+      "shortName": "uid",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ドメイン内で、各ノードを一意に識別するための2バイトデータ",
+        "en": "2 byte data to identify each node in a domain"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_2"
+      },
+      "note": {
+        "ja": "ECHONET Lite SPECIFICATION 第2部6.11.1参照",
+        "en": "Refer ECHONET Lite SPECIFICATION Part 2 Chapter 6.11.1."
+      }
+    },
+    {
+      "epc": "0xD3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自ノードインスタンス数",
+        "en": "Number of self-node instances"
+      },
+      "shortName": "selfNodeInstances",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自ノードで保持するインスタンスの総数",
+        "en": "Total number of instances held by self-node"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_3"
+      },
+      "note": {
+        "ja": "3 byteで数値を表す。ノードプロファイルオブジェクトのインスタンスは含まない",
+        "en": "3 byte data for integer. excluding node profile object instance"
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自ノードクラス数",
+        "en": "Number of self-node classes"
+      },
+      "shortName": "selfNodeClasses",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自ノードで保持するクラス総数",
+        "en": "Total number of classes held by self-node"
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-253_u16"
+      },
+      "note": {
+        "ja": "ノードプロファイルクラスを含む",
+        "en": "Including node profile class"
+      }
+    },
+    {
+      "epc": "0xD5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "インスタンスリスト通知",
+        "en": "Instance list notification"
+      },
+      "shortName": "instanceListNotification",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "自ノード内インスタンスに構成変化があった時のインスタンスリスト",
+        "en": "Instance list when self-node instance configuration is changed."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "インスタンス数",
+              "en": "Number of instances"
+            },
+            "shortName": "numberOfinstances",
+            "element": {
+              "$ref": "#/definitions/number_0-84"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "インスタンスリスト",
+              "en": "Instance list"
+            },
+            "shortName": "instanceList",
+            "element": {
+              "type": "array",
+              "itemSize": 3,
+              "maxItems": 84,
+              "items": {
+                "$ref": "#/definitions/raw_3"
+              }
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "インスタンスリストは機器オブジェクトの3バイトのEOJを列挙する",
+        "en": "Instance list is an array of EOJ. (3 bytes)"
+      }
+    },
+    {
+      "epc": "0xD6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自ノードインスタンスリストS",
+        "en": "Self-node instance list S"
+      },
+      "shortName": "selfNodeInstanceListS",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自ノード内インスタンスリスト",
+        "en": "Self-node instance list"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "インスタンス数",
+              "en": "Number of Instances"
+            },
+            "shortName": "numberOfInstances",
+            "element": {
+              "$ref": "#/definitions/number_0-84"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "インスタンスリスト",
+              "en": "instance list"
+            },
+            "shortName": "instanceList",
+            "element": {
+              "type": "array",
+              "itemSize": 3,
+              "maxItems": 84,
+              "items": {
+                "$ref": "#/definitions/raw_3"
+              }
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "インスタンスリストは3バイトのEOJを列挙する",
+        "en": "Instance list is an array of EOJ. (3 bytes)"
+      }
+    },
+    {
+      "epc": "0xD7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自ノードクラスリストS",
+        "en": "Self-node class list S"
+      },
+      "shortName": "selfNodeClassListS",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自ノード内クラスリスト",
+        "en": ""
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "クラス数",
+              "en": "Number of classes"
+            },
+            "shortName": "numberOfClasses",
+            "element": {
+              "$ref": "#/definitions/number_1-8"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "クラスリスト",
+              "en": "Class list"
+            },
+            "shortName": "classList",
+            "element": {
+              "type": "array",
+              "itemSize": 2,
+              "maxItems": 8,
+              "items": {
+                "$ref": "#/definitions/raw_2"
+              }
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "ノードプロファイルクラスは除く",
+        "en": "Excluding node profile class"
+      }
+    }
+  ]
+}

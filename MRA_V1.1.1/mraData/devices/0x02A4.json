@@ -1,0 +1,272 @@
+{
+  "eoj": "0x02A4",
+  "validRelease": {
+    "from": "J",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "拡張照明システム",
+    "en": "Extended lighting system"
+  },
+  "shortName": "enhancedLightingSystem",
+  "elProperties": [
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "照明の明るさ設定",
+        "en": "Light level setting"
+      },
+      "shortName": "lightLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "照明の明るさを % で示す。0x00 を消灯とする。",
+        "en": "This property indicates light level in %. 0x00 shall be a state of lights-out."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xC0",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "シーン制御設定",
+        "en": "Scene control setting"
+      },
+      "shortName": "sceneId",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "シーン制御の番号を取得、設定する。",
+        "en": "Get or set scene control number."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-253"
+          },
+          {
+            "$ref": "#/definitions/state_NoSetting_00"
+          }
+        ]
+      },
+      "note": {
+        "ja": "最大値は maximumNumberOfSceneId の値",
+        "en": "Maximum value is the value of maximumNumberOfSceneId."
+      }
+    },
+    {
+      "epc": "0xC1",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "シーン制御設定可能数",
+        "en": "Number that can assign scene control setting."
+      },
+      "shortName": "maximumNumberOfSceneId",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "シーン制御を設定可能な最大数を示す",
+        "en": "This property indicates the maximum number that can be assigned for scene control."
+      },
+      "data": {
+        "$ref": "#/definitions/number_1-253"
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "電力消費率リスト",
+        "en": "Power consumption rate list"
+      },
+      "shortName": "powerConsumptionRateList",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "全灯時を100%の消費電力とした時の各シーンにおける消費電力の比率（電力消費率）をシーン制御設定可能数個列挙する",
+        "en": "Listed a number controllable by scene of power consumption ratio at scenes when defining a fully lighted as 100% power consumption."
+      },
+      "data": {
+        "type": "array",
+        "itemSize": 1,
+        "minItems": 1,
+        "maxItems": 253,
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/number_0-100percent"
+            },
+            {
+              "$ref": "#/definitions/state_Unknown_FF"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "epc": "0xC3",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "全灯時消費電力",
+        "en": "Power consumption when fully lighted"
+      },
+      "shortName": "powerConsumptionAtFullLighting",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "該当するインスタンスの拡張照明システム内に接続する照明の全灯時の消費電力 (W) を示す",
+        "en": "This property indicates power consumption (W) when fully lighted of lighting to be connected into an extended lighting system of the applicable instance."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xC4",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "節電可能消費電力",
+        "en": "Possible power savings"
+      },
+      "shortName": "powerConsumptionWillBeSaved",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現運転状況から節電可能な電力 (W) を示す",
+        "en": "This property indicates possible power savings (W) based on current operation status."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xC5",
+      "validRelease": {
+        "from": "J",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "消費電力制限設定",
+        "en": "Power consumption limit setting"
+      },
+      "shortName": "powerConsumptionLimit",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "節電する電力 (W) を設定する/読み出す",
+        "en": "Setting/Reading power (W) to be saved"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-65533W"
+          },
+          {
+            "type": "state",
+            "size": 2,
+            "enum": [
+              {
+                "edt": "0x0000",
+                "name": "cancel",
+                "descriptions": {
+                  "ja": "電力制限解除",
+                  "en": "Canceling power consumption restriction"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC6",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自動動作制御設定",
+        "en": "Automatic operation controlling setting"
+      },
+      "shortName": "automaticOperationControlling",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自動動作の制御のON、OFFを設定する/読み出す。（自動動作にはスケジュール制御、センサー制御等を含む）",
+        "en": "Automatic operation controlling ON/OFF setting/reading (Automatic operation shall include schedule control, sensor control, etc.)"
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFFA_3031"
+      }
+    },
+    {
+      "epc": "0xC7",
+      "validRelease": {
+        "from": "K",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "フェード制御変化時間設定",
+        "en": "Fading control change time setting"
+      },
+      "shortName": "fadingControlChangeTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "フェード制御の変化時間を設定する/読み出す。フェード制御変化時間を秒で示す",
+        "en": "Fading control change time shall be set/read. This property indicates the fading control change time in units of seconds."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-3600Second"
+      }
+    }
+  ]
+}

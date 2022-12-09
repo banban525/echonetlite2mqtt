@@ -1,9 +1,9 @@
-import { DevicePropertySchema } from "*/device_descriptions_v1.3.0/all_device_descriptions_v1.3.0.json";
+import { ElPropertyDescription } from "./MraTypes";
 
 
 
 export interface ServerStatus {
-  mqttState: "Connected" | "Disconnected";
+  mqttState: "Connected" | "Disconnected" | "NotConfigure";
   systemVersion: string,
   devices: ApiDeviceSummary[];
 }
@@ -36,6 +36,7 @@ export  interface ApiService
 export interface ApiDeviceSummary
 {
   id:string;
+  name:string;
   deviceType:string;
   eoj:string;
   ip:string;
@@ -56,6 +57,7 @@ export interface ApiDeviceSummary
 // /elapi/v1/devices/<device id> → ApiDevice
 export interface ApiDevice{
   id:string;
+  name:string;
   deviceType:string;
   eoj:string;
   ip:string;
@@ -75,7 +77,7 @@ export interface ApiDevicePropertyValue
 {
   name:string;
   value:any;
-  updated:string;  // YYYY-MM-DD HH:mm:ss
+  updated:string;  // YYYY-MM-DD HH:mm:ssZ (UTC)
 }
 
 export   interface ApiDeviceProperty{
@@ -90,7 +92,7 @@ export   interface ApiDeviceProperty{
   writable:boolean;
   observable:boolean;
   urlParameters:string[];
-  schema:DevicePropertySchema;
+  schema:ElPropertyDescription;
   note:{
     ja:string;
     en:string;

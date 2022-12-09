@@ -1,0 +1,2586 @@
+{
+  "eoj": "0x027D",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "蓄電池",
+    "en": "Storage battery"
+  },
+  "shortName": "storageBattery",
+  "elProperties": [
+    {
+      "epc": "0x83",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "識別番号",
+        "en": "Identification number"
+      },
+      "shortName": "id",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "オブジェクトを固有に識別する番号",
+        "en": "A number that allows each object to be uniquely identified."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_17"
+      },
+      "note": {
+        "ja": "1バイト目は0xFE。2～4バイト目はメーカコード。残りは機器毎のユニーク値",
+        "en": "1st data is 0xFE. 2nd to 4th data is manufacture code. The rest should be unique to each device."
+      }
+    },
+    {
+      "epc": "0x97",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "現在時刻設定",
+        "en": "Current time setting"
+      },
+      "shortName": "currentTime",
+      "accessRule": {
+        "get": "required",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現在時刻HH：MM",
+        "en": "Current time (HH: MM format)"
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0x98",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "現在年月日設定",
+        "en": "Current date setting"
+      },
+      "shortName": "currentDate",
+      "accessRule": {
+        "get": "required",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現在年月日YYYY：MM：DD",
+        "en": "Current date (YYYY: MM: DD format)"
+      },
+      "data": {
+        "type": "date"
+      }
+    },
+    {
+      "epc": "0xA0",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC実効容量 (充電)",
+        "en": "AC effective capacity (charging)"
+      },
+      "shortName": "acEffectiveChargingCapacity",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "空の蓄電池より充電可能な電力量 (AC)",
+        "en": "This property indicates the electric energy that can be charged from an empty storage battery (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999Wh"
+      },
+      "remark": {
+        "ja": "脚注参照",
+        "en": "Refer to footnote"
+      }
+    },
+    {
+      "epc": "0xA1",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC実効容量 (放電)",
+        "en": "AC effective capacity (discharging)"
+      },
+      "shortName": "acEffectiveDischargingCapacity",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "満充電の蓄電池より放電可能な電力量 (AC)",
+        "en": "This property indicates the electric energy that can be discharged from a fully-charged storage battery (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999Wh"
+      },
+      "remark": {
+        "ja": "脚注参照",
+        "en": "Refer to footnote"
+      }
+    },
+    {
+      "epc": "0xA2",
+      "propertyName": {
+        "ja": "AC充電可能容量",
+        "en": "AC chargeable capacity"
+      },
+      "shortName": "acChargeableCapacity",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常時において、充電可能な電力量 (AC)",
+        "en": "This property indicates the electric energy that can be charged during a normal time (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999Wh"
+      }
+    },
+    {
+      "epc": "0xA3",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC放電可能容量",
+        "en": "AC dischargeable capacity"
+      },
+      "shortName": "acDischargeableCapacity",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常時において、放電可能な電力量 (AC)",
+        "en": "This property indicates the electric energy that can be discharged during a normal time (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999Wh"
+      }
+    },
+    {
+      "epc": "0xA4",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC充電可能量",
+        "en": "AC chargeable electric energy"
+      },
+      "shortName": "acChargeableElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現時点での充電可能な電力量 (AC)",
+        "en": "This property indicates the electric energy that can be charged at the present point in time (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999Wh"
+      }
+    },
+    {
+      "epc": "0xA5",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC放電可能量",
+        "en": "AC dischargeable electric energy"
+      },
+      "shortName": "acDischargeableElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現時点での放電可能な電力量 (AC)",
+        "en": "This property indicates the electric energy that can be discharged at the present point in time (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999Wh"
+      }
+    },
+    {
+      "epc": "0xA6",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC充電上限設定",
+        "en": "AC charge upper limit setting"
+      },
+      "shortName": "acChargeUpperLimit",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "充電可能容量に対して、充電の上限値を％で設定する (AC)",
+        "en": "This property sets the upper limit value for charging in relation to chargeable capacity in % (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xA7",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC放電下限設定",
+        "en": "AC discharge lower limit setting"
+      },
+      "shortName": "acDischargeLowerLimit",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "放電可能容量に対して、放電の下限値を％で設定する (AC)",
+        "en": "This property sets the lower limit value for discharging in relation to dischargeable capacity in % (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xA8",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC積算充電電力量計測値",
+        "en": "AC measured cumulative charging electric energy"
+      },
+      "shortName": "acCumulativeChargingElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算充電電力量 (AC)を0.001kWhで示す",
+        "en": "This property indicates the cumulative charging electric energy (AC) in 0.001kW."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999kWh"
+      }
+    },
+    {
+      "epc": "0xA9",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC積算放電電力量計測値",
+        "en": "AC measured cumulative discharging electric energy"
+      },
+      "shortName": "acCumulativeDischargingElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算放電電力量 (AC)を0.001kWhで示す",
+        "en": "This property indicates the cumulative discharging electric energy (AC) in 0.001kWh."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999kWh"
+      }
+    },
+    {
+      "epc": "0xAA",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC充電量設定値",
+        "en": "AC charge amount setting value"
+      },
+      "shortName": "acTargetChargingElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "充電の電力量 (AC)をWhで指定する",
+        "en": "This property indicates the electric energy for charging (AC) in Wh."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-999999999Wh"
+          },
+          {
+            "$ref": "#/definitions/state_NoSetting_00000000"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xAB",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC放電量設定値",
+        "en": "AC discharge amount setting value"
+      },
+      "shortName": "acTargetDischargingElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "放電の電力量 (AC)をWhで指定する",
+        "en": "This property indicates the electric energy for discharging (AC) in Wh."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-999999999Wh"
+          },
+          {
+            "$ref": "#/definitions/state_NoSetting_00000000"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC1",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "充電方式",
+        "en": "Charging method"
+      },
+      "shortName": "chargingMethod",
+      "accessRule": {
+        "get": "required",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "運転モード設定 (EPC=0xDA)に充電 (0x42)を設定した時の充電方式を示す",
+        "en": "This property indicates charging method when setting charging (0x42) to operation mode setting (EPC = 0xDA)."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x01",
+            "name": "maximum",
+            "descriptions": {
+              "ja": "最大充電電力充電",
+              "en": "Maximum charging electric energy charting"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "surplus",
+            "descriptions": {
+              "ja": "余剰電力充電",
+              "en": "Surplus electric energy charging"
+            }
+          },
+          {
+            "edt": "0x03",
+            "name": "designatedPower",
+            "descriptions": {
+              "ja": "指定電力充電",
+              "en": "Designated electric energy charging"
+            }
+          },
+          {
+            "edt": "0x04",
+            "name": "designatedCurrent",
+            "descriptions": {
+              "ja": "指定電流充電",
+              "en": "Designated current power charging"
+            }
+          },
+          {
+            "edt": "0x00",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Others"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "M",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "放電方式",
+        "en": "Discharging method"
+      },
+      "shortName": "dischargingMethod",
+      "accessRule": {
+        "get": "required",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "運転モード設定 (EPC=0xDA)に放電 (0x43)を設定した時の放電方式を示す",
+        "en": "This property indicates discharging method when setting discharging (0x43) to operation mode setting (EPC = 0xDA)."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x01",
+            "name": "maximum",
+            "descriptions": {
+              "ja": "最大放電電力放電",
+              "en": "Maximum discharge electric energy discharging"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "loadFollowing",
+            "descriptions": {
+              "ja": "負荷追従放電",
+              "en": "Load following discharge"
+            }
+          },
+          {
+            "edt": "0x03",
+            "name": "designatedPower",
+            "descriptions": {
+              "ja": "指定電力放電",
+              "en": "Designated electric energy discharging"
+            }
+          },
+          {
+            "edt": "0x04",
+            "name": "designatedCurrent",
+            "descriptions": {
+              "ja": "指定電流放電",
+              "en": "Designated current power discharging"
+            }
+          },
+          {
+            "edt": "0x00",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Others"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC7",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "AC定格電力量",
+        "en": "AC rated electric energy"
+      },
+      "shortName": "acRatedElectricEnergy",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池の定格電力量をWh (AC)で示す",
+        "en": "This property indicates the rated electric energy of the storage battery in Wh (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999Wh"
+      }
+    },
+    {
+      "epc": "0xC8",
+      "validRelease": {
+        "from": "B",
+        "to": "G"
+      },
+      "propertyName": {
+        "ja": "最小最大充電電力値",
+        "en": "Minimum/maximum charging electric power"
+      },
+      "shortName": "minimumAndMaximumChargingElectricPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池への充電電力の最小値および最大値を、それぞれW (AC)で示す",
+        "en": "This property indicates the minimum/maximum electric power for charging in watts (AC)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "最小充電電力値",
+              "en": "Minimum"
+            },
+            "shortName": "minValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "最大充電電力値",
+              "en": "Maximum"
+            },
+            "shortName": "maxValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC8",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "最小最大充電電力値",
+        "en": "Minimum/maximum charging electric power"
+      },
+      "shortName": "minimumAndMaximumChargingElectricPower",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池への充電電力の最小値および最大値を、それぞれW (AC)で示す",
+        "en": "This property indicates the minimum/maximum electric power for charging in watts (AC)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "最小充電電力値",
+              "en": "Minimum"
+            },
+            "shortName": "minValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "最大充電電力値",
+              "en": "Maximum"
+            },
+            "shortName": "maxValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC9",
+      "validRelease": {
+        "from": "B",
+        "to": "G"
+      },
+      "propertyName": {
+        "ja": "最小最大放電電力値",
+        "en": "Minimum/maximum discharging electric power"
+      },
+      "shortName": "minimumAndMaximumDischargingElectricPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池からの放電電力の最小値および最大値を、それぞれW (AC)で示す",
+        "en": "This property indicates the minimum/maximum electric power for discharging in watts (AC)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "最小放電電力値",
+              "en": "Minimum"
+            },
+            "shortName": "minValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "最大放電電力値",
+              "en": "Maximum"
+            },
+            "shortName": "maxValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC9",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "最小最大放電電力値",
+        "en": "Minimum/maximum discharging electric power"
+      },
+      "shortName": "minimumAndMaximumDischargingElectricPower",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池からの放電電力の最小値および最大値を、それぞれW (AC)で示す",
+        "en": "This property indicates the minimum/maximum electric power for discharging in watts (AC)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "最小放電電力値",
+              "en": "Minimum"
+            },
+            "shortName": "minValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "最大放電電力値",
+              "en": "Maximum"
+            },
+            "shortName": "maxValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "最小最大充電電流値",
+        "en": "Minimum/maximum charging current"
+      },
+      "shortName": "minimumAndMaximumChargingCurrent",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池への充電電流の最小値および最大値を、それぞれ0.1A (AC)で示す",
+        "en": "This property indicates the minimum/maximum current for charging in units of 0.1A (AC)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "最小充電電流値",
+              "en": "Minimum"
+            },
+            "shortName": "minValue",
+            "element": {
+              "$ref": "#/definitions/number_0-3276.6A"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "最大充電電流値",
+              "en": "Maximum"
+            },
+            "shortName": "maxValue",
+            "element": {
+              "$ref": "#/definitions/number_0-3276.6A"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCB",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "最小最大放電電流値",
+        "en": "Minimum/maximum discharging current"
+      },
+      "shortName": "minimumAndMaximumDischargingCurrent",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池からの放電電流の最小値および最大値を、それぞれ0.1A (AC)で示す",
+        "en": "This property indicates the minimum/maximum current for discharging in units of 0.1A (AC)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "最小放電電流値",
+              "en": "Minimum"
+            },
+            "shortName": "minValue",
+            "element": {
+              "$ref": "#/definitions/number_0-3276.6A"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "最大放電電流値",
+              "en": "Maximum"
+            },
+            "shortName": "maxValue",
+            "element": {
+              "$ref": "#/definitions/number_0-3276.6A"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCC",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "再連系許可設定",
+        "en": "Re-interconnection permission setting"
+      },
+      "shortName": "reInterconnectionPermission",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "系統への連系の許可、禁止を設定する",
+        "en": "This property sets permission and prohibition for interconnection to system."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "permitted",
+            "descriptions": {
+              "ja": "許可",
+              "en": "Permitted"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "prohibited",
+            "descriptions": {
+              "ja": "禁止",
+              "en": "Prohibited"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCD",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転許可設定",
+        "en": "Operation permission setting"
+      },
+      "shortName": "operationPermission",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池運転の許可、禁止を設定する",
+        "en": "This property sets permission and prohibition for storage battery operation."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "permitted",
+            "descriptions": {
+              "ja": "許可",
+              "en": "Permitted"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "prohibited",
+            "descriptions": {
+              "ja": "禁止",
+              "en": "Prohibited"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCE",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自立運転許可設定",
+        "en": "Independent operation permission setting"
+      },
+      "shortName": "independentOperationPermission",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池の自立運転の許可、禁止を設定する",
+        "en": "This property sets permission and prohibition for independent operation of the storage battery."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "permitted",
+            "descriptions": {
+              "ja": "許可",
+              "en": "Permitted"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "prohibited",
+            "descriptions": {
+              "ja": "禁止",
+              "en": "Prohibited"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCF",
+      "validRelease": {
+        "from": "D",
+        "to": "G"
+      },
+      "propertyName": {
+        "ja": "運転動作状態",
+        "en": "Working operation status"
+      },
+      "shortName": "actualOperationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "蓄電池の動作状態を示す。充電状態、放電状態、待機状態の各運転動作状態は必須とする",
+        "en": "This property indicates the working operation status. The operation action statuses of charging status, discharging status and standby status are required."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "rapidCharging",
+            "descriptions": {
+              "ja": "急速充電",
+              "en": "Rapid charging"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "charging",
+            "descriptions": {
+              "ja": "充電",
+              "en": "Charging"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "discharging",
+            "descriptions": {
+              "ja": "放電",
+              "en": "Discharging"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "standby",
+            "descriptions": {
+              "ja": "待機",
+              "en": "Standby"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "test",
+            "descriptions": {
+              "ja": "テスト",
+              "en": "Test"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Other"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCF",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転動作状態",
+        "en": "Working operation status"
+      },
+      "shortName": "actualOperationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "蓄電池の動作状態を示す。充電状態、放電状態、待機状態の各運転動作状態は必須とする",
+        "en": "This property indicates the working operation status. The operation action statuses of charging status, discharging status and standby status are required."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "rapidCharging",
+            "descriptions": {
+              "ja": "急速充電",
+              "en": "Rapid charging"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "charging",
+            "descriptions": {
+              "ja": "充電",
+              "en": "Charging"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "discharging",
+            "descriptions": {
+              "ja": "放電",
+              "en": "Discharging"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "standby",
+            "descriptions": {
+              "ja": "待機",
+              "en": "Standby"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "test",
+            "descriptions": {
+              "ja": "テスト",
+              "en": "Test"
+            }
+          },
+          {
+            "edt": "0x46",
+            "name": "auto",
+            "descriptions": {
+              "ja": "自動",
+              "en": "Automatic"
+            }
+          },
+          {
+            "edt": "0x48",
+            "name": "restart",
+            "descriptions": {
+              "ja": "再起動",
+              "en": "Restart"
+            }
+          },
+          {
+            "edt": "0x49",
+            "name": "capacityRecalculation",
+            "descriptions": {
+              "ja": "実効容量再計算処理",
+              "en": "Effective capacity recalculation processing"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Other"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "脚注参照",
+        "en": "Refer to footnote"
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定格電力量",
+        "en": "Rated electric energy"
+      },
+      "shortName": "ratedElectricEnergy",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池の定格電力量をWh (DC)で示す",
+        "en": "This property indicates the rated electric energy of the battery in Wh (DC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999Wh"
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定格容量",
+        "en": "Rated capacity"
+      },
+      "shortName": "ratedCapacity",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池の定格充電容量を0.1Ah (DC)で示す",
+        "en": "This property indicates the rated charging capacity of the battery in units of 0.1Ah (DC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-3276.6Ah"
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定格電圧",
+        "en": "Rated voltage"
+      },
+      "shortName": "ratedVoltage",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池の定格電圧をV (DC)で示す",
+        "en": "This property indicates the rated voltage of the battery in volts (DC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-32766V"
+      }
+    },
+    {
+      "epc": "0xD3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時充放電電力計測値",
+        "en": "Measured instantaneous charging/discharging electric energy"
+      },
+      "shortName": "instantaneousChargingAndDischargingElectricPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時充放電電力を±W (AC)で示す",
+        "en": "This property indicates the measured instantaneous charging/discharging electric power in watts (AC) (positive/negative)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-999999999-999999999W"
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時充放電電流計測値",
+        "en": "Measured instantaneous charging/discharging current"
+      },
+      "shortName": "instantaneousChargingAndDischargingCurrent",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時充放電電流を±0.1A (AC)で示す",
+        "en": "This property indicates the measured instantaneous charging/discharging current in units of 0.1A (AC) (positive/negative)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-3276.7-3276.6A"
+      }
+    },
+    {
+      "epc": "0xD5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時充放電電圧計測値",
+        "en": "Measured instantaneous charging/discharging voltage"
+      },
+      "shortName": "instantaneousChargingAndDischargingVoltage",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時充放電電圧を±V (AC)で示す",
+        "en": "This property indicates the measured instantaneous charging/discharging voltage in volts (AC) (positive/negative)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-32767-32766V"
+      }
+    },
+    {
+      "epc": "0xD6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算放電電力量計測値",
+        "en": "Measured cumulative discharging electric energy"
+      },
+      "shortName": "cumulativeDischargingElectricEnergy",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算放電電力量を0.001kWhで示す",
+        "en": "This property indicates the measured cumulative discharging electric energy in units of 0.001kWh."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999kWh"
+      }
+    },
+    {
+      "epc": "0xD7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算放電電力量リセット設定",
+        "en": "Measured cumulative discharging electric energy reset setting"
+      },
+      "shortName": "resetCumulativeDischargingElectricEnergy",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "積算放電電力量をリセットする",
+        "en": "Resets 'Measured cumulative discharging electric energy' to zero."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reset_00"
+      },
+      "note": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      }
+    },
+    {
+      "epc": "0xD8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算充電電力量計測値",
+        "en": "Measured cumulative charging electric energy"
+      },
+      "shortName": "cumulativeChargingElectricEnergy",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算充電電力量を0.001kWhで示す",
+        "en": "This property indicates the measured cumulative charging electric energy in units of 0.001kWh."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999.999kWh"
+      }
+    },
+    {
+      "epc": "0xD9",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算充電電力量リセット設定",
+        "en": "Measured cumulative charging electric energy reset setting"
+      },
+      "shortName": "resetCumulativeChargingElectricEnergy",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "積算充電電力量をリセットする",
+        "en": "Resets 'Measured cumulative charging electric energy' to zero."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reset_00"
+      },
+      "note": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is Set only."
+      }
+    },
+    {
+      "epc": "0xDA",
+      "validRelease": {
+        "from": "A",
+        "to": "A"
+      },
+      "propertyName": {
+        "ja": "運転モード設定",
+        "en": "Operation mode setting"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "急速充電/充電/放電/待機/テスト/自動/その他の運転モードを設定する。充電、放電、待機の各運転モードを必須とする",
+        "en": "Sets the battery to one of the following operation modes: 'Rapid charging,' 'Charging,' 'Discharging,' 'Standby,' 'Test,' 'Auto' or 'Others.' The operation modes of charging, discharging and standby are required."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "rapidCharging",
+            "descriptions": {
+              "ja": "急速充電",
+              "en": "Rapid charging"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "charging",
+            "descriptions": {
+              "ja": "充電",
+              "en": "Charging"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "discharging",
+            "descriptions": {
+              "ja": "放電",
+              "en": "Discharging"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "standby",
+            "descriptions": {
+              "ja": "待機",
+              "en": "Standby"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "test",
+            "descriptions": {
+              "ja": "テスト",
+              "en": "Test"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDA",
+      "validRelease": {
+        "from": "B",
+        "to": "C"
+      },
+      "propertyName": {
+        "ja": "運転モード設定",
+        "en": "Operation mode setting"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "急速充電/充電/放電/待機/テスト/自動/その他の運転モードを設定する。充電、放電、待機の各運転モードを必須とする",
+        "en": "Sets the battery to one of the following operation modes: 'Rapid charging,' 'Charging,' 'Discharging,' 'Standby,' 'Test,' 'Auto' or 'Others.' The operation modes of charging, discharging and standby are required."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "rapidCharging",
+            "descriptions": {
+              "ja": "急速充電",
+              "en": "Rapid charging"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "charging",
+            "descriptions": {
+              "ja": "充電",
+              "en": "Charging"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "discharging",
+            "descriptions": {
+              "ja": "放電",
+              "en": "Discharging"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "standby",
+            "descriptions": {
+              "ja": "待機",
+              "en": "Standby"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "test",
+            "descriptions": {
+              "ja": "テスト",
+              "en": "Test"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Other"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDA",
+      "validRelease": {
+        "from": "D",
+        "to": "G"
+      },
+      "propertyName": {
+        "ja": "運転モード設定",
+        "en": "Operation mode setting"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "急速充電/充電/放電/待機/テスト/自動/その他の運転モードを設定する。充電、放電、待機の各運転モードを必須とする",
+        "en": "Sets the battery to one of the following operation modes: 'Rapid charging,' 'Charging,' 'Discharging,' 'Standby,' 'Test,' 'Auto' or 'Others.' The operation modes of charging, discharging and standby are required."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "rapidCharging",
+            "descriptions": {
+              "ja": "急速充電",
+              "en": "Rapid Charging"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "charging",
+            "descriptions": {
+              "ja": "充電",
+              "en": "Charging"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "discharging",
+            "descriptions": {
+              "ja": "放電",
+              "en": "Discharging"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "standby",
+            "descriptions": {
+              "ja": "待機",
+              "en": "Standby"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "test",
+            "descriptions": {
+              "ja": "テスト",
+              "en": "Test"
+            }
+          },
+          {
+            "edt": "0x46",
+            "name": "auto",
+            "descriptions": {
+              "ja": "自動",
+              "en": "Automatic"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Other"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDA",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転モード設定",
+        "en": "Operation mode setting"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "急速充電/充電/放電/待機/テスト/自動/その他の運転モードを設定する。充電、放電、待機の各運転モードを必須とする",
+        "en": "Sets the battery to one of the following operation modes: 'Rapid charging,' 'Charging,' 'Discharging,' 'Standby,' 'Test,' 'Auto' or 'Others.' The operation modes of charging, discharging and standby are required."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "rapidCharging",
+            "descriptions": {
+              "ja": "急速充電",
+              "en": "Rapid charging"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "charging",
+            "descriptions": {
+              "ja": "充電",
+              "en": "Charging"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "discharging",
+            "descriptions": {
+              "ja": "放電",
+              "en": "Discharging"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "standby",
+            "descriptions": {
+              "ja": "待機",
+              "en": "Standby"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "test",
+            "descriptions": {
+              "ja": "テスト",
+              "en": "Test"
+            }
+          },
+          {
+            "edt": "0x46",
+            "name": "auto",
+            "descriptions": {
+              "ja": "自動",
+              "en": "Automatic"
+            }
+          },
+          {
+            "edt": "0x48",
+            "name": "restart",
+            "descriptions": {
+              "ja": "再起動",
+              "en": "Restart"
+            }
+          },
+          {
+            "edt": "0x49",
+            "name": "capacityRecalculation",
+            "descriptions": {
+              "ja": "実効容量再計算処理",
+              "en": "Effective capacity recalculation processing"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Other"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "脚注参照",
+        "en": "Refer to footnote"
+      },
+      "note": {
+        "ja": "このプロパティをGetして取得できる値は設定値である。実際の運転状態はactualOperationModeをGETすること",
+        "en": "The value you get with this property is the value you set. Get actualOperationMode for the current status."
+      }
+    },
+    {
+      "epc": "0xDB",
+      "validRelease": {
+        "from": "B",
+        "to": "G"
+      },
+      "propertyName": {
+        "ja": "系統連系状態",
+        "en": "System-interconnected type"
+      },
+      "shortName": "powerSystemInterconnectionStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "系統連系状態のタイプを示す",
+        "en": "This property indicates the status of connection with the current system (system interconnection status)."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "name": "reversePowerFlowAcceptable",
+            "descriptions": {
+              "ja": "系統連系 (逆潮流可)",
+              "en": "System interconnection (reverse power flow acceptable)"
+            }
+          },
+          {
+            "edt": "0x01",
+            "name": "independent",
+            "descriptions": {
+              "ja": "独立",
+              "en": "Independent type"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "reversePowerFlowNotAcceptable",
+            "descriptions": {
+              "ja": "系統連系 (逆潮流不可)",
+              "en": "System-interconnected type (reverse power flow not acceptable)"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDB",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "系統連系状態",
+        "en": "System-interconnected type"
+      },
+      "shortName": "powerSystemInterconnectionStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "系統連系状態のタイプを示す",
+        "en": "This property indicates the status of connection with the current system (system interconnection status)."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "name": "reversePowerFlowAcceptable",
+            "descriptions": {
+              "ja": "系統連系 (逆潮流可)",
+              "en": "System interconnection (reverse power flow acceptable)"
+            }
+          },
+          {
+            "edt": "0x01",
+            "name": "independent",
+            "descriptions": {
+              "ja": "独立",
+              "en": "Independent type"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "reversePowerFlowNotAcceptable",
+            "descriptions": {
+              "ja": "系統連系 (逆潮流不可)",
+              "en": "System-interconnected type (reverse power flow not acceptable)"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDC",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "最小最大充電電力値 (独立時)",
+        "en": "Minimum/maximum charging power (Independent)"
+      },
+      "shortName": "minimumAndMaximumChargingPowerAtIndependent",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "独立時の蓄電池への充電電力の最小値および最大値を、それぞれW (AC)で示す",
+        "en": "This property indicates the minimum and maximum values of charging power battery in watts (AC) in the dependent status."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "最小充電電力値",
+              "en": "Minimum charging power"
+            },
+            "shortName": "minValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "最大充電電力値",
+              "en": "Maximum charging power"
+            },
+            "shortName": "maxValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDD",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "最小最大放電電力値 (独立時)",
+        "en": "Minimum/maximum discharging power (Independent)"
+      },
+      "shortName": "minimumAndMaximumDischargingPowerAtIndependent",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "独立時の蓄電池からの放電電力の最小値および最大値を、それぞれW (AC)で示す",
+        "en": "This property indicates the minimum and maximum values of discharging power from the battery in the independent status in watts (AC)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "最小放電電力値",
+              "en": "Minimum discharging power"
+            },
+            "shortName": "minValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "最大放電電力値",
+              "en": "Maximum discharging power"
+            },
+            "shortName": "maxValue",
+            "element": {
+              "$ref": "#/definitions/number_0-999999999W"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDE",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "最小最大充電電流値 (独立時)",
+        "en": "Minimum/maximum charging current (Independent)"
+      },
+      "shortName": "minimumAndMaximumChargingCurrentAtIndependent",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "独立時の蓄電池への充電電流の最小値および最大値を、それぞれ0.1A (AC)で示す",
+        "en": "This property indicates the minimum and maximum values of a charging current to the battery in the independent status in units of 0.1A (AC)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "最小充電電流値",
+              "en": "Minimum charging current"
+            },
+            "shortName": "minValue",
+            "element": {
+              "$ref": "#/definitions/number_0-3276.6A"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "最大充電電流値",
+              "en": "Maximum charging current"
+            },
+            "shortName": "maxValue",
+            "element": {
+              "$ref": "#/definitions/number_0-3276.6A"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDF",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "最小最大放電電流値 (独立時)",
+        "en": "Minimum/maximum discharging current (Independent)"
+      },
+      "shortName": "minimumAndMaximumDischargingCurrentAtIndependent",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "独立時の蓄電池からの放電電流の最小値および最大値を、それぞれ0.1A (AC)で示す",
+        "en": "This property indicates the minimum and maximum values of a discharging current in the independent status in units of 0.1A (AC)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "最小放電電流値",
+              "en": "Minimum discharging current"
+            },
+            "shortName": "minValue",
+            "element": {
+              "$ref": "#/definitions/number_0-3276.6A"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "最大放電電流値",
+              "en": "Maximum discharging current"
+            },
+            "shortName": "maxValue",
+            "element": {
+              "$ref": "#/definitions/number_0-3276.6A"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "A"
+      },
+      "propertyName": {
+        "ja": "充放電量指定1",
+        "en": "Charging/discharging amount setting 1"
+      },
+      "shortName": "chargingAndDischargingAmount1",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "充電/放電の電力量を Wh (DC) で指定する。プラス値は充電、マイナス値は放電。",
+        "en": "Specify the charging (positive value) or discharging (negative value) electric energy in Wh (DC)."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-999999999Wh"
+          },
+          {
+            "$ref": "#/definitions/number_-999999999--1Wh"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "EPC=0xE0を実装する場合は、EPC=0xE1,E7,E8,E9,EAを実装しない。プラス値：充電 マイナス値：放電",
+        "en": "In case EPC=0xE0 is implemented, EPC=0xE1,E7,E8,E9,EA should not be implemented. Positive value: Charging, Negative value: Discharging."
+      },
+      "note": {
+        "ja": "充電時 (プラス値)／放電時 (マイナス値)",
+        "en": "During charging (positive value) / During discharging (negative value)"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "充放電量設定値1",
+        "en": "Charging/discharging amount setting 1"
+      },
+      "shortName": "chargingAndDischargingAmount1",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "充電/放電の電力量を Wh (DC) で指定する。プラス値は充電、マイナス値は放電。",
+        "en": "Specify the charging (positive value) or discharging (negative value) electric energy in Wh (DC)."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-999999999Wh"
+          },
+          {
+            "$ref": "#/definitions/number_-999999999--1Wh"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "EPC=0xE0を実装する場合は、EPC=0xE1,E7,E8,E9,EAを実装しない。プラス値：充電 マイナス値：放電",
+        "en": "In case EPC=0xE0 is implemented, EPC=0xE1,E7,E8,E9,EA should not be implemented. Positive value: Charging, Negative value: Discharging."
+      },
+      "note": {
+        "ja": "充電時 (プラス値)／放電時 (マイナス値)",
+        "en": "During charging (positive value) / During discharging (negative value)"
+      }
+    },
+    {
+      "epc": "0xE1",
+      "propertyName": {
+        "ja": "充放電量指定2",
+        "en": "Charging/discharging amount setting 2"
+      },
+      "shortName": "chargingAndDischargingAmount2",
+      "validRelease": {
+        "from": "A",
+        "to": "A"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "充電/放電の電力量を Ah (DC) で指定する。プラス値は充電、マイナス値は放電。",
+        "en": "Specify the charging (positive value) or discharging (negative value) electric energy in Ah (DC)."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-3276.6Ah_i16"
+          },
+          {
+            "$ref": "#/definitions/number_-3276.6--0.1Ah"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "EPC=0xE1を実装する場合は、EPC=0xE0,E7,E8,E9,EAを実装しない。プラス値：充電 マイナス値：放電",
+        "en": "In case EPC=0xE1 is implemented, EPC=0xE0,E7,E8,E9,EA should not be implemented. Positive value: Charging, Negative value: Discharging."
+      },
+      "note": {
+        "ja": "充電時 (プラス値)／放電時 (マイナス値)",
+        "en": "During charging (positive value) / During discharging (negative value)"
+      }
+    },
+    {
+      "epc": "0xE1",
+      "propertyName": {
+        "ja": "充放電量設定値2",
+        "en": "Charging/discharging amount setting 2"
+      },
+      "shortName": "chargingAndDischargingAmount2",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "充電/放電の電力量を Ah (DC) で指定する。プラス値は充電、マイナス値は放電。",
+        "en": "Specify the charging (positive value) or discharging (negative value) electric energy in Ah (DC)."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-3276.6Ah_i16"
+          },
+          {
+            "$ref": "#/definitions/number_-3276.6--0.1Ah"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "EPC=0xE1を実装する場合は、EPC=0xE0,E7,E8,E9,EAを実装しない。プラス値：充電 マイナス値：放電",
+        "en": "In case EPC=0xE1 is implemented, EPC=0xE0,E7,E8,E9,EA should not be implemented. Positive value: Charging, Negative value: Discharging."
+      },
+      "note": {
+        "ja": "充電時 (プラス値)／放電時 (マイナス値)",
+        "en": "During charging (positive value) / During discharging (negative value)"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "蓄電残量1",
+        "en": "Remaining stored electricity 1"
+      },
+      "shortName": "remainingCapacity1",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電残量をWh (DC)で示す",
+        "en": "This property indicates the remaining stored electric energy in Wh (DC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999Wh"
+      },
+      "remark": {
+        "ja": "0xE2, 0xE3または0xE4のいずれかを必須",
+        "en": "Either 0xE2, 0xE3 or 0xE4 is required."
+      }
+    },
+    {
+      "epc": "0xE3",
+      "propertyName": {
+        "ja": "蓄電残量2",
+        "en": "Remaining stored electricity 2"
+      },
+      "shortName": "remainingCapacity2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電残量を0.1Ah (DC)で示す",
+        "en": "This property indicates the remaining capacity in units of 0.1Ah (DC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-3276.6Ah"
+      },
+      "remark": {
+        "ja": "0xE2, 0xE3または0xE4のいずれかを必須",
+        "en": "Either 0xE2, 0xE3 or 0xE4 is required."
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "蓄電残量3",
+        "en": "Remaining stored electricity 3"
+      },
+      "shortName": "remainingCapacity3",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電残量を%で示す",
+        "en": "This property indicates the charging rate of the battery in %."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      },
+      "remark": {
+        "ja": "0xE2, 0xE3または0xE4のいずれかを必須",
+        "en": "Either 0xE2, 0xE3 or 0xE4 is required."
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "劣化状態",
+        "en": "Battery state of health"
+      },
+      "shortName": "batteryHealthState",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "蓄電池の劣化状態 (健康状態)を%で示す",
+        "en": "This property indicates the battery state of health in %."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "蓄電池タイプ",
+        "en": "Battery type"
+      },
+      "shortName": "batteryType",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "電池の種類を示す",
+        "en": "This property indicates the battery type."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "name": "unknown",
+            "descriptions": {
+              "ja": "不明",
+              "en": "Unknown"
+            }
+          },
+          {
+            "edt": "0x01",
+            "name": "lead",
+            "descriptions": {
+              "ja": "鉛",
+              "en": "Lead"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "ni_mh",
+            "descriptions": {
+              "ja": "ニッケル水素",
+              "en": "Nickel-metal hydride"
+            }
+          },
+          {
+            "edt": "0x03",
+            "name": "ni_cd",
+            "descriptions": {
+              "ja": "ニッケルカドミウム",
+              "en": "Nickel-cadmium"
+            }
+          },
+          {
+            "edt": "0x04",
+            "name": "lib",
+            "descriptions": {
+              "ja": "リチウムイオン",
+              "en": "Lithium ion"
+            }
+          },
+          {
+            "edt": "0x05",
+            "name": "zinc",
+            "descriptions": {
+              "ja": "亜鉛",
+              "en": "Zinc"
+            }
+          },
+          {
+            "edt": "0x06",
+            "name": "alkaline",
+            "descriptions": {
+              "ja": "充電式アルカリ",
+              "en": "Rechargeable alkaline"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "充電量設定値1",
+        "en": "Charging amount setting 1"
+      },
+      "shortName": "chargingAmount1",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "充電の電力量をWh (DC)で指定する",
+        "en": "This property specifies the charging electric energy in Wh (DC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999Wh"
+      },
+      "remark": {
+        "ja": "EPC=0xE7を実装する場合は、EPC=0xE0,E1,E9を実装しない",
+        "en": "In case EPC=0xE7 is implemented, EPC=0xE0,E1,E9 should not be implemented."
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "放電量設定値1",
+        "en": "Discharging amount setting 1"
+      },
+      "shortName": "dischargingAmount1",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "放電の電力量をWh (DC)で指定する",
+        "en": "This property specifies the discharging electric energy in Wh (DC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999Wh"
+      },
+      "remark": {
+        "ja": "EPC=0xE8を実装する場合は、EPC=0xE0,E1,EAを実装しない",
+        "en": "In case EPC=0xE8 is implemented, EPC=0xE0,E1,EA should not be implemented."
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "充電量設定値2",
+        "en": "Charging amount setting 2"
+      },
+      "shortName": "chargingAmount2",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "充電の容量を0.1Ah (DC)で指定する",
+        "en": "This property specifies the charging capacity in units of 0.1Ah (DC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-3276.6Ah"
+      },
+      "remark": {
+        "ja": "EPC=0xE9を実装する場合は、EPC=0xE0,E1,E7を実装しない",
+        "en": "In case EPC=0xE9 is implemented, EPC=0xE0,E1,E7 should not be implemented."
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "放電量設定値2",
+        "en": "Discharging amount setting 2"
+      },
+      "shortName": "dischargingAmount2",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "放電の容量を0.1Ah (DC)で指定する",
+        "en": "This property specifies the discharging capacity in units of 0.1Ah (DC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-3276.6Ah"
+      },
+      "remark": {
+        "ja": "EPC=0xEAを実装する場合は、EPC=0xE0,E1,E8を実装しない",
+        "en": "In case EPC=0xEA is implemented, EPC=0xE0,E1,E8 should not be implemented."
+      }
+    },
+    {
+      "epc": "0xEB",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "充電電力設定値",
+        "en": "Charging electric energy setting"
+      },
+      "shortName": "chargingPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "充電の電力をW (AC)で指定する",
+        "en": "This property specifies the charging electric power in watts (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999W"
+      }
+    },
+    {
+      "epc": "0xEC",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "放電電力設定値",
+        "en": "Discharging electric energy setting"
+      },
+      "shortName": "dischargingPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "放電の電力をW (AC)で指定する",
+        "en": "This property specifies the discharging electric power in watts (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999W"
+      }
+    },
+    {
+      "epc": "0xED",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "充電電流設定値",
+        "en": "Charging current setting"
+      },
+      "shortName": "chargingCurrent",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "充電の電流を0.1A (AC)で指定する",
+        "en": "This property specifies the charging current in units of 0.1A (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-6553.3A"
+      }
+    },
+    {
+      "epc": "0xEE",
+      "validRelease": {
+        "from": "B",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "放電電流設定値",
+        "en": "Discharging current setting"
+      },
+      "shortName": "dischargingCurrent",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "放電の電流を0.1A (AC)で指定する",
+        "en": "This property specifies the discharging current in units of 0.1A (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-6553.3A"
+      }
+    },
+    {
+      "epc": "0xEF",
+      "validRelease": {
+        "from": "C",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定格電圧 (独立時)",
+        "en": "Rated voltage (Independent)"
+      },
+      "shortName": "ratedVoltageAtIndependent",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "独立時の蓄電池の定格電圧をV (AC)で示す",
+        "en": "This property indicates the rated voltage of a battery in the independent status in volts (AC)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-32766V"
+      }
+    }
+  ]
+}
