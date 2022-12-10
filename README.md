@@ -250,8 +250,8 @@ echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/
 This is not possible as the ECHONET Lite "Set temperature value" (ja:温度設定値) specification is in units of 1 degree.
 
 See specs below.
-(ja) https://echonet.jp/spec_g/#standard-05
-(en) https://echonet.jp/spec-en/#standard-05
+* (ja) https://echonet.jp/spec_g/#standard-05
+* (en) https://echonet.jp/spec-en/#standard-05
 
 ## Third party use
 
