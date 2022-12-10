@@ -150,7 +150,7 @@ mqtt:
 ```yml
 cover:
   - platform: mqtt
-    command_topic: "echonetlite2mqtt/elapi/v1/devices/fe00-your-device-id-00000000000000/properties/openCloseOperation/set"
+    command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/openCloseOperation/set"
     device_class: shutter
     name: shutter1
     payload_close: "close"
@@ -161,7 +161,7 @@ cover:
     state_open: "fullyOpen"
     state_opening: "opening"
     state_stopped: "stoppedHalfway"
-    state_topic: "echonetlite2mqtt/elapi/v1/devices/fe00-your-device-id-00000000000000/properties/openCloseStatus"
+    state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/openCloseStatus"
 ```
 
 
@@ -197,7 +197,7 @@ mqtt:
 
 
 
-## Electric Water Heater ([Mitsubishi electric water heater SRT-S375A](https://www.lixil.co.jp/lineup/window/jshutter/) with [GT-HEM4](https://www.mitsubishielectric.co.jp/ldg/wink/ssl/displayProduct.do?pid=309179&ccd=10501170) )
+## Electric Water Heater ([Mitsubishi electric water heater SRT-S375A](https://www.mitsubishielectric.co.jp/ldg/wink/ssl/displayProduct.do?pid=309056&ccd=10501120) with [GT-HEM4](https://www.mitsubishielectric.co.jp/ldg/wink/ssl/displayProduct.do?pid=309179&ccd=10501170) )
 
 
 ![demo-waterheater](demo_waterheater.gif)
@@ -294,8 +294,8 @@ sensor:
 lock:
   - platform: mqtt
     name: Frontdoor-lock
-    state_topic: "echonetlite2mqtt/elapi/v1/devices/fe00-your-device-id-00000000000000/properties/operationStatus"
-    command_topic: "echonetlite2mqtt/elapi/v1/devices/fe00-your-device-id-00000000000000/properties/operationStatus/set"
+    state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationStatus"
+    command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationStatus/set"
     payload_lock: "false"
     payload_unlock: "true"
     state_locked: "false"
