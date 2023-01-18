@@ -1,7 +1,10 @@
 # ECHONETLite2MQTT
 
 [![MIT License](https://img.shields.io/github/license/banban525/echonetlite2mqtt)](LICENSE)
-[![github build](https://img.shields.io/github/workflow/status/banban525/echonetlite2mqtt/Build%20and%20Publish%20Docker)](https://github.com/banban525/echonetlite2mqtt/actions/workflows/action.yml)
+[![GitHub Workflow Build Status](https://img.shields.io/github/actions/workflow/status/banban525/echonetlite2mqtt/action.yml)
+](https://github.com/banban525/echonetlite2mqtt/actions/workflows/action.yml)
+[![GitHub Workflow Test Status](https://img.shields.io/github/actions/workflow/status/banban525/echonetlite2mqtt/test.yml?label=test)
+](https://github.com/banban525/echonetlite2mqtt/actions/workflows/test.yml)
 [![Docker Hub](https://img.shields.io/docker/pulls/banban525/echonetlite2mqtt)](https://hub.docker.com/r/banban525/echonetlite2mqtt)
 
 ECHONET Lite to MQTT bridge.
