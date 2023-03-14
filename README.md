@@ -9,6 +9,9 @@
 
 ECHONET Lite to MQTT bridge.
 
+[日本語のReadmeはこちら (Readme in Japanese is here)](README.ja.md)
+
+
 ## Description
 
 
@@ -99,7 +102,7 @@ docker run -d --net=host -e MQTT_BROKER="mqtt://your.mqtt.brocker" banban525/ech
 git clone https://github.com/banban525/echonetlite2mqtt.git
 ```
 
-2. Run the following command to initialize in ripository root directory.
+2. Run the following command to initialize in repository root directory.
 
 ```
 cd echonetlite2mqtt
