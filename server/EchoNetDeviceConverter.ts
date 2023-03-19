@@ -25,18 +25,27 @@ export default class EchoNetDeviceConverter
         {
           continue;
         }
-        const getPropertyNoList = this.convertGetPropertyNoList(ip, eoj, echonetLiteFacilities);
-        if(getPropertyNoList === undefined)
+
+        let id;
+        if(eoj === "0ef001")
         {
-          continue;
+          // nodeprofileのIdは専用処理する(他デバイスとIdが共通のことがあるため、他デバイスのIdが確定してから決まる)
+          id = this.getDeviceIdForNodeProfile(echonetLiteFacilities, ip);
         }
-  
-        let id = this.getDeviceId(ip, eoj, echonetLiteFacilities);
+        else
+        {
+          const getPropertyNoList = this.convertGetPropertyNoList(ip, eoj, echonetLiteFacilities);
+          if(getPropertyNoList === undefined)
+          {
+            continue;
+          }
+          id = this.getDeviceId(ip, eoj, echonetLiteFacilities);
+        }
+
         if(id === "")
         {
           continue;
         }
-
         result.push({
           id,
           ip,
@@ -54,11 +63,9 @@ export default class EchoNetDeviceConverter
     {
       return undefined;
     }
-    let id = this.getDeviceId(deviceId.ip, deviceId.eoj, echonetLiteFacilities);
-    if(id === "")
-    {
-      return undefined;
-    }
+
+    let id = deviceId.id;
+
     const manufacturer = this.getManufacturer(deviceId.ip, deviceId.eoj, echonetLiteFacilities);
     if(manufacturer === undefined)
     {
@@ -334,6 +341,101 @@ export default class EchoNetDeviceConverter
     }
   
     return id;
+  }
+
+
+  // NodeProfile用のDeviceId作成
+  // NodeProfileと他インスタンスでIdが重複することがあり、その場合に正常にデバイスが認識されない
+  // (目的のデバイスではなくNodeProfileだけが存在すると認識されてしまう)
+  // Idが重複している場合、NodeProfileのIdの後ろに"_0ef001"を付けるようにする。
+  // そのため、NodeProfileのIdは、他デバイスの情報が出そろってから確定する。
+  // 本来は、全てのデバイスのIdの後ろに"_{eoj}"を付けたほうが統一感があるが
+  // 過去バージョンとの互換性のため、できるだけIdは変えないようにする
+  // 通常、NodeProfileはMQTT経由で制御するものではないので、Idが変わってもOKとする
+  private getDeviceIdForNodeProfile = (echonetLiteFacilities:facilitiesType, ip:string):string =>
+  {
+    const echoNetRawNodeData = echonetLiteFacilities[ip];
+
+    const nodeProfileDeviceClass = this.echoNetPropertyConverter.getDevice("0x0EF0");
+    if(nodeProfileDeviceClass === undefined)
+    {
+      throw Error("ERROR: Not found nodeProfile device class");
+    }
+    
+    let instanceListProperty = nodeProfileDeviceClass.elProperties.find(_=>_.epc === "0xD6");
+    if(instanceListProperty === undefined)
+    {
+      throw Error("ERROR: Not found Self-node instance list S property class in nodeProfile device class");
+    }
+
+    if(("0ef001" in echoNetRawNodeData) === false)
+    {
+      // NodeProfileが無し
+      return "";
+    }
+
+    if(("d6" in echoNetRawNodeData["0ef001"]) === false)
+    {
+      // 自ノードインスタンスリスト プロパティが未取得
+      return "";
+    }
+    if(("83" in echoNetRawNodeData["0ef001"]) === false)
+    {
+      // NodeProfileのIdが未取得
+      return "";
+    }
+
+    const nodeProfileId = echoNetRawNodeData["0ef001"]["83"];
+
+    // 自ノードインスタンスリストの取得
+    const data = echoNetRawNodeData["0ef001"]["d6"];
+    const eojListUnknown = this.echoNetPropertyConverter.toObject(
+      instanceListProperty.data,
+      data
+    );
+    const eojList = eojListUnknown as {numberOfInstances:number,instanceList:string[]}
+
+    const otherDeviceIdList:string[] = [];
+    for(const otherDeviceEoj of eojList.instanceList)
+    {
+      if((otherDeviceEoj in echoNetRawNodeData) === false)
+      {
+        // 自ノードのインスタンスがそろっていない
+        return "";
+      }
+      const otherDeviceRawData = echoNetRawNodeData[otherDeviceEoj];
+      if(("9f" in otherDeviceRawData) === false || 
+        ("9e" in otherDeviceRawData) === false || 
+        ("9d" in otherDeviceRawData) === false ||
+        ("8a" in otherDeviceRawData) ===false)  //メーカコード
+      {
+        // 他インスタンスのプロパティがそろっていない
+        return "";
+      }
+      const getPropertyNoList = this.convertGetPropertyNoList(ip, otherDeviceEoj, echonetLiteFacilities);
+      if(getPropertyNoList === undefined)
+      {
+        throw Error("ありえない");
+      }
+      if(getPropertyNoList.find((_):boolean=>_ === "83") !== undefined){
+        if("83" in otherDeviceRawData === false)
+        {
+          // 識別番号のプロパティがあるはずで、未取得なら取得されるまで待つ
+          return "";
+        }
+        const otherDeviceId = otherDeviceRawData["83"];
+        otherDeviceIdList.push(otherDeviceId);
+      }
+    }
+
+    if(otherDeviceIdList.find(_=>_ === nodeProfileId) !== undefined)
+    {
+      // NodeProfileのIdが他のインスタンスのIdと重複している。
+      // NodeProfileのIdを "{id}_{eoj}" の形にする
+      return nodeProfileId + "_0ef001";
+    }
+  
+    return nodeProfileId;
   }
 
   public getPropertyWithEpc = (deviceId: DeviceId, epc:string): Property|undefined =>{
