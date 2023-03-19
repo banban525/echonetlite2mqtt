@@ -44,54 +44,15 @@ function int32ToHexString(number:number):string
   return number.toString(16).padStart(8, "0");
 }
 
-
 export class EchoNetPropertyConverter
 {
-  public getAllDeviceClasses():string[]
-  {
-    const files = fs.readdirSync(path.join(__dirname, `../MRA_V1.1.1/mraData/devices`));
-    const classes = files.map(_=>_.match(/0x([0-9A-F]+)\.json/)).filter(_=>_!==null).map(_=>_===null?"":_[1]);
-    return classes;
-  }
+  echoNetDefinitionRepository:EchoNetDefinitionRepository = new EchoNetDefinitionRepository();
+
   public getDevice(eojClass:string):ElDeviceDescription | undefined
   {
-    const definitionsJsonPath = path.join(__dirname, "../MRA_V1.1.1/mraData/definitions/definitions.json");
-    const definitionsText = fs.readFileSync(definitionsJsonPath, {encoding:"utf8"});
-    const definitions = JSON.parse(definitionsText) as ElDefinitions;
+    const definitions = this.echoNetDefinitionRepository.getDefinition();
+    let device = this.echoNetDefinitionRepository.getClass(eojClass);
 
-    const superClassJsonPath = path.join(__dirname, `../MRA_V1.1.1/mraData/superClass/0x0000.json`);
-    const superClassText = fs.readFileSync(superClassJsonPath, {encoding:"utf8"});
-    const superClass = JSON.parse(superClassText) as ElDeviceDescription;
-
-    let device:ElDeviceDescription|undefined = undefined;
-    if(device === undefined)
-    {
-      const deviceJsonPath = path.join(__dirname, `../MRA_custom/${eojClass}.json`);
-      if(fs.existsSync(deviceJsonPath))
-      {
-        const deviceText = fs.readFileSync(deviceJsonPath, {encoding:"utf8"});
-        device = JSON.parse(deviceText) as ElDeviceDescription;
-        device.elProperties.push(...superClass.elProperties);
-      }
-    }
-    if(device === undefined)
-    {
-      const deviceJsonPath = path.join(__dirname, `../MRA_V1.1.1/mraData/devices/${eojClass}.json`);
-      if(fs.existsSync(deviceJsonPath))
-      {
-        const deviceText = fs.readFileSync(deviceJsonPath, {encoding:"utf8"});
-        device = JSON.parse(deviceText) as ElDeviceDescription;
-        device.elProperties.push(...superClass.elProperties);
-      }
-    }
-
-    if(device === undefined && eojClass.toLowerCase() === "0x0ef0")
-    {
-      const deviceJsonPath = path.join(__dirname, `../MRA_V1.1.1/mraData/nodeProfile/${eojClass}.json`);
-      const deviceText = fs.readFileSync(deviceJsonPath, {encoding:"utf8"});
-      device = JSON.parse(deviceText) as ElDeviceDescription;
-      device.elProperties.push(...superClass.elProperties);
-    }
     if(device === undefined)
     {
       return undefined;
@@ -1140,4 +1101,79 @@ export class EchoNetPropertyConverter
     return 0;
   }
   
+}
+
+
+
+class EchoNetDefinitionRepository
+{
+  static definitionsCache:ElDefinitions|undefined;
+  static superClassCache:ElDeviceDescription|undefined;
+  static deviceDescriptionCache:{[key:string]:ElDeviceDescription|undefined} = {};
+
+  public getDefinition():ElDefinitions
+  {
+    if(EchoNetDefinitionRepository.definitionsCache===undefined)
+    {
+      const definitionsJsonPath = path.join(__dirname, "../MRA_V1.1.1/mraData/definitions/definitions.json");
+      const definitionsText = fs.readFileSync(definitionsJsonPath, {encoding:"utf8"});
+      EchoNetDefinitionRepository.definitionsCache = JSON.parse(definitionsText) as ElDefinitions;
+    }
+    return EchoNetDefinitionRepository.definitionsCache;
+  }
+
+  public getSuperClass():ElDeviceDescription
+  {
+    if(EchoNetDefinitionRepository.superClassCache===undefined)
+    {
+      const superClassJsonPath = path.join(__dirname, `../MRA_V1.1.1/mraData/superClass/0x0000.json`);
+      const superClassText = fs.readFileSync(superClassJsonPath, {encoding:"utf8"});
+      EchoNetDefinitionRepository.superClassCache = JSON.parse(superClassText) as ElDeviceDescription;
+    }
+    return EchoNetDefinitionRepository.superClassCache;
+  }
+
+  public getClass(eojClass:string):ElDeviceDescription|undefined
+  {
+    if(eojClass in EchoNetDefinitionRepository.deviceDescriptionCache)
+    {
+      return EchoNetDefinitionRepository.deviceDescriptionCache[eojClass];
+    }
+
+    const superClass = this.getSuperClass();
+
+    let device:ElDeviceDescription|undefined = undefined;
+    if(device === undefined)
+    {
+      const deviceJsonPath = path.join(__dirname, `../MRA_custom/${eojClass}.json`);
+      if(fs.existsSync(deviceJsonPath))
+      {
+        const deviceText = fs.readFileSync(deviceJsonPath, {encoding:"utf8"});
+        device = JSON.parse(deviceText) as ElDeviceDescription;
+        device.elProperties.push(...superClass.elProperties);
+      }
+    }
+    if(device === undefined)
+    {
+      const deviceJsonPath = path.join(__dirname, `../MRA_V1.1.1/mraData/devices/${eojClass}.json`);
+      if(fs.existsSync(deviceJsonPath))
+      {
+        const deviceText = fs.readFileSync(deviceJsonPath, {encoding:"utf8"});
+        device = JSON.parse(deviceText) as ElDeviceDescription;
+        device.elProperties.push(...superClass.elProperties);
+      }
+    }
+
+    if(device === undefined && eojClass.toLowerCase() === "0x0ef0")
+    {
+      const deviceJsonPath = path.join(__dirname, `../MRA_V1.1.1/mraData/nodeProfile/${eojClass}.json`);
+      const deviceText = fs.readFileSync(deviceJsonPath, {encoding:"utf8"});
+      device = JSON.parse(deviceText) as ElDeviceDescription;
+      device.elProperties.push(...superClass.elProperties);
+    }
+
+    EchoNetDefinitionRepository.deviceDescriptionCache[eojClass]=device;
+
+    return device;
+  }
 }
