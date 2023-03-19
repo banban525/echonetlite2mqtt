@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/adm-zip": "^0.5.0",
+    "adm-zip": "^0.5.10",
     "echonet-lite": "^2.6.0",
     "ejs": "^3.1.8",
     "express": "^4.17.1",

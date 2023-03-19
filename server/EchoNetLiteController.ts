@@ -184,5 +184,10 @@ export class EchoNetLiteController{
       console.log(`[ECHONETLite] send ${id.ip} ${id.eoj} ${EL.GET} ${epc}`);
       EL.sendOPC1(id.ip, "05ff01", id.eoj, EL.GET, epc, [0x00]);
     }
+
+    public getRawData = ():unknown=>
+    {
+      return EL.facilities;
+    }
   }
   

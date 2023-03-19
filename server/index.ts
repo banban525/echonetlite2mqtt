@@ -298,7 +298,7 @@ echoNetListController.addPropertyChnagedEvent((id:DeviceId, propertyName:string,
   }
 });
 
-const restApiController = new RestApiController(deviceStore, systemStatusRepository, eventRepository, logger, restApiHost, restApiPort, mqttBaseTopic);
+const restApiController = new RestApiController(deviceStore, systemStatusRepository, eventRepository, logger, echoNetListController, restApiHost, restApiPort, mqttBaseTopic);
 restApiController.addPropertyChangedRequestEvent((deviceId:string, propertyName:string, newValue:any):void=>{
 
   const device = deviceStore.getFromNameOrId(deviceId);

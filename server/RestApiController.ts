@@ -6,6 +6,8 @@ import { LogRepository } from "./LogRepository";
 import { Device } from "./Property";
 import expressLayouts from 'express-ejs-layouts';
 import { ElDataType, ElMixedOneOfType } from "./MraTypes";
+import admZip from 'adm-zip';
+import { EchoNetLiteController } from "./EchoNetLiteController";
 
 interface ViewProperty{
   propertyName:string;
@@ -19,6 +21,7 @@ export class RestApiController
   private readonly deviceStore:DeviceStore;
   private readonly systemStatusRepository:SystemStatusRepositry;
   private readonly logRepository:LogRepository;
+  private readonly echoNetLiteController:EchoNetLiteController;
   private readonly hostName:string;
   private readonly port:number;
   private readonly mqttBaseTopic:string;
@@ -26,6 +29,7 @@ export class RestApiController
     systemStatusRepository:SystemStatusRepositry,
     eventRepository:EventRepository, 
     logRepository:LogRepository,
+    echoNetLiteController:EchoNetLiteController,
     hostName:string, 
     port:number,
     mqttBaseTopic:string){
@@ -34,6 +38,7 @@ export class RestApiController
     this.systemStatusRepository = systemStatusRepository;
     this.eventRepository = eventRepository;
     this.logRepository = logRepository;
+    this.echoNetLiteController = echoNetLiteController;
     this.hostName = hostName;
     this.port = port;
     this.mqttBaseTopic = mqttBaseTopic;
@@ -72,6 +77,8 @@ export class RestApiController
     app.get("/api/status", this.getStatus);
     app.get("/api/events", this.getEventsWithLongPolling);
     app.get("/api/logs", this.getLogs);
+
+    app.get("/downloadlogs/zip", this.downloadLogs)
 
     const server = app.listen(this.port, this.hostName, ():void => {
       console.log(`[RESTAPI] Start listening to web server. ${this.hostName}:${this.port}`);
@@ -579,6 +586,28 @@ export class RestApiController
     const logs = this.logRepository.logs;
     res.json(logs);
     res.end();
+  }
+
+  private downloadLogs = async (
+    req: express.Request,
+    res: express.Response
+  ): Promise<void> => {
+
+    
+    
+    const zip = new admZip();
+    
+    zip.addFile("alldevices.json",Buffer.from(JSON.stringify(this.deviceStore.getAll(), null, 2)));
+    zip.addFile("logs.json", Buffer.from(JSON.stringify(this.logRepository.logs, null, 2)))
+    zip.addFile("ELRawData.json", Buffer.from(JSON.stringify(this.echoNetLiteController.getRawData(), null, 2)))
+
+    const buffer = await zip.toBufferPromise();
+    
+    const fileName = "echonetlite2mqtt_logs_internalsStatus.zip";
+    res.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+    res.setHeader("Content-Type", "application/zip");
+    res.setHeader("Content-Disposition", `attachment;filename=${fileName}`);
+    res.send(buffer);
   }
 
 
