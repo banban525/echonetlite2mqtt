@@ -66,11 +66,6 @@ export class MqttController
         {
           const deviceId = match[1];
           const propertyName = match[2];
-          if(this.deviceStore.exists(deviceId)===false)
-          {
-            //error
-            return;
-          }
 
           const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
           if(foundDevice===undefined){
@@ -98,11 +93,6 @@ export class MqttController
         {
           const deviceId = match[1];
           const propertyName = match[2];
-          if(this.deviceStore.exists(deviceId)===false)
-          {
-            //error
-            return;
-          }
 
           const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
           if(foundDevice===undefined){
