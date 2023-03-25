@@ -18,12 +18,20 @@ mqtt:
         - "dry"
         - "auto"
       mode_command_template: >-
-        {% set values = { 'off':'off', 'cool':'cooling',  'heat':'heating', 'dry':'dehumidification', 'fan_only':'circulation', 'auto':'auto'} %}
-        {{ values[value] if value in values.keys() else 'off' }}
-      payload_on: "true"
-      payload_off: "false"
-      power_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationStatus/set"
-      mode_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationMode/set"
+        {% if value == 'off' %}
+          {"operationStatus":"false"}
+        {% elif value == 'cool' %}
+          {"operationStatus":"true","operationMode":"cooling"}
+        {% elif value == 'heat' %}
+          {"operationStatus":"true","operationMode":"heating"}
+        {% elif value == 'dry' %}
+          {"operationStatus":"true","operationMode":"dehumidification"}
+        {% elif value == 'auto' %}
+          {"operationStatus":"true","operationMode":"auto"}
+        {% else %}
+          {}
+        {% endif %}
+      mode_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/set"
       temperature_state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/targetTemperature"
       temperature_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/targetTemperature/set"
       current_temperature_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/roomTemperature"
@@ -31,9 +39,16 @@ mqtt:
       mode_state_template: >-
         {% if value_json.operationStatus == 'false' %}
           off
+        {% elif value_json.operationMode == 'cooling' %}
+          cool
+        {% elif value_json.operationMode == 'heating' %}
+          heat
+        {% elif value_json.operationMode == 'dehumidification' %}
+          dry
+        {% elif value_json.operationMode == 'auto' %}
+          auto
         {% else %}
-          {% set values = { 'off':'off', 'cooling':'cool',  'heating':'heat', 'dehumidification':'dry', 'circulation':'fan_only', 'auto':'auto'} %}
-          {{ values[value_json.operationMode] if value_json.operationMode in values.keys() else 'off' }}
+          off
         {% endif %}
 ```
 
@@ -46,33 +61,44 @@ mqtt:
 ### settings examples for Home Assistant
 
 ```yml
-climate:
-  - platform: mqtt
-    name: air-conditioner
-    icon: mdi:air-conditioner
-    modes:
-      - "off"
-      - "cool"
-      - "heat"
-      - "dry"
-    mode_command_template: >-
-      {% set values = { 'off':'off', 'cool':'cooling',  'heat':'heating', 'dry':'dehumidification'} %}
-      {{ values[value] if value in values.keys() else 'off' }}
-    payload_on: "true"
-    payload_off: "false"
-    power_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationStatus/set"
-    mode_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationMode/set"
-    temperature_state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/targetTemperature"
-    temperature_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/targetTemperature/set"
-    current_temperature_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/roomTemperature"
-    mode_state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties"
-    mode_state_template: >-
-      {% if value_json.operationStatus == false %}
-        off
-      {% else %}
-        {% set values = { 'off':'off', 'cooling':'cool',  'heating':'heat', 'dehumidification':'dry'} %}
-        {{ values[value_json.operationMode] if value_json.operationMode in values.keys() else 'off' }}
-      {% endif %}
+mqtt:
+  climate:
+    - name: "air-conditioner"
+      icon: mdi:air-conditioner
+      modes:
+        - "off"
+        - "cool"
+        - "heat"
+        - "dry"
+      mode_command_template: >-
+        {% if value == 'off' %}
+          {"operationStatus":"false"}
+        {% elif value == 'cool' %}
+          {"operationStatus":"true","operationMode":"cooling"}
+        {% elif value == 'heat' %}
+          {"operationStatus":"true","operationMode":"heating"}
+        {% elif value == 'dry' %}
+          {"operationStatus":"true","operationMode":"dehumidification"}
+        {% else %}
+          {}
+        {% endif %}
+      mode_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/set"
+      temperature_state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/targetTemperature"
+      temperature_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/targetTemperature/set"
+      current_temperature_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/roomTemperature"
+      mode_state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties"
+      mode_state_template: >-
+        {% if value_json.operationStatus == 'false' %}
+          off
+        {% elif value_json.operationMode == 'cooling' %}
+          cool
+        {% elif value_json.operationMode == 'heating' %}
+          heat
+        {% elif value_json.operationMode == 'dehumidification' %}
+          dry
+        {% else %}
+          off
+        {% endif %}
 ```
 
 
@@ -83,33 +109,54 @@ climate:
 ### settings examples for Home Assistant
 
 ```yml
-climate:
-  - platform: mqtt
-    name: air-conditioner
-    icon: mdi:air-conditioner
-    modes:
-      - "off"
-      - "cool"
-      - "heat"
-      - "dry"
-    mode_command_template: >-
-      {% set values = { 'off':'off', 'cool':'cooling',  'heat':'heating', 'dry':'dehumidification'} %}
-      {{ values[value] if value in values.keys() else 'off' }}
-    payload_on: "true"
-    payload_off: "false"
-    power_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationStatus/set"
-    mode_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationMode/set"
-    temperature_state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/targetTemperature"
-    temperature_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/targetTemperature/set"
-    current_temperature_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/roomTemperature"
-    mode_state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties"
-    mode_state_template: >-
-      {% if value_json.operationStatus == false %}
-        off
-      {% else %}
-        {% set values = { 'off':'off', 'cooling':'cool',  'heating':'heat', 'dehumidification':'dry'} %}
-        {{ values[value_json.operationMode] if value_json.operationMode in values.keys() else 'off' }}
-      {% endif %}
+mqtt:
+  climate:
+    - name: "emulator-aircon"
+      icon: mdi:air-conditioner
+      modes:
+        - "off"
+        - "cool"
+        - "heat"
+        - "dry"
+        - "fan_only"
+        - "auto"
+      mode_command_template: >-
+        {% if value == 'off' %}
+          {"operationStatus":"false"}
+        {% elif value == 'cool' %}
+          {"operationStatus":"true","operationMode":"cooling"}
+        {% elif value == 'heat' %}
+          {"operationStatus":"true","operationMode":"heating"}
+        {% elif value == 'dry' %}
+          {"operationStatus":"true","operationMode":"dehumidification"}
+        {% elif value == 'fan_only' %}
+          {"operationStatus":"true","operationMode":"circulation"}
+        {% elif value == 'auto' %}
+          {"operationStatus":"true","operationMode":"auto"}
+        {% else %}
+          {}
+        {% endif %}
+      mode_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00000000000000000000000000000000_013001/properties/set"
+      temperature_state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00000000000000000000000000000000_013001/properties/targetTemperature"
+      temperature_command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00000000000000000000000000000000_013001/properties/targetTemperature/set"
+      current_temperature_topic: "echonetlite2mqtt/elapi/v2/devices/fe00000000000000000000000000000000_001101/properties/value"
+      mode_state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00000000000000000000000000000000_013001/properties"
+      mode_state_template: >-
+        {% if value_json.operationStatus == 'false' %}
+          off
+        {% elif value_json.operationMode == 'cooling' %}
+          cool
+        {% elif value_json.operationMode == 'heating' %}
+          heat
+        {% elif value_json.operationMode == 'dehumidification' %}
+          dry
+        {% elif value_json.operationMode == 'circulation' %}
+          fan_only
+        {% elif value_json.operationMode == 'auto' %}
+          auto
+        {% else %}
+          off
+        {% endif %}
 ```
 
 
@@ -148,20 +195,20 @@ mqtt:
 ### settings examples for Home Assistant
 
 ```yml
-cover:
-  - platform: mqtt
-    command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/openCloseOperation/set"
-    device_class: shutter
-    name: shutter1
-    payload_close: "close"
-    payload_open: "open"
-    payload_stop: "stop"
-    state_closed: "fullyClosed"
-    state_closing: "closing"
-    state_open: "fullyOpen"
-    state_opening: "opening"
-    state_stopped: "stoppedHalfway"
-    state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/openCloseStatus"
+mqtt:
+  cover:
+    - name: shutter1
+      command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/openCloseOperation/set"
+      device_class: shutter
+      payload_close: "close"
+      payload_open: "open"
+      payload_stop: "stop"
+      state_closed: "fullyClosed"
+      state_closing: "closing"
+      state_open: "fullyOpen"
+      state_opening: "opening"
+      state_stopped: "stoppedHalfway"
+      state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/openCloseStatus"
 ```
 
 
@@ -291,17 +338,17 @@ sensor:
 ### settings examples for Home Assistant
 
 ```yml
-lock:
-  - platform: mqtt
-    name: Frontdoor-lock
-    state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationStatus"
-    command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationStatus/set"
-    payload_lock: "false"
-    payload_unlock: "true"
-    state_locked: "false"
-    state_unlocked: "true"
-    optimistic: false
-    qos: 1
-    retain: true
+mqtt:
+  lock:
+    - name: Frontdoor-lock
+      state_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationStatus"
+      command_topic: "echonetlite2mqtt/elapi/v2/devices/fe00-your-device-id-00000000000000/properties/operationStatus/set"
+      payload_lock: "false"
+      payload_unlock: "true"
+      state_locked: "false"
+      state_unlocked: "true"
+      optimistic: false
+      qos: 1
+      retain: true
 ```
 

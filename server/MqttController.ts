@@ -108,6 +108,56 @@ export class MqttController
           this.firePropertyRequestedEvent(deviceId, propertyName);
         }
       }
+      // multiple sets
+      {
+        const regex = RegExp(`${this.baseTopic}/([^/]+)/properties/set`);
+        const match = topic.match(regex);
+        if(match!==null)
+        {
+          const deviceId = match[1];
+
+          const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
+          if(foundDevice===undefined){
+            //error
+            return;
+          }
+          
+          //データのパース
+          const bodyText = payload.toString();
+          let body:{[key:string]:any}|undefined = undefined;
+          try
+          {
+            body = JSON.parse(bodyText);
+          }
+          catch(err)
+          {
+            console.log(`[MQTT] ERROR can not parse ${bodyText}`);
+            return;
+          }
+          if(body === undefined)
+          {
+            // error
+            return;
+          }
+          for(const propertyName in body)
+          {
+            if(body[propertyName]===undefined)
+            {
+              continue;
+            }
+            const propertyBodyText = body[propertyName].toString();
+
+            const property = foundDevice.properties.find(_=>_.name === propertyName);
+            if(property===undefined){
+              console.log(`[MQTT] ERROR: not found property ${propertyName} in ${deviceId}`);
+              return;
+            }
+
+            const newValue = this.parseValueFromText(propertyBodyText, property.schema.data);
+            this.firePropertyChnagedEvent(deviceId, propertyName, newValue);
+          }
+        }
+      }
     });
   }
 
