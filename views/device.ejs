@@ -22,7 +22,12 @@
         <dd class="col-10" style="margin-bottom: 0px;"><%= context.mqttTopic %></dd>
       </dl>
       <h3>All Properties</h3>
-
+      <dl class="row">
+        <dt class="col-2" style="margin-bottom: 0px;">get mqtt topic</dt>
+        <dd class="col-10" style="margin-bottom: 0px;"><%= context.mqttTopic %>/properties</dd>
+        <dt class="col-2" style="margin-bottom: 0px;">set mqtt topic</dt>
+        <dd class="col-10" style="margin-bottom: 0px;"><%= context.mqttTopic %>/properties/set</dd>
+      </dl>
       <div class="accordion" id="accordionExample1">
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne1">

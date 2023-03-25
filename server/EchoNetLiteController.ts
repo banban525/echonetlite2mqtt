@@ -167,8 +167,12 @@ export class EchoNetLiteController{
       {
         epc = epc.replace(/^0x/gi, "");
       }
-      console.log(`[ECHONETLite] send ${id.ip} ${id.eoj} ${EL.SETC} ${epc} ${echoNetData}`);
-      EL.sendOPC1(id.ip, "05ff01", id.eoj, EL.SETC, epc, echoNetData);
+      setTimeout(() => {
+        console.log(`[ECHONETLite] send ${id.ip} ${id.eoj} ${EL.SETC} ${epc} ${echoNetData}`);
+        EL.sendOPC1(id.ip, "05ff01", id.eoj, EL.SETC, epc, echoNetData);
+        EL.decreaseWaitings();
+      }, EL.autoGetDelay * (EL.autoGetWaitings+1));
+      EL.increaseWaitings();
     }
     start = ():void=>{
       EL.search();
@@ -188,8 +192,13 @@ export class EchoNetLiteController{
       {
         epc = epc.replace(/^0x/gi, "");
       }
-      console.log(`[ECHONETLite] send ${id.ip} ${id.eoj} ${EL.GET} ${epc}`);
-      EL.sendOPC1(id.ip, "05ff01", id.eoj, EL.GET, epc, [0x00]);
+      setTimeout(() => {
+        console.log(`[ECHONETLite] send ${id.ip} ${id.eoj} ${EL.GET} ${epc}`);
+        EL.sendOPC1(id.ip, "05ff01", id.eoj, EL.GET, epc, [0x00]);
+        EL.decreaseWaitings();
+      }, EL.autoGetDelay * (EL.autoGetWaitings+1));
+      EL.increaseWaitings();
+
     }
 
     public getRawData = ():unknown=>
