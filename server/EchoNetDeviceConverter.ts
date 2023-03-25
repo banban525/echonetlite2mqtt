@@ -255,7 +255,7 @@ export default class EchoNetDeviceConverter
   }
     
     
-  private convertGetPropertyNoList = (ip:string, eoj:string, facilities:facilitiesType): string[]|undefined => {
+  public convertGetPropertyNoList = (ip:string, eoj:string, facilities:facilitiesType): string[]|undefined => {
   
     const getPropertyListText = facilities[ip][eoj]["9f"];
     if(getPropertyListText===undefined)

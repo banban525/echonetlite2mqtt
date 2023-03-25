@@ -3,14 +3,18 @@ import os from "os";
 import ip from "ip";
 import { AliasOption, Device, DeviceAlias, DeviceId } from "./Property";
 import EchoNetDeviceConverter from "./EchoNetDeviceConverter";
+import { EchoNetLiteRawController } from "./EchoNetLiteRawController";
 
 
 export class EchoNetLiteController{
   
   private readonly aliasOption: AliasOption;
+  private readonly echonetLiteRawController:EchoNetLiteRawController;
     constructor(echonetTargetNetwork:string, intervalToGetProperties:number, aliasOption: AliasOption){
   
       this.aliasOption = aliasOption;
+      const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
+      this.echonetLiteRawController = new EchoNetLiteRawController(deviceConverter);
       let usedIpByEchoNet = "";
       if (echonetTargetNetwork.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+/)) {
         const interfaces = os.networkInterfaces();
@@ -25,7 +29,6 @@ export class EchoNetLiteController{
         }
       }
   
-      const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
   
       var objList = ['05ff01'];
   
@@ -77,6 +80,8 @@ export class EchoNetLiteController{
           }
         }
   
+
+        this.echonetLiteRawController.reveivePacketProc(rinfo, els);
       }, 4, {v4:usedIpByEchoNet, autoGetDelay:intervalToGetProperties, autoGetProperties:true});
       
       
@@ -108,6 +113,8 @@ export class EchoNetLiteController{
           // }
         
       });
+
+      this.echonetLiteRawController.start();
     }
     detectedDeviceIds:DeviceId[] = [];
     getDetectedDeviceIds = ():DeviceId[]=>{

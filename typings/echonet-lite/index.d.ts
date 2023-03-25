@@ -64,8 +64,8 @@ declare module "echonet-lite" {
   let tid: number[];
   let ignoreMe: boolean;
   let autoGetProperties: boolean;
-  let autoGetDelay: boolean;
-  let autoGetWaitings: boolean;
+  let autoGetDelay: number;
+  let autoGetWaitings: number;
   let debugMode: boolean;
   let facilities: facilitiesType;
   let identificationNumbers: { id: string; ip: string; OBJ: string }[];
