@@ -82,7 +82,7 @@ export class MqttController
           const bodyText = payload.toString();
           const newValue = this.parseValueFromText(bodyText, property.schema.data);
 
-          this.firePropertyChnagedEvent(deviceId, propertyName, newValue);
+          this.firePropertyChnagedEvent(deviceId, propertyName, newValue, HoldOption.empty);
         }
       }
       // request
@@ -139,12 +139,28 @@ export class MqttController
             // error
             return;
           }
+          let holdOption = HoldOption.empty;
+          if("echonetlite2mqtt.hold" in body)
+          {
+            const holdOptionUnknown = body["echonetlite2mqtt.hold"];
+            if(holdOptionUnknown.checkInterval === undefined)
+            {
+              holdOptionUnknown.checkInterval = 1;
+            }
+
+            holdOption = HoldOption.asType(body["echonetlite2mqtt.hold"]) ?? HoldOption.empty;
+          }
           for(const propertyName in body)
           {
             if(body[propertyName]===undefined)
             {
               continue;
             }
+            if(propertyName === "echonetlite2mqtt.hold" )
+            {
+              continue;
+            }
+
             const propertyBodyText = body[propertyName].toString();
 
             const property = foundDevice.properties.find(_=>_.name === propertyName);
@@ -154,7 +170,7 @@ export class MqttController
             }
 
             const newValue = this.parseValueFromText(propertyBodyText, property.schema.data);
-            this.firePropertyChnagedEvent(deviceId, propertyName, newValue);
+            this.firePropertyChnagedEvent(deviceId, propertyName, newValue, holdOption);
           }
         }
       }
@@ -162,12 +178,12 @@ export class MqttController
   }
 
 
-  propertyChangedEventListeners:((deviceId:string, propertyName:string, value:any)=>void)[]=[];
-  addPropertyChnagedEvent = (event:(deviceId:string, propertyName:string, value:any)=>void):void =>{
+  propertyChangedEventListeners:((deviceId:string, propertyName:string, value:any, holdOption:HoldOption)=>void)[]=[];
+  addPropertyChnagedEvent = (event:(deviceId:string, propertyName:string, value:any, holdOption:HoldOption)=>void):void =>{
     this.propertyChangedEventListeners.push(event);
   };
-  firePropertyChnagedEvent = (deviceId:string, propertyName:string, value:any):void=>{
-    this.propertyChangedEventListeners.forEach(_=>_(deviceId, propertyName, value));
+  firePropertyChnagedEvent = (deviceId:string, propertyName:string, value:any, holdOption:HoldOption):void=>{
+    this.propertyChangedEventListeners.forEach(_=>_(deviceId, propertyName, value, holdOption));
   }
 
   propertyRequestedEventListeners:((deviceId:string, propertyName:string)=>void)[]=[];
@@ -496,3 +512,33 @@ export class MqttController
     }
   };
 }
+
+export interface HoldOption
+{
+  holdTime:number;
+  checkInterval:number;
+}
+
+export class HoldOption
+{
+  static readonly empty:HoldOption = {checkInterval:0, holdTime: 0};
+  static validateType(obj: unknown): obj is HoldOption {
+    if (typeof obj !== 'object' || obj === null) {
+      return false;
+    }
+    const { holdTime: holdTime, checkInterval} = obj as HoldOption;
+    if (typeof holdTime !== 'number' || typeof checkInterval !== "number") {
+      return false;
+    }
+    return true;
+  }
+  static asType(obj:unknown): HoldOption|undefined
+  {
+    if(this.validateType(obj))
+    {
+      return obj;
+    }
+    return undefined;
+  }
+}
+

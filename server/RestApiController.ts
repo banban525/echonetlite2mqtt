@@ -600,6 +600,7 @@ export class RestApiController
     zip.addFile("alldevices.json",Buffer.from(JSON.stringify(this.deviceStore.getAll(), null, 2)));
     zip.addFile("logs.json", Buffer.from(JSON.stringify(this.logRepository.logs, null, 2)))
     zip.addFile("ELRawData.json", Buffer.from(JSON.stringify(this.echoNetLiteController.getRawData(), null, 2)))
+    zip.addFile("echoNetLiteController.json", Buffer.from(JSON.stringify(this.echoNetLiteController.getInternalStatus(), null, 2)))
 
     const buffer = await zip.toBufferPromise();
     

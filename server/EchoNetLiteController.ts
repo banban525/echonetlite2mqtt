@@ -4,17 +4,22 @@ import ip from "ip";
 import { AliasOption, Device, DeviceAlias, DeviceId } from "./Property";
 import EchoNetDeviceConverter from "./EchoNetDeviceConverter";
 import { EchoNetLiteRawController } from "./EchoNetLiteRawController";
+import { EchoNetHoldController } from "./EchoNetHoldController";
+import { HoldOption } from "./MqttController";
 
 
 export class EchoNetLiteController{
   
   private readonly aliasOption: AliasOption;
   private readonly echonetLiteRawController:EchoNetLiteRawController;
+  private readonly holdController:EchoNetHoldController;
     constructor(echonetTargetNetwork:string, intervalToGetProperties:number, aliasOption: AliasOption){
   
       this.aliasOption = aliasOption;
       const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
       this.echonetLiteRawController = new EchoNetLiteRawController(deviceConverter);
+      this.holdController = new EchoNetHoldController({request:this.requestDeviceProperty, set:this.setDevicePropertyPrivate, isBusy:()=>EL.autoGetWaitings >= 1});
+
       let usedIpByEchoNet = "";
       if (echonetTargetNetwork.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+/)) {
         const interfaces = os.networkInterfaces();
@@ -61,6 +66,7 @@ export class EchoNetLiteController{
             }
             const value = deviceConverter.getPropertyValue(deviceId, property);
             this.firePropertyChnagedEvent(deviceId, property.name, value);
+            this.holdController.receivedProperty(deviceId, property.name, value);
           }
         }
         if(els.ESV === EL.INF)
@@ -145,8 +151,28 @@ export class EchoNetLiteController{
     fireDeviceDetected = ():void=>{
       this.deviceDetectedListeners.forEach(_=>_());
     }
-    
-    setDeviceProperty = (id:DeviceId, propertyName:string, newValue:any):void =>{
+
+    setDeviceProperty = (id:DeviceId, propertyName:string, newValue:any, holdOption:HoldOption|undefined=undefined):void =>
+    {
+      if(holdOption===undefined)
+      {
+        holdOption = HoldOption.empty;
+      }
+
+      this.setDevicePropertyPrivate(id, propertyName, newValue);
+
+      if(holdOption.holdTime > 0)
+      {
+        this.holdController.setHold(id, propertyName, newValue, holdOption);
+      }
+      else
+      {
+        this.holdController.clearHold(id, propertyName);
+      }
+    };
+
+    setDevicePropertyPrivate = (id:DeviceId, propertyName:string, newValue:any):void =>
+    {
       const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
       const property = deviceConverter.getProperty(id, propertyName);
   
@@ -204,6 +230,13 @@ export class EchoNetLiteController{
     public getRawData = ():unknown=>
     {
       return EL.facilities;
+    }
+
+    public getInternalStatus = ():unknown=>
+    {
+      return {
+        hold: this.holdController.getInternalStatus()
+      }
     }
   }
   

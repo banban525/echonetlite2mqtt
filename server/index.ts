@@ -1,5 +1,5 @@
 import { AliasOption, Device, DeviceId } from "./Property";
-import { MqttController } from "./MqttController";
+import { HoldOption, MqttController } from "./MqttController";
 import { DeviceStore } from "./DeviceStore";
 import { EchoNetLiteController } from "./EchoNetLiteController";
 import { RestApiController } from "./RestApiController";
@@ -310,7 +310,7 @@ restApiController.addPropertyChangedRequestEvent((deviceId:string, propertyName:
   logger.output(`[RESTAPI]     prop changed: ${deviceNameText} ${propertyName} ${valueText}`);
   eventRepository.newEvent(`LOG`);
 
-  echoNetListController.setDeviceProperty({id: deviceId, ip: device.ip, eoj:device.eoj}, propertyName, newValue);
+  echoNetListController.setDeviceProperty({id: device.id, ip: device.ip, eoj:device.eoj}, propertyName, newValue);
 });
 restApiController.addPropertyRequestedRequestEvent((deviceId:string, propertyName:string):void=>{
   const device = deviceStore.getFromNameOrId(deviceId);
@@ -332,7 +332,7 @@ restApiController.addPropertyRequestedRequestEvent((deviceId:string, propertyNam
 });
 
 const mqttController = new MqttController(deviceStore, mqttBroker, mqttOption, mqttBaseTopic);
-mqttController.addPropertyChnagedEvent((deviceId:string, propertyName:string, value:any):void=>{
+mqttController.addPropertyChnagedEvent((deviceId:string, propertyName:string, value:any, holdOption:HoldOption):void=>{
   const device = deviceStore.getFromNameOrId(deviceId);
   if(device === undefined){
     logger.output('[MQTT] device not found : ' + deviceId)
@@ -343,13 +343,17 @@ mqttController.addPropertyChnagedEvent((deviceId:string, propertyName:string, va
     logger.output('[MQTT] property not found : ' + propertyName)
     return;
   }
+  if(holdOption.holdTime > 0)
+  {
+    logger.output(`[MQTT] start hold value : ${deviceId} ${propertyName} ${value} holdOption=${JSON.stringify(holdOption)}`);
+  }
 
   const deviceNameText = (device.name + "                                  ").slice(0, 34);
   const valueText = typeof(value) === "object" ? JSON.stringify(value) : value.toString();
   logger.output(`[MQTT]        prop changed: ${deviceNameText} ${propertyName} ${valueText}`);
   eventRepository.newEvent(`LOG`);
 
-  echoNetListController.setDeviceProperty({id: deviceId, ip: device.ip, eoj:device.eoj}, propertyName, value);
+  echoNetListController.setDeviceProperty({id: device.id, ip: device.ip, eoj:device.eoj}, propertyName, value, holdOption);
 });
 mqttController.addPropertyRequestedEvent((deviceId:string, propertyName:string):void=>{
   const device = deviceStore.getFromNameOrId(deviceId);
