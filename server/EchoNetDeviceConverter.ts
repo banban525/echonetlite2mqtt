@@ -1,7 +1,8 @@
-import EL, { facilitiesType } from "echonet-lite";
+import { facilitiesType } from "echonet-lite";
 import { AliasOption, Device, DeviceAlias, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
 import { EchoNetPropertyConverter } from "./EchoNetPropertyConverter";
 import { getUtcNowDateTimeText } from "./datetimeLib";
+import { EchoNetCommunicator } from "./EchoNetCommunicator";
 
 export default class EchoNetDeviceConverter
 {
@@ -439,10 +440,11 @@ export default class EchoNetDeviceConverter
   }
 
   public getPropertyWithEpc = (deviceId: DeviceId, epc:string): Property|undefined =>{
-    if((deviceId.ip in EL.facilities) === false){
+    const facilities = EchoNetCommunicator.getFacilities();
+    if((deviceId.ip in facilities) === false){
       return undefined;
     }
-    if((deviceId.eoj in EL.facilities[deviceId.ip]) === false)
+    if((deviceId.eoj in facilities[deviceId.ip]) === false)
     {
       return undefined;
     }
@@ -463,10 +465,11 @@ export default class EchoNetDeviceConverter
   }
 
   public getProperty = (deviceId: DeviceId, propertyName:string): Property|undefined =>{
-    if((deviceId.ip in EL.facilities) === false){
+    const facilities = EchoNetCommunicator.getFacilities();
+    if((deviceId.ip in facilities) === false){
       return undefined;
     }
-    if((deviceId.eoj in EL.facilities[deviceId.ip]) === false)
+    if((deviceId.eoj in facilities[deviceId.ip]) === false)
     {
       return undefined;
     }
@@ -497,13 +500,14 @@ export default class EchoNetDeviceConverter
   }
 
   public propertyToEchoNetData = (deviceId:DeviceId, propertyName:string, value:any):string|undefined => {
-    if((deviceId.ip in EL.facilities) === false){
-      console.log(`propertyToEchoNetData (deviceId.ip in EL.facilities) === false`)
+    const facilities = EchoNetCommunicator.getFacilities();
+    if((deviceId.ip in facilities) === false){
+      console.log(`propertyToEchoNetData (deviceId.ip in echonet facilities) === false`)
       return undefined;
     }
-    if((deviceId.eoj in EL.facilities[deviceId.ip]) === false)
+    if((deviceId.eoj in facilities[deviceId.ip]) === false)
     {
-      console.log(`propertyToEchoNetData (deviceId.eoj in EL.facilities[deviceId.ip]) === false`)
+      console.log(`propertyToEchoNetData (deviceId.eoj in echonet facilities[deviceId.ip]) === false`)
       return undefined;
     }
 
@@ -534,7 +538,7 @@ export default class EchoNetDeviceConverter
 
   public getPropertyValue = (deviceId:DeviceId, property:Property): unknown|undefined=>{
 
-    const echoNetRawData = EL.facilities[deviceId.ip][deviceId.eoj];
+    const echoNetRawData = EchoNetCommunicator.getFacilities()[deviceId.ip][deviceId.eoj];
     if((property.epc.substring(2).toLowerCase() in echoNetRawData)===false)
     {
       return undefined;

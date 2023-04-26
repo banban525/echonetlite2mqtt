@@ -1,4 +1,4 @@
-import EL, { eldata,rinfo } from "echonet-lite";
+import { eldata,rinfo } from "echonet-lite";
 import os from "os";
 import ip from "ip";
 import { AliasOption, Device, DeviceAlias, DeviceId } from "./Property";
@@ -6,6 +6,7 @@ import EchoNetDeviceConverter from "./EchoNetDeviceConverter";
 import { EchoNetLiteRawController } from "./EchoNetLiteRawController";
 import { EchoNetHoldController } from "./EchoNetHoldController";
 import { HoldOption } from "./MqttController";
+import { EchoNetCommunicator, ELSV } from "./EchoNetCommunicator";
 
 
 export class EchoNetLiteController{
@@ -18,7 +19,7 @@ export class EchoNetLiteController{
       this.aliasOption = aliasOption;
       const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
       this.echonetLiteRawController = new EchoNetLiteRawController(deviceConverter);
-      this.holdController = new EchoNetHoldController({request:this.requestDeviceProperty, set:this.setDevicePropertyPrivate, isBusy:()=>EL.autoGetWaitings >= 1});
+      this.holdController = new EchoNetHoldController({request:this.requestDeviceProperty, set:this.setDevicePropertyPrivate, isBusy:()=>EchoNetCommunicator.getSendQueueLength() >= 1});
 
       let usedIpByEchoNet = "";
       if (echonetTargetNetwork.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+/)) {
@@ -36,23 +37,21 @@ export class EchoNetLiteController{
   
   
       var objList = ['05ff01'];
-  
-      EL.initialize(objList, ( rinfo:rinfo, els:eldata ):void=>{
+      EchoNetCommunicator.initialize(objList, ( rinfo:rinfo, els:eldata ):void=>{
         // if(els.SEOJ === "026302")
         // {
         //   const b = JSON.stringify(els);
         //   console.log(`recieved:` + b);  
         // }
         
-        if(els.ESV === EL.SET_RES)
+        if(els.ESV === ELSV.SET_RES)
         {
           for(const propertyCode in els.DETAILs)
           {
-            //console.log(`sendOPC1 ${rinfo.address} ${els.SEOJ} ${EL.GET} ${propertyCode} `);
-            EL.sendOPC1(rinfo.address, "05ff01", els.SEOJ, EL.GET, propertyCode, "");
+            EchoNetCommunicator.sendNow(rinfo.address, "05ff01", els.SEOJ, ELSV.GET, propertyCode, "");
           }
         }
-        if(els.ESV === EL.GET_RES)
+        if(els.ESV === ELSV.GET_RES)
         {
           const deviceId = this.detectedDeviceIds.find(_=>_.ip === rinfo.address &&  _.eoj === els.SEOJ);
           if(deviceId===undefined){
@@ -69,7 +68,7 @@ export class EchoNetLiteController{
             this.holdController.receivedProperty(deviceId, property.name, value);
           }
         }
-        if(els.ESV === EL.INF)
+        if(els.ESV === ELSV.INF)
         {
           const deviceId = this.detectedDeviceIds.find(_=>_.ip === rinfo.address &&  _.eoj === els.SEOJ);
           if(deviceId===undefined){
@@ -90,9 +89,8 @@ export class EchoNetLiteController{
         this.echonetLiteRawController.reveivePacketProc(rinfo, els);
       }, 4, {v4:usedIpByEchoNet, autoGetDelay:intervalToGetProperties, autoGetProperties:true});
       
-      
-      EL.setObserveFacilities(1000, () => {
-        const idList = deviceConverter.getDeviceIdList(EL.facilities);
+      EchoNetCommunicator.setObserveFacilities(1000, () => {
+        const idList = deviceConverter.getDeviceIdList(EchoNetCommunicator.getFacilities());
   
         let detected=false;
         for(const id of idList)
@@ -106,18 +104,6 @@ export class EchoNetLiteController{
         if(detected){
           this.fireDeviceDetected();
         }
-        //console.dir(EL.facilities);
-          // if(deviceStore.exists(id.id) === false)
-          // {
-          //   const device = deviceConverter.createDevice(id, EL.facilities);
-          //   if(device !== undefined)
-          //   {
-          //     deviceStore.add(device);
-          //     //deviceListTemp[id.id] = device;
-          //     console.dir(device.propertiesValue);
-          //   }
-          // }
-        
       });
 
       this.echonetLiteRawController.start();
@@ -130,7 +116,7 @@ export class EchoNetLiteController{
     getDevice = (id:DeviceId):Device|undefined => {
       const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
   
-      const device = deviceConverter.createDevice(id, EL.facilities);
+      const device = deviceConverter.createDevice(id, EchoNetCommunicator.getFacilities());
       return device;
     }
   
@@ -193,15 +179,10 @@ export class EchoNetLiteController{
       {
         epc = epc.replace(/^0x/gi, "");
       }
-      setTimeout(() => {
-        console.log(`[ECHONETLite] send ${id.ip} ${id.eoj} ${EL.SETC} ${epc} ${echoNetData}`);
-        EL.sendOPC1(id.ip, "05ff01", id.eoj, EL.SETC, epc, echoNetData);
-        EL.decreaseWaitings();
-      }, EL.autoGetDelay * (EL.autoGetWaitings+1));
-      EL.increaseWaitings();
+      EchoNetCommunicator.send(id.ip, "05ff01", id.eoj, ELSV.SETC, epc, echoNetData);
     }
     start = ():void=>{
-      EL.search();
+      EchoNetCommunicator.search();
     }
 
     requestDeviceProperty = (id:DeviceId, propertyName:string):void =>{
@@ -218,18 +199,12 @@ export class EchoNetLiteController{
       {
         epc = epc.replace(/^0x/gi, "");
       }
-      setTimeout(() => {
-        console.log(`[ECHONETLite] send ${id.ip} ${id.eoj} ${EL.GET} ${epc}`);
-        EL.sendOPC1(id.ip, "05ff01", id.eoj, EL.GET, epc, [0x00]);
-        EL.decreaseWaitings();
-      }, EL.autoGetDelay * (EL.autoGetWaitings+1));
-      EL.increaseWaitings();
-
+      EchoNetCommunicator.send(id.ip, "05ff01", id.eoj, ELSV.GET, epc, [0x00]);
     }
 
     public getRawData = ():unknown=>
     {
-      return EL.facilities;
+      return EchoNetCommunicator.getFacilities();
     }
 
     public getInternalStatus = ():unknown=>
