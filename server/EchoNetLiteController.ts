@@ -14,11 +14,12 @@ export class EchoNetLiteController{
   private readonly aliasOption: AliasOption;
   private readonly echonetLiteRawController:EchoNetLiteRawController;
   private readonly holdController:EchoNetHoldController;
+  private readonly deviceConverter:EchoNetDeviceConverter;
     constructor(echonetTargetNetwork:string, intervalToGetProperties:number, aliasOption: AliasOption){
   
       this.aliasOption = aliasOption;
-      const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
-      this.echonetLiteRawController = new EchoNetLiteRawController(deviceConverter);
+      this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
+      this.echonetLiteRawController = new EchoNetLiteRawController(this.deviceConverter);
       this.holdController = new EchoNetHoldController({request:this.requestDeviceProperty, set:this.setDevicePropertyPrivate, isBusy:()=>EchoNetCommunicator.getSendQueueLength() >= 1});
 
       let usedIpByEchoNet = "";
@@ -34,83 +35,62 @@ export class EchoNetLiteController{
           usedIpByEchoNet = matchedNetworkAddresses[0]?.address ?? "";
         }
       }
-  
-  
-      var objList = ['05ff01'];
-      EchoNetCommunicator.initialize(objList, ( rinfo:rinfo, els:eldata ):void=>{
-        // if(els.SEOJ === "026302")
-        // {
-        //   const b = JSON.stringify(els);
-        //   console.log(`recieved:` + b);  
-        // }
-        
-        if(els.ESV === ELSV.SET_RES)
-        {
-          for(const propertyCode in els.DETAILs)
-          {
-            EchoNetCommunicator.sendNow(rinfo.address, "05ff01", els.SEOJ, ELSV.GET, propertyCode, "");
-          }
-        }
-        if(els.ESV === ELSV.GET_RES)
-        {
-          const deviceId = this.detectedDeviceIds.find(_=>_.ip === rinfo.address &&  _.eoj === els.SEOJ);
-          if(deviceId===undefined){
-            return;
-          }
-          for(const propertyCode in els.DETAILs)
-          {
-            const property = deviceConverter.getPropertyWithEpc(deviceId, propertyCode);
-            if(property===undefined){
-              continue;
-            }
-            const value = deviceConverter.getPropertyValue(deviceId, property);
-            this.firePropertyChnagedEvent(deviceId, property.name, value);
-            this.holdController.receivedProperty(deviceId, property.name, value);
-          }
-        }
-        if(els.ESV === ELSV.INF)
-        {
-          const deviceId = this.detectedDeviceIds.find(_=>_.ip === rinfo.address &&  _.eoj === els.SEOJ);
-          if(deviceId===undefined){
-            return;
-          }
-          for(const propertyCode in els.DETAILs)
-          {
-            const property = deviceConverter.getPropertyWithEpc(deviceId, propertyCode);
-            if(property===undefined){
-              continue;
-            }
-            const value = deviceConverter.getPropertyValue(deviceId, property);
-            this.firePropertyChnagedEvent(deviceId, property.name, value);
-          }
-        }
-  
-
+      EchoNetCommunicator.addSetResponseHandler(this.ReceivedSetResponse);
+      EchoNetCommunicator.addGetResponseHandler(this.ReceivedGetResponse);
+      EchoNetCommunicator.addInfoHandler(this.ReceivedInfo);
+      EchoNetCommunicator.addReveivedHandler(( rinfo:rinfo, els:eldata ):void=>{
         this.echonetLiteRawController.reveivePacketProc(rinfo, els);
-      }, 4, {v4:usedIpByEchoNet, autoGetDelay:intervalToGetProperties, autoGetProperties:true});
-      
-      EchoNetCommunicator.setObserveFacilities(1000, () => {
-        const idList = deviceConverter.getDeviceIdList(EchoNetCommunicator.getFacilities());
-  
-        let detected=false;
-        for(const id of idList)
-        {
-          const foundId = this.detectedDeviceIds.find(_=>_.id === id.id);
-          if(foundId===undefined){
-            this.detectedDeviceIds.push(id);
-            detected=true;
-          }
-        }
-        if(detected){
-          this.fireDeviceDetected();
-        }
       });
+
+      var objList = ['05ff01'];
+      EchoNetCommunicator.initialize(objList, 4, {v4:usedIpByEchoNet, autoGetDelay:intervalToGetProperties, autoGetProperties:true});
+      
+      this.echonetLiteRawController.addDeviceDetectedEvent(this.fireDeviceDetected);
 
       this.echonetLiteRawController.start();
     }
-    detectedDeviceIds:DeviceId[] = [];
+
+    private ReceivedSetResponse = (( rinfo:rinfo, els:eldata ):void=>{
+      for(const propertyCode in els.DETAILs)
+      {
+        EchoNetCommunicator.sendNow(rinfo.address, "05ff01", els.SEOJ, ELSV.GET, propertyCode, "");
+      }
+    });
+    private ReceivedGetResponse = (( rinfo:rinfo, els:eldata ):void=>{
+      const deviceId = this.echonetLiteRawController.getAllDeviceIds().find(_=>_.ip === rinfo.address &&  _.eoj === els.SEOJ);
+      if(deviceId===undefined){
+        return;
+      }
+      for(const propertyCode in els.DETAILs)
+      {
+        const property = this.deviceConverter.getPropertyWithEpc(deviceId, propertyCode);
+        if(property===undefined){
+          continue;
+        }
+        const value = this.deviceConverter.getPropertyValue(deviceId, property);
+        this.firePropertyChnagedEvent(deviceId, property.name, value);
+        this.holdController.receivedProperty(deviceId, property.name, value);
+      }
+    });
+    ReceivedInfo = (( rinfo:rinfo, els:eldata ):void=>{
+      const deviceId = this.echonetLiteRawController.getAllDeviceIds().find(_=>_.ip === rinfo.address &&  _.eoj === els.SEOJ);
+      if(deviceId===undefined){
+        return;
+      }
+      for(const propertyCode in els.DETAILs)
+      {
+        const property = this.deviceConverter.getPropertyWithEpc(deviceId, propertyCode);
+        if(property===undefined){
+          continue;
+        }
+        const value = this.deviceConverter.getPropertyValue(deviceId, property);
+        this.firePropertyChnagedEvent(deviceId, property.name, value);
+      }
+    });
+
+    //detectedDeviceIds:DeviceId[] = [];
     getDetectedDeviceIds = ():DeviceId[]=>{
-      return this.detectedDeviceIds;
+      return this.echonetLiteRawController.getAllDeviceIds();
     }
   
     getDevice = (id:DeviceId):Device|undefined => {
@@ -210,7 +190,8 @@ export class EchoNetLiteController{
     public getInternalStatus = ():unknown=>
     {
       return {
-        hold: this.holdController.getInternalStatus()
+        hold: this.holdController.getInternalStatus(),
+        rawController: this.echonetLiteRawController.getInternalStatus()
       }
     }
   }

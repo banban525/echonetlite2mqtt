@@ -272,7 +272,7 @@ export default class EchoNetDeviceConverter
     return getPropertyNoList;
   }
 
-  private getDeviceId = (ip:string, eoj:string, facilities:facilitiesType):string => {
+  public getDeviceId = (ip:string, eoj:string, facilities:facilitiesType):string => {
     let id = "";
   
     const getPropertyNoList = this.convertGetPropertyNoList(ip, eoj, facilities);
@@ -353,7 +353,7 @@ export default class EchoNetDeviceConverter
   // 本来は、全てのデバイスのIdの後ろに"_{eoj}"を付けたほうが統一感があるが
   // 過去バージョンとの互換性のため、できるだけIdは変えないようにする
   // 通常、NodeProfileはMQTT経由で制御するものではないので、Idが変わってもOKとする
-  private getDeviceIdForNodeProfile = (echonetLiteFacilities:facilitiesType, ip:string):string =>
+  public getDeviceIdForNodeProfile = (echonetLiteFacilities:facilitiesType, ip:string):string =>
   {
     const echoNetRawNodeData = echonetLiteFacilities[ip];
 
