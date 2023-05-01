@@ -163,7 +163,11 @@ export class EchoNetLiteRawController
     // nodeProfileのインスタンスリストで取得していないデバイスを再取得する
     for(const ip in echoNetRawData)
     {
-      if(ip in echoNetRawStatus.nodes && echoNetRawStatus.nodes[ip].state === "acquiredAllInstance")
+      if((ip in echoNetRawStatus.nodes) === false)
+      {
+        continue;
+      }
+      if(echoNetRawStatus.nodes[ip].state === "acquiredAllInstance")
       {
         continue;
       }
@@ -181,6 +185,10 @@ export class EchoNetLiteRawController
       const selfNodeInstanceListS = this.echoNetDeviceConverter.getPropertyValue(
         {eoj:"0ef001", ip, id:""}, 
         selfNodeInstanceListSProperty) as {numberOfInstances:number, instanceList:string[]};
+      if(selfNodeInstanceListS === undefined)
+      {
+        continue;
+      }
 
       const notGetDevices = selfNodeInstanceListS.instanceList.filter(_=>(_ in echoNetRawData[ip]) === false);
 
@@ -224,10 +232,13 @@ export class EchoNetLiteRawController
       for(const eoj in echoNetRawData[ip])
       {
         const instanceId = `${ip}-${eoj}`;
-        if(instanceId in echoNetRawStatus.devices && (
-          echoNetRawStatus.devices[instanceId].state === "acquiredMandatoryProperty" ||
+        if((instanceId in echoNetRawStatus.devices) === false)
+        {
+          continue;
+        }
+        if(echoNetRawStatus.devices[instanceId].state === "acquiredMandatoryProperty" ||
           echoNetRawStatus.devices[instanceId].state === "requestedAllProperty" ||
-          echoNetRawStatus.devices[instanceId].state === "acquiredAllProperty" ))
+          echoNetRawStatus.devices[instanceId].state === "acquiredAllProperty" )
         {
           // すでにチェック済みならスキップする
           continue;
@@ -244,7 +255,7 @@ export class EchoNetLiteRawController
         }
         if(canRequest)
         {
-          if(instanceId in echoNetRawStatus.devices && echoNetRawStatus.devices[instanceId].state === "requestedMandatoryProperty")
+          if(echoNetRawStatus.devices[instanceId].state === "requestedMandatoryProperty")
           {
             // すでにリクエスト済みならスキップする
             for(const propertyNo of missingProperties)
@@ -281,13 +292,18 @@ export class EchoNetLiteRawController
       for(const eoj in echoNetRawData[ip])
       {
         const instanceId = `${ip}-${eoj}`;
-        if(instanceId in echoNetRawStatus.devices && echoNetRawStatus.devices[instanceId].state === "acquiredAllProperty")
+
+        if((instanceId in echoNetRawStatus.devices) === false)
+        {
+          continue;
+        }
+        if(echoNetRawStatus.devices[instanceId].state === "acquiredAllProperty")
         {
           // すでにチェック済みならスキップする
           continue;
         }
-        if(instanceId in echoNetRawStatus.devices && echoNetRawStatus.devices[instanceId].state === "uncheck" || 
-          instanceId in echoNetRawStatus.devices && echoNetRawStatus.devices[instanceId].state === "requestedMandatoryProperty")
+        if(echoNetRawStatus.devices[instanceId].state === "uncheck" || 
+          echoNetRawStatus.devices[instanceId].state === "requestedMandatoryProperty")
         {
           // 必須プロパティの取得が終わっていないならスキップ
           continue;
@@ -308,7 +324,7 @@ export class EchoNetLiteRawController
 
         if(canRequest)
         {
-          if(instanceId in echoNetRawStatus.devices && echoNetRawStatus.devices[instanceId].state === "requestedAllProperty")
+          if(echoNetRawStatus.devices[instanceId].state === "requestedAllProperty")
           {
             // すでに要求済みなら、値を返さないGETプロパティと思われるので、完了とする
             for(const propertyNo of notGetPropNoList)
