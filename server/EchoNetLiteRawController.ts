@@ -7,7 +7,7 @@ import { DeviceId } from "./Property";
 export class EchoNetLiteRawController
 {
   readonly echoNetDeviceConverter:EchoNetDeviceConverter;
-  private echoNetRawStatus:EchoNetRawStatus = {devices:{},nodes:{}};
+  private echoNetRawStatus:EchoNetRawStatus = {devices:{},nodes:{},searchRetryCount:0};
   constructor(echoNetDeviceConverter:EchoNetDeviceConverter)
   {
     this.echoNetDeviceConverter = echoNetDeviceConverter;
@@ -96,6 +96,12 @@ export class EchoNetLiteRawController
               continue;
             }
             echoNetRawStatus.devices[instanceId] = {instanceId, state:echoNetRawStatus.devices[instanceId].state, deviceId:{eoj, ip, id:deviceId}};
+
+            // 非対応デバイスはプロパティの再取得をしないように完了済みにしておく
+            if(this.echoNetDeviceConverter.isSupportedDeviceType(eoj)===false)
+            {
+              echoNetRawStatus.devices[instanceId] = {instanceId, state:"acquiredAllProperty", deviceId:{eoj, ip, id:deviceId}};
+            }
             detected=true;
           }
           else if(echoNetRawStatus.devices[instanceId].state === "acquiredMandatoryProperty" || 
@@ -108,6 +114,12 @@ export class EchoNetLiteRawController
               continue;
             }
             echoNetRawStatus.devices[instanceId] = {instanceId, state:echoNetRawStatus.devices[instanceId].state, deviceId:{eoj, ip, id:deviceId}};
+
+            // 非対応デバイスはプロパティの再取得をしないように完了済みにしておく
+            if(this.echoNetDeviceConverter.isSupportedDeviceType(eoj)===false)
+            {
+              echoNetRawStatus.devices[instanceId] = {instanceId, state:"acquiredAllProperty", deviceId:{eoj, ip, id:deviceId}};
+            }
             detected=true;
           }
         }
@@ -205,6 +217,7 @@ export class EchoNetLiteRawController
 
     if(isRequested){return;}
 
+    isRequested = false;
     // インスタンスごとに、Id、メーカーコード、INFマップ、SETマップ、GETマップが無ければ取得する
     for(const ip in echoNetRawData)
     {
@@ -229,20 +242,19 @@ export class EchoNetLiteRawController
           echoNetRawStatus.devices[instanceId] = {instanceId, state: "acquiredMandatoryProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
           continue;
         }
-
-        if(instanceId in echoNetRawStatus.devices && echoNetRawStatus.devices[instanceId].state === "requestedMandatoryProperty")
-        {
-          // すでにリクエスト済みならスキップする
-          for(const propertyNo of missingProperties)
-          {
-            console.log(`[ECHONETLite][retry] failed to get property ${ip} ${eoj} ${propertyNo}`);
-          }
-          echoNetRawStatus.devices[instanceId] = {instanceId, state: "acquiredMandatoryProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
-          continue;
-        }
-
         if(canRequest)
         {
+          if(instanceId in echoNetRawStatus.devices && echoNetRawStatus.devices[instanceId].state === "requestedMandatoryProperty")
+          {
+            // すでにリクエスト済みならスキップする
+            for(const propertyNo of missingProperties)
+            {
+              console.log(`[ECHONETLite][retry] failed to get property ${ip} ${eoj} ${propertyNo}`);
+            }
+            echoNetRawStatus.devices[instanceId] = {instanceId, state: "acquiredMandatoryProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
+            continue;
+          }
+
           for(const propertyNo of missingProperties)
           {
             console.log(`[ECHONETLite][retry] request property ${ip} ${eoj} ${propertyNo}`);
@@ -253,12 +265,17 @@ export class EchoNetLiteRawController
           isRequested = true;
           echoNetRawStatus.devices[instanceId] = {instanceId, state: "requestedMandatoryProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
         }
+        else
+        {
+          continue;
+        }
       }
     }
 
     if(isRequested){return;}
 
     // インスタンスごとに、Getプロパティが無ければ取得する
+    isRequested = false;
     for(const ip in echoNetRawData)
     {
       for(const eoj in echoNetRawData[ip])
@@ -269,7 +286,12 @@ export class EchoNetLiteRawController
           // すでにチェック済みならスキップする
           continue;
         }
-
+        if(instanceId in echoNetRawStatus.devices && echoNetRawStatus.devices[instanceId].state === "uncheck" || 
+          instanceId in echoNetRawStatus.devices && echoNetRawStatus.devices[instanceId].state === "requestedMandatoryProperty")
+        {
+          // 必須プロパティの取得が終わっていないならスキップ
+          continue;
+        }
         const facilities = EchoNetCommunicator.getFacilities();
         const getPropNoList = this.echoNetDeviceConverter.convertGetPropertyNoList(ip, eoj, facilities);
         if(getPropNoList === undefined)
@@ -284,19 +306,19 @@ export class EchoNetLiteRawController
           continue;
         }
 
-        if(instanceId in echoNetRawStatus.devices && echoNetRawStatus.devices[instanceId].state === "requestedAllProperty")
-        {
-          // すでに要求済みなら、値を返さないGETプロパティと思われるので、完了とする
-          for(const propertyNo of notGetPropNoList)
-          {
-            console.log(`[ECHONETLite][retry] failed to get property ${ip} ${eoj} ${propertyNo}`);
-          }
-          echoNetRawStatus.devices[instanceId] = {instanceId, state: "acquiredAllProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
-          continue;
-        }
-
         if(canRequest)
         {
+          if(instanceId in echoNetRawStatus.devices && echoNetRawStatus.devices[instanceId].state === "requestedAllProperty")
+          {
+            // すでに要求済みなら、値を返さないGETプロパティと思われるので、完了とする
+            for(const propertyNo of notGetPropNoList)
+            {
+              console.log(`[ECHONETLite][retry] failed to get property ${ip} ${eoj} ${propertyNo}`);
+            }
+            echoNetRawStatus.devices[instanceId] = {instanceId, state: "acquiredAllProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
+            continue;
+          }
+
           // 再取得を試みる
           for(const propertyNo of notGetPropNoList)
           {
@@ -306,6 +328,23 @@ export class EchoNetLiteRawController
           // 状態: 全GETプロパティ取得要求済み
           isRequested = true;
           echoNetRawStatus.devices[instanceId] = {instanceId, state: "requestedAllProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
+        }
+      }
+    }
+
+    if(isRequested){return;}
+
+    if(canRequest)
+    {
+      if(Object.keys(echoNetRawStatus.nodes).length > 0 &&
+        Object.keys(echoNetRawStatus.devices).filter(_=>echoNetRawStatus.devices[_].state !== "acquiredAllProperty").length === 0)
+      {
+        if(echoNetRawStatus.searchRetryCount === 0)
+        {
+          console.log(`[ECHONETLite][retry] retry searching devices...`);
+          EchoNetCommunicator.search();
+          echoNetRawStatus.searchRetryCount++;
+          return;
         }
       }
     }
@@ -320,6 +359,7 @@ export class EchoNetLiteRawController
 
 export interface EchoNetRawStatus
 {
+  searchRetryCount:number;
 	nodes:{[key:string]:EchoNetRawNodeStatus};
 	devices:{[key:string]:EchoNetRawDeviceStatus};
 }

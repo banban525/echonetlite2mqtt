@@ -551,4 +551,11 @@ export default class EchoNetDeviceConverter
     );
     return value;
   }
+
+  public isSupportedDeviceType(eoj:string):boolean
+  {
+    const eojClass = "0x" + eoj.substring(0, 4).toUpperCase();
+    const deviceType = this.echoNetPropertyConverter.getDevice(eojClass);
+    return deviceType !== undefined;
+  }
 }

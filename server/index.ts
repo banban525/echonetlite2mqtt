@@ -10,7 +10,7 @@ import { EventRepository } from "./EventRepository";
 import { LogRepository } from "./LogRepository";
 
 let echonetTargetNetwork = "";
-let echonetIntervalToGetProperties = 100;
+let echonetIntervalToGetProperties = 300;
 let echonetAliasFile="";
 let debugLog = false;
 let restApiPort = 3000;
@@ -383,8 +383,11 @@ mqttController.addConnectionStateChangedEvent(():void=>{
   restApiController.setNewEvent();
 });
 
+setTimeout(()=>{
+  console.log("searching devices...");
+  echoNetListController.start();
+}, echonetIntervalToGetProperties);
 
-echoNetListController.start();
 restApiController.start();
 mqttController.start();
 if(mqttBroker === "")

@@ -33,6 +33,7 @@ export class EchoNetCommunicator
     {
       this.infoHandlers.forEach(_=>_(rinfo,els));
     }
+    //console.log(`Reveived ${rinfo.address}\t${els.SEOJ}\t${els.DEOJ}\t${els.ESV}`);
     this.reveivedHandlers.forEach(_=>_(rinfo,els));
   }
 
