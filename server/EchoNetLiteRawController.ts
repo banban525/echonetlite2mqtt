@@ -1,6 +1,7 @@
 import { eldata, rinfo } from "echonet-lite";
 import { EchoNetCommunicator } from "./EchoNetCommunicator";
 import EchoNetDeviceConverter from "./EchoNetDeviceConverter";
+import { Logger } from "./Logger";
 import { DeviceId } from "./Property";
 
 
@@ -206,14 +207,14 @@ export class EchoNetLiteRawController
           // すでにリクエスト済みならスキップする
           for(const notGetDeviceEoj of notGetDevices)
           {
-            console.log(`[ECHONETLite][retry] failed to get instance ${ip} ${notGetDeviceEoj}`);
+            Logger.warn("[ECHONETLite][retry]", `failed to get instance ${ip} ${notGetDeviceEoj}`);
           }
           echoNetRawStatus.nodes[ip] = {ip, state:"acquiredAllInstance"};
           continue;
         }
         for(const notGetDeviceEoj of notGetDevices)
         {
-          console.log(`[ECHONETLite][retry] request instance ${ip} ${notGetDeviceEoj}`);
+          Logger.info("[ECHONETLite][retry]", `request instance ${ip} ${notGetDeviceEoj}`);
           isRequested = true;
           EchoNetCommunicator.getPropertyMaps(ip, notGetDeviceEoj);
         }
@@ -260,7 +261,7 @@ export class EchoNetLiteRawController
             // すでにリクエスト済みならスキップする
             for(const propertyNo of missingProperties)
             {
-              console.log(`[ECHONETLite][retry] failed to get property ${ip} ${eoj} ${propertyNo}`);
+              Logger.warn("[ECHONETLite][retry]", `failed to get property ${ip} ${eoj} ${propertyNo}`);
             }
             echoNetRawStatus.devices[instanceId] = {instanceId, state: "acquiredMandatoryProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
             continue;
@@ -268,7 +269,7 @@ export class EchoNetLiteRawController
 
           for(const propertyNo of missingProperties)
           {
-            console.log(`[ECHONETLite][retry] request property ${ip} ${eoj} ${propertyNo}`);
+            Logger.info("[ECHONETLite][retry]", `request property ${ip} ${eoj} ${propertyNo}`);
             EchoNetCommunicator.send(ip, [0x0e, 0xf0, 0x01], eoj, 0x62, propertyNo, [0x00] );
           }
 
@@ -329,7 +330,7 @@ export class EchoNetLiteRawController
             // すでに要求済みなら、値を返さないGETプロパティと思われるので、完了とする
             for(const propertyNo of notGetPropNoList)
             {
-              console.log(`[ECHONETLite][retry] failed to get property ${ip} ${eoj} ${propertyNo}`);
+              Logger.warn("[ECHONETLite][retry]", `failed to get property ${ip} ${eoj} ${propertyNo}`);
             }
             echoNetRawStatus.devices[instanceId] = {instanceId, state: "acquiredAllProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
             continue;
@@ -338,7 +339,7 @@ export class EchoNetLiteRawController
           // 再取得を試みる
           for(const propertyNo of notGetPropNoList)
           {
-            console.log(`[ECHONETLite][retry] request property ${ip} ${eoj} ${propertyNo}`);
+            Logger.info("[ECHONETLite][retry]", `request property ${ip} ${eoj} ${propertyNo}`);
             EchoNetCommunicator.send(ip, [0x0e, 0xf0, 0x01], eoj, 0x62, propertyNo, [0x00] );
           }
           // 状態: 全GETプロパティ取得要求済み
@@ -357,7 +358,7 @@ export class EchoNetLiteRawController
       {
         if(echoNetRawStatus.searchRetryCount === 0)
         {
-          console.log(`[ECHONETLite][retry] retry searching devices...`);
+          Logger.info("[ECHONETLite][retry]", `retry searching devices...`);
           EchoNetCommunicator.search();
           echoNetRawStatus.searchRetryCount++;
           return;

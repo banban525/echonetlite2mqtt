@@ -3,6 +3,7 @@ import { AliasOption, Device, DeviceAlias, DeviceId, Manufacturer, Property, Pro
 import { EchoNetPropertyConverter } from "./EchoNetPropertyConverter";
 import { getUtcNowDateTimeText } from "./datetimeLib";
 import { EchoNetCommunicator } from "./EchoNetCommunicator";
+import { Logger } from "./Logger";
 
 export default class EchoNetDeviceConverter
 {
@@ -113,7 +114,7 @@ export default class EchoNetDeviceConverter
     const deviceType = this.echoNetPropertyConverter.getDevice(eojClass);
     if(deviceType === undefined)
     {
-      console.log("ERROR class not found.");
+      Logger.info("", "ERROR class not found.");
       return {
         id,
         name:"",
@@ -161,7 +162,7 @@ export default class EchoNetDeviceConverter
         properties.push(matchedDeviceProperties[0]);
         continue;
       }
-      console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in id: ${id}, ip:${ip}, eoj:${eoj}`);
+      Logger.warn("", `ERROR: unknown property. propertyNo === ${propertyNo} in id: ${id}, ip:${ip}, eoj:${eoj}`);
     }
     
     for(const propertyNo of getPropertyNoList)
@@ -176,7 +177,6 @@ export default class EchoNetDeviceConverter
         matchedProperties[0].readable = true;
         continue;
       }
-      //console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
     }
 
     for(const propertyNo of setPropertyNoList)
@@ -191,7 +191,6 @@ export default class EchoNetDeviceConverter
         matchedProperties[0].writable = true;
         continue;
       }
-      //console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
     }
   
     for(const propertyNo of notifyPropertyNoList)
@@ -206,7 +205,6 @@ export default class EchoNetDeviceConverter
         matchedProperties[0].observable = true;
         continue;
       }
-      //console.log(`ERROR: unknown property. propertyNo === ${propertyNo} in eoj:${eoj}`);
     }
 
     const updated = getUtcNowDateTimeText();
@@ -286,7 +284,7 @@ export default class EchoNetDeviceConverter
       if("83" in facilities[ip][eoj] === false)
       {
         // 識別番号が未取得なら、取得されるまで待つ
-        console.log(`id is not get in ${ip} ${eoj}`);
+        Logger.warn("", `id is not get in ${ip} ${eoj}`);
         return "";
       }
     }
@@ -304,14 +302,14 @@ export default class EchoNetDeviceConverter
       if(nodeProfile===undefined)
       {
         // ノードが未取得なら、取得されるまで待つ
-        console.log(`node is not found in ${ip} ${eoj}`);
+        Logger.warn("", `node is not found in ${ip} ${eoj}`);
         return "";
       }
       const nodeGetProperty = nodeProfile["9f"];
       if(nodeGetProperty === undefined)
       {
         // ノードのプロパティリストが未取得なら、取得されるまで待つ
-        console.log(`node property list are not get in ${ip} ${eoj}`);
+        Logger.warn("", `node property list are not get in ${ip} ${eoj}`);
         return "";
       }
       
@@ -329,7 +327,7 @@ export default class EchoNetDeviceConverter
         if(nodeId === undefined)
         {
           // ノードのIDが未取得なら取得されるまで待つ
-          console.log(`node id is not get in ${ip} ${eoj}`);
+          Logger.warn("", `node id is not get in ${ip} ${eoj}`);
           return "";
         }
         id = nodeId + "_" + eoj;
@@ -502,12 +500,12 @@ export default class EchoNetDeviceConverter
   public propertyToEchoNetData = (deviceId:DeviceId, propertyName:string, value:any):string|undefined => {
     const facilities = EchoNetCommunicator.getFacilities();
     if((deviceId.ip in facilities) === false){
-      console.log(`propertyToEchoNetData (deviceId.ip in echonet facilities) === false`)
+      Logger.warn("", `propertyToEchoNetData (deviceId.ip in echonet facilities) === false`)
       return undefined;
     }
     if((deviceId.eoj in facilities[deviceId.ip]) === false)
     {
-      console.log(`propertyToEchoNetData (deviceId.eoj in echonet facilities[deviceId.ip]) === false`)
+      Logger.warn("", `propertyToEchoNetData (deviceId.eoj in echonet facilities[deviceId.ip]) === false`)
       return undefined;
     }
 
@@ -515,21 +513,21 @@ export default class EchoNetDeviceConverter
     const deviceClass = "0x"+deviceId.eoj.substr(0, 4).toUpperCase();
     const foundDevice = this.echoNetPropertyConverter.getDevice(deviceClass);
     if(foundDevice === undefined){
-      console.log(`propertyToEchoNetData foundDevice === undefined`)
+      Logger.warn("", `propertyToEchoNetData foundDevice === undefined`)
       return undefined;
     }
     
     const foundProperty = foundDevice.elProperties.find(_=>_.shortName === propertyName);
     if(foundProperty === undefined)
     {
-      console.log(`propertyToEchoNetData deviceProperty === undefined`)
+      Logger.warn("", `propertyToEchoNetData deviceProperty === undefined`)
       return undefined;
     }
 
     const echoNetData = this.echoNetPropertyConverter.toEchoNetLiteData(foundProperty.data, value);
     
     if(echoNetData===undefined){
-      console.log(`propertyToEchoNetData echoNetData===undefined`)
+      Logger.warn("", `propertyToEchoNetData echoNetData===undefined`)
       return undefined;
     }
 

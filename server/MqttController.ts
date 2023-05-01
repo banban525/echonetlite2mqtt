@@ -3,6 +3,7 @@ import { DeviceStore } from "./DeviceStore";
 import { ApiDevice, ApiDeviceProperty, ApiDeviceSummary } from "./ApiTypes";
 import { Device } from "./Property";
 import { ElDataType, ElPropertyDescription } from "./MraTypes";
+import { Logger } from "./Logger";
 
 export class MqttController
 {
@@ -27,22 +28,22 @@ export class MqttController
       this.fireConnectionStateChangedEvent();
       return;
     }
-    console.log(`[MQTT] connect to ${this.mqttBroker} ...`);
+    Logger.info("[MQTT]", `connect to ${this.mqttBroker} ...`);
     this.mqttClient = mqtt.connect(this.mqttBroker, this.mqttOption);
     
     this.mqttClient.on("connect", ()=>{
       this.ConnectionState = "Connected";
-      console.log("[MQTT] connected");
+      Logger.info("[MQTT]", "connected");
       this.fireConnectionStateChangedEvent();
 
       this.publishAll();
     });
     this.mqttClient.on("error", (error:Error):void=>{
-      console.log(error);
+      Logger.warn("[MQTT]", error?.toString() ?? "");
     })
     this.mqttClient.on("disconnect", ():void=>{
       this.ConnectionState = "Disconnected";
-      console.log("[MQTT] disconnected");
+      Logger.info("[MQTT]", "disconnected");
       this.fireConnectionStateChangedEvent();
     });
     this.mqttClient.subscribe([
@@ -50,13 +51,13 @@ export class MqttController
     ], (err: Error, granted: ISubscriptionGrant[])=>{
       if(err !== null)
       {
-        console.log("[MQTT] subscribe error: " + err);
+        Logger.warn("[MQTT]", "subscribe error: " + err);
       }
     });
 
     
     this.mqttClient.on("message", (topic: string, payload: Buffer, packet: IPublishPacket)=>{
-      //console.log('subscriber.on.message', 'topic:', topic, 'message:', payload.toString());
+      //Logger.write('subscriber.on.message', 'topic:', topic, 'message:', payload.toString());
 
       // set
       {
@@ -131,7 +132,7 @@ export class MqttController
           }
           catch(err)
           {
-            console.log(`[MQTT] ERROR can not parse ${bodyText}`);
+            Logger.warn("[MQTT]", `ERROR can not parse ${bodyText}`);
             return;
           }
           if(body === undefined)
@@ -165,7 +166,7 @@ export class MqttController
 
             const property = foundDevice.properties.find(_=>_.name === propertyName);
             if(property===undefined){
-              console.log(`[MQTT] ERROR: not found property ${propertyName} in ${deviceId}`);
+              Logger.warn("[MQTT]", `ERROR: not found property ${propertyName} in ${deviceId}`);
               return;
             }
 

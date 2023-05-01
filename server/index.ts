@@ -8,6 +8,7 @@ import mqtt from "mqtt";
 import { SystemStatusRepositry } from "./ApiTypes";
 import { EventRepository } from "./EventRepository";
 import { LogRepository } from "./LogRepository";
+import { Logger } from "./Logger";
 
 let echonetTargetNetwork = "";
 let echonetIntervalToGetProperties = 300;
@@ -162,8 +163,8 @@ for(var i = 2;i < process.argv.length; i++){
 const logger = new LogRepository();
 
 
-console.log(`${process.env.npm_package_name} ver.${process.env.npm_package_version}`);
-console.log("");
+Logger.info("", `${process.env.npm_package_name} ver.${process.env.npm_package_version}`);
+Logger.info("", "");
 
 logger.output(`echonetTargetNetwork=${echonetTargetNetwork}`);
 logger.output(`echonetAliasFile=${echonetAliasFile}`);
@@ -261,7 +262,6 @@ echoNetListController.addDeviceDetectedEvent(()=>{
       {
         const deviceNameText = (device.name + "                                  ").slice(0, 34);
         logger.output(`[ECHONETLite] new device:   ${deviceNameText} ${device.deviceType} ${device.ip} ${device.eoj}`);
-        //console.dir(device, {depth:10});
         deviceStore.add(device);
         mqttController.publishDevices();
         mqttController.publishDevice(device.id);
@@ -384,7 +384,7 @@ mqttController.addConnectionStateChangedEvent(():void=>{
 });
 
 setTimeout(()=>{
-  console.log("searching devices...");
+  Logger.info("", "searching devices...");
   echoNetListController.start();
 }, echonetIntervalToGetProperties);
 

@@ -8,6 +8,8 @@ import expressLayouts from 'express-ejs-layouts';
 import { ElDataType, ElMixedOneOfType } from "./MraTypes";
 import admZip from 'adm-zip';
 import { EchoNetLiteController } from "./EchoNetLiteController";
+import { Logger } from "./Logger";
+import path from "path";
 
 interface ViewProperty{
   propertyName:string;
@@ -81,7 +83,7 @@ export class RestApiController
     app.get("/downloadlogs/zip", this.downloadLogs)
 
     const server = app.listen(this.port, this.hostName, ():void => {
-      console.log(`[RESTAPI] Start listening to web server. ${this.hostName}:${this.port}`);
+      Logger.info("[RESTAPI]", `Start listening to web server. ${this.hostName}:${this.port}`);
     });
   }
 
@@ -494,27 +496,27 @@ export class RestApiController
     const propertyName = req.params.propertyName;
     const newValue = req.body[propertyName];
   
-    console.log(`[RESTAPI] put property: ${deviceId}\t${propertyName}\t${newValue}`)
+    Logger.info("[RESTAPI]", `put property: ${deviceId}\t${propertyName}\t${newValue}`)
   
     const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
-      console.log('device not found : ' + deviceId)
+      Logger.warn("[RESTAPI]", 'device not found : ' + deviceId)
       return;
     }
     if((propertyName in foundDevice.propertiesValue)===false)
     {
       res.status(404);
       res.end('property not found : ' + propertyName);
-      console.log('property not found : ' + propertyName)
+      Logger.warn("[RESTAPI]", 'property not found : ' + propertyName)
       return;
     }
   
     if((propertyName in req.body)===false){
       res.status(404);  //Bad Request
       res.end('Bad Request : ' + JSON.stringify(req.body));
-      console.log('Bad Request : ' + JSON.stringify(req.body));
+      Logger.warn("[RESTAPI]", 'Bad Request : ' + JSON.stringify(req.body));
       return;
     }
   
@@ -532,20 +534,20 @@ export class RestApiController
     const deviceId = req.params.deviceId;
     const propertyName = req.params.propertyName;
   
-    console.log(`[RESTAPI] request property: ${deviceId}\t${propertyName}`)
+    Logger.info("[RESTAPI]", `request property: ${deviceId}\t${propertyName}`);
   
     const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
       res.status(404);
       res.end('device not found : ' + deviceId);
-      console.log('device not found : ' + deviceId)
+      Logger.warn("[RESTAPI]", 'device not found : ' + deviceId)
       return;
     }
     if((propertyName in foundDevice.propertiesValue)===false)
     {
       res.status(404);
       res.end('property not found : ' + propertyName);
-      console.log('property not found : ' + propertyName)
+      Logger.warn("[RESTAPI]", 'property not found : ' + propertyName)
       return;
     }
   
@@ -601,6 +603,7 @@ export class RestApiController
     zip.addFile("logs.json", Buffer.from(JSON.stringify(this.logRepository.logs, null, 2)))
     zip.addFile("ELRawData.json", Buffer.from(JSON.stringify(this.echoNetLiteController.getRawData(), null, 2)))
     zip.addFile("echoNetLiteController.json", Buffer.from(JSON.stringify(this.echoNetLiteController.getInternalStatus(), null, 2)))
+    zip.addLocalFolder(path.resolve(__dirname, "..", "logs"), "logs");
 
     const buffer = await zip.toBufferPromise();
     
@@ -625,7 +628,7 @@ export class RestApiController
     
     if(this.eventRepository.existsNewEvents(lastEventId)){
       const newEvents = this.eventRepository.getNewEvents(lastEventId);
-      //console.log(`new EVENT:${lastEventId} !== ${this.eventRepository.lastId}`)
+      //Logger.write(`new EVENT:${lastEventId} !== ${this.eventRepository.lastId}`)
       res.json(newEvents);
       res.end();
       return;
@@ -642,7 +645,7 @@ export class RestApiController
       const newEvents = this.eventRepository.getNewEvents(_.lastEventId);
       _.res.json(newEvents);
       _.res.end();
-      //console.log(`no  EVENT:${_.lastEventId}`)
+      //Logger.write(`no  EVENT:${_.lastEventId}`)
     });
     this.waitingResponseList = [];
   }
@@ -652,7 +655,7 @@ export class RestApiController
       const newEvents = this.eventRepository.getNewEvents(_.lastEventId);
       _.res.json(newEvents);
       _.res.end();
-      //console.log(`no  EVENT:${_.lastEventId}`)
+      //Logger.write(`no  EVENT:${_.lastEventId}`)
     });
     this.waitingResponseList = [];
   }

@@ -7,6 +7,7 @@ import { EchoNetLiteRawController } from "./EchoNetLiteRawController";
 import { EchoNetHoldController } from "./EchoNetHoldController";
 import { HoldOption } from "./MqttController";
 import { EchoNetCommunicator, ELSV } from "./EchoNetCommunicator";
+import { Logger } from "./Logger";
 
 
 export class EchoNetLiteController{
@@ -181,12 +182,12 @@ export class EchoNetLiteController{
     const echoNetData = deviceConverter.propertyToEchoNetData(id, propertyName, newValue);
     if(echoNetData===undefined)
     {
-      console.log(`setDeviceProperty echoNetData===undefined newValue=${newValue}`);
+      Logger.warn("[ECHONETLite]", `setDeviceProperty echoNetData===undefined newValue=${newValue}`);
       return;
     }
     if(property === undefined)
     {
-      console.log(`setDeviceProperty property === undefined propertyName=${propertyName}`);
+      Logger.warn("[ECHONETLite]", `setDeviceProperty property === undefined propertyName=${propertyName}`);
       return;
     }
     let epc = property.epc;
@@ -208,7 +209,7 @@ export class EchoNetLiteController{
     const property = deviceConverter.getProperty(id, propertyName);
     if(property === undefined)
     {
-      console.log(`setDeviceProperty property === undefined propertyName=${propertyName}`);
+      Logger.warn("[ECHONETLite]", `setDeviceProperty property === undefined propertyName=${propertyName}`);
       return;
     }
 

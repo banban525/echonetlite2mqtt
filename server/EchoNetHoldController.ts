@@ -1,4 +1,5 @@
 import { getUtcNowDateTimeText, toUtcDateTimeText } from "./datetimeLib";
+import { Logger } from "./Logger";
 import { HoldOption } from "./MqttController";
 import { DeviceId } from "./Property";
 
@@ -70,7 +71,7 @@ export class EchoNetHoldController
     {
       this._removedList.push(found);
       this._removedList = this._removedList.slice(-100);
-      console.log(`[ECHONETLite][hold] clear setting ${id.id} ${propertyName}`);
+      Logger.info("[ECHONETLite][hold]", `clear setting ${id.id} ${propertyName}`);
       this._list = this._list.filter(_=>(_.id.id === id.id && _.propertyName == propertyName)===false);
     }
   }
@@ -97,7 +98,7 @@ export class EchoNetHoldController
         else
         {
           // skip
-          // console.log(`[ECHONETLite] [hold] skip because busy`);
+          Logger.debug("[ECHONETLite][hold]", `skip because busy`);
         }
 
         // 次回のチェックする時刻を設定する
@@ -110,7 +111,7 @@ export class EchoNetHoldController
     const endedHoldStatusList = this._list.filter(_=>_.expireDateTime <= now);
     for(const endedHoldStatus of endedHoldStatusList)
     {
-      console.log(`[ECHONETLite][hold] end setting ${endedHoldStatus.id.id} ${endedHoldStatus.propertyName}`);
+      Logger.info("[ECHONETLite][hold]", `end setting ${endedHoldStatus.id.id} ${endedHoldStatus.propertyName}`);
     }
     this._removedList.push(...endedHoldStatusList);
     this._removedList = this._removedList.slice(-100);
@@ -140,7 +141,7 @@ export class EchoNetHoldController
         return;
       }
       // set Value
-      console.log(`[ECHONETLite][hold] set value ${id.id} ${propertyName} ${match.value}`);
+      Logger.info("[ECHONETLite][hold]", `set value ${id.id} ${propertyName} ${match.value}`);
       match.sent = true;
       this.actions.set(id, propertyName, match.value);
     }

@@ -1,4 +1,5 @@
 import { getUtcNowDateTimeText } from "./datetimeLib";
+import { Logger } from "./Logger";
 
 export interface log
 {
@@ -13,7 +14,7 @@ export class LogRepository
   logs:log[] = [];
   lastId = 0;
   output = (message:string):void => {
-    console.log(message);
+    Logger.info("", message);
     this.lastId++;
     this.logs.push({
       id: this.lastId,
