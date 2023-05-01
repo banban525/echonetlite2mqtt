@@ -1,4 +1,4 @@
-import { eldata,rinfo } from "echonet-lite";
+import { eldata,facilitiesType,rinfo } from "echonet-lite";
 import os from "os";
 import ip from "ip";
 import { AliasOption, Device, DeviceAlias, DeviceId } from "./Property";
@@ -15,6 +15,7 @@ export class EchoNetLiteController{
   private readonly echonetLiteRawController:EchoNetLiteRawController;
   private readonly holdController:EchoNetHoldController;
   private readonly deviceConverter:EchoNetDeviceConverter;
+  private readonly controllerDeviceDefine:{[key: string]: { [key: string]: number[] }};
   constructor(echonetTargetNetwork:string, intervalToGetProperties:number, aliasOption: AliasOption)
   {
     this.aliasOption = aliasOption;
@@ -38,27 +39,42 @@ export class EchoNetLiteController{
     EchoNetCommunicator.addSetResponseHandler(this.ReceivedSetResponse);
     EchoNetCommunicator.addGetResponseHandler(this.ReceivedGetResponse);
     EchoNetCommunicator.addInfoHandler(this.ReceivedInfo);
+    EchoNetCommunicator.addGetHandler(this.ReceivedGet);
+    EchoNetCommunicator.addSetHandler(this.ReceivedSet);
     EchoNetCommunicator.addReveivedHandler(( rinfo:rinfo, els:eldata ):void=>{
       this.echonetLiteRawController.reveivePacketProc(rinfo, els);
     });
 
-    var objList = ['05ff01'];
-    EchoNetCommunicator.initialize(objList, 4, {v4:usedIpByEchoNet, autoGetDelay:intervalToGetProperties, autoGetProperties:true});
-    
     this.echonetLiteRawController.addDeviceDetectedEvent(this.fireDeviceDetected);
-
     this.echonetLiteRawController.start();
+
+    // コントローラー
+    this.controllerDeviceDefine = {
+      '05ff01': {
+        // super
+        "80": [0x30],  // 動作状態
+        "81": [0xff],  // 設置場所
+        "82": [0x00, 0x00, 0x50, 0x00], // EL version, Release P
+        '83': [0xfe, 0xff, 0xff, 0xfe, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02], // identifier
+        "88": [0x42],  // 異常状態
+        "8a": [0xff, 0xff, 0xfe], // maker code
+        "9d": [0x00],        // inf map
+        "9e": [0x00],        // set map
+        "9f": [0x09, 0x80, 0x81, 0x82, 0x83, 0x88, 0x8a, 0x9d, 0x9e, 0x9f], // get map
+      }
+    };
+    
+    const a = EchoNetCommunicator.initialize(Object.keys(this.controllerDeviceDefine), 4, {v4:usedIpByEchoNet, autoGetDelay:intervalToGetProperties, autoGetProperties:true});
+    a.then(()=>{
+      this.controllerDeviceDefine['05ff01']['83'] = EchoNetCommunicator.updateidentifierFromMacAddress(this.controllerDeviceDefine['05ff01']['83']);
+    });
   }
 
-  private ReceivedSetResponse = (( rinfo:rinfo, els:eldata ):void=>
+  private ReceivedSetResponse = ( rinfo:rinfo, els:eldata ):void=>
   {
-    for(const propertyCode in els.DETAILs)
-    {
-      EchoNetCommunicator.sendNow(rinfo.address, "05ff01", els.SEOJ, ELSV.GET, propertyCode, "");
-    }
-  });
+  };
 
-  private ReceivedGetResponse = (( rinfo:rinfo, els:eldata ):void=>
+  private ReceivedGetResponse = ( rinfo:rinfo, els:eldata ):void=>
   {
     const deviceId = this.echonetLiteRawController.getAllDeviceIds().find(_=>_.ip === rinfo.address &&  _.eoj === els.SEOJ);
     if(deviceId===undefined){
@@ -74,8 +90,8 @@ export class EchoNetLiteController{
       this.firePropertyChnagedEvent(deviceId, property.name, value);
       this.holdController.receivedProperty(deviceId, property.name, value);
     }
-  });
-  ReceivedInfo = (( rinfo:rinfo, els:eldata ):void=>
+  };
+  ReceivedInfo = ( rinfo:rinfo, els:eldata ):void=>
   {
     const deviceId = this.echonetLiteRawController.getAllDeviceIds().find(_=>_.ip === rinfo.address &&  _.eoj === els.SEOJ);
     if(deviceId===undefined){
@@ -89,6 +105,20 @@ export class EchoNetLiteController{
       }
       const value = this.deviceConverter.getPropertyValue(deviceId, property);
       this.firePropertyChnagedEvent(deviceId, property.name, value);
+    }
+  };
+  ReceivedGet = (( rinfo:rinfo, els:eldata ):void=>
+  {
+    if(els.DEOJ === "05ff01")
+    {
+      EchoNetCommunicator.replyGetDetail(rinfo, els, this.controllerDeviceDefine );
+    }
+  });
+  ReceivedSet = (( rinfo:rinfo, els:eldata ):void=>
+  {
+    if(els.DEOJ === "05ff01")
+    {
+      EchoNetCommunicator.replySetDetail(rinfo, els, this.controllerDeviceDefine );
     }
   });
 

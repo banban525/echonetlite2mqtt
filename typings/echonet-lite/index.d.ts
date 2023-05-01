@@ -19,6 +19,10 @@ declare module "echonet-lite" {
     [key: string]: { [key: string]: { [key: string]: string } };
   };
 
+  export type DeviceDetailsType ={
+    [key: string]: { [key: string]: number[] }
+  };
+
   const SETI_SNA: string;
   const SETC_SNA: string;
   const GET_SNA: string;
@@ -70,7 +74,7 @@ declare module "echonet-lite" {
   let facilities: facilitiesType;
   let identificationNumbers: { id: string; ip: string; OBJ: string }[];
 
-  function initialize(
+  async function initialize(
     objList: string[],
     userfunc: (rinfo: rinfo, els: eldata) => void,
     ipVer?: number,
@@ -82,7 +86,7 @@ declare module "echonet-lite" {
       autoGetDelay?: number;
       debugMode?: boolean;
     }
-  ): { sock4: any; sock6: any } | any;
+  ): Promise<{ sock4: any; sock6: any } | any>;
   function renewNICList(): {
     v4: { name: string; address: string }[];
     v6: { name: string; address: string }[];
@@ -126,4 +130,6 @@ declare module "echonet-lite" {
   function search(): void;
   function getPropertyMaps(ip: string, eoj: string | number[]): void;
   function parseMapForm2(bitstr: string): number[];
+  async function replySetDetail(rinfo: rinfo, els: eldata, dev_details:DeviceDetailsType):Promise<void>;
+  async function replyGetDetail(rinfo: rinfo, els: eldata, dev_details:DeviceDetailsType):Promise<void>;
 }

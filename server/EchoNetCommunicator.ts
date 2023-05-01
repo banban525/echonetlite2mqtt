@@ -1,9 +1,9 @@
-import EL, { facilitiesType,eldata,rinfo } from "echonet-lite";
+import EL, { facilitiesType,eldata,rinfo, DeviceDetailsType } from "echonet-lite";
 
 
 export class EchoNetCommunicator
 {
-  public static initialize = (
+  public static initialize = async (
     objList: string[],
     ipVer?: number,
     Options?: {
@@ -14,9 +14,32 @@ export class EchoNetCommunicator
       autoGetDelay?: number;
       debugMode?: boolean;
     }
-  ): { sock4: any; sock6: any } | any =>
+  ): Promise<{ sock4: any; sock6: any } | any> =>
   {
-    return EL.initialize(objList, this.echonetUserFunc, ipVer, Options);
+    // maker code
+    EL.Node_details["8a"][0]=0xff;
+    EL.Node_details["8a"][1]=0xff;
+    EL.Node_details["8a"][2]=0xfe;
+
+    return EL.initialize(objList, this.echonetUserFunc, ipVer, Options)
+      .then(()=>{
+        EL.Node_details["83"][1]=0xff;
+        EL.Node_details["83"][2]=0xff;
+        EL.Node_details["83"][3]=0xfe;
+      });
+  }
+
+  public static updateidentifierFromMacAddress = (base:number[]):number[] =>
+  {
+    const result = JSON.parse(JSON.stringify(base));
+    result[7]  = EL.Node_details["83"][7];
+    result[8]  = EL.Node_details["83"][8];
+    result[9]  = EL.Node_details["83"][9];
+    result[10] = EL.Node_details["83"][10];
+    result[11] = EL.Node_details["83"][11];
+    result[12] = EL.Node_details["83"][12];
+
+    return result;
   }
 
   static echonetUserFunc = (rinfo: rinfo, els: eldata):void =>
@@ -25,7 +48,7 @@ export class EchoNetCommunicator
     {
       this.setResponseHandlers.forEach(_=>_(rinfo,els));
     }
-    else(els.ESV === ELSV.GET_RES)
+    if(els.ESV === ELSV.GET_RES)
     {
       this.getResponseHandlers.forEach(_=>_(rinfo,els));
     }
@@ -33,7 +56,14 @@ export class EchoNetCommunicator
     {
       this.infoHandlers.forEach(_=>_(rinfo,els));
     }
-    //console.log(`Reveived ${rinfo.address}\t${els.SEOJ}\t${els.DEOJ}\t${els.ESV}`);
+    if(els.ESV === ELSV.SETC || els.ESV === ELSV.SETI)
+    {
+      this.setHandlers.forEach(_=>_(rinfo,els));
+    }
+    if(els.ESV === ELSV.GET)
+    {
+      this.getHandlers.forEach(_=>_(rinfo,els));
+    }
     this.reveivedHandlers.forEach(_=>_(rinfo,els));
   }
 
@@ -52,6 +82,16 @@ export class EchoNetCommunicator
   public static addInfoHandler = (event:(rinfo: rinfo, els: eldata) => void):void =>
   {
     this.infoHandlers.push(event);
+  }
+  static readonly getHandlers:((rinfo: rinfo, els: eldata) => void)[] = [];
+  public static addGetHandler = (event:(rinfo: rinfo, els: eldata) => void):void =>
+  {
+    this.getHandlers.push(event);
+  }
+  static readonly setHandlers:((rinfo: rinfo, els: eldata) => void)[] = [];
+  public static addSetHandler = (event:(rinfo: rinfo, els: eldata) => void):void =>
+  {
+    this.setHandlers.push(event);
   }
 
   static readonly reveivedHandlers:((rinfo: rinfo, els: eldata) => void)[] = [];
@@ -107,6 +147,15 @@ export class EchoNetCommunicator
   {
     return EL.autoGetWaitings;
   }
+  public static replySetDetail = async (rinfo: rinfo, els: eldata, dev_details:DeviceDetailsType):Promise<void> =>
+  {
+    return EL.replySetDetail(rinfo, els, dev_details);
+  }
+  public static replyGetDetail = async (rinfo: rinfo, els: eldata, dev_details:DeviceDetailsType):Promise<void> =>
+  {
+    return EL.replyGetDetail(rinfo, els, dev_details);
+  }
+
 }
 
 export class ELSV
@@ -115,5 +164,6 @@ export class ELSV
   public static readonly GET_RES="72";
   public static readonly INF="73";
   public static readonly SETC="61";
+  public static readonly SETI="60";
   public static readonly SET_RES="71";
 }
