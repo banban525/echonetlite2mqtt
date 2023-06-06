@@ -57,6 +57,8 @@ declare module "echonet-lite" {
     d6: number[];
     d7: number[];
   };
+  const NODE_PROFILE:string;
+  const NODE_PROFILE_OBJECT:string;
   let EL_obj: string[];
   let EL_cls: string[];
   let ipVer: number;
@@ -73,7 +75,10 @@ declare module "echonet-lite" {
   let debugMode: boolean;
   let facilities: facilitiesType;
   let identificationNumbers: { id: string; ip: string; OBJ: string }[];
-
+  let sock4:any;
+  let sock6:any;
+  let Multi:string;
+  let Multi6:string;
   async function initialize(
     objList: string[],
     userfunc: (rinfo: rinfo, els: eldata) => void,
@@ -118,7 +123,7 @@ declare module "echonet-lite" {
   ): number[];
   function sendString(ip: string, string: string): number[];
   function returner(
-    bytes: number[],
+    bytes: Buffer,
     rinfo: rinfo,
     userfunc:
       | ((rinfo: rinfo, els: eldata) => void)

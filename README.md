@@ -148,6 +148,7 @@ ECHONET Lite Options
 | `ECHONET_TARGET_NETWORK` | `--echonetTargetNetwork` | Specify the network for ECHONET Lite in the format "000.000.000.000/00". (Default: Auto) |
 | `ECHONET_ALIAS_FILE`   | `--echonetAliasFile`  | The file path for alias option file. (Defalt: (empty)) |
 | `ECHONET_INTERVAL_TO_GET_PROPERTIES` | `--echonetIntervalToGetProperties` | Specifies the time interval for acquiring ECHONET Lite properties. (Unit: ms) (Default: 100) |
+| `ECHONET_ALT_MULTI_NIC_MODE` | `--echonetAltMultiNicMode` | Alternate mode in a multiple NIC environment. Specifies if you cannot receive status from the device. (Default: off) |
 
 ### Alias Option File Format
 

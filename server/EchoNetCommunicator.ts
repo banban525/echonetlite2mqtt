@@ -1,5 +1,5 @@
 import EL, { facilitiesType,eldata,rinfo, DeviceDetailsType } from "echonet-lite";
-
+import dgram from "dgram";
 
 export class EchoNetCommunicator
 {
@@ -13,15 +13,85 @@ export class EchoNetCommunicator
       autoGetProperties?: boolean;
       autoGetDelay?: number;
       debugMode?: boolean;
-    }
+    },
+    multiNicMode?:boolean
   ): Promise<{ sock4: any; sock6: any } | any> =>
   {
+    if(multiNicMode)
+    {
+      // 複数NICの代替モードの場合、echonet-lite.jsの初期化時にはipVerに-1(無効値)を渡してネットワーク廻りを初期化しない
+      // 代替処理をこちらで処理する。
+
+      // maker code
+      EL.Node_details["8a"][0]=0xff;
+      EL.Node_details["8a"][1]=0xff;
+      EL.Node_details["8a"][2]=0xfe;
+
+      await EL.initialize(objList, this.echonetUserFunc, -1, Options)
+        .then(()=>{
+          EL.Node_details["83"][1]=0xff;
+          EL.Node_details["83"][2]=0xff;
+          EL.Node_details["83"][3]=0xfe;
+        });
+      
+      // 向地を渡したipVerを元に戻す
+      EL.ipVer = ipVer ?? 4;
+
+
+      // ---- 代替処理ここから
+      if( EL.ipVer == 0 || EL.ipVer == 4) {
+        EL.sock4 = dgram.createSocket({type:"udp4",reuseAddr:true}, (msg:Buffer, rinfo) => {
+          EL.returner(msg, rinfo, this.echonetUserFunc);
+        });
+      }
+      if( EL.ipVer == 0 || EL.ipVer == 6) {
+        EL.sock6 = dgram.createSocket({type:"udp6",reuseAddr:true}, (msg:Buffer, rinfo) => {
+          EL.returner(msg, rinfo, this.echonetUserFunc);
+        });
+      }
+    
+      // マルチキャスト設定，ネットワークに繋がっていない（IPが一つもない）と例外がでる。
+      if( EL.ipVer == 0 || EL.ipVer == 4) {
+        EL.sock4.bind( {'address': '0.0.0.0', 'port': EL.EL_port}, function () {
+          EL.sock4.setMulticastLoopback(true);
+          EL.sock4.addMembership(EL.EL_Multi, EL.usingIF.v4);   // 元の処理から変えた部分はこちら。第2引数を渡して、マルチキャストを受信するNICを指定する。
+        });
+      }
+      if( EL.ipVer == 0 || EL.ipVer == 6) {
+        EL.sock6.bind({'address': '::', 'port': EL.EL_port}, function () {
+          EL.sock6.setMulticastLoopback(true);
+          if( process.platform == 'win32' ) {  // windows
+            EL.sock6.addMembership(EL.EL_Multi6, '::' + EL.usingIF.v6);  // bug fixのために分けたけど今は意味はなし
+          }else{
+            EL.sock6.addMembership(EL.EL_Multi6, '::' + EL.usingIF.v6);
+          }
+        });
+      }
+    
+      // 初期化終わったのでノードのINFをだす, IPv4, IPv6ともに出す
+      if( EL.ipVer == 0 || EL.ipVer == 4) {
+        EL.sendOPC1( EL.Multi,  EL.NODE_PROFILE_OBJECT, EL.NODE_PROFILE_OBJECT, EL.INF, 0xd5, EL.Node_details["d5"]);
+      }
+      if( EL.ipVer == 0 || EL.ipVer == 6) {
+        EL.sendOPC1( EL.Multi6, EL.NODE_PROFILE_OBJECT, EL.NODE_PROFILE_OBJECT, EL.INF, 0xd5, EL.Node_details["d5"]);
+      }
+    
+      if( EL.ipVer == 4) {
+        return EL.sock4;
+      }else if( EL.ipVer == 6 ) {
+        return EL.sock6;
+      }else{
+        return {sock4: EL.sock4, sock6: EL.sock6};
+      }
+      // ---- 代替処理ここまで
+    }
+
     // maker code
     EL.Node_details["8a"][0]=0xff;
     EL.Node_details["8a"][1]=0xff;
     EL.Node_details["8a"][2]=0xfe;
 
-    return EL.initialize(objList, this.echonetUserFunc, ipVer, Options)
+    return await EL.initialize(objList, this.echonetUserFunc, ipVer, Options)
       .then(()=>{
         EL.Node_details["83"][1]=0xff;
         EL.Node_details["83"][2]=0xff;

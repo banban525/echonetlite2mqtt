@@ -13,6 +13,7 @@ import { Logger } from "./Logger";
 let echonetTargetNetwork = "";
 let echonetIntervalToGetProperties = 300;
 let echonetAliasFile="";
+let echonetAltMultiNicMode = false;
 let debugLog = false;
 let restApiPort = 3000;
 let restApiHost = "0.0.0.0";
@@ -46,6 +47,12 @@ if (
 ) {
   echonetAliasFile = process.env.ECHONET_ALIAS_FILE.replace(/^"/g, "").replace(/"$/g, "");
 }
+
+if( "ECHONET_ALT_MULTI_NIC_MODE" in process.env && process.env.ECHONET_ALT_MULTI_NIC_MODE !== undefined)
+{
+  echonetAltMultiNicMode = true;
+}
+
 if ("DEBUG" in process.env && process.env.DEBUG !== undefined) {
   debugLog =
     process.env.DEBUG.toUpperCase() === "TRUE" || process.env.DEBUG === "1" || 
@@ -120,6 +127,10 @@ for(var i = 2;i < process.argv.length; i++){
       echonetIntervalToGetProperties = tempNo;
     }
   }
+  if(name === "--echonetAltMultiNicMode".toLowerCase())
+  {
+    echonetAltMultiNicMode = true;
+  }
   if(name === "--RestApiPort".toLowerCase())
   {
     const tempNo = Number(value.replace(/^"/g, "").replace(/"$/g, ""));
@@ -169,6 +180,7 @@ Logger.info("", "");
 logger.output(`echonetTargetNetwork=${echonetTargetNetwork}`);
 logger.output(`echonetAliasFile=${echonetAliasFile}`);
 logger.output(`echonetIntervalToGetProperties=${echonetIntervalToGetProperties}`);
+logger.output(`echonetAltMultiNicMode=${echonetAltMultiNicMode}`);
 logger.output(`debugLog=${debugLog}`);
 logger.output(`restApiPort=${restApiPort}`);
 logger.output(`restApiHost=${restApiHost}`);
@@ -249,7 +261,7 @@ const systemStatusRepository = new SystemStatusRepositry();
 
 const deviceStore = new DeviceStore();
 
-const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, echonetIntervalToGetProperties, aliasOption);
+const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, echonetIntervalToGetProperties, aliasOption, echonetAltMultiNicMode);
 
 echoNetListController.addDeviceDetectedEvent(()=>{
   const deviceIds = echoNetListController.getDetectedDeviceIds();

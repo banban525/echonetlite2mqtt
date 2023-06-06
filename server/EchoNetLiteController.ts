@@ -17,14 +17,19 @@ export class EchoNetLiteController{
   private readonly holdController:EchoNetHoldController;
   private readonly deviceConverter:EchoNetDeviceConverter;
   private readonly controllerDeviceDefine:{[key: string]: { [key: string]: number[] }};
-  constructor(echonetTargetNetwork:string, intervalToGetProperties:number, aliasOption: AliasOption)
+  private readonly intervalToGetProperties:number;
+  private readonly usedIpByEchoNet:string;
+  private readonly multiNicMode:boolean;
+  constructor(echonetTargetNetwork:string, intervalToGetProperties:number, aliasOption: AliasOption, multiNicMode:boolean)
   {
     this.aliasOption = aliasOption;
     this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
     this.echonetLiteRawController = new EchoNetLiteRawController(this.deviceConverter);
     this.holdController = new EchoNetHoldController({request:this.requestDeviceProperty, set:this.setDevicePropertyPrivate, isBusy:()=>EchoNetCommunicator.getSendQueueLength() >= 1});
+    this.intervalToGetProperties = intervalToGetProperties;
+    this.multiNicMode = multiNicMode;
 
-    let usedIpByEchoNet = "";
+    this.usedIpByEchoNet = "";
     if (echonetTargetNetwork.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+/)) {
       const interfaces = os.networkInterfaces();
       const matchedNetworkAddresses = Object.keys(interfaces)
@@ -34,7 +39,7 @@ export class EchoNetLiteController{
       
       if(matchedNetworkAddresses.length >= 1)
       {
-        usedIpByEchoNet = matchedNetworkAddresses[0]?.address ?? "";
+        this.usedIpByEchoNet = matchedNetworkAddresses[0]?.address ?? "";
       }
     }
     EchoNetCommunicator.addSetResponseHandler(this.ReceivedSetResponse);
@@ -64,11 +69,6 @@ export class EchoNetLiteController{
         "9f": [0x09, 0x80, 0x81, 0x82, 0x83, 0x88, 0x8a, 0x9d, 0x9e, 0x9f], // get map
       }
     };
-    
-    const a = EchoNetCommunicator.initialize(Object.keys(this.controllerDeviceDefine), 4, {v4:usedIpByEchoNet, autoGetDelay:intervalToGetProperties, autoGetProperties:true});
-    a.then(()=>{
-      this.controllerDeviceDefine['05ff01']['83'] = EchoNetCommunicator.updateidentifierFromMacAddress(this.controllerDeviceDefine['05ff01']['83']);
-    });
   }
 
   private ReceivedSetResponse = ( rinfo:rinfo, els:eldata ):void=>
@@ -200,7 +200,15 @@ export class EchoNetLiteController{
 
   start = ():void=>
   {
-    EchoNetCommunicator.search();
+    const a = EchoNetCommunicator.initialize(
+      Object.keys(this.controllerDeviceDefine), 
+      4, 
+      {v4:this.usedIpByEchoNet, autoGetDelay:this.intervalToGetProperties, autoGetProperties:true},
+      this.multiNicMode);
+    a.then(()=>{
+      this.controllerDeviceDefine['05ff01']['83'] = EchoNetCommunicator.updateidentifierFromMacAddress(this.controllerDeviceDefine['05ff01']['83']);
+      EchoNetCommunicator.search();
+    });
   }
 
   requestDeviceProperty = (id:DeviceId, propertyName:string):void =>
