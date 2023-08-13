@@ -1,0 +1,5 @@
+{
+  "port": 1883,
+  "username": "your-username",
+  "password": "your-password"
+}
