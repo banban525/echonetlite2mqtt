@@ -1,5 +1,6 @@
 import { eldata, rinfo } from "echonet-lite";
-import { EchoNetCommunicator } from "./EchoNetCommunicator";
+import { toUtcDateTimeText } from "./datetimeLib";
+import { EchoNetCommunicator, ELSV } from "./EchoNetCommunicator";
 import EchoNetDeviceConverter from "./EchoNetDeviceConverter";
 import { Logger } from "./Logger";
 import { DeviceId } from "./Property";
@@ -25,9 +26,112 @@ export class EchoNetLiteRawController
     }, 1000);
   }
 
+  notGetProperties:{[key:string]:EchoNetRawProperty}={};
+
   public reveivePacketProc( rinfo:rinfo, els:eldata ):void
   {
-    // no code
+    // echonet-lite.jsをバージョンアップしたことで、いろいろ挙動が変わってしまったので
+    // ここで回避用の処理を行う。
+    // autoGetPropertiesで、まとめてプロパティが取得されるようになったことで
+    // (1)取得エラーが返ることがある、(2)全部のプロパティが取得されない、という症状が起こっている
+    // 全部のプロパティが取得されたかを確認するようにして、未取得だったら再取得を行うようにした。
+    // (1)の取得エラーは、EchoNetCommunicatorで、GET_SNAもGET_RES扱いにすることにした。
+    // このクラスは間に合わせの処理ばかりなので、一度整理したい。
+
+    if(els.ESV === ELSV.INF)
+    {
+      // INFの NodeProfile のd5(インスタンスリスト通知) では、NodeProfileの必須プロパティを取得する
+      if(els.SEOJ.startsWith("0ef0") && "d5" in els.DETAILs)
+      {
+        const ip = rinfo.address;
+        const eoj = els.SEOJ;
+        this.notGetProperties[`${ip}-${eoj}-9d`] = {ip, eoj, propertyCode:"9d"};
+        this.notGetProperties[`${ip}-${eoj}-9e`] = {ip, eoj, propertyCode:"9e"};
+        this.notGetProperties[`${ip}-${eoj}-9f`] = {ip, eoj, propertyCode:"9f"};
+      }
+    }
+    if(els.ESV === ELSV.GET_RES || els.ESV === ELSV.GET_SNA)
+    {
+      // GET_RESの NodeProfile のd6(自ノードインスタンスリストS) では、各インスタンスの必須プロパティを取得する
+      if(els.SEOJ.startsWith("0ef0") &&  "d6" in els.DETAILs)
+      {
+        let fiveSecondsLater = new Date();
+        fiveSecondsLater.setSeconds(fiveSecondsLater.getSeconds() + 5);
+        const expire = toUtcDateTimeText(fiveSecondsLater);
+
+        // このノードのインスタンスの必須プロパティを取得するはず。
+        // ただし、無限ループになるかもしれないので、ノードプロファイルはリトライから外す
+        const ip = rinfo.address;
+        const eoj = els.SEOJ;
+        const selfNodeInstanceListSProperty = this.echoNetDeviceConverter.getProperty({eoj, ip, id:""}, "selfNodeInstanceListS");
+        if(selfNodeInstanceListSProperty === undefined)
+        {
+          return;
+        }
+        const selfNodeInstanceListS = this.echoNetDeviceConverter.getPropertyValue(
+          {eoj, ip, id:""}, 
+          selfNodeInstanceListSProperty) as {numberOfInstances:number, instanceList:string[]};
+        selfNodeInstanceListS.instanceList.filter(_=>_.startsWith("0ef0")===false).forEach(eoj=>{
+          this.notGetProperties[`${ip}-${eoj}-9d`] = {ip, eoj, propertyCode:"9d"};
+          this.notGetProperties[`${ip}-${eoj}-9e`] = {ip, eoj, propertyCode:"9e"};
+          this.notGetProperties[`${ip}-${eoj}-9f`] = {ip, eoj, propertyCode:"9f"};  
+        });
+      }
+
+      // ノードプロファイルから9fのGet_Resが来た場合
+      // 前バージョンではd6を要求して、その後インスタンスの情報取得が始まっていたが
+      // それが最近のバージョンではなくなってしまっているので復活させる。
+      if(els.SEOJ.startsWith("0ef0") && "9f" in els.DETAILs)
+      {
+        EchoNetCommunicator.send(rinfo.address, [0x0e, 0xf0, 0x01], els.SEOJ, 0x62, "d6", [0x00] );
+      }
+
+      // 9fを受信したときに自動で取得するはずだが、echonet-lite.jsではd6が除外されてしまっている
+      // (おそらく実装ミス。除外するならノードプロファイルのd6だけを除外しないといけない)
+      // ノードプロファイル以外の場合で、9fにd6があるなら、GET要求する
+      if(els.SEOJ.startsWith("0ef0") === false && "9f" in els.DETAILs)
+      {
+        const ip = rinfo.address;
+        const eoj = els.SEOJ;
+
+        const getPropertyCount = els.DETAILs["9f"].length/2-1;
+        for(let i=0;i<getPropertyCount;i++)
+        {
+          const propertyCode = els.DETAILs["9f"].substring(i*2+2, i*2+2+2);
+          if(propertyCode === "d6")
+          {
+            EchoNetCommunicator.send(rinfo.address, [0x0e, 0xf0, 0x01], els.SEOJ, 0x62, "d6", [0x00] );
+          }
+        }
+      }
+
+      // 9fを受信したら、それらのプロパティを受信するはず
+      if("9f" in els.DETAILs)
+      {
+        let fiveSecondsLater = new Date();
+        fiveSecondsLater.setSeconds(fiveSecondsLater.getSeconds() + 5);
+        const expire = toUtcDateTimeText(fiveSecondsLater);
+
+        const ip = rinfo.address;
+        const eoj = els.SEOJ;
+
+        const getPropertyCount = els.DETAILs["9f"].length/2-1;
+        for(let i=0;i<getPropertyCount;i++)
+        {
+          const propertyCode = els.DETAILs["9f"].substring(i*2+2, i*2+2+2);
+          if(propertyCode === "9f")
+          {
+            continue;
+          }
+          this.notGetProperties[`${ip}-${eoj}-${propertyCode}`] = {ip, eoj, propertyCode};
+        }
+      }
+      
+      // 受信したら、プロパティ待ちリストから除外する
+      Object.keys(els.DETAILs).forEach(propertyCode =>{
+        delete this.notGetProperties[`${rinfo.address}-${els.SEOJ}-${propertyCode}`];
+      });
+    }
   }
   static readonly mandatoryProperties:string[] = ["83", "8a", "9d", "9e", "9f"];
 
@@ -157,6 +261,17 @@ export class EchoNetLiteRawController
 
   public retryGetDevice(echoNetRawStatus:EchoNetRawStatus):void
   {
+    // 送信キューが空なら、未受信のプロパティを再取得する
+    if(EchoNetCommunicator.getSendQueueLength() === 0)
+    {
+      Object.keys(this.notGetProperties).forEach(key=>{
+        const propInfo = this.notGetProperties[key];
+        console.log(`Not Received: ${propInfo.ip}\t${propInfo.eoj}\t${propInfo.propertyCode}`);
+        EchoNetCommunicator.send(propInfo.ip, [0x0e, 0xf0, 0x01], propInfo.eoj, 0x62, propInfo.propertyCode, [0x00] );
+        delete this.notGetProperties[key];
+      })
+    }
+
     const canRequest = EchoNetCommunicator.getSendQueueLength() <= 1
 
     let isRequested = false;
@@ -360,8 +475,8 @@ export class EchoNetLiteRawController
         {
           Logger.info("[ECHONETLite][retry]", `retry searching devices...`);
           EchoNetCommunicator.search();
+          isRequested = true;
           echoNetRawStatus.searchRetryCount++;
-          return;
         }
       }
     }
@@ -392,4 +507,11 @@ export interface EchoNetRawDeviceStatus
 	instanceId: string;
 	state: "uncheck"|"requestedMandatoryProperty"|"acquiredMandatoryProperty"|"requestedAllProperty"|"acquiredAllProperty"
   deviceId: DeviceId|undefined;
+}
+
+export interface EchoNetRawProperty
+{
+  ip:string;
+  eoj:string;
+  propertyCode:string;
 }

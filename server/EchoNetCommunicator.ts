@@ -122,6 +122,12 @@ export class EchoNetCommunicator
     {
       this.getResponseHandlers.forEach(_=>_(rinfo,els));
     }
+
+    // GETエラーだが、一部のプロパティは受信できているので、GetResponseとして扱う
+    if(els.ESV === ELSV.GET_SNA)
+    {
+      this.getResponseHandlers.forEach(_=>_(rinfo,els));
+    }
     if(els.ESV === ELSV.INF)
     {
       this.infoHandlers.forEach(_=>_(rinfo,els));
@@ -236,4 +242,5 @@ export class ELSV
   public static readonly SETC="61";
   public static readonly SETI="60";
   public static readonly SET_RES="71";
+  public static readonly GET_SNA="52";
 }
