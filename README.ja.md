@@ -81,6 +81,10 @@ ECHONET Lite と MQTT をつなぐブリッジです。
 
 ## 使い方
 
+echonetlite2mqttは同じネットワーク内のデバイスを自動で見つけます。
+そのため、デバイスと同じネットワークで実行する必要があります。
+また、docker使用時は、 `--net=host` が必要です。
+
 ### Dockerを使用する場合
 
 1. 次のコマンドで起動します。
@@ -235,10 +239,11 @@ npm start -- --MqttBroker "mqtt://your.mqtt.brocker" --MqttOptionFile /(any fold
 
 #### (1) 複数のIPがある環境だと正常に動作しないことがあります。
 
-もし実行環境に複数のIPがある場合、 `ECHONET_TARGET_NETWORK` (または `--echonetTargetNetwork` )を試してみてください。
+もし実行環境に複数のIPがある場合、 `ECHONET_TARGET_NETWORK` と `ECHONET_ALT_MULTI_NIC_MODE` を試してみてください。
+(Node.jsを使用している場合は `--echonetTargetNetwork` と `--echonetAltMultiNicMode`)
 
-* 例1: `-e ECHONET_TARGET_NETWORK "192.168.1.0/24" `
-* 例2: `--echonetTargetNetwork "192.168.1.0/24"`
+* Dockerの場合: `-e ECHONET_TARGET_NETWORK="192.168.1.0/24" -e ECHONET_ALT_MULTI_NIC_MODE=1`
+* Node.jsの場合: `--echonetTargetNetwork "192.168.1.0/24" --echonetAltMultiNicMode`
 
 #### (2) ECHONET Lite 機器が自動でプロパティを送らないのかも
 

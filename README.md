@@ -85,6 +85,10 @@ The supported devices are as follows.
 
 ## How to use
 
+echonetlite2mqtt automatically finds devices in the same network.
+Therefore, echonetlite2mqtt must be run on the same network as the devices.
+Also, when using docker, `--net=host` is required.
+
 ### Use docker
 
 1. Run the following command
@@ -237,9 +241,9 @@ npm start -- --MqttBroker "mqtt://your.mqtt.brocker" --MqttOptionFile /(any fold
 
 #### (1) This application may not work properly if the execution environment has multiple IPs.
 
-If your execution environment has multiple IPs, try the environment variable `ECHONET_TARGET_NETWORK` or the command line parameter `--echonetTargetNetwork` .
-* Example 1: `-e ECHONET_TARGET_NETWORK "192.168.1.0/24" `
-* Example 2: `--echonetTargetNetwork "192.168.1.0/24"`
+If your execution environment has multiple IPs, try the environment variable `ECHONET_TARGET_NETWORK` and `ECHONET_ALT_MULTI_NIC_MODE`. (when use Node.js, the command line parameter `--echonetTargetNetwork` and `--echonetAltMultiNicMode`)
+* for Docker: `-e ECHONET_TARGET_NETWORK="192.168.1.0/24" -e ECHONET_ALT_MULTI_NIC_MODE=1`
+* for Node.js: `--echonetTargetNetwork "192.168.1.0/24" --echonetAltMultiNicMode`
 
 #### (2) ECHONET Lite devices may not automatically send property values.
 
