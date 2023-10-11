@@ -87,7 +87,7 @@ export class EchoNetLiteController{
       if(property===undefined){
         continue;
       }
-      const value = this.deviceConverter.getPropertyValue(deviceId, property);
+      const value = this.deviceConverter.getPropertyValue(deviceId.ip, deviceId.eoj, property);
       this.firePropertyChnagedEvent(deviceId, property.name, value);
       this.holdController.receivedProperty(deviceId, property.name, value);
     }
@@ -104,7 +104,7 @@ export class EchoNetLiteController{
       if(property===undefined){
         continue;
       }
-      const value = this.deviceConverter.getPropertyValue(deviceId, property);
+      const value = this.deviceConverter.getPropertyValue(deviceId.ip, deviceId.eoj, property);
       this.firePropertyChnagedEvent(deviceId, property.name, value);
     }
   };
@@ -132,7 +132,7 @@ export class EchoNetLiteController{
   {
     const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
 
-    const device = deviceConverter.createDevice(id, EchoNetCommunicator.getFacilities());
+    const device = deviceConverter.createDevice(id, EchoNetCommunicator.getRawDataSet());
     return device;
   }
 
@@ -176,10 +176,10 @@ export class EchoNetLiteController{
   setDevicePropertyPrivate = (id:DeviceId, propertyName:string, newValue:any):void =>
   {
     const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
-    const property = deviceConverter.getProperty(id, propertyName);
+    const property = deviceConverter.getProperty(id.ip, id.eoj, propertyName);
 
 
-    const echoNetData = deviceConverter.propertyToEchoNetData(id, propertyName, newValue);
+    const echoNetData = deviceConverter.propertyToEchoNetData(id.ip, id.eoj, propertyName, newValue);
     if(echoNetData===undefined)
     {
       Logger.warn("[ECHONETLite]", `setDeviceProperty echoNetData===undefined newValue=${newValue}`);
@@ -214,7 +214,7 @@ export class EchoNetLiteController{
   requestDeviceProperty = (id:DeviceId, propertyName:string):void =>
   {
     const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
-    const property = deviceConverter.getProperty(id, propertyName);
+    const property = deviceConverter.getProperty(id.ip, id.eoj, propertyName);
     if(property === undefined)
     {
       Logger.warn("[ECHONETLite]", `setDeviceProperty property === undefined propertyName=${propertyName}`);

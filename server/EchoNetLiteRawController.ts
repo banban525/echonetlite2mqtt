@@ -63,13 +63,13 @@ export class EchoNetLiteRawController
         // ただし、無限ループになるかもしれないので、ノードプロファイルはリトライから外す
         const ip = rinfo.address;
         const eoj = els.SEOJ;
-        const selfNodeInstanceListSProperty = this.echoNetDeviceConverter.getProperty({eoj, ip, id:""}, "selfNodeInstanceListS");
+        const selfNodeInstanceListSProperty = this.echoNetDeviceConverter.getProperty(ip, eoj, "selfNodeInstanceListS");
         if(selfNodeInstanceListSProperty === undefined)
         {
           return;
         }
         const selfNodeInstanceListS = this.echoNetDeviceConverter.getPropertyValue(
-          {eoj, ip, id:""}, 
+          ip, eoj, 
           selfNodeInstanceListSProperty) as {numberOfInstances:number, instanceList:string[]};
         selfNodeInstanceListS.instanceList.filter(_=>_.startsWith("0ef0")===false).forEach(eoj=>{
           this.notGetProperties[`${ip}-${eoj}-9d`] = {ip, eoj, propertyCode:"9d"};
@@ -137,20 +137,20 @@ export class EchoNetLiteRawController
 
   private findDevice(echoNetRawStatus:EchoNetRawStatus):void
   {
-    const echoNetRawData = EchoNetCommunicator.getFacilities();
+    const echoNetRawData = EchoNetCommunicator.getRawDataSet();
 
     let detected:boolean = false;
-    for(const ip in echoNetRawData)
+    for(const ip of echoNetRawData.getIpList())
     {
       if((ip in echoNetRawStatus.nodes) === false)
       {
         echoNetRawStatus.nodes[ip] = {ip, state:"uncheck"};
       }
 
-      for(const eoj in echoNetRawData[ip])
+      for(const eoj of echoNetRawData.getEojList(ip))
       {
         const instanceId = `${ip}-${eoj}`;
-        const deviceRawData = echoNetRawData[ip][eoj];
+        //const deviceRawData = echoNetRawData[ip][eoj];
         if((instanceId in echoNetRawStatus.devices) === false)
         {
           echoNetRawStatus.devices[instanceId] = {instanceId, state:"uncheck", deviceId:undefined};
@@ -175,7 +175,7 @@ export class EchoNetLiteRawController
             continue;
           }
 
-          const missingProperties = EchoNetLiteRawController.mandatoryProperties.filter(_=>(_ in deviceRawData)===false);
+          const missingProperties = EchoNetLiteRawController.mandatoryProperties.filter(_=>echoNetRawData.existsData(ip, eoj, _)===false);
           if(missingProperties.length !== 0)
           {
             continue;
@@ -192,7 +192,7 @@ export class EchoNetLiteRawController
         }
         else
         {
-          const missingProperties = EchoNetLiteRawController.mandatoryProperties.filter(_=>(_ in deviceRawData)===false);
+          const missingProperties = EchoNetLiteRawController.mandatoryProperties.filter(_=>echoNetRawData.existsData(ip, eoj, _)===false);
           if(missingProperties.length === 0)
           {
             const deviceId = this.echoNetDeviceConverter.getDeviceId(ip, eoj, echoNetRawData);
@@ -275,9 +275,9 @@ export class EchoNetLiteRawController
     const canRequest = EchoNetCommunicator.getSendQueueLength() <= 1
 
     let isRequested = false;
-    const echoNetRawData = EchoNetCommunicator.getFacilities();
+    const echoNetRawData = EchoNetCommunicator.getRawDataSet();
     // nodeProfileのインスタンスリストで取得していないデバイスを再取得する
-    for(const ip in echoNetRawData)
+    for(const ip of echoNetRawData.getIpList())
     {
       if((ip in echoNetRawStatus.nodes) === false)
       {
@@ -287,26 +287,26 @@ export class EchoNetLiteRawController
       {
         continue;
       }
-      if(("0ef001" in echoNetRawData[ip]) === false)
+      if(echoNetRawData.existsDevice(ip, "0ef001") === false)
       {
         // ここには来ないはず
         continue;
       }
 
-      const selfNodeInstanceListSProperty = this.echoNetDeviceConverter.getProperty({eoj:"0ef001", ip, id:""}, "selfNodeInstanceListS");
+      const selfNodeInstanceListSProperty = this.echoNetDeviceConverter.getProperty(ip, "0ef001", "selfNodeInstanceListS");
       if(selfNodeInstanceListSProperty === undefined)
       {
         continue;
       }
       const selfNodeInstanceListS = this.echoNetDeviceConverter.getPropertyValue(
-        {eoj:"0ef001", ip, id:""}, 
+        ip, "0ef001", 
         selfNodeInstanceListSProperty) as {numberOfInstances:number, instanceList:string[]};
       if(selfNodeInstanceListS === undefined)
       {
         continue;
       }
 
-      const notGetDevices = selfNodeInstanceListS.instanceList.filter(_=>(_ in echoNetRawData[ip]) === false);
+      const notGetDevices = selfNodeInstanceListS.instanceList.filter(_=>echoNetRawData.existsDevice(ip,_) === false);
 
       if(notGetDevices.length === 0)
       {
@@ -343,9 +343,9 @@ export class EchoNetLiteRawController
 
     isRequested = false;
     // インスタンスごとに、Id、メーカーコード、INFマップ、SETマップ、GETマップが無ければ取得する
-    for(const ip in echoNetRawData)
+    for(const ip of echoNetRawData.getIpList())
     {
-      for(const eoj in echoNetRawData[ip])
+      for(const eoj of echoNetRawData.getEojList(ip))
       {
         const instanceId = `${ip}-${eoj}`;
         if((instanceId in echoNetRawStatus.devices) === false)
@@ -360,9 +360,8 @@ export class EchoNetLiteRawController
           continue;
         }
 
-        const deviceRawData = echoNetRawData[ip][eoj];
 
-        const missingProperties = EchoNetLiteRawController.mandatoryProperties.filter(_=>(_ in deviceRawData)===false);
+        const missingProperties = EchoNetLiteRawController.mandatoryProperties.filter(_=>echoNetRawData.existsData(ip, eoj, _)===false);
         if(missingProperties.length === 0)
         {
           // 状態: 必須プロパティ取得済み
@@ -403,9 +402,9 @@ export class EchoNetLiteRawController
 
     // インスタンスごとに、Getプロパティが無ければ取得する
     isRequested = false;
-    for(const ip in echoNetRawData)
+    for(const ip of echoNetRawData.getIpList())
     {
-      for(const eoj in echoNetRawData[ip])
+      for(const eoj of echoNetRawData.getEojList(ip))
       {
         const instanceId = `${ip}-${eoj}`;
 
@@ -424,13 +423,13 @@ export class EchoNetLiteRawController
           // 必須プロパティの取得が終わっていないならスキップ
           continue;
         }
-        const facilities = EchoNetCommunicator.getFacilities();
+        const facilities = EchoNetCommunicator.getRawDataSet();
         const getPropNoList = this.echoNetDeviceConverter.convertGetPropertyNoList(ip, eoj, facilities);
         if(getPropNoList === undefined)
         {
           continue;
         }
-        const notGetPropNoList = getPropNoList.filter(_=>(_ in facilities[ip][eoj])===false);
+        const notGetPropNoList = getPropNoList.filter(_=>echoNetRawData.existsData(ip, eoj, _)===false);
         if(notGetPropNoList.length === 0)
         {
           // 状態: 全GETプロパティ取得済み

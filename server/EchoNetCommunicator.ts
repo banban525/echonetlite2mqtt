@@ -1,4 +1,4 @@
-import EL, { facilitiesType,eldata,rinfo, DeviceDetailsType } from "echonet-lite";
+import EL, { facilitiesType,eldata,rinfo, DeviceDetailsType, facilities } from "echonet-lite";
 import dgram from "dgram";
 
 export class EchoNetCommunicator
@@ -180,6 +180,11 @@ export class EchoNetCommunicator
   {
     return EL.facilities;
   }
+
+  public static getRawDataSet = (): RawDataSet =>
+  {
+    return new RawDataSet(EL.facilities);
+  }
   public static send = (
     ip: string,
     seoj: string | number[],
@@ -243,4 +248,81 @@ export class ELSV
   public static readonly SETI="60";
   public static readonly SET_RES="71";
   public static readonly GET_SNA="52";
+}
+
+export class RawDataSet
+{
+  readonly facilities:facilitiesType;
+  constructor(facilities:facilitiesType)
+  {
+    this.facilities = facilities;
+  }
+
+  public existsDevice(ip:string, eoj:string):boolean
+  {
+    eoj = eoj.toLocaleLowerCase();
+    if((ip in facilities) === false)
+    {
+      return false;
+    }
+    if((eoj in facilities[ip]) === false)
+    {
+      return false;
+    }
+    return true;
+  }
+
+  public existsData(ip:string, eoj:string, epc:string):boolean
+  {
+    eoj = eoj.toLocaleLowerCase();
+    epc = epc.toLocaleLowerCase();
+    
+    if((ip in facilities) === false)
+    {
+      return false;
+    }
+    if((eoj in facilities[ip]) === false)
+    {
+      return false;
+    }
+    if((epc in facilities[ip][eoj]) === false)
+    {
+      return false;
+    }
+    return true;
+  }
+
+  public getIpList():string[]
+  {
+    return Object.keys(this.facilities);
+  }
+
+  public getEojList(ip:string):string[]
+  {
+    if((ip in facilities) === false)
+    {
+      return [];
+    }
+    return Object.keys(facilities[ip]);
+  }
+
+  public getRawData(ip:string, eoj:string, epc:string):string|undefined
+  {
+    eoj = eoj.toLocaleLowerCase();
+    epc = epc.toLocaleLowerCase();
+    
+    if((ip in facilities) === false)
+    {
+      return undefined;
+    }
+    if((eoj in facilities[ip]) === false)
+    {
+      return undefined;
+    }
+    if((epc in facilities[ip][eoj]) === false)
+    {
+      return undefined;
+    }
+    return facilities[ip][eoj][epc];
+  }
 }

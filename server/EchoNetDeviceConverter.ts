@@ -1,8 +1,7 @@
-import { facilitiesType } from "echonet-lite";
-import { AliasOption, Device, DeviceAlias, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
+import { AliasOption, Device, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
 import { EchoNetPropertyConverter } from "./EchoNetPropertyConverter";
 import { getUtcNowDateTimeText } from "./datetimeLib";
-import { EchoNetCommunicator } from "./EchoNetCommunicator";
+import { EchoNetCommunicator, RawDataSet } from "./EchoNetCommunicator";
 import { Logger } from "./Logger";
 
 export default class EchoNetDeviceConverter
@@ -15,50 +14,8 @@ export default class EchoNetDeviceConverter
     this.aliasOption = aliasOption;
   }
 
-  public getDeviceIdList =  (echonetLiteFacilities:facilitiesType): DeviceId[] =>{
-    const result:DeviceId[] = [];
-    for(const ip in echonetLiteFacilities)
-    {
-      for(const eoj in echonetLiteFacilities[ip]){
-        if(("9f" in echonetLiteFacilities[ip][eoj]) === false || 
-          ("9e" in echonetLiteFacilities[ip][eoj]) === false || 
-          ("9d" in echonetLiteFacilities[ip][eoj]) === false ||
-          ("8a" in echonetLiteFacilities[ip][eoj]) ===false)  //メーカコード
-        {
-          continue;
-        }
 
-        let id;
-        if(eoj === "0ef001")
-        {
-          // nodeprofileのIdは専用処理する(他デバイスとIdが共通のことがあるため、他デバイスのIdが確定してから決まる)
-          id = this.getDeviceIdForNodeProfile(echonetLiteFacilities, ip);
-        }
-        else
-        {
-          const getPropertyNoList = this.convertGetPropertyNoList(ip, eoj, echonetLiteFacilities);
-          if(getPropertyNoList === undefined)
-          {
-            continue;
-          }
-          id = this.getDeviceId(ip, eoj, echonetLiteFacilities);
-        }
-
-        if(id === "")
-        {
-          continue;
-        }
-        result.push({
-          id,
-          ip,
-          eoj
-        });
-      }
-    }
-    return result;
-  }
-
-  public createDevice = (deviceId:DeviceId, echonetLiteFacilities:facilitiesType):Device|undefined => {
+  public createDevice = (deviceId:DeviceId, echonetLiteFacilities:RawDataSet):Device|undefined => {
 
     const getPropertyNoList = this.convertGetPropertyNoList(deviceId.ip, deviceId.eoj, echonetLiteFacilities);
     if(getPropertyNoList === undefined)
@@ -68,20 +25,20 @@ export default class EchoNetDeviceConverter
 
     let id = deviceId.id;
 
-    const manufacturer = this.getManufacturer(deviceId.ip, deviceId.eoj, echonetLiteFacilities);
+    const manufacturer = this.getManufacturer(deviceId.ip, deviceId.eoj, echonetLiteFacilities.getRawData(deviceId.ip,deviceId.eoj,"8a")??undefined);
     if(manufacturer === undefined)
     {
       return undefined;
     }
     const setPropertyNoList:string[] = [];
-    const setPropertyListText = echonetLiteFacilities[deviceId.ip][deviceId.eoj]["9e"];
+    const setPropertyListText = echonetLiteFacilities.getRawData(deviceId.ip, deviceId.eoj,"9e") ?? "";
     for(let i = 2; i < setPropertyListText.length; i+=2)
     {
       setPropertyNoList.push(setPropertyListText.substr(i, 2));
     }
 
     const notifyPropertyNoList:string[] = [];
-    const notifyPropertyListText = echonetLiteFacilities[deviceId.ip][deviceId.eoj]["9d"];
+    const notifyPropertyListText = echonetLiteFacilities.getRawData(deviceId.ip, deviceId.eoj, "9d") ?? "";
     for(let i = 2; i < notifyPropertyListText.length; i+=2)
     {
       notifyPropertyNoList.push(notifyPropertyListText.substr(i, 2));
@@ -94,7 +51,6 @@ export default class EchoNetDeviceConverter
       getPropertyNoList, 
       setPropertyNoList, 
       notifyPropertyNoList, 
-      echonetLiteFacilities[deviceId.ip][deviceId.eoj],
       manufacturer);
     return newDevice;
   }
@@ -107,7 +63,6 @@ export default class EchoNetDeviceConverter
       getPropertyNoList:string[], 
       setPropertyNoList:string[], 
       notifyPropertyNoList:string[],
-      echoNetRawData: {[key:string]:string},
       manufacturer:Manufacturer):Device =>
   {
     const eojClass = "0x" + eoj.substring(0, 4).toUpperCase();
@@ -210,7 +165,7 @@ export default class EchoNetDeviceConverter
     const updated = getUtcNowDateTimeText();
     const propertiesValue:{[key:string]:PropertyValue} = {};
     for(const property of properties){
-      const value = this.getPropertyValue({id,ip,eoj}, property);
+      const value = this.getPropertyValue(ip, eoj, property);
       propertiesValue[property.name] = {
         name: property.name,
         deviceProperty: property,
@@ -238,8 +193,8 @@ export default class EchoNetDeviceConverter
     }
   }
     
-  private getManufacturer = (ip:string, eoj:string, facilities:facilitiesType):Manufacturer|undefined => {
-    const manufacturerCode = facilities[ip][eoj]["8a"];
+  private getManufacturer = (ip:string, eoj:string, rawData:string|undefined):Manufacturer|undefined => {
+    const manufacturerCode = rawData;
     if(manufacturerCode===undefined)
     {
       return undefined;
@@ -254,9 +209,9 @@ export default class EchoNetDeviceConverter
   }
     
     
-  public convertGetPropertyNoList = (ip:string, eoj:string, facilities:facilitiesType): string[]|undefined => {
+  public convertGetPropertyNoList = (ip:string, eoj:string, facilities:RawDataSet): string[]|undefined => {
   
-    const getPropertyListText = facilities[ip][eoj]["9f"];
+    const getPropertyListText = facilities.getRawData(ip, eoj, "9f");
     if(getPropertyListText===undefined)
     {
       return undefined;
@@ -270,7 +225,7 @@ export default class EchoNetDeviceConverter
     return getPropertyNoList;
   }
 
-  public getDeviceId = (ip:string, eoj:string, facilities:facilitiesType):string => {
+  public getDeviceId = (ip:string, eoj:string, facilities:RawDataSet):string => {
     let id = "";
   
     const getPropertyNoList = this.convertGetPropertyNoList(ip, eoj, facilities);
@@ -281,7 +236,7 @@ export default class EchoNetDeviceConverter
   
     // 識別番号を持つ場合で、未取得ならば取得されるまで待つ
     if(getPropertyNoList.find((_):boolean=>_ === "83") !== undefined){
-      if("83" in facilities[ip][eoj] === false)
+      if(facilities.existsData(ip, eoj,"83") === false)
       {
         // 識別番号が未取得なら、取得されるまで待つ
         Logger.warn("", `id is not get in ${ip} ${eoj}`);
@@ -290,22 +245,21 @@ export default class EchoNetDeviceConverter
     }
 
     // getプロパティに無くても識別番号を持つ場合があり、その場合はその値を使う
-    if("83" in facilities[ip][eoj])
+    if(facilities.existsData(ip,eoj,"83"))
     {
-      id = facilities[ip][eoj]["83"];
+      id = facilities.getRawData(ip, eoj, "83") ?? "";
     }
     
     // 識別番号が無い機器の場合は、ノードの識別番号+eojにする
     if(id === "")
     {
-      const nodeProfile = facilities[ip]["0ef001"];
-      if(nodeProfile===undefined)
+      if(facilities.existsDevice(ip, "0ef001")===false)
       {
         // ノードが未取得なら、取得されるまで待つ
         Logger.warn("", `node is not found in ${ip} ${eoj}`);
         return "";
       }
-      const nodeGetProperty = nodeProfile["9f"];
+      const nodeGetProperty = facilities.getRawData(ip, eoj, "9f");
       if(nodeGetProperty === undefined)
       {
         // ノードのプロパティリストが未取得なら、取得されるまで待つ
@@ -323,7 +277,7 @@ export default class EchoNetDeviceConverter
       }
       if(nodeHasId)
       {
-        const nodeId = facilities[ip]["0ef001"]["83"];
+        const nodeId = facilities.getRawData(ip, "0ef001", "83");
         if(nodeId === undefined)
         {
           // ノードのIDが未取得なら取得されるまで待つ
@@ -351,9 +305,9 @@ export default class EchoNetDeviceConverter
   // 本来は、全てのデバイスのIdの後ろに"_{eoj}"を付けたほうが統一感があるが
   // 過去バージョンとの互換性のため、できるだけIdは変えないようにする
   // 通常、NodeProfileはMQTT経由で制御するものではないので、Idが変わってもOKとする
-  public getDeviceIdForNodeProfile = (echonetLiteFacilities:facilitiesType, ip:string):string =>
+  public getDeviceIdForNodeProfile = (echonetLiteFacilities:RawDataSet, ip:string):string =>
   {
-    const echoNetRawNodeData = echonetLiteFacilities[ip];
+    //const echoNetRawNodeData = echonetLiteFacilities[ip];
 
     const nodeProfileDeviceClass = this.echoNetPropertyConverter.getDevice("0x0EF0");
     if(nodeProfileDeviceClass === undefined)
@@ -367,27 +321,32 @@ export default class EchoNetDeviceConverter
       throw Error("ERROR: Not found Self-node instance list S property class in nodeProfile device class");
     }
 
-    if(("0ef001" in echoNetRawNodeData) === false)
+    if(echonetLiteFacilities.existsDevice(ip, "0ef001") === false)
     {
       // NodeProfileが無し
       return "";
     }
 
-    if(("d6" in echoNetRawNodeData["0ef001"]) === false)
+    if(echonetLiteFacilities.existsData(ip, "0ef001", "d6") === false)
     {
       // 自ノードインスタンスリスト プロパティが未取得
       return "";
     }
-    if(("83" in echoNetRawNodeData["0ef001"]) === false)
+    if(echonetLiteFacilities.existsData(ip, "0ef001", "83") === false)
     {
       // NodeProfileのIdが未取得
       return "";
     }
 
-    const nodeProfileId = echoNetRawNodeData["0ef001"]["83"];
+    const nodeProfileId = echonetLiteFacilities.getRawData(ip, "0ef001", "83") ?? "";
 
     // 自ノードインスタンスリストの取得
-    const data = echoNetRawNodeData["0ef001"]["d6"];
+    const data = echonetLiteFacilities.getRawData(ip,"0ef001","d6");
+    if(data === undefined)
+    {
+      // ここには来ないはず
+      return "";
+    }
     const eojListUnknown = this.echoNetPropertyConverter.toObject(
       instanceListProperty.data,
       data
@@ -397,16 +356,16 @@ export default class EchoNetDeviceConverter
     const otherDeviceIdList:string[] = [];
     for(const otherDeviceEoj of eojList.instanceList)
     {
-      if((otherDeviceEoj in echoNetRawNodeData) === false)
+      if(echonetLiteFacilities.existsDevice(ip, otherDeviceEoj) === false)
       {
         // 自ノードのインスタンスがそろっていない
         return "";
       }
-      const otherDeviceRawData = echoNetRawNodeData[otherDeviceEoj];
-      if(("9f" in otherDeviceRawData) === false || 
-        ("9e" in otherDeviceRawData) === false || 
-        ("9d" in otherDeviceRawData) === false ||
-        ("8a" in otherDeviceRawData) ===false)  //メーカコード
+
+      if(echonetLiteFacilities.existsData(ip, otherDeviceEoj, "9f") === false || 
+        echonetLiteFacilities.existsData(ip, otherDeviceEoj, "9e") === false || 
+        echonetLiteFacilities.existsData(ip, otherDeviceEoj, "9d") === false ||
+        echonetLiteFacilities.existsData(ip, otherDeviceEoj, "8a") ===false)  //メーカコード
       {
         // 他インスタンスのプロパティがそろっていない
         return "";
@@ -417,12 +376,17 @@ export default class EchoNetDeviceConverter
         throw Error("ありえない");
       }
       if(getPropertyNoList.find((_):boolean=>_ === "83") !== undefined){
-        if("83" in otherDeviceRawData === false)
+        if(echonetLiteFacilities.existsData(ip, otherDeviceEoj, "83") === false)
         {
           // 識別番号のプロパティがあるはずで、未取得なら取得されるまで待つ
           return "";
         }
-        const otherDeviceId = otherDeviceRawData["83"];
+        const otherDeviceId = echonetLiteFacilities.getRawData(ip, otherDeviceEoj, "83");
+        if(otherDeviceId === undefined)
+        {
+          // ここには来ないはず
+          return "";
+        }
         otherDeviceIdList.push(otherDeviceId);
       }
     }
@@ -438,11 +402,8 @@ export default class EchoNetDeviceConverter
   }
 
   public getPropertyWithEpc = (deviceId: DeviceId, epc:string): Property|undefined =>{
-    const facilities = EchoNetCommunicator.getFacilities();
-    if((deviceId.ip in facilities) === false){
-      return undefined;
-    }
-    if((deviceId.eoj in facilities[deviceId.ip]) === false)
+    const facilities = EchoNetCommunicator.getRawDataSet();
+    if(facilities.existsDevice(deviceId.ip, deviceId.eoj) === false)
     {
       return undefined;
     }
@@ -459,21 +420,18 @@ export default class EchoNetDeviceConverter
     {
       return undefined;
     }
-    return this.getProperty(deviceId, property.shortName);
+    return this.getProperty(deviceId.ip, deviceId.eoj, property.shortName);
   }
 
-  public getProperty = (deviceId: DeviceId, propertyName:string): Property|undefined =>{
-    const facilities = EchoNetCommunicator.getFacilities();
-    if((deviceId.ip in facilities) === false){
-      return undefined;
-    }
-    if((deviceId.eoj in facilities[deviceId.ip]) === false)
+  public getProperty = (ip:string, eoj:string, propertyName:string): Property|undefined =>{
+    const facilities = EchoNetCommunicator.getRawDataSet();
+    if(facilities.existsDevice(ip, eoj)===false)
     {
       return undefined;
     }
 
     // コンバート可能なデバイスかチェック
-    const deviceClass = "0x"+deviceId.eoj.substr(0, 4).toUpperCase();
+    const deviceClass = "0x"+eoj.substr(0, 4).toUpperCase();
     const foundDevice = this.echoNetPropertyConverter.getDevice(deviceClass);
     if(foundDevice === undefined){
       return undefined;
@@ -497,20 +455,16 @@ export default class EchoNetDeviceConverter
     };
   }
 
-  public propertyToEchoNetData = (deviceId:DeviceId, propertyName:string, value:any):string|undefined => {
-    const facilities = EchoNetCommunicator.getFacilities();
-    if((deviceId.ip in facilities) === false){
-      Logger.warn("", `propertyToEchoNetData (deviceId.ip in echonet facilities) === false`)
-      return undefined;
-    }
-    if((deviceId.eoj in facilities[deviceId.ip]) === false)
+  public propertyToEchoNetData = (ip:string, eoj:string, propertyName:string, value:any):string|undefined => {
+    const facilities = EchoNetCommunicator.getRawDataSet();
+    if(facilities.existsDevice(ip, eoj)===false)
     {
       Logger.warn("", `propertyToEchoNetData (deviceId.eoj in echonet facilities[deviceId.ip]) === false`)
       return undefined;
     }
 
     // コンバート可能なデバイスかチェック
-    const deviceClass = "0x"+deviceId.eoj.substr(0, 4).toUpperCase();
+    const deviceClass = "0x"+eoj.substr(0, 4).toUpperCase();
     const foundDevice = this.echoNetPropertyConverter.getDevice(deviceClass);
     if(foundDevice === undefined){
       Logger.warn("", `propertyToEchoNetData foundDevice === undefined`)
@@ -534,14 +488,14 @@ export default class EchoNetDeviceConverter
     return echoNetData;
   }
 
-  public getPropertyValue = (deviceId:DeviceId, property:Property): unknown|undefined=>{
+  public getPropertyValue = (ip:string, eoj:string, property:Property): unknown|undefined=>{
 
-    const echoNetRawData = EchoNetCommunicator.getFacilities()[deviceId.ip][deviceId.eoj];
-    if((property.epc.substring(2).toLowerCase() in echoNetRawData)===false)
+    const echoNetRawData = EchoNetCommunicator.getRawDataSet().getRawData(ip, eoj, property.epc.substring(2).toLowerCase());
+    if(echoNetRawData===undefined)
     {
       return undefined;
     }
-    const data = echoNetRawData[property.epc.substring(2).toLowerCase()];
+    const data = echoNetRawData;
 
     const value = this.echoNetPropertyConverter.toObject(
       property.schema.data,
