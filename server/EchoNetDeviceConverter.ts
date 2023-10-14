@@ -307,20 +307,7 @@ export default class EchoNetDeviceConverter
   // 通常、NodeProfileはMQTT経由で制御するものではないので、Idが変わってもOKとする
   public getDeviceIdForNodeProfile = (echonetLiteFacilities:RawDataSet, ip:string):string =>
   {
-    //const echoNetRawNodeData = echonetLiteFacilities[ip];
-
-    const nodeProfileDeviceClass = this.echoNetPropertyConverter.getDevice("0x0EF0");
-    if(nodeProfileDeviceClass === undefined)
-    {
-      throw Error("ERROR: Not found nodeProfile device class");
-    }
     
-    let instanceListProperty = nodeProfileDeviceClass.elProperties.find(_=>_.epc === "0xD6");
-    if(instanceListProperty === undefined)
-    {
-      throw Error("ERROR: Not found Self-node instance list S property class in nodeProfile device class");
-    }
-
     if(echonetLiteFacilities.existsDevice(ip, "0ef001") === false)
     {
       // NodeProfileが無し
@@ -347,11 +334,12 @@ export default class EchoNetDeviceConverter
       // ここには来ないはず
       return "";
     }
-    const eojListUnknown = this.echoNetPropertyConverter.toObject(
-      instanceListProperty.data,
-      data
-    );
-    const eojList = eojListUnknown as {numberOfInstances:number,instanceList:string[]}
+    const eojList = this.convertToSelfNodeInstanceListForNodeProfile(data);
+    if(eojList === undefined)
+    {
+      // ここには来ないはず
+      return "";
+    }
 
     const otherDeviceIdList:string[] = [];
     for(const otherDeviceEoj of eojList.instanceList)
@@ -502,6 +490,45 @@ export default class EchoNetDeviceConverter
       data
     );
     return value;
+  }
+
+  public convertToSelfNodeInstanceListForNodeProfile(rawData:string):  {numberOfInstances:number, instanceList:string[]} | undefined
+  {
+    const nodeProfileDeviceType = this.echoNetPropertyConverter.getDevice("0x0EF0");
+    if(nodeProfileDeviceType === undefined)
+    {
+      throw Error("ERROR: Not found nodeProfile device class");
+    }
+    const instanceListProperty = nodeProfileDeviceType.elProperties.find(_=>_.epc === "0xD6");
+    if(instanceListProperty === undefined)
+    {
+      throw Error("ERROR: Not found Self-node instance list S property class in nodeProfile device class");
+    }
+    const data = rawData;
+    const eojListUnknown = this.echoNetPropertyConverter.toObject(
+      instanceListProperty.data,
+      data
+    ) as {numberOfInstances:number, instanceList:string[]} | undefined;
+    return eojListUnknown;
+  }
+
+  public convertToPropertyList(rawData:string): string[] | undefined
+  {
+    if(rawData.length < 2)
+    {
+      return undefined;
+    }
+    const result:string[] = [];
+    for(let i=2;i<rawData.length;i+=2)
+    {
+      const epc = rawData.substring(i, i+2).toLowerCase();
+      if(epc.match(/[0-9a-f]{2}/) === null)
+      {
+        return undefined;
+      }
+      result.push(epc);
+    }
+    return result;
   }
 
   public isSupportedDeviceType(eoj:string):boolean

@@ -55,22 +55,16 @@ export class EchoNetLiteRawController
       // GET_RESの NodeProfile のd6(自ノードインスタンスリストS) では、各インスタンスの必須プロパティを取得する
       if(els.SEOJ.startsWith("0ef0") &&  "d6" in els.DETAILs)
       {
-        let fiveSecondsLater = new Date();
-        fiveSecondsLater.setSeconds(fiveSecondsLater.getSeconds() + 5);
-        const expire = toUtcDateTimeText(fiveSecondsLater);
-
         // このノードのインスタンスの必須プロパティを取得するはず。
         // ただし、無限ループになるかもしれないので、ノードプロファイルはリトライから外す
         const ip = rinfo.address;
-        const eoj = els.SEOJ;
-        const selfNodeInstanceListSProperty = this.echoNetDeviceConverter.getProperty(ip, eoj, "selfNodeInstanceListS");
-        if(selfNodeInstanceListSProperty === undefined)
+
+        const rawData = els.DETAILs["d6"];
+        const selfNodeInstanceListS = this.echoNetDeviceConverter.convertToSelfNodeInstanceListForNodeProfile(rawData);
+        if(selfNodeInstanceListS === undefined)
         {
           return;
         }
-        const selfNodeInstanceListS = this.echoNetDeviceConverter.getPropertyValue(
-          ip, eoj, 
-          selfNodeInstanceListSProperty) as {numberOfInstances:number, instanceList:string[]};
         selfNodeInstanceListS.instanceList.filter(_=>_.startsWith("0ef0")===false).forEach(eoj=>{
           this.notGetProperties[`${ip}-${eoj}-9d`] = {ip, eoj, propertyCode:"9d"};
           this.notGetProperties[`${ip}-${eoj}-9e`] = {ip, eoj, propertyCode:"9e"};
@@ -91,34 +85,30 @@ export class EchoNetLiteRawController
       // ノードプロファイル以外の場合で、9fにd6があるなら、GET要求する
       if(els.SEOJ.startsWith("0ef0") === false && "9f" in els.DETAILs)
       {
-        const ip = rinfo.address;
-        const eoj = els.SEOJ;
-
-        const getPropertyCount = els.DETAILs["9f"].length/2-1;
-        for(let i=0;i<getPropertyCount;i++)
+        const propertyNoList = this.echoNetDeviceConverter.convertToPropertyList(els.DETAILs["9f"]);
+        if(propertyNoList === undefined)
         {
-          const propertyCode = els.DETAILs["9f"].substring(i*2+2, i*2+2+2);
-          if(propertyCode === "d6")
-          {
-            EchoNetCommunicator.send(rinfo.address, [0x0e, 0xf0, 0x01], els.SEOJ, 0x62, "d6", [0x00] );
-          }
+          return;
+        }
+        if(propertyNoList.find(_=>_ === "d6"))
+        {
+          EchoNetCommunicator.send(rinfo.address, [0x0e, 0xf0, 0x01], els.SEOJ, 0x62, "d6", [0x00] );
         }
       }
 
       // 9fを受信したら、それらのプロパティを受信するはず
       if("9f" in els.DETAILs)
       {
-        let fiveSecondsLater = new Date();
-        fiveSecondsLater.setSeconds(fiveSecondsLater.getSeconds() + 5);
-        const expire = toUtcDateTimeText(fiveSecondsLater);
-
         const ip = rinfo.address;
         const eoj = els.SEOJ;
 
-        const getPropertyCount = els.DETAILs["9f"].length/2-1;
-        for(let i=0;i<getPropertyCount;i++)
+        const propertyNoList = this.echoNetDeviceConverter.convertToPropertyList(els.DETAILs["9f"]);
+        if(propertyNoList === undefined)
         {
-          const propertyCode = els.DETAILs["9f"].substring(i*2+2, i*2+2+2);
+          return;
+        }
+        for(const propertyCode of propertyNoList)
+        {
           if(propertyCode === "9f")
           {
             continue;
@@ -293,14 +283,12 @@ export class EchoNetLiteRawController
         continue;
       }
 
-      const selfNodeInstanceListSProperty = this.echoNetDeviceConverter.getProperty(ip, "0ef001", "selfNodeInstanceListS");
-      if(selfNodeInstanceListSProperty === undefined)
+      const selfNodeInstanceListRawData = echoNetRawData.getRawData(ip, "0ef001", "d6");
+      if(selfNodeInstanceListRawData === undefined)
       {
         continue;
       }
-      const selfNodeInstanceListS = this.echoNetDeviceConverter.getPropertyValue(
-        ip, "0ef001", 
-        selfNodeInstanceListSProperty) as {numberOfInstances:number, instanceList:string[]};
+      const selfNodeInstanceListS = this.echoNetDeviceConverter.convertToSelfNodeInstanceListForNodeProfile(selfNodeInstanceListRawData);
       if(selfNodeInstanceListS === undefined)
       {
         continue;
