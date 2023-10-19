@@ -492,6 +492,15 @@ export default class EchoNetDeviceConverter
     return value;
   }
 
+  public convertPropertyValue = (property: Property, echonetData: string): unknown | undefined =>
+  {
+    const value = this.echoNetPropertyConverter.toObject(
+      property.schema.data,
+      echonetData
+    );
+    return value;
+  }
+
   public convertToSelfNodeInstanceListForNodeProfile(rawData:string):  {numberOfInstances:number, instanceList:string[]} | undefined
   {
     const nodeProfileDeviceType = this.echoNetPropertyConverter.getDevice("0x0EF0");

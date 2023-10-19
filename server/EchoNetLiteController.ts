@@ -103,8 +103,13 @@ export class EchoNetLiteController{
     if(property===undefined){
       return;
     }
-    this.firePropertyChnagedEvent(deviceId, property.name, newValue);
-    //this.holdController.receivedProperty(deviceId, property.name, newValue);
+
+    const value = this.deviceConverter.convertPropertyValue(property, newValue);
+    if(value === undefined)
+    {
+      return;
+    }
+    this.firePropertyChnagedEvent(deviceId, property.name, value);
   }
 
   readonly detectedDeviceIdList:DeviceId[] = [];
@@ -237,8 +242,8 @@ export class EchoNetLiteController{
       Logger.warn("[ECHONETLite]", `setDeviceProperty property === undefined propertyName=${propertyName}`);
       return;
     }
-    let epc = property.epc;
-    if(epc.toLowerCase().startsWith("0x"))
+    let epc = property.epc.toLowerCase();
+    if(epc.startsWith("0x"))
     {
       epc = epc.replace(/^0x/gi, "");
     }
@@ -268,7 +273,7 @@ export class EchoNetLiteController{
         tid:""});
       if(res.responses[0].els.ESV === ELSV.GET_RES)
       {
-        const value = this.deviceConverter.getPropertyValue(id.ip, id.eoj, property);
+        const value = this.deviceConverter.convertPropertyValue(property, res.responses[0].els.DETAILs[epc]);
         if(value === undefined)
         {
           return;
@@ -302,8 +307,8 @@ export class EchoNetLiteController{
       return;
     }
 
-    let epc = property.epc;
-    if(epc.toLowerCase().startsWith("0x"))
+    let epc = property.epc.toLowerCase();
+    if(epc.startsWith("0x"))
     {
       epc = epc.replace(/^0x/gi, "");
     }
@@ -318,7 +323,7 @@ export class EchoNetLiteController{
 
     if(res.responses[0].els.ESV === ELSV.GET_RES)
     {
-      const value = this.deviceConverter.getPropertyValue(id.ip, id.eoj, property);
+      const value = this.deviceConverter.convertPropertyValue(property, res.responses[0].els.DETAILs[epc]);
       if(value === undefined)
       {
         return;
