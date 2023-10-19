@@ -99,6 +99,11 @@ export class EchoNetCommunicator
       });
   }
 
+  public static release():void
+  {
+    EL.release();
+  }
+
   public static updateidentifierFromMacAddress = (base:number[]):number[] =>
   {
     const result = JSON.parse(JSON.stringify(base));
@@ -140,6 +145,8 @@ export class EchoNetCommunicator
     {
       this.getHandlers.forEach(_=>_(rinfo,els));
     }
+    this.commandResponse?.addResponse({rinfo, els});
+    
     this.reveivedHandlers.forEach(_=>_(rinfo,els));
   }
 
@@ -183,7 +190,7 @@ export class EchoNetCommunicator
 
   public static getRawDataSet = (): RawDataSet =>
   {
-    return new RawDataSet(EL.facilities);
+    return new RawDataSetForFacilities(EL.facilities);
   }
   public static send = (
     ip: string,
@@ -237,6 +244,111 @@ export class EchoNetCommunicator
     return EL.replyGetDetail(rinfo, els, dev_details);
   }
 
+  static readonly DefaultCommandTimeout=1000;
+  static commandResponse:CommandResponse|undefined = undefined;
+  public static execCommandPromise(
+    ip: string,
+    seoj: string,
+    deoj: string,
+    esv: string,
+    epc: string,
+    edt: string
+  ): Promise<CommandResponse>
+  {
+    const command:Command = {
+      ip,
+      seoj,
+      deoj,
+      esv,
+      epc,
+      edt,
+      tid: ""
+    }
+    const tid = EL.sendOPC1(ip, seoj, deoj, esv, epc, edt);
+    command.tid = EL.bytesToString(tid);
+    const commandResponse = new CommandResponse(command);
+    this.commandResponse = commandResponse;
+
+    return new Promise<CommandResponse>((resolve,reject)=>{
+      const handle = setTimeout(()=>{
+        reject({message:"timeout", commandResponse});
+      }, this.DefaultCommandTimeout);
+      commandResponse.setCallback(()=>{
+        this.commandResponse = undefined;
+        clearTimeout(handle);
+        resolve(commandResponse);
+      });
+    });
+  }
+
+  public static async getMultiPropertyPromise(
+    ip: string,
+    seoj: string,
+    deoj: string,
+    esv: string,
+    epc: string[]
+  ): Promise<CommandResponse>
+  {
+    const command:Command = {
+      ip,
+      seoj,
+      deoj,
+      esv,
+      epc:"",
+      edt:"",
+      tid: ""
+    }
+    const edt:{[key:string]:string} = {};
+    epc.forEach(_=>{
+      edt[_]="";
+    });
+    const tid = await EL.sendDetails(ip, seoj, deoj, esv, edt);
+    command.tid = EL.bytesToString(tid);
+    const commandResponse = new CommandResponse(command);
+    this.commandResponse = commandResponse;
+
+    return await new Promise<CommandResponse>((resolve,reject)=>{
+      const handle = setTimeout(()=>{
+        reject({message:"timeout", commandResponse});
+      }, this.DefaultCommandTimeout);
+      commandResponse.setCallback(()=>{
+        this.commandResponse = undefined;
+        clearTimeout(handle);
+        resolve(commandResponse);
+      });
+    });
+  }
+
+  public static getForTimeoutPromise(
+    ip: string,
+    seoj: string,
+    deoj: string,
+    esv: string,
+    epc: string,
+    edt: string,
+    timeout: number
+  ): Promise<CommandResponse>
+  {
+    const command:Command = {
+      ip,
+      seoj,
+      deoj,
+      esv,
+      epc,
+      edt,
+      tid: ""
+    }
+    const tid = EL.sendOPC1(ip, seoj, deoj, esv, epc, edt);
+    command.tid = EL.bytesToString(tid);
+    const commandResponse = new CommandResponse(command);
+    this.commandResponse = commandResponse;
+
+    return new Promise<CommandResponse>((resolve,reject)=>{
+      setTimeout(()=>{
+        resolve(commandResponse);
+      }, timeout);
+    });
+  }
 }
 
 export class ELSV
@@ -250,7 +362,60 @@ export class ELSV
   public static readonly GET_SNA="52";
 }
 
-export class RawDataSet
+
+export interface Command
+{
+  ip: string,
+  seoj: string,
+  deoj: string,
+  esv: string ,
+  epc: string,
+  edt: string;
+  tid: string;
+}
+
+export class CommandResponse
+{
+  readonly command:Command;
+  callback:()=>void = ()=>{};
+  constructor(command:Command)
+  {
+    this.command = command;
+  }
+  responses:Response[] = [];
+
+  public setCallback(callback:()=>void):void
+  {
+    this.callback = callback;
+  }
+
+  public addResponse = (response:Response):void =>
+  {
+    if((this.command.ip === EL.EL_Multi || response.rinfo.address === this.command.ip ) && 
+      response.els.SEOJ === this.command.deoj && response.els.TID === this.command.tid)
+    {
+      this.responses.push(response);
+      this.callback();
+    }
+  }
+}
+
+export interface Response
+{
+  rinfo: rinfo;
+  els: eldata;
+}
+
+
+export interface RawDataSet
+{
+  existsDevice:(ip:string, eoj:string)=>boolean;
+  existsData:(ip:string, eoj:string, epc:string)=>boolean;
+  getIpList:()=>string[];
+  getEojList:(ip:string)=>string[];
+  getRawData:(ip:string, eoj:string, epc:string)=>string|undefined;
+}
+export class RawDataSetForFacilities implements RawDataSet
 {
   readonly facilities:facilitiesType;
   constructor(facilities:facilitiesType)

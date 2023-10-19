@@ -17,8 +17,8 @@ interface holdStatus
 
 export interface HoldControllerActions
 {
-  request:(deviceId:DeviceId, propertyName:string)=>void;
-  set:(deviceId:DeviceId, propertyName:string, newValue:any)=>void;
+  request:(deviceId:DeviceId, propertyName:string)=>Promise<void>;
+  set:(deviceId:DeviceId, propertyName:string, newValue:any)=>Promise<void>;
   isBusy:()=>boolean;
 }
 
@@ -76,11 +76,11 @@ export class EchoNetHoldController
     }
   }
 
-  fireRequestEvent = (deviceId:DeviceId, propertyName:string):void=>{
-    this.actions.request(deviceId, propertyName);
+  fireRequestEvent = async (deviceId:DeviceId, propertyName:string):Promise<void>=>{
+    await this.actions.request(deviceId, propertyName);
   }
 
-  procInterval = ():void =>
+  procInterval = async ():Promise<void> =>
   {
     const now = getUtcNowDateTimeText();
     
@@ -93,7 +93,7 @@ export class EchoNetHoldController
         {
           // request
           status.sent = false;
-          this.fireRequestEvent(status.id, status.propertyName);
+          await this.fireRequestEvent(status.id, status.propertyName);
         }
         else
         {
@@ -127,7 +127,7 @@ export class EchoNetHoldController
     }
   }
 
-  receivedProperty = (id:DeviceId, propertyName:string, newValue:any):void =>
+  receivedProperty = async (id:DeviceId, propertyName:string, newValue:any):Promise<void> =>
   {
     const match = this._list.find(_=>_.id.id === id.id && _.propertyName == propertyName);
     if(match === undefined)
@@ -143,7 +143,7 @@ export class EchoNetHoldController
       // set Value
       Logger.info("[ECHONETLite][hold]", `set value ${id.id} ${propertyName} ${match.value}`);
       match.sent = true;
-      this.actions.set(id, propertyName, match.value);
+      await this.actions.set(id, propertyName, match.value);
     }
   }
 

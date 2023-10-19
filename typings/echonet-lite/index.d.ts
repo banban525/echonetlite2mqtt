@@ -92,6 +92,7 @@ declare module "echonet-lite" {
       debugMode?: boolean;
     }
   ): Promise<{ sock4: any; sock6: any } | any>;
+  function release(): void;
   function renewNICList(): {
     v4: { name: string; address: string }[];
     v6: { name: string; address: string }[];
@@ -137,4 +138,5 @@ declare module "echonet-lite" {
   function parseMapForm2(bitstr: string): number[];
   async function replySetDetail(rinfo: rinfo, els: eldata, dev_details:DeviceDetailsType):Promise<void>;
   async function replyGetDetail(rinfo: rinfo, els: eldata, dev_details:DeviceDetailsType):Promise<void>;
+  function sendDetails(ip:string, seoj:string | number[], deoj:string | number[], esv:string | number, DETAILs:{[key:string]:string}): Promise<number[]>;
 }
