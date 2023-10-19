@@ -256,10 +256,10 @@ export default class EchoNetDeviceConverter
       if(facilities.existsDevice(ip, "0ef001")===false)
       {
         // ノードが未取得なら、取得されるまで待つ
-        Logger.warn("", `node is not found in ${ip} ${eoj}`);
+        Logger.warn("", `node is not found in ${ip} ${"0ef001"}`);
         return "";
       }
-      const nodeGetProperty = facilities.getRawData(ip, eoj, "9f");
+      const nodeGetProperty = facilities.getRawData(ip, "0ef001", "9f");
       if(nodeGetProperty === undefined)
       {
         // ノードのプロパティリストが未取得なら、取得されるまで待つ
