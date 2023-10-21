@@ -360,15 +360,15 @@ export class EchoNetLiteRawController {
 
           // 全プロパティを更新する
           for (const device of foundNode.devices) {
-            for (const property of device.properties) {
+            for (const property of device.properties.filter(_=>_.operation.get)) {
               const newValue = await EchoNetLiteRawController.getProperty(property.ip, property.eoj, property.epc);
               if (newValue === undefined) {
-                return;
+                continue;
               }
               const matchProperty = this.findProperty(property.ip, property.eoj, property.epc);
               if (matchProperty === undefined) {
                 console.log(`error GET ${property.ip} ${property.eoj} ${property.epc}`);
-                return;
+                continue;
               }
 
               const oldValue = matchProperty.value;
