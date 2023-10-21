@@ -51,7 +51,8 @@ export default class EchoNetDeviceConverter
       getPropertyNoList, 
       setPropertyNoList, 
       notifyPropertyNoList, 
-      manufacturer);
+      manufacturer,
+      echonetLiteFacilities);
     return newDevice;
   }
 
@@ -63,7 +64,8 @@ export default class EchoNetDeviceConverter
       getPropertyNoList:string[], 
       setPropertyNoList:string[], 
       notifyPropertyNoList:string[],
-      manufacturer:Manufacturer):Device =>
+      manufacturer:Manufacturer, 
+      echonetLiteFacilities:RawDataSet):Device =>
   {
     const eojClass = "0x" + eoj.substring(0, 4).toUpperCase();
     const deviceType = this.echoNetPropertyConverter.getDevice(eojClass);
@@ -165,7 +167,16 @@ export default class EchoNetDeviceConverter
     const updated = getUtcNowDateTimeText();
     const propertiesValue:{[key:string]:PropertyValue} = {};
     for(const property of properties){
-      const value = this.getPropertyValue(ip, eoj, property);
+      const echonetRawData = echonetLiteFacilities.getRawData(ip, eoj, property.epc.substring(2).toLowerCase());
+      if(echonetRawData === undefined)
+      {
+        continue;
+      }
+      const value = this.echoNetPropertyConverter.toObject(
+        property.schema.data,
+        echonetRawData
+      );
+      //const value = this.getPropertyValue(ip, eoj, property);
       propertiesValue[property.name] = {
         name: property.name,
         deviceProperty: property,
@@ -390,11 +401,6 @@ export default class EchoNetDeviceConverter
   }
 
   public getPropertyWithEpc = (deviceId: DeviceId, epc:string): Property|undefined =>{
-    const facilities = EchoNetCommunicator.getRawDataSet();
-    if(facilities.existsDevice(deviceId.ip, deviceId.eoj) === false)
-    {
-      return undefined;
-    }
 
     // コンバート可能なデバイスかチェック
     const deviceClass = "0x"+deviceId.eoj.substr(0, 4).toUpperCase();
@@ -412,11 +418,6 @@ export default class EchoNetDeviceConverter
   }
 
   public getProperty = (ip:string, eoj:string, propertyName:string): Property|undefined =>{
-    const facilities = EchoNetCommunicator.getRawDataSet();
-    if(facilities.existsDevice(ip, eoj)===false)
-    {
-      return undefined;
-    }
 
     // コンバート可能なデバイスかチェック
     const deviceClass = "0x"+eoj.substr(0, 4).toUpperCase();
@@ -444,12 +445,6 @@ export default class EchoNetDeviceConverter
   }
 
   public propertyToEchoNetData = (ip:string, eoj:string, propertyName:string, value:any):string|undefined => {
-    const facilities = EchoNetCommunicator.getRawDataSet();
-    if(facilities.existsDevice(ip, eoj)===false)
-    {
-      Logger.warn("", `propertyToEchoNetData (deviceId.eoj in echonet facilities[deviceId.ip]) === false`)
-      return undefined;
-    }
 
     // コンバート可能なデバイスかチェック
     const deviceClass = "0x"+eoj.substr(0, 4).toUpperCase();
@@ -474,22 +469,6 @@ export default class EchoNetDeviceConverter
     }
 
     return echoNetData;
-  }
-
-  public getPropertyValue = (ip:string, eoj:string, property:Property): unknown|undefined=>{
-
-    const echoNetRawData = EchoNetCommunicator.getRawDataSet().getRawData(ip, eoj, property.epc.substring(2).toLowerCase());
-    if(echoNetRawData===undefined)
-    {
-      return undefined;
-    }
-    const data = echoNetRawData;
-
-    const value = this.echoNetPropertyConverter.toObject(
-      property.schema.data,
-      data
-    );
-    return value;
   }
 
   public convertPropertyValue = (property: Property, echonetData: string): unknown | undefined =>

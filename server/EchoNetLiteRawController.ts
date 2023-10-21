@@ -551,7 +551,7 @@ export class EchoNetLiteRawController {
     return JSON.stringify({
       elData:EchoNetCommunicator.getFacilities(),
       nodes:this.nodes
-    });
+    }, null, 2);
   }
 
   public getRawDataSet = ():RawDataSet =>
