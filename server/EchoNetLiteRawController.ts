@@ -1,5 +1,6 @@
 import { DeviceDetailsType, eldata,rinfo } from "echonet-lite";
 import { Command, CommandResponse, Response, ELSV, EchoNetCommunicator, RawDataSet } from "./EchoNetCommunicator";
+import { Logger } from "./Logger";
 
 
 export interface CommandWithCallback extends Command
@@ -93,17 +94,17 @@ export class EchoNetLiteRawController {
       res = await EchoNetCommunicator.execCommandPromise(ip, '0ef001', eoj, ELSV.GET, epc, "");
     }
     catch (e) {
-      console.log(e);
+      Logger.warn("[ECHONETLite][raw]", `error getProperty: timeout ${ip} ${eoj} ${epc}`, {exception:e});
       return undefined;
     }
     if (res.responses[0].els.ESV !== ELSV.GET_RES) {
-      console.log(`error GET ${ip} ${eoj} ${epc}`);
+      Logger.warn("[ECHONETLite][raw]", `error getProperty: returned ${res.responses[0].els.ESV} ${ip} ${eoj} ${epc}`);
       return undefined;
     }
 
     const data = res.responses[0].els.DETAILs;
     if ((epc in data) === false) {
-      console.log(`error GET ${ip} ${eoj} ${epc}`);
+      Logger.warn("[ECHONETLite][raw]", `error getProperty: data not found. ${ip} ${eoj} ${epc}`);
       return undefined;
     }
     return data[epc];
@@ -126,7 +127,7 @@ export class EchoNetLiteRawController {
         res = await EchoNetCommunicator.getMultiPropertyPromise(result.ip, '0ef001', device.eoj, ELSV.GET, ["9d", "9e", "9f"]);
       }
       catch (e) {
-        console.log(e);
+        Logger.warn("[ECHONETLite][raw]", `error getNewNode: timeout ${result.ip} ${device.eoj}`, {exception:e});
         continue;
       }
 
@@ -218,8 +219,7 @@ export class EchoNetLiteRawController {
         }
         const matchProperty = device.properties.find(_ => _.epc === epc);
         if (matchProperty === undefined) {
-          console.log(`error GET ${result.ip} ${device.eoj} ${epc}`);
-          continue;
+          throw Error("ありえない");
         }
         matchProperty.value = value;
       }
@@ -365,8 +365,7 @@ export class EchoNetLiteRawController {
               }
               const matchProperty = this.findProperty(property.ip, property.eoj, property.epc);
               if (matchProperty === undefined) {
-                console.log(`error GET ${property.ip} ${property.eoj} ${property.epc}`);
-                continue;
+                throw Error("ありえない");
               }
 
               const oldValue = matchProperty.value;
