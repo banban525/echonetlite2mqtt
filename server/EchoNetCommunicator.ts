@@ -1,4 +1,4 @@
-import EL, { facilitiesType,eldata,rinfo, DeviceDetailsType, facilities } from "echonet-lite";
+import EL, { facilitiesType,eldata,rinfo, DeviceDetailsType } from "echonet-lite";
 import dgram from "dgram";
 
 export class EchoNetCommunicator

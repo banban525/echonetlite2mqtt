@@ -24,7 +24,7 @@ export class EchoNetLiteController{
   {
     this.aliasOption = aliasOption;
     this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
-    this.echonetLiteRawController = new EchoNetLiteRawController(this.deviceConverter);
+    this.echonetLiteRawController = new EchoNetLiteRawController();
     this.holdController = new EchoNetHoldController({request:this.requestDeviceProperty, set:this.setDevicePropertyPrivate, isBusy:()=>this.echonetLiteRawController.getSendQueueLength() >= 1});
     this.intervalToGetProperties = intervalToGetProperties;
     this.multiNicMode = multiNicMode;

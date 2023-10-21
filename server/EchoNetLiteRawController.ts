@@ -1,7 +1,5 @@
 import { DeviceDetailsType, eldata,rinfo } from "echonet-lite";
 import { Command, CommandResponse, Response, ELSV, EchoNetCommunicator, RawDataSet } from "./EchoNetCommunicator";
-import { DeviceId } from "./Property";
-import EchoNetDeviceConverter from "./EchoNetDeviceConverter";
 
 
 export interface CommandWithCallback extends Command
@@ -15,7 +13,7 @@ export class EchoNetLiteRawController {
   private readonly sendQueue: CommandWithCallback[] = [];
   private processing = false;
 
-  constructor(echoNetDeviceConverter:EchoNetDeviceConverter) {
+  constructor() {
     
     EchoNetCommunicator.addReveivedHandler((rinfo, els) => {
       if (els.ESV === ELSV.INF) {

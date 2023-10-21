@@ -1,7 +1,7 @@
 import { AliasOption, Device, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
 import { EchoNetPropertyConverter } from "./EchoNetPropertyConverter";
 import { getUtcNowDateTimeText } from "./datetimeLib";
-import { EchoNetCommunicator, RawDataSet } from "./EchoNetCommunicator";
+import { RawDataSet } from "./EchoNetCommunicator";
 import { Logger } from "./Logger";
 
 export default class EchoNetDeviceConverter
