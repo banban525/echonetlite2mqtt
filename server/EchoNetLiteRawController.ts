@@ -22,7 +22,7 @@ export class EchoNetLiteRawController {
           rinfo: rinfo,
           els: els
         });
-        if ((this.infQueue.length + this.sendQueue.length) === 1) {
+        if (this.processing === false) {
           // INFの処理
           this.processQueue();
         }
@@ -38,7 +38,7 @@ export class EchoNetLiteRawController {
   public exec = (command:Command, callback:(res:CommandResponse)=>void):void =>
   {
     this.sendQueue.push({callback: callback, ...command});
-    if ((this.infQueue.length + this.sendQueue.length) === 1) {
+    if (this.processing === false) {
       this.processQueue();
     }
   }
@@ -49,7 +49,7 @@ export class EchoNetLiteRawController {
       this.sendQueue.push({callback: (res)=>{
         resolve(res);
       }, ...command});
-      if ((this.infQueue.length + this.sendQueue.length) === 1) {
+      if (this.processing === false) {
         this.processQueue();
       }
     });
@@ -58,7 +58,7 @@ export class EchoNetLiteRawController {
 
   public enqueue = (command: Command): void  =>{
     this.sendQueue.push({callback: undefined, ...command});
-    if ((this.infQueue.length + this.sendQueue.length) === 1) {
+    if (this.processing === false) {
       this.processQueue();
     }
   }
