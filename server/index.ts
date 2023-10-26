@@ -175,6 +175,14 @@ const logger = new LogRepository();
 
 
 Logger.info("", `${process.env.npm_package_name} ver.${process.env.npm_package_version}`);
+
+if(fs.existsSync("../buildinfo"))
+{
+  const buildInfo = fs.readFileSync("../buildinfo", {encoding:"utf-8"});
+  Logger.info("", buildInfo);
+}
+
+
 Logger.info("", "");
 
 logger.output(`echonetTargetNetwork=${echonetTargetNetwork}`);
