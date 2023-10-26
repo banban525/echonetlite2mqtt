@@ -24,6 +24,7 @@ COPY --chown=node:node --from=build /app/MRA_custom ./MRA_custom
 COPY --chown=node:node --from=build /app/views ./views
 COPY --chown=node:node --from=build /app/public ./public
 COPY --chown=node:node --from=build /app/.ts-node ./.ts-node
+COPY --chown=node:node --from=build /app/LICENSE /app/buildinfo* ./
 
 EXPOSE 3000
 
