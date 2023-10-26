@@ -48,48 +48,36 @@ const unhandledErrorLoggerForConsole = winston.createLogger({
 
 export class Logger
 {
-  public static error = (category:string,text:string)=>
+  public static error = (category:string,text:string, meta:{[key:string]:unknown} = {})=>
   {
-    if(category === "")
+    if(category !== "")
     {
-      logger.error(text);
+      meta["category"] = category;
     }
-    else
-    {
-      logger.error(text, {category});
-    }
+    logger.error(text, meta);
   }
-  public static warn = (category:string,text:string)=>
+  public static warn = (category:string,text:string, meta:{[key:string]:unknown} = {})=>
   {
-    if(category === "")
+    if(category !== "")
     {
-      logger.warn(text);
+      meta["category"] = category;
     }
-    else
-    {
-      logger.warn(text, {category});
-    }
+    logger.warn(text, meta);
   }
-  public static info = (category:string,text:string)=>
+  public static info = (category:string,text:string, meta:{[key:string]:unknown} = {})=>
   {
-    if(category === "")
+    if(category !== "")
     {
-      logger.info(text);
+      meta["category"] = category;
     }
-    else
-    {
-      logger.info(text, {category});
-    }
+    logger.info(text, meta);
   }
-  public static debug = (category:string,text:string)=>
+  public static debug = (category:string,text:string, meta:{[key:string]:unknown} = {})=>
   {
-    if(category === "")
+    if(category !== "")
     {
-      logger.debug(text);
+      meta["category"] = category;
     }
-    else
-    {
-      logger.debug(text, {category});
-    }
+    logger.debug(text, meta);
   }
 }

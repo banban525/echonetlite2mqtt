@@ -56,7 +56,7 @@ export class MqttController
     });
 
     
-    this.mqttClient.on("message", (topic: string, payload: Buffer, packet: IPublishPacket)=>{
+    this.mqttClient.on("message", async (topic: string, payload: Buffer, packet: IPublishPacket):Promise<void>=>{
       //Logger.write('subscriber.on.message', 'topic:', topic, 'message:', payload.toString());
 
       // set
@@ -83,7 +83,7 @@ export class MqttController
           const bodyText = payload.toString();
           const newValue = this.parseValueFromText(bodyText, property.schema.data);
 
-          this.firePropertyChnagedEvent(deviceId, propertyName, newValue, HoldOption.empty);
+          await this.firePropertyChnagedEvent(deviceId, propertyName, newValue, HoldOption.empty);
         }
       }
       // request
@@ -106,7 +106,7 @@ export class MqttController
             return;
           }
 
-          this.firePropertyRequestedEvent(deviceId, propertyName);
+          await this.firePropertyRequestedEvent(deviceId, propertyName);
         }
       }
       // multiple sets
@@ -171,7 +171,7 @@ export class MqttController
             }
 
             const newValue = this.parseValueFromText(propertyBodyText, property.schema.data);
-            this.firePropertyChnagedEvent(deviceId, propertyName, newValue, holdOption);
+            await this.firePropertyChnagedEvent(deviceId, propertyName, newValue, holdOption);
           }
         }
       }
@@ -179,20 +179,26 @@ export class MqttController
   }
 
 
-  propertyChangedEventListeners:((deviceId:string, propertyName:string, value:any, holdOption:HoldOption)=>void)[]=[];
-  addPropertyChnagedEvent = (event:(deviceId:string, propertyName:string, value:any, holdOption:HoldOption)=>void):void =>{
+  propertyChangedEventListeners:((deviceId:string, propertyName:string, value:any, holdOption:HoldOption)=>Promise<void>)[]=[];
+  addPropertyChnagedEvent = (event:(deviceId:string, propertyName:string, value:any, holdOption:HoldOption)=>Promise<void>):void =>{
     this.propertyChangedEventListeners.push(event);
   };
-  firePropertyChnagedEvent = (deviceId:string, propertyName:string, value:any, holdOption:HoldOption):void=>{
-    this.propertyChangedEventListeners.forEach(_=>_(deviceId, propertyName, value, holdOption));
+  firePropertyChnagedEvent = async (deviceId:string, propertyName:string, value:any, holdOption:HoldOption):Promise<void>=>{
+    for(const listener of this.propertyChangedEventListeners)
+    {
+      await listener(deviceId, propertyName, value, holdOption);
+    }
   }
 
-  propertyRequestedEventListeners:((deviceId:string, propertyName:string)=>void)[]=[];
-  addPropertyRequestedEvent = (event:(deviceId:string, propertyName:string)=>void):void =>{
+  propertyRequestedEventListeners:((deviceId:string, propertyName:string)=>Promise<void>)[]=[];
+  addPropertyRequestedEvent = (event:(deviceId:string, propertyName:string)=>Promise<void>):void =>{
     this.propertyRequestedEventListeners.push(event);
   };
-  firePropertyRequestedEvent = (deviceId:string, propertyName:string):void=>{
-    this.propertyRequestedEventListeners.forEach(_=>_(deviceId, propertyName));
+  firePropertyRequestedEvent = async (deviceId:string, propertyName:string):Promise<void>=>{
+    for(const listener of this.propertyRequestedEventListeners)
+    {
+      await listener(deviceId, propertyName);
+    }
   }
 
   connectionStateChangedEventListeners:(()=>void)[]=[];

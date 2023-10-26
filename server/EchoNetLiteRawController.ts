@@ -1,517 +1,661 @@
-import { eldata, rinfo } from "echonet-lite";
-import { toUtcDateTimeText } from "./datetimeLib";
-import { EchoNetCommunicator, ELSV } from "./EchoNetCommunicator";
-import EchoNetDeviceConverter from "./EchoNetDeviceConverter";
+import { DeviceDetailsType, eldata,rinfo } from "echonet-lite";
+import { Command, CommandResponse, Response, ELSV, EchoNetCommunicator, RawDataSet } from "./EchoNetCommunicator";
 import { Logger } from "./Logger";
-import { DeviceId } from "./Property";
 
 
-export class EchoNetLiteRawController
+export interface CommandWithCallback extends Command
 {
-  readonly echoNetDeviceConverter:EchoNetDeviceConverter;
-  private echoNetRawStatus:EchoNetRawStatus = {devices:{},nodes:{},searchRetryCount:0};
-  constructor(echoNetDeviceConverter:EchoNetDeviceConverter)
-  {
-    this.echoNetDeviceConverter = echoNetDeviceConverter;
-  }
+  callback: ((res: CommandResponse) => void) | undefined;
+}
 
-  public start():void
-  {
-    setInterval(()=>{
-      this.retryGetDevice(this.echoNetRawStatus);
-    }, 3000);
+export class EchoNetLiteRawController {
+  private readonly nodes: RawNode[] = [];
+  private readonly infQueue: Response[] = [];
+  private readonly sendQueue: CommandWithCallback[] = [];
+  private processing = false;
 
-    setInterval(()=>{
-      this.findDevice(this.echoNetRawStatus);
-    }, 1000);
-  }
-
-  notGetProperties:{[key:string]:EchoNetRawProperty}={};
-
-  public reveivePacketProc( rinfo:rinfo, els:eldata ):void
-  {
-    // echonet-lite.jsをバージョンアップしたことで、いろいろ挙動が変わってしまったので
-    // ここで回避用の処理を行う。
-    // autoGetPropertiesで、まとめてプロパティが取得されるようになったことで
-    // (1)取得エラーが返ることがある、(2)全部のプロパティが取得されない、という症状が起こっている
-    // 全部のプロパティが取得されたかを確認するようにして、未取得だったら再取得を行うようにした。
-    // (1)の取得エラーは、EchoNetCommunicatorで、GET_SNAもGET_RES扱いにすることにした。
-    // このクラスは間に合わせの処理ばかりなので、一度整理したい。
-
-    if(els.ESV === ELSV.INF)
-    {
-      // INFの NodeProfile のd5(インスタンスリスト通知) では、NodeProfileの必須プロパティを取得する
-      if(els.SEOJ.startsWith("0ef0") && "d5" in els.DETAILs)
-      {
-        const ip = rinfo.address;
-        const eoj = els.SEOJ;
-        this.notGetProperties[`${ip}-${eoj}-9d`] = {ip, eoj, propertyCode:"9d"};
-        this.notGetProperties[`${ip}-${eoj}-9e`] = {ip, eoj, propertyCode:"9e"};
-        this.notGetProperties[`${ip}-${eoj}-9f`] = {ip, eoj, propertyCode:"9f"};
-      }
-    }
-    if(els.ESV === ELSV.GET_RES || els.ESV === ELSV.GET_SNA)
-    {
-      // GET_RESの NodeProfile のd6(自ノードインスタンスリストS) では、各インスタンスの必須プロパティを取得する
-      if(els.SEOJ.startsWith("0ef0") &&  "d6" in els.DETAILs)
-      {
-        let fiveSecondsLater = new Date();
-        fiveSecondsLater.setSeconds(fiveSecondsLater.getSeconds() + 5);
-        const expire = toUtcDateTimeText(fiveSecondsLater);
-
-        // このノードのインスタンスの必須プロパティを取得するはず。
-        // ただし、無限ループになるかもしれないので、ノードプロファイルはリトライから外す
-        const ip = rinfo.address;
-        const eoj = els.SEOJ;
-        const selfNodeInstanceListSProperty = this.echoNetDeviceConverter.getProperty({eoj, ip, id:""}, "selfNodeInstanceListS");
-        if(selfNodeInstanceListSProperty === undefined)
-        {
-          return;
-        }
-        const selfNodeInstanceListS = this.echoNetDeviceConverter.getPropertyValue(
-          {eoj, ip, id:""}, 
-          selfNodeInstanceListSProperty) as {numberOfInstances:number, instanceList:string[]};
-        selfNodeInstanceListS.instanceList.filter(_=>_.startsWith("0ef0")===false).forEach(eoj=>{
-          this.notGetProperties[`${ip}-${eoj}-9d`] = {ip, eoj, propertyCode:"9d"};
-          this.notGetProperties[`${ip}-${eoj}-9e`] = {ip, eoj, propertyCode:"9e"};
-          this.notGetProperties[`${ip}-${eoj}-9f`] = {ip, eoj, propertyCode:"9f"};  
-        });
-      }
-
-      // ノードプロファイルから9fのGet_Resが来た場合
-      // 前バージョンではd6を要求して、その後インスタンスの情報取得が始まっていたが
-      // それが最近のバージョンではなくなってしまっているので復活させる。
-      if(els.SEOJ.startsWith("0ef0") && "9f" in els.DETAILs)
-      {
-        EchoNetCommunicator.send(rinfo.address, [0x0e, 0xf0, 0x01], els.SEOJ, 0x62, "d6", [0x00] );
-      }
-
-      // 9fを受信したときに自動で取得するはずだが、echonet-lite.jsではd6が除外されてしまっている
-      // (おそらく実装ミス。除外するならノードプロファイルのd6だけを除外しないといけない)
-      // ノードプロファイル以外の場合で、9fにd6があるなら、GET要求する
-      if(els.SEOJ.startsWith("0ef0") === false && "9f" in els.DETAILs)
-      {
-        const ip = rinfo.address;
-        const eoj = els.SEOJ;
-
-        const getPropertyCount = els.DETAILs["9f"].length/2-1;
-        for(let i=0;i<getPropertyCount;i++)
-        {
-          const propertyCode = els.DETAILs["9f"].substring(i*2+2, i*2+2+2);
-          if(propertyCode === "d6")
-          {
-            EchoNetCommunicator.send(rinfo.address, [0x0e, 0xf0, 0x01], els.SEOJ, 0x62, "d6", [0x00] );
-          }
-        }
-      }
-
-      // 9fを受信したら、それらのプロパティを受信するはず
-      if("9f" in els.DETAILs)
-      {
-        let fiveSecondsLater = new Date();
-        fiveSecondsLater.setSeconds(fiveSecondsLater.getSeconds() + 5);
-        const expire = toUtcDateTimeText(fiveSecondsLater);
-
-        const ip = rinfo.address;
-        const eoj = els.SEOJ;
-
-        const getPropertyCount = els.DETAILs["9f"].length/2-1;
-        for(let i=0;i<getPropertyCount;i++)
-        {
-          const propertyCode = els.DETAILs["9f"].substring(i*2+2, i*2+2+2);
-          if(propertyCode === "9f")
-          {
-            continue;
-          }
-          this.notGetProperties[`${ip}-${eoj}-${propertyCode}`] = {ip, eoj, propertyCode};
-        }
-      }
-      
-      // 受信したら、プロパティ待ちリストから除外する
-      Object.keys(els.DETAILs).forEach(propertyCode =>{
-        delete this.notGetProperties[`${rinfo.address}-${els.SEOJ}-${propertyCode}`];
-      });
-    }
-  }
-  static readonly mandatoryProperties:string[] = ["83", "8a", "9d", "9e", "9f"];
-
-  private findDevice(echoNetRawStatus:EchoNetRawStatus):void
-  {
-    const echoNetRawData = EchoNetCommunicator.getFacilities();
-
-    let detected:boolean = false;
-    for(const ip in echoNetRawData)
-    {
-      if((ip in echoNetRawStatus.nodes) === false)
-      {
-        echoNetRawStatus.nodes[ip] = {ip, state:"uncheck"};
-      }
-
-      for(const eoj in echoNetRawData[ip])
-      {
-        const instanceId = `${ip}-${eoj}`;
-        const deviceRawData = echoNetRawData[ip][eoj];
-        if((instanceId in echoNetRawStatus.devices) === false)
-        {
-          echoNetRawStatus.devices[instanceId] = {instanceId, state:"uncheck", deviceId:undefined};
-        }
-        if(echoNetRawStatus.devices[instanceId].deviceId !== undefined)
-        {
-          continue;
-        }
-
-        if(eoj === "0ef001")
-        {
-          if(echoNetRawStatus.nodes[ip].state !== "acquiredAllInstance")
-          {
-            continue;
-          }
-          const devices = Object.keys(echoNetRawStatus.devices)
-            .filter(_=>_.startsWith(`${ip}-`))
-            .filter(_=>_ !== instanceId)
-            .map(_=>echoNetRawStatus.devices[_]);
-          if(devices.filter(_=>_.deviceId === undefined).length !== 0)
-          {
-            continue;
-          }
-
-          const missingProperties = EchoNetLiteRawController.mandatoryProperties.filter(_=>(_ in deviceRawData)===false);
-          if(missingProperties.length !== 0)
-          {
-            continue;
-          }
-
-          const deviceId = this.echoNetDeviceConverter.getDeviceIdForNodeProfile(echoNetRawData, ip);
-          if(deviceId==="")
-          {
-            continue;
-          }
-
-          echoNetRawStatus.devices[instanceId] = {instanceId, state:echoNetRawStatus.devices[instanceId].state, deviceId:{eoj, ip, id:deviceId}};
-          detected=true;
-        }
-        else
-        {
-          const missingProperties = EchoNetLiteRawController.mandatoryProperties.filter(_=>(_ in deviceRawData)===false);
-          if(missingProperties.length === 0)
-          {
-            const deviceId = this.echoNetDeviceConverter.getDeviceId(ip, eoj, echoNetRawData);
-            if(deviceId==="")
-            {
-              continue;
-            }
-            echoNetRawStatus.devices[instanceId] = {instanceId, state:echoNetRawStatus.devices[instanceId].state, deviceId:{eoj, ip, id:deviceId}};
-
-            // 非対応デバイスはプロパティの再取得をしないように完了済みにしておく
-            if(this.echoNetDeviceConverter.isSupportedDeviceType(eoj)===false)
-            {
-              echoNetRawStatus.devices[instanceId] = {instanceId, state:"acquiredAllProperty", deviceId:{eoj, ip, id:deviceId}};
-            }
-            detected=true;
-          }
-          else if(echoNetRawStatus.devices[instanceId].state === "acquiredMandatoryProperty" || 
-            echoNetRawStatus.devices[instanceId].state === "requestedAllProperty" || 
-            echoNetRawStatus.devices[instanceId].state === "acquiredAllProperty")
-          {
-            const deviceId = this.echoNetDeviceConverter.getDeviceId(ip, eoj, echoNetRawData);
-            if(deviceId==="")
-            {
-              continue;
-            }
-            echoNetRawStatus.devices[instanceId] = {instanceId, state:echoNetRawStatus.devices[instanceId].state, deviceId:{eoj, ip, id:deviceId}};
-
-            // 非対応デバイスはプロパティの再取得をしないように完了済みにしておく
-            if(this.echoNetDeviceConverter.isSupportedDeviceType(eoj)===false)
-            {
-              echoNetRawStatus.devices[instanceId] = {instanceId, state:"acquiredAllProperty", deviceId:{eoj, ip, id:deviceId}};
-            }
-            detected=true;
-          }
-        }
-      }
+  constructor() {
     
-    }
-    if(detected)
-    {
-      this.fireDeviceDetected();
-    }
-  }
-
-  private deviceDetectedListeners:(()=>void)[] = [];
-  public addDeviceDetectedEvent = (event:()=>void):void =>{
-    this.deviceDetectedListeners.push(event);
-  }
-  private fireDeviceDetected = ():void=>{
-    this.deviceDetectedListeners.forEach(_=>_());
-  }
-
-  public getAllDeviceIds():DeviceId[]
-  {
-    const results:DeviceId[] = [];
-
-    Object.keys(this.echoNetRawStatus.devices).forEach((instanceId:string):void=>{
-      const device = this.echoNetRawStatus.devices[instanceId];
-      if(device.deviceId !== undefined)
-      {
-        results.push(device.deviceId);
+    EchoNetCommunicator.addReveivedHandler((rinfo, els) => {
+      if (els.ESV === ELSV.INF) {
+        this.infQueue.push({
+          rinfo: rinfo,
+          els: els
+        });
+        if (this.processing === false) {
+          // INFの処理
+          this.processQueue();
+        }
       }
     });
-    return results;
+
   }
 
-  public retryGetDevice(echoNetRawStatus:EchoNetRawStatus):void
+  public getAllNodes = (): RawNode[] =>{
+    return this.nodes;
+  }
+
+  public exec = (command:Command, callback:(res:CommandResponse)=>void):void =>
   {
-    // 送信キューが空なら、未受信のプロパティを再取得する
-    if(EchoNetCommunicator.getSendQueueLength() === 0)
-    {
-      Object.keys(this.notGetProperties).forEach(key=>{
-        const propInfo = this.notGetProperties[key];
-        console.log(`Not Received: ${propInfo.ip}\t${propInfo.eoj}\t${propInfo.propertyCode}`);
-        EchoNetCommunicator.send(propInfo.ip, [0x0e, 0xf0, 0x01], propInfo.eoj, 0x62, propInfo.propertyCode, [0x00] );
-        delete this.notGetProperties[key];
-      })
+    this.sendQueue.push({callback: callback, ...command});
+    if (this.processing === false) {
+      this.processQueue();
+    }
+  }
+  
+  public execPromise = (command:Command):Promise<CommandResponse> =>
+  {
+    return new Promise<CommandResponse>((resolve, reject)=>{
+      this.sendQueue.push({callback: (res)=>{
+        resolve(res);
+      }, ...command});
+      if (this.processing === false) {
+        this.processQueue();
+      }
+    });
+  }
+
+
+  public enqueue = (command: Command): void  =>{
+    this.sendQueue.push({callback: undefined, ...command});
+    if (this.processing === false) {
+      this.processQueue();
+    }
+  }
+
+  private static convertToInstanceList(data: string): string[] {
+    const result: string[] = [];
+    for (let i = 2; i < data.length; i += 6) {
+      const eoj = data.substring(i, i + 6);
+      result.push(eoj);
+    }
+    return result;
+  }
+
+  private findProperty = (ip: string, eoj: string, epc: string): RawDeviceProperty | undefined  =>{
+    const node = this.nodes.find(_ => _.ip === ip);
+    if (node === undefined) {
+      return undefined;
+    }
+    const device = node.devices.find(_ => _.eoj === eoj);
+    if (device === undefined) {
+      return undefined;
+    }
+    const property = device.properties.find(_ => _.epc === epc);
+    if (property === undefined) {
+      return undefined;
+    }
+    return property;
+  }
+
+  private static getProperty = async (ip: string, eoj: string, epc: string): Promise<string | undefined> =>{
+    let res: CommandResponse;
+    try {
+      res = await EchoNetCommunicator.execCommandPromise(ip, '0ef001', eoj, ELSV.GET, epc, "");
+    }
+    catch (e) {
+      Logger.warn("[ECHONETLite][raw]", `error getProperty: timeout ${ip} ${eoj} ${epc}`, {exception:e});
+      return undefined;
+    }
+    if (res.responses[0].els.ESV !== ELSV.GET_RES) {
+      Logger.warn("[ECHONETLite][raw]", `error getProperty: returned ${res.responses[0].els.ESV} ${ip} ${eoj} ${epc}`);
+      return undefined;
     }
 
-    const canRequest = EchoNetCommunicator.getSendQueueLength() <= 1
+    const data = res.responses[0].els.DETAILs;
+    if ((epc in data) === false) {
+      Logger.warn("[ECHONETLite][raw]", `error getProperty: data not found. ${ip} ${eoj} ${epc}`);
+      return undefined;
+    }
+    return data[epc];
+  }
 
-    let isRequested = false;
-    const echoNetRawData = EchoNetCommunicator.getFacilities();
-    // nodeProfileのインスタンスリストで取得していないデバイスを再取得する
-    for(const ip in echoNetRawData)
-    {
-      if((ip in echoNetRawStatus.nodes) === false)
-      {
-        continue;
-      }
-      if(echoNetRawStatus.nodes[ip].state === "acquiredAllInstance")
-      {
-        continue;
-      }
-      if(("0ef001" in echoNetRawData[ip]) === false)
-      {
-        // ここには来ないはず
-        continue;
-      }
+  private static async getNewNode(node: RawNode): Promise<RawNode> {
+    const result: RawNode = {
+      ip: node.ip,
+      devices: node.devices.map(_ => ({
+        ip: _.ip,
+        eoj: _.eoj,
+        properties: [],
+        noExistsId: false
+      }))
+    };
 
-      const selfNodeInstanceListSProperty = this.echoNetDeviceConverter.getProperty({eoj:"0ef001", ip, id:""}, "selfNodeInstanceListS");
-      if(selfNodeInstanceListSProperty === undefined)
-      {
-        continue;
+    for (const device of result.devices) {
+      let res: CommandResponse;
+      try {
+        res = await EchoNetCommunicator.getMultiPropertyPromise(result.ip, '0ef001', device.eoj, ELSV.GET, ["9d", "9e", "9f"]);
       }
-      const selfNodeInstanceListS = this.echoNetDeviceConverter.getPropertyValue(
-        {eoj:"0ef001", ip, id:""}, 
-        selfNodeInstanceListSProperty) as {numberOfInstances:number, instanceList:string[]};
-      if(selfNodeInstanceListS === undefined)
-      {
+      catch (e) {
+        Logger.warn("[ECHONETLite][raw]", `error getNewNode: timeout ${result.ip} ${device.eoj}`, {exception:e});
         continue;
       }
 
-      const notGetDevices = selfNodeInstanceListS.instanceList.filter(_=>(_ in echoNetRawData[ip]) === false);
-
-      if(notGetDevices.length === 0)
-      {
-        // 状態:インスタンスの存在チェックPass
-        echoNetRawStatus.nodes[ip] = {ip, state:"acquiredAllInstance"};
-        continue;
-      }
-
-      if(canRequest)
-      {
-        if(ip in echoNetRawStatus.nodes && echoNetRawStatus.nodes[ip].state === "requestedInstance")
-        {
-          // すでにリクエスト済みならスキップする
-          for(const notGetDeviceEoj of notGetDevices)
-          {
-            Logger.warn("[ECHONETLite][retry]", `failed to get instance ${ip} ${notGetDeviceEoj}`);
+      const edt = res.responses[0].els.DETAILs;
+      if ("9f" in edt) {
+        const data = edt["9f"];
+        for (let i = 2; i < data.length; i += 2) {
+          const epc = data.substring(i, i + 2);
+          let matchProperty = device.properties.find(_ => _.epc === epc);
+          if (matchProperty === undefined) {
+            matchProperty = {
+              ip: result.ip,
+              eoj: device.eoj,
+              epc: epc,
+              value: "",
+              operation: {
+                get: false,
+                set: false,
+                inf: false
+              }
+            };
+            device.properties.push(matchProperty);
           }
-          echoNetRawStatus.nodes[ip] = {ip, state:"acquiredAllInstance"};
-          continue;
+          matchProperty.operation.get = true;
         }
-        for(const notGetDeviceEoj of notGetDevices)
-        {
-          Logger.info("[ECHONETLite][retry]", `request instance ${ip} ${notGetDeviceEoj}`);
-          isRequested = true;
-          EchoNetCommunicator.getPropertyMaps(ip, notGetDeviceEoj);
-        }
+      }
 
-        // 状態:インスタンス取得要求済み
-        echoNetRawStatus.nodes[ip] = {ip, state:"requestedInstance"};
+      if ("9e" in edt) {
+        const data = edt["9e"];
+        for (let i = 2; i < data.length; i += 2) {
+          const epc = data.substring(i, i + 2);
+          let matchProperty = device.properties.find(_ => _.epc === epc);
+          if (matchProperty === undefined) {
+            matchProperty = {
+              ip: result.ip,
+              eoj: device.eoj,
+              epc: epc,
+              value: "",
+              operation: {
+                get: false,
+                set: false,
+                inf: false
+              }
+            };
+            device.properties.push(matchProperty);
+          }
+          matchProperty.operation.set = true;
+        }
+      }
+
+      if ("9d" in edt) {
+        const data = edt["9d"];
+        for (let i = 2; i < data.length; i += 2) {
+          const epc = data.substring(i, i + 2);
+          let matchProperty = device.properties.find(_ => _.epc === epc);
+          if (matchProperty === undefined) {
+            matchProperty = {
+              ip: result.ip,
+              eoj: device.eoj,
+              epc: epc,
+              value: "",
+              operation: {
+                get: false,
+                set: false,
+                inf: false
+              }
+            };
+            device.properties.push(matchProperty);
+          }
+          matchProperty.operation.inf = true;
+        }
+      }
+
+      for (const epc in edt) {
+        const matchProperty = device.properties.find(_ => _.epc === epc);
+        if (matchProperty !== undefined) {
+          matchProperty.value = edt[epc];
+        }
       }
     }
 
-    if(isRequested){return;}
-
-    isRequested = false;
-    // インスタンスごとに、Id、メーカーコード、INFマップ、SETマップ、GETマップが無ければ取得する
-    for(const ip in echoNetRawData)
-    {
-      for(const eoj in echoNetRawData[ip])
-      {
-        const instanceId = `${ip}-${eoj}`;
-        if((instanceId in echoNetRawStatus.devices) === false)
-        {
+    // 取得していないgetプロパティを取得する
+    for (const device of result.devices) {
+      const epcList = device.properties.filter(_ => _.operation.get).filter(_ => _.value === "").map(_ => _.epc);
+      for (const epc of epcList) {
+        const value = await EchoNetLiteRawController.getProperty(result.ip, device.eoj, epc);
+        if (value === undefined) {
           continue;
         }
-        if(echoNetRawStatus.devices[instanceId].state === "acquiredMandatoryProperty" ||
-          echoNetRawStatus.devices[instanceId].state === "requestedAllProperty" ||
-          echoNetRawStatus.devices[instanceId].state === "acquiredAllProperty" )
-        {
-          // すでにチェック済みならスキップする
-          continue;
+        const matchProperty = device.properties.find(_ => _.epc === epc);
+        if (matchProperty === undefined) {
+          throw Error("ありえない");
         }
+        matchProperty.value = value;
+      }
+    }
 
-        const deviceRawData = echoNetRawData[ip][eoj];
+    // 83 (識別番号)を取得していないのなら取得する
+    // 本来、9f (getプロパティリスト)にないなら取得する必要はないのだが、過去バージョンでは9fに関わらずgetしていたので
+    // 互換性のために取得する。
+    // なお、9fに無くても、要求すると83を取得できるデバイスもある。
+    for (const device of result.devices) {
+      const idProperty = device.properties.find(_ => _.epc === "83");
+      if (idProperty !== undefined) {
+        continue;
+      }
+      let res: CommandResponse;
+      try {
+        res = await EchoNetCommunicator.execCommandPromise(device.ip, '0ef001', device.eoj, ELSV.GET, "83", "");
+      }
+      catch (e) {
+        device.noExistsId = true;
+        continue;
+      }
 
-        const missingProperties = EchoNetLiteRawController.mandatoryProperties.filter(_=>(_ in deviceRawData)===false);
-        if(missingProperties.length === 0)
-        {
-          // 状態: 必須プロパティ取得済み
-          echoNetRawStatus.devices[instanceId] = {instanceId, state: "acquiredMandatoryProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
-          continue;
-        }
-        if(canRequest)
-        {
-          if(echoNetRawStatus.devices[instanceId].state === "requestedMandatoryProperty")
-          {
-            // すでにリクエスト済みならスキップする
-            for(const propertyNo of missingProperties)
-            {
-              Logger.warn("[ECHONETLite][retry]", `failed to get property ${ip} ${eoj} ${propertyNo}`);
+      if (res.responses[0].els.ESV === ELSV.GET_RES) {
+        const data = res.responses[0].els.DETAILs;
+        let matchProperty = device.properties.find(_ => _.epc === "83");
+        if (matchProperty === undefined) {
+          matchProperty = {
+            ip: result.ip,
+            eoj: device.eoj,
+            epc: "83",
+            value: "",
+            operation: {
+              get: false,
+              set: false,
+              inf: false
             }
-            echoNetRawStatus.devices[instanceId] = {instanceId, state: "acquiredMandatoryProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
+          };
+          device.properties.push(matchProperty);
+        }
+        matchProperty.value = data["83"];
+      }
+      else if (res.responses[0].els.ESV === ELSV.GET_SNA) {
+        device.noExistsId = true;
+      }
+    }
+
+
+    return result;
+  }
+
+
+
+
+  private processQueue = async ():Promise<void> =>{
+    if (this.processing) {
+      return;
+    }
+    this.processing = true;
+    try {
+      // infから先に処理する
+      while (this.infQueue.length > 0) {
+        const inf = this.infQueue.shift();
+        if (inf === undefined) {
+          throw Error("ありえない");
+        }
+
+        const foundNode = this.nodes.find(_ => _.ip === inf.rinfo.address);
+        if (foundNode === undefined) {
+          // 新たなノードからの通知で、d5(自ノードインスタンスリスト通知)ならば、新しいノードを追加する
+          if ("d5" in inf.els.DETAILs) {
+            const nodeTemp: RawNode = {
+              ip: inf.rinfo.address,
+              devices: [{
+                ip: inf.rinfo.address,
+                eoj: "0ef001",
+                properties: [],
+                noExistsId: false
+              }]
+            };
+            const eojList = EchoNetLiteRawController.convertToInstanceList(inf.els.DETAILs["d5"]);
+            eojList.forEach(eoj => {
+              nodeTemp.devices.push({
+                ip: inf.rinfo.address,
+                eoj: eoj,
+                properties: [],
+                noExistsId: false
+              });
+            });
+
+            const newNode = await EchoNetLiteRawController.getNewNode(nodeTemp);
+            this.nodes.push(newNode);
+            this.fireDeviceDetected(newNode.devices.map(_=>({ip:_.ip, eoj:_.eoj})));
+          }
+          continue;
+        }
+        const foundDevice = foundNode.devices.find(_ => _.eoj === inf.els.SEOJ);
+        if (foundDevice === undefined) {
+          // 存在しないデバイスは無視する
+          continue;
+        }
+        for (const epc in inf.els.DETAILs) {
+          const foundProperty = foundDevice.properties.find(_ => _.epc === epc);
+          if (foundProperty === undefined) {
+            // 存在しないプロパティは無視する
             continue;
           }
 
-          for(const propertyNo of missingProperties)
-          {
-            Logger.info("[ECHONETLite][retry]", `request property ${ip} ${eoj} ${propertyNo}`);
-            EchoNetCommunicator.send(ip, [0x0e, 0xf0, 0x01], eoj, 0x62, propertyNo, [0x00] );
-          }
+          const oldValue = foundProperty.value;
 
-          // 状態: 必須プロパティ取得要求済み
-          isRequested = true;
-          echoNetRawStatus.devices[instanceId] = {instanceId, state: "requestedMandatoryProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
-        }
-        else
-        {
-          continue;
-        }
-      }
-    }
+          // 値を更新する
+          foundProperty.value = inf.els.DETAILs[epc];
 
-    if(isRequested){return;}
-
-    // インスタンスごとに、Getプロパティが無ければ取得する
-    isRequested = false;
-    for(const ip in echoNetRawData)
-    {
-      for(const eoj in echoNetRawData[ip])
-      {
-        const instanceId = `${ip}-${eoj}`;
-
-        if((instanceId in echoNetRawStatus.devices) === false)
-        {
-          continue;
-        }
-        if(echoNetRawStatus.devices[instanceId].state === "acquiredAllProperty")
-        {
-          // すでにチェック済みならスキップする
-          continue;
-        }
-        if(echoNetRawStatus.devices[instanceId].state === "uncheck" || 
-          echoNetRawStatus.devices[instanceId].state === "requestedMandatoryProperty")
-        {
-          // 必須プロパティの取得が終わっていないならスキップ
-          continue;
-        }
-        const facilities = EchoNetCommunicator.getFacilities();
-        const getPropNoList = this.echoNetDeviceConverter.convertGetPropertyNoList(ip, eoj, facilities);
-        if(getPropNoList === undefined)
-        {
-          continue;
-        }
-        const notGetPropNoList = getPropNoList.filter(_=>(_ in facilities[ip][eoj])===false);
-        if(notGetPropNoList.length === 0)
-        {
-          // 状態: 全GETプロパティ取得済み
-          echoNetRawStatus.devices[instanceId] = {instanceId, state: "acquiredAllProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
-          continue;
+          // イベントを発火する
+          this.firePropertyChanged(
+            foundProperty.ip, 
+            foundProperty.eoj, 
+            foundProperty.epc, 
+            oldValue, 
+            foundProperty.value);
         }
 
-        if(canRequest)
-        {
-          if(echoNetRawStatus.devices[instanceId].state === "requestedAllProperty")
-          {
-            // すでに要求済みなら、値を返さないGETプロパティと思われるので、完了とする
-            for(const propertyNo of notGetPropNoList)
-            {
-              Logger.warn("[ECHONETLite][retry]", `failed to get property ${ip} ${eoj} ${propertyNo}`);
+        // 存在するノードからの d5 (自ノードインスタンスリスト通知)なら、
+        if (inf.els.SEOJ === "0ef001" && "d5" in inf.els.DETAILs) {
+          // 増えたインスタンスを追加する。削除は特に対処しない
+          const eojList = EchoNetLiteRawController.convertToInstanceList(inf.els.DETAILs["d5"]);
+          const currentEojList = foundNode.devices.map(_ => _.eoj);
+          eojList.filter(_ => currentEojList.includes(_) == false).forEach(eoj => {
+            foundNode.devices.push({
+              ip: inf.rinfo.address,
+              eoj: eoj,
+              properties: [],
+              noExistsId: false
+            });
+          });
+
+          // 全プロパティを更新する
+          for (const device of foundNode.devices) {
+            for (const property of device.properties.filter(_=>_.operation.get)) {
+              const newValue = await EchoNetLiteRawController.getProperty(property.ip, property.eoj, property.epc);
+              if (newValue === undefined) {
+                continue;
+              }
+              const matchProperty = this.findProperty(property.ip, property.eoj, property.epc);
+              if (matchProperty === undefined) {
+                throw Error("ありえない");
+              }
+
+              const oldValue = matchProperty.value;
+              matchProperty.value = newValue;
+
+              // イベントを発火する
+              this.firePropertyChanged(
+                matchProperty.ip, 
+                matchProperty.eoj, 
+                matchProperty.epc, 
+                oldValue, 
+                matchProperty.value);
             }
-            echoNetRawStatus.devices[instanceId] = {instanceId, state: "acquiredAllProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
-            continue;
           }
-
-          // 再取得を試みる
-          for(const propertyNo of notGetPropNoList)
-          {
-            Logger.info("[ECHONETLite][retry]", `request property ${ip} ${eoj} ${propertyNo}`);
-            EchoNetCommunicator.send(ip, [0x0e, 0xf0, 0x01], eoj, 0x62, propertyNo, [0x00] );
-          }
-          // 状態: 全GETプロパティ取得要求済み
-          isRequested = true;
-          echoNetRawStatus.devices[instanceId] = {instanceId, state: "requestedAllProperty", deviceId:echoNetRawStatus.devices[instanceId].deviceId};
         }
       }
-    }
 
-    if(isRequested){return;}
 
-    if(canRequest)
-    {
-      if(Object.keys(echoNetRawStatus.nodes).length > 0 &&
-        Object.keys(echoNetRawStatus.devices).filter(_=>echoNetRawStatus.devices[_].state !== "acquiredAllProperty").length === 0)
-      {
-        if(echoNetRawStatus.searchRetryCount === 0)
+      while (this.sendQueue.length > 0) {
+        const command = this.sendQueue.shift();
+        if (command === undefined) {
+          throw Error("ありえない");
+        }
+        const res = await EchoNetCommunicator.execCommandPromise(
+          command.ip,
+          command.seoj,
+          command.deoj,
+          command.esv,
+          command.epc,
+          command.edt);
+
+        // GET_RESの場合は、値を更新する
+        if(res.responses[0].els.ESV === ELSV.GET_RES)
         {
-          Logger.info("[ECHONETLite][retry]", `retry searching devices...`);
-          EchoNetCommunicator.search();
-          isRequested = true;
-          echoNetRawStatus.searchRetryCount++;
+          const ip  = res.responses[0].rinfo.address;
+          const eoj = res.responses[0].els.SEOJ;
+          const els = res.responses[0].els;
+
+          for(const epc in els.DETAILs)
+          {
+            const newValue = els.DETAILs[epc];
+
+            const matchProperty = this.findProperty(ip, eoj, epc);
+            if (matchProperty === undefined) {
+              continue;
+            }
+  
+            // const oldValue = matchProperty.value;
+            matchProperty.value = newValue;
+  
+            // // イベントを発火する
+            // this.firePropertyChanged(
+            //   matchProperty.ip, 
+            //   matchProperty.eoj, 
+            //   matchProperty.epc, 
+            //   oldValue, 
+            //   matchProperty.value);
+          }
+        }
+
+        if(command.callback !== undefined)
+        {
+          command.callback(res);
         }
       }
     }
+    finally {
+      this.processing = false;
+    }
+
+    if (this.infQueue.length > 0 || this.sendQueue.length > 0) {
+      setTimeout(this.processQueue, 1);
+    }
   }
 
-  public getInternalStatus():EchoNetRawStatus
+  
+  public initilize = async (objList:string[], echonetTargetNetwork:string, multiNicMode:boolean):Promise<void> =>
   {
-    return this.echoNetRawStatus;
+    await EchoNetCommunicator.initialize(objList, 4, { v4: echonetTargetNetwork, autoGetProperties: false }, multiNicMode);
+  }
+
+  public start = async (): Promise<void> =>{
+
+    // ネットワーク内のすべてのノードからd6(自ノードインスタンスリスト)を取得する
+    const res = await EchoNetCommunicator.getForTimeoutPromise(
+      '224.0.23.0',
+      '0ef001',
+      '0ef001',
+      ELSV.GET,
+      "d6",
+      "",
+      5000);
+
+    // 取得結果から、ノードを作成する
+    var nodesTemp = res.responses.map((response): RawNode => {
+      const result: RawNode = {
+        ip: response.rinfo.address,
+        devices: [
+          {
+            ip: response.rinfo.address,
+            eoj: "0ef001",
+            properties: [],
+            noExistsId: false
+          }
+        ]
+      };
+
+      if ("d6" in response.els.DETAILs) {
+        EchoNetLiteRawController.convertToInstanceList(response.els.DETAILs["d6"]).forEach(eoj => {
+          result.devices.push({
+            ip: response.rinfo.address,
+            eoj: eoj,
+            properties: [],
+            noExistsId: false
+          });
+        });
+      }
+      return result;
+    });
+
+    // ノードの詳細を取得する
+    for (const node of nodesTemp) {
+      const newNode = await EchoNetLiteRawController.getNewNode(node);
+      this.nodes.push(newNode);
+      this.fireDeviceDetected(newNode.devices.map(_=>({ip:_.ip, eoj:_.eoj})));
+    }
+  }
+
+  private deviceDetectedListeners:((deviceKeys:{ip:string, eoj:string}[])=>void)[] = [];
+  public addDeviceDetectedEvent = (event:(deviceKeys:{ip:string, eoj:string}[])=>void):void =>{
+    this.deviceDetectedListeners.push(event);
+  }
+  private fireDeviceDetected = (deviceKeys:{ip:string, eoj:string}[]):void=>{
+    this.deviceDetectedListeners.forEach(_=>_(deviceKeys));
+  }
+
+  readonly propertyChangedHandlers:((ip:string, eoj:string, epc:string, oldValue:string, newValue:string) => void)[] = [];
+  public addPropertyChangedHandler = (event:(ip:string, eoj:string, epc:string, oldValue:string, newValue:string) => void):void =>
+  {
+    this.propertyChangedHandlers.push(event);
+  }
+  public firePropertyChanged = (ip:string, eoj:string, epc:string, oldValue:string, newValue:string):void =>
+  {
+    this.propertyChangedHandlers.forEach(_=>_(ip, eoj, epc, oldValue, newValue));
+  }
+
+
+  readonly reveivedHandlers:((rinfo: rinfo, els: eldata) => void)[] = [];
+  public addReveivedHandler = (event:(rinfo: rinfo, els: eldata) => void):void =>
+  {
+    this.reveivedHandlers.push(event);
+  }
+  public fireReceived = (rinfo: rinfo, els: eldata):void =>
+  {
+    this.reveivedHandlers.forEach(_=>_(rinfo, els));
+  }
+
+  
+  public getSendQueueLength = ():number=>
+  {
+    return EchoNetCommunicator.getSendQueueLength();
+  }
+
+  public replySetDetail = (rinfo: rinfo, els: eldata, dev_details:DeviceDetailsType):Promise<void> =>
+  {
+    return EchoNetCommunicator.replySetDetail(rinfo, els, dev_details);
+  }
+  public replyGetDetail = (rinfo: rinfo, els: eldata, dev_details:DeviceDetailsType):Promise<void> =>
+  {
+    return EchoNetCommunicator.replyGetDetail(rinfo, els, dev_details);
+  }
+
+  public updateidentifierFromMacAddress = (base:number[]):number[] =>
+  {
+    return EchoNetCommunicator.updateidentifierFromMacAddress(base);
+  }
+
+  public getInternalStatus = ():string =>
+  {
+    return JSON.stringify({
+      elData:EchoNetCommunicator.getFacilities(),
+      nodes:this.nodes
+    }, null, 2);
+  }
+
+  public getRawDataSet = ():RawDataSet =>
+  {
+    return new RawDataSetforNodes(this.nodes);
   }
 }
 
-
-export interface EchoNetRawStatus
+class RawDataSetforNodes implements RawDataSet
 {
-  searchRetryCount:number;
-	nodes:{[key:string]:EchoNetRawNodeStatus};
-	devices:{[key:string]:EchoNetRawDeviceStatus};
+  private readonly nodes:RawNode[] = [];
+  constructor(nodes:RawNode[])
+  {
+    this.nodes = nodes;
+  }
+  public existsDevice = (ip: string, eoj: string):boolean =>
+  {
+    const node = this.nodes.find(_=>_.ip === ip);
+    if(node === undefined)
+    {
+      return false;
+    }
+    const device = node.devices.find(_=>_.eoj === eoj);
+    if(device === undefined)
+    {
+      return false;
+    }
+    return true;
+  }
+  public existsData = (ip: string, eoj: string, epc: string):boolean =>
+  {
+    const node = this.nodes.find(_=>_.ip === ip);
+    if(node === undefined)
+    {
+      return false;
+    }
+    const device = node.devices.find(_=>_.eoj === eoj);
+    if(device === undefined)
+    {
+      return false;
+    }
+    const property = device.properties.find(_=>_.epc === epc);
+    if(property === undefined)
+    {
+      return false;
+    }
+    return true;
+  }
+  public getIpList = ():string[] =>
+  {
+    return this.nodes.map(_=>_.ip);
+  }
+
+  public getEojList = (ip: string):string[] =>
+  {
+    const node = this.nodes.find(_=>_.ip === ip);
+    if(node === undefined)
+    {
+      return [];
+    }
+    return node.devices.map(_=>_.eoj);
+  }
+
+  public getRawData = (ip: string, eoj: string, epc: string):string | undefined =>
+  {
+    const node = this.nodes.find(_=>_.ip === ip);
+    if(node === undefined)
+    {
+      return undefined;
+    }
+    const device = node.devices.find(_=>_.eoj === eoj);
+    if(device === undefined)
+    {
+      return undefined;
+    }
+    const property = device.properties.find(_=>_.epc === epc);
+    if(property === undefined)
+    {
+      return undefined;
+    }
+    return property.value;
+  }
+
+
 }
 
-export interface EchoNetRawNodeStatus
+export interface RawNode
 {
-	ip:string;
-	state: "uncheck"|"requestedInstance"|"acquiredAllInstance";
+  ip:string;
+  devices:RawDevice[];
 }
-
-export interface EchoNetRawDeviceStatus
-{
-	instanceId: string;
-	state: "uncheck"|"requestedMandatoryProperty"|"acquiredMandatoryProperty"|"requestedAllProperty"|"acquiredAllProperty"
-  deviceId: DeviceId|undefined;
-}
-
-export interface EchoNetRawProperty
+interface RawDevice
 {
   ip:string;
   eoj:string;
-  propertyCode:string;
+  properties:RawDeviceProperty[];
+  noExistsId:boolean;
+}
+export interface RawDeviceProperty
+{
+  ip:string;
+  eoj:string;
+  epc:string;
+  value:string;
+  operation:{
+    get:boolean;
+    set:boolean;
+    inf:boolean;
+  }
 }

@@ -87,20 +87,26 @@ export class RestApiController
     });
   }
 
-  private readonly propertyChangedRequestEvents:((deviceId:string,propertyName:string,newValue:any)=>void)[] = [];
-  public addPropertyChangedRequestEvent = (event:(deviceId:string,propertyName:string,newValue:any)=>void):void =>{
+  private readonly propertyChangedRequestEvents:((deviceId:string,propertyName:string,newValue:any)=>Promise<void>)[] = [];
+  public addPropertyChangedRequestEvent = (event:(deviceId:string,propertyName:string,newValue:any)=>Promise<void>):void =>{
     this.propertyChangedRequestEvents.push(event);
   }
-  private firePropertyChangedRequestEvent = (deviceId:string,propertyName:string,newValue:any):void=>{
-    this.propertyChangedRequestEvents.forEach(_=>_(deviceId, propertyName, newValue));
+  private firePropertyChangedRequestEvent = async (deviceId:string,propertyName:string,newValue:any):Promise<void>=>{
+    for(const event of this.propertyChangedRequestEvents)
+    {
+      await event(deviceId, propertyName, newValue);
+    }
   }
 
   private readonly propertyRequestedRequestEvents:((deviceId:string,propertyName:string)=>void)[] = [];
-  public addPropertyRequestedRequestEvent = (event:(deviceId:string,propertyName:string)=>void):void =>{
+  public addPropertyRequestedRequestEvent = (event:(deviceId:string,propertyName:string)=>Promise<void>):void =>{
     this.propertyRequestedRequestEvents.push(event);
   }
-  private firePropertyRequestedRequestEvent = (deviceId:string,propertyName:string):void=>{
-    this.propertyRequestedRequestEvents.forEach(_=>_(deviceId, propertyName));
+  private firePropertyRequestedRequestEvent = async (deviceId:string,propertyName:string):Promise<void>=>{
+    for(const event of this.propertyRequestedRequestEvents)
+    {
+      await event(deviceId, propertyName);
+    }
   }
 
   private viewIndex = (
@@ -488,10 +494,10 @@ export class RestApiController
     res.json(result);
   }
   
-  private putProperty = (
+  private putProperty = async (
     req: express.Request,
     res: express.Response
-  ): void => {
+  ): Promise<void> => {
     const deviceId = req.params.deviceId;
     const propertyName = req.params.propertyName;
     const newValue = req.body[propertyName];
@@ -520,17 +526,17 @@ export class RestApiController
       return;
     }
   
-    this.firePropertyChangedRequestEvent(deviceId, propertyName, newValue);
+    await this.firePropertyChangedRequestEvent(deviceId, propertyName, newValue);
   
     const result:{[key:string]:any} = {};
     result[propertyName] = foundDevice.propertiesValue[propertyName].value;
     res.json(result);
   }
 
-  private requestProperty = (
+  private requestProperty = async (
     req: express.Request,
     res: express.Response
-  ): void => {
+  ): Promise<void> => {
     const deviceId = req.params.deviceId;
     const propertyName = req.params.propertyName;
   
@@ -551,7 +557,7 @@ export class RestApiController
       return;
     }
   
-    this.firePropertyRequestedRequestEvent(deviceId, propertyName);
+    await this.firePropertyRequestedRequestEvent(deviceId, propertyName);
   
     res.json({});
   }
