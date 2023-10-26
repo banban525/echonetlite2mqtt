@@ -9,6 +9,7 @@ import { SystemStatusRepositry } from "./ApiTypes";
 import { EventRepository } from "./EventRepository";
 import { LogRepository } from "./LogRepository";
 import { Logger } from "./Logger";
+import path from "path";
 
 let echonetTargetNetwork = "";
 let echonetIntervalToGetProperties = 300;
@@ -176,9 +177,9 @@ const logger = new LogRepository();
 
 Logger.info("", `${process.env.npm_package_name} ver.${process.env.npm_package_version}`);
 
-if(fs.existsSync("../buildinfo"))
+if(fs.existsSync(path.resolve(__dirname, "../buildinfo")))
 {
-  const buildInfo = fs.readFileSync("../buildinfo", {encoding:"utf-8"});
+  const buildInfo = fs.readFileSync(path.resolve(__dirname, "../buildinfo"), {encoding:"utf-8"});
   Logger.info("", buildInfo);
 }
 
