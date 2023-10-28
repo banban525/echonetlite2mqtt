@@ -72,6 +72,25 @@ export class EchoNetLiteRawController {
     return result;
   }
 
+  public static convertToPropertyList(rawData:string): string[] | undefined
+  {
+    if(rawData.length < 2)
+    {
+      return undefined;
+    }
+    const result:string[] = [];
+    for(let i=2;i<rawData.length;i+=2)
+    {
+      const epc = rawData.substring(i, i+2).toLowerCase();
+      if(epc.match(/[0-9a-f]{2}/) === null)
+      {
+        return undefined;
+      }
+      result.push(epc);
+    }
+    return result;
+  }
+
   private findProperty = (ip: string, eoj: string, epc: string): RawDeviceProperty | undefined  =>{
     const node = this.nodes.find(_ => _.ip === ip);
     if (node === undefined) {
@@ -121,21 +140,69 @@ export class EchoNetLiteRawController {
       }))
     };
 
-    for (const device of result.devices) {
-      let res: CommandResponse;
-      try {
-        res = await EchoNetCommunicator.getMultiPropertyPromise(result.ip, '0ef001', device.eoj, ELSV.GET, ["9d", "9e", "9f"]);
-      }
-      catch (e) {
-        Logger.warn("[ECHONETLite][raw]", `error getNewNode: timeout ${result.ip} ${device.eoj}`, {exception:e});
-        continue;
-      }
-
-      const edt = res.responses[0].els.DETAILs;
-      if ("9f" in edt) {
-        const data = edt["9f"];
-        for (let i = 2; i < data.length; i += 2) {
-          const epc = data.substring(i, i + 2);
+    // GET/SET/INFのプロパティマップを受信する
+    for (const device of result.devices)
+    {
+      for(const epc of ["9f", "9e", "9d"])
+      {
+        let res: CommandResponse;
+        try
+        {
+          res = await EchoNetCommunicator.execCommandPromise(result.ip, "0ef001", device.eoj, ELSV.GET, epc, "");
+        }
+        catch(e)
+        {
+          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: exception ${result.ip} ${device.eoj}`, {exception:e});
+          continue;
+        }
+        if(res.responses[0].els.ESV !== ELSV.GET_RES)
+        {
+          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: returned not GET_RES ${result.ip} ${device.eoj}`);
+          continue;
+        }
+        const edt = res.responses[0].els.DETAILs;
+        if ((epc in edt) === false)
+        {
+          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: invalid reveive data ${result.ip} ${device.eoj} ${JSON.stringify(edt)}`);
+          continue;
+        }
+        const data = edt[epc];
+        const propertyList = EchoNetLiteRawController.convertToPropertyList(data);
+        if(propertyList === undefined)
+        {
+          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: invalid reveive data 2 ${result.ip} ${device.eoj} ${JSON.stringify(edt)}`);
+          continue;
+        }
+        for(const propertyMapEpc of propertyList)
+        {
+          let matchProperty = device.properties.find(_ => _.epc === propertyMapEpc);
+          if (matchProperty === undefined) {
+            matchProperty = {
+              ip: result.ip,
+              eoj: device.eoj,
+              epc: propertyMapEpc,
+              value: "",
+              operation: {
+                get: false,
+                set: false,
+                inf: false
+              }
+            };
+            device.properties.push(matchProperty);
+          }
+          if(epc === "9f"){
+            matchProperty.operation.get = true;
+          }
+          if(epc === "9e"){
+            matchProperty.operation.set = true;
+          }
+          if(epc === "9d"){
+            matchProperty.operation.inf = true;
+          }
+        }
+        
+        // 受信したデータをプロパティとして格納する
+        for (const epc in edt) {
           let matchProperty = device.properties.find(_ => _.epc === epc);
           if (matchProperty === undefined) {
             matchProperty = {
@@ -151,59 +218,7 @@ export class EchoNetLiteRawController {
             };
             device.properties.push(matchProperty);
           }
-          matchProperty.operation.get = true;
-        }
-      }
 
-      if ("9e" in edt) {
-        const data = edt["9e"];
-        for (let i = 2; i < data.length; i += 2) {
-          const epc = data.substring(i, i + 2);
-          let matchProperty = device.properties.find(_ => _.epc === epc);
-          if (matchProperty === undefined) {
-            matchProperty = {
-              ip: result.ip,
-              eoj: device.eoj,
-              epc: epc,
-              value: "",
-              operation: {
-                get: false,
-                set: false,
-                inf: false
-              }
-            };
-            device.properties.push(matchProperty);
-          }
-          matchProperty.operation.set = true;
-        }
-      }
-
-      if ("9d" in edt) {
-        const data = edt["9d"];
-        for (let i = 2; i < data.length; i += 2) {
-          const epc = data.substring(i, i + 2);
-          let matchProperty = device.properties.find(_ => _.epc === epc);
-          if (matchProperty === undefined) {
-            matchProperty = {
-              ip: result.ip,
-              eoj: device.eoj,
-              epc: epc,
-              value: "",
-              operation: {
-                get: false,
-                set: false,
-                inf: false
-              }
-            };
-            device.properties.push(matchProperty);
-          }
-          matchProperty.operation.inf = true;
-        }
-      }
-
-      for (const epc in edt) {
-        const matchProperty = device.properties.find(_ => _.epc === epc);
-        if (matchProperty !== undefined) {
           matchProperty.value = edt[epc];
         }
       }
