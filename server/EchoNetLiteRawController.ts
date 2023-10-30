@@ -27,6 +27,7 @@ export class EchoNetLiteRawController {
           this.processQueue();
         }
       }
+      this.fireReceived(rinfo, els);
     });
 
   }
