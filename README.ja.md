@@ -147,7 +147,7 @@ ECHONET Lite オプション
 | ------------------     | --------------------- | ----------- |
 | `ECHONET_TARGET_NETWORK` | `--echonetTargetNetwork` | ECHONET Liteのネットワークを"000.000.000.000/00"の形で指定します。 (デフォルト: 自動) |
 | `ECHONET_ALIAS_FILE`   | `--echonetAliasFile`  | エイリアスオプションファイルを指定します。 (デフォルト: (空)) |
-| `ECHONET_INTERVAL_TO_GET_PROPERTIES` | `--echonetIntervalToGetProperties` | ECHONET Liteプロパティの受信間隔を指定します。(単位: ms) (デフォルト: 100) |
+| ~~`ECHONET_INTERVAL_TO_GET_PROPERTIES`~~ | ~~`--echonetIntervalToGetProperties`~~ | (v2.4.0以降で廃止されました) ~~ECHONET Liteプロパティの受信間隔を指定します。(単位: ms) (デフォルト: 100)~~ |
 | `ECHONET_ALT_MULTI_NIC_MODE` | `--echonetAltMultiNicMode` | 複数NIC環境での代替モードです。もしデバイスから状態を受信できない場合は指定します。 (デフォルト: OFF) |
 
 ### エイリアスオプションファイルの形式

@@ -12,7 +12,6 @@ import { Logger } from "./Logger";
 import path from "path";
 
 let echonetTargetNetwork = "";
-let echonetIntervalToGetProperties = 300;
 let echonetAliasFile="";
 let echonetAltMultiNicMode = false;
 let debugLog = false;
@@ -30,17 +29,6 @@ if (
   process.env.ECHONET_TARGET_NETWORK !== undefined
 ) {
   echonetTargetNetwork = process.env.ECHONET_TARGET_NETWORK.replace(/^"/g, "").replace(/"$/g, "");
-}
-if (
-  "ECHONET_INTERVAL_TO_GET_PROPERTIES" in process.env &&
-  process.env.ECHONET_INTERVAL_TO_GET_PROPERTIES !== undefined
-) {
-  const tempText = process.env.ECHONET_INTERVAL_TO_GET_PROPERTIES.replace(/^"/g, "").replace(/"$/g, "");
-  const tempNo = Number(tempText);
-  if(isNaN(tempNo) === false)
-  {
-    echonetIntervalToGetProperties = tempNo;
-  }
 }
 if (
   "ECHONET_ALIAS_FILE" in process.env &&
@@ -119,15 +107,6 @@ for(var i = 2;i < process.argv.length; i++){
   {
     echonetAliasFile = value.replace(/^"/g, "").replace(/"$/g, "");
   }
-  if(name === "--echonetIntervalToGetProperties".toLowerCase())
-  {
-    const tempText = value.replace(/^"/g, "").replace(/"$/g, "");
-    const tempNo = Number(tempText);
-    if(isNaN(tempNo) === false)
-    {
-      echonetIntervalToGetProperties = tempNo;
-    }
-  }
   if(name === "--echonetAltMultiNicMode".toLowerCase())
   {
     echonetAltMultiNicMode = true;
@@ -188,7 +167,6 @@ Logger.info("", "");
 
 logger.output(`echonetTargetNetwork=${echonetTargetNetwork}`);
 logger.output(`echonetAliasFile=${echonetAliasFile}`);
-logger.output(`echonetIntervalToGetProperties=${echonetIntervalToGetProperties}`);
 logger.output(`echonetAltMultiNicMode=${echonetAltMultiNicMode}`);
 logger.output(`debugLog=${debugLog}`);
 logger.output(`restApiPort=${restApiPort}`);
@@ -270,7 +248,7 @@ const systemStatusRepository = new SystemStatusRepositry();
 
 const deviceStore = new DeviceStore();
 
-const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, echonetIntervalToGetProperties, aliasOption, echonetAltMultiNicMode);
+const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, aliasOption, echonetAltMultiNicMode);
 
 echoNetListController.addDeviceDetectedEvent((device:Device)=>{
   if(device === undefined)
@@ -409,7 +387,7 @@ mqttController.addConnectionStateChangedEvent(():void=>{
 setTimeout(()=>{
   Logger.info("", "searching devices...");
   echoNetListController.start();
-}, echonetIntervalToGetProperties);
+}, 100);
 
 restApiController.start();
 mqttController.start();

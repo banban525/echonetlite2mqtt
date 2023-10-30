@@ -17,16 +17,14 @@ export class EchoNetLiteController{
   private readonly holdController:EchoNetHoldController;
   private readonly deviceConverter:EchoNetDeviceConverter;
   private readonly controllerDeviceDefine:{[key: string]: { [key: string]: number[] }};
-  private readonly intervalToGetProperties:number;
   private readonly usedIpByEchoNet:string;
   private readonly multiNicMode:boolean;
-  constructor(echonetTargetNetwork:string, intervalToGetProperties:number, aliasOption: AliasOption, multiNicMode:boolean)
+  constructor(echonetTargetNetwork:string,  aliasOption: AliasOption, multiNicMode:boolean)
   {
     this.aliasOption = aliasOption;
     this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
     this.echonetLiteRawController = new EchoNetLiteRawController();
     this.holdController = new EchoNetHoldController({request:this.requestDeviceProperty, set:this.setDevicePropertyPrivate, isBusy:()=>this.echonetLiteRawController.getSendQueueLength() >= 1});
-    this.intervalToGetProperties = intervalToGetProperties;
     this.multiNicMode = multiNicMode;
 
     this.usedIpByEchoNet = "";
