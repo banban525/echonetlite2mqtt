@@ -388,10 +388,18 @@ export class CommandResponse
   public addResponse = (response:Response):void =>
   {
     if((this.command.ip === EL.EL_Multi || response.rinfo.address === this.command.ip ) && 
-      response.els.SEOJ === this.command.deoj && response.els.TID === this.command.tid)
+      response.els.SEOJ === this.command.deoj && response.els.DEOJ === this.command.seoj)
     {
-      this.responses.push(response);
-      this.callback();
+      if(response.els.ESV === ELSV.SET_RES && this.command.esv === ELSV.SETC)
+      {
+        this.responses.push(response);
+        this.callback();
+      }
+      if(response.els.ESV === ELSV.GET_RES && this.command.esv === ELSV.GET)
+      {
+        this.responses.push(response);
+        this.callback();
+      }
     }
   }
 }
