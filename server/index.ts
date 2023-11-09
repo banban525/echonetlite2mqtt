@@ -14,6 +14,7 @@ import path from "path";
 let echonetTargetNetwork = "";
 let echonetAliasFile="";
 let echonetAltMultiNicMode = false;
+let echonetUnknownAsError = false;
 let debugLog = false;
 let restApiPort = 3000;
 let restApiHost = "0.0.0.0";
@@ -40,6 +41,17 @@ if (
 if( "ECHONET_ALT_MULTI_NIC_MODE" in process.env && process.env.ECHONET_ALT_MULTI_NIC_MODE !== undefined)
 {
   echonetAltMultiNicMode = true;
+}
+
+if( "ECHONET_UNKNOWN_AS_ERROR" in process.env && process.env.ECHONET_UNKNOWN_AS_ERROR !== undefined)
+{
+  if(process.env.ECHONET_UNKNOWN_AS_ERROR !== "0" && 
+    process.env.ECHONET_UNKNOWN_AS_ERROR !== "false" && 
+    process.env.ECHONET_UNKNOWN_AS_ERROR !== "\"0\"" && 
+    process.env.ECHONET_UNKNOWN_AS_ERROR !== "\"false\"")
+  {
+    echonetUnknownAsError = true;
+  }
 }
 
 if ("DEBUG" in process.env && process.env.DEBUG !== undefined) {
@@ -94,11 +106,6 @@ for(var i = 2;i < process.argv.length; i++){
     debugLog = true;
   }
 
-  if(value === "")
-  {
-    continue;
-  }
-
   if(name === "--echonetTargetNetwork".toLowerCase())
   {
     echonetTargetNetwork = value.replace(/^"/g, "").replace(/"$/g, "");
@@ -111,17 +118,27 @@ for(var i = 2;i < process.argv.length; i++){
   {
     echonetAltMultiNicMode = true;
   }
+  if(name === "--echonetUnknownAsError".toLowerCase())
+  {
+    if(value !== "0" && value !== "false" && value !== "\"0\"" && value !== "\"false\"")
+    {
+      echonetUnknownAsError = true;
+    }
+  }
   if(name === "--RestApiPort".toLowerCase())
   {
     const tempNo = Number(value.replace(/^"/g, "").replace(/"$/g, ""));
-    if(isNaN(tempNo)===false)
+    if(value!=="" && isNaN(tempNo)===false)
     {
       restApiPort = tempNo;
     }
   }
   if(name === "--RestApiHost".toLowerCase())
   {
-    restApiHost = value.replace(/^"/g, "").replace(/"$/g, "");
+    if(value!=="")
+    {
+      restApiHost = value.replace(/^"/g, "").replace(/"$/g, "");
+    }
   }
   if(name === "--MqttBroker".toLowerCase())
   {
@@ -168,6 +185,7 @@ Logger.info("", "");
 logger.output(`echonetTargetNetwork=${echonetTargetNetwork}`);
 logger.output(`echonetAliasFile=${echonetAliasFile}`);
 logger.output(`echonetAltMultiNicMode=${echonetAltMultiNicMode}`);
+logger.output(`echonetUnknownAsError=${echonetUnknownAsError}`);
 logger.output(`debugLog=${debugLog}`);
 logger.output(`restApiPort=${restApiPort}`);
 logger.output(`restApiHost=${restApiHost}`);
@@ -248,7 +266,7 @@ const systemStatusRepository = new SystemStatusRepositry();
 
 const deviceStore = new DeviceStore();
 
-const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, aliasOption, echonetAltMultiNicMode);
+const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, aliasOption, echonetAltMultiNicMode, echonetUnknownAsError);
 
 echoNetListController.addDeviceDetectedEvent((device:Device)=>{
   if(device === undefined)

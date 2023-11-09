@@ -9,9 +9,11 @@ export default class EchoNetDeviceConverter
   private echoNetPropertyConverter:EchoNetPropertyConverter = new EchoNetPropertyConverter();
 
   private readonly aliasOption:AliasOption;
-  public constructor(aliasOption:AliasOption)
+  private readonly unknownAsError:boolean;
+  public constructor(aliasOption:AliasOption, unknownAsError:boolean)
   {
     this.aliasOption = aliasOption;
+    this.unknownAsError = unknownAsError;
   }
 
 
@@ -68,28 +70,32 @@ export default class EchoNetDeviceConverter
       echonetLiteFacilities:RawDataSet):Device =>
   {
     const eojClass = "0x" + eoj.substring(0, 4).toUpperCase();
-    const deviceType = this.echoNetPropertyConverter.getDevice(eojClass);
+    let deviceType = this.echoNetPropertyConverter.getDevice(eojClass);
     if(deviceType === undefined)
     {
-      Logger.info("", "ERROR class not found.");
-      return {
-        id,
-        name:"",
-        ip,
-        eoj,
-        properties:[],
-        deviceType:"unknown",
-        descriptions: {
-          ja:"不明",
-          en:"unknown"
-        },
-        protocol:{
-          type:"ECHONET_Lite v1.13",
-          version: "Rel.P"
-        },
-        manufacturer,
-        propertiesValue:{}
-      };
+      Logger.info("", `ERROR class not found. EOJ=${eoj}`);
+      if(this.unknownAsError)
+      {
+        return {
+          id,
+          name:"",
+          ip,
+          eoj,
+          properties:[],
+          deviceType:"unknown",
+          descriptions: {
+            ja:"不明",
+            en:"unknown"
+          },
+          protocol:{
+            type:"ECHONET_Lite v1.13",
+            version: "Rel.P"
+          },
+          manufacturer,
+          propertiesValue:{}
+        };
+      }
+      deviceType = this.echoNetPropertyConverter.createDummyDevice(eoj);
     }
   
     const set = new Set([...getPropertyNoList, ...setPropertyNoList, ...notifyPropertyNoList]);
@@ -117,9 +123,17 @@ export default class EchoNetDeviceConverter
       if(matchedDeviceProperties.length !== 0)
       {
         properties.push(matchedDeviceProperties[0]);
-        continue;
       }
-      Logger.warn("", `ERROR: unknown property. propertyNo === ${propertyNo} in id: ${id}, ip:${ip}, eoj:${eoj}`);
+      else
+      {
+        Logger.warn("", `ERROR: unknown property. propertyNo === ${propertyNo} in id: ${id}, ip:${ip}, eoj:${eoj}`);
+        if(this.unknownAsError)
+        {
+          continue;
+        }
+        const dummyProperty = this.createDummyProperty(epc);
+        properties.push(dummyProperty);
+      }
     }
     
     for(const propertyNo of getPropertyNoList)
@@ -201,6 +215,24 @@ export default class EchoNetDeviceConverter
       },
       manufacturer,
       propertiesValue
+    }
+  }
+
+  private createDummyProperty(epc:string):Property
+  {
+    let epcNo = epc.toUpperCase();
+    epcNo = epcNo.startsWith("0X") ? epcNo.substring(2) : epcNo;
+
+    const propertyDescription = this.echoNetPropertyConverter.createDummyProperty(epcNo);
+
+    return {
+      descriptions: propertyDescription.descriptions ?? {ja:"",en:""},
+      epc:`0x${epcNo}`,
+      name:propertyDescription.shortName,
+      observable:false,
+      readable:false,
+      writable:false,
+      schema: propertyDescription
     }
   }
     

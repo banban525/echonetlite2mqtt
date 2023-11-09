@@ -19,13 +19,15 @@ export class EchoNetLiteController{
   private readonly controllerDeviceDefine:{[key: string]: { [key: string]: number[] }};
   private readonly usedIpByEchoNet:string;
   private readonly multiNicMode:boolean;
-  constructor(echonetTargetNetwork:string,  aliasOption: AliasOption, multiNicMode:boolean)
+  private readonly unknownAsError:boolean;
+  constructor(echonetTargetNetwork:string,  aliasOption: AliasOption, multiNicMode:boolean, unknownAsError:boolean)
   {
     this.aliasOption = aliasOption;
-    this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
+    this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption, unknownAsError);
     this.echonetLiteRawController = new EchoNetLiteRawController();
     this.holdController = new EchoNetHoldController({request:this.requestDeviceProperty, set:this.setDevicePropertyPrivate, isBusy:()=>this.echonetLiteRawController.getSendQueueLength() >= 1});
     this.multiNicMode = multiNicMode;
+    this.unknownAsError = unknownAsError;
 
     this.usedIpByEchoNet = "";
     if (echonetTargetNetwork.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+/)) {
@@ -180,9 +182,7 @@ export class EchoNetLiteController{
 
   getDevice = (id:DeviceId):Device|undefined => 
   {
-    const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
-
-    const device = deviceConverter.createDevice(id, this.echonetLiteRawController.getRawDataSet());
+    const device = this.deviceConverter.createDevice(id, this.echonetLiteRawController.getRawDataSet());
     return device;
   }
 
@@ -225,11 +225,10 @@ export class EchoNetLiteController{
 
   setDevicePropertyPrivate = async (id:DeviceId, propertyName:string, newValue:any):Promise<void> =>
   {
-    const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
-    const property = deviceConverter.getProperty(id.ip, id.eoj, propertyName);
+    const property = this.deviceConverter.getProperty(id.ip, id.eoj, propertyName);
 
 
-    const echoNetData = deviceConverter.propertyToEchoNetData(id.ip, id.eoj, propertyName, newValue);
+    const echoNetData = this.deviceConverter.propertyToEchoNetData(id.ip, id.eoj, propertyName, newValue);
     if(echoNetData===undefined)
     {
       Logger.warn("[ECHONETLite]", `setDeviceProperty echoNetData===undefined newValue=${newValue}`);
@@ -297,8 +296,7 @@ export class EchoNetLiteController{
 
   requestDeviceProperty = async (id:DeviceId, propertyName:string):Promise<void> =>
   {
-    const deviceConverter = new EchoNetDeviceConverter(this.aliasOption);
-    const property = deviceConverter.getProperty(id.ip, id.eoj, propertyName);
+    const property = this.deviceConverter.getProperty(id.ip, id.eoj, propertyName);
     if(property === undefined)
     {
       Logger.warn("[ECHONETLite]", `setDeviceProperty property === undefined propertyName=${propertyName}`);

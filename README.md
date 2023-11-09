@@ -153,6 +153,7 @@ ECHONET Lite Options
 | `ECHONET_ALIAS_FILE`   | `--echonetAliasFile`  | The file path for alias option file. (Defalt: (empty)) |
 | ~~`ECHONET_INTERVAL_TO_GET_PROPERTIES`~~ | ~~`--echonetIntervalToGetProperties`~~ | (Deprecated since v2.4.0) ~~Specifies the time interval for acquiring ECHONET Lite properties. (Unit: ms) (Default: 100)~~ |
 | `ECHONET_ALT_MULTI_NIC_MODE` | `--echonetAltMultiNicMode` | Alternate mode in a multiple NIC environment. Specifies if you cannot receive status from the device. (Default: off) |
+| `ECHONET_UNKNOWN_AS_ERROR`   | `--echonetUnknownAsError`  | Specifies whether to  treat unknown classes and unknown properties as errors. (Default: off) |
 
 ### Alias Option File Format
 

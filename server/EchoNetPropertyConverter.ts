@@ -116,6 +116,55 @@ export class EchoNetPropertyConverter
     return schema;
   }
 
+
+  public createDummyDevice(eoj:string):ElDeviceDescription
+  {
+    const definitions = this.echoNetDefinitionRepository.getDefinition();
+    const superClass = this.echoNetDefinitionRepository.getSuperClass();
+
+    let eojNo = eoj.toUpperCase();
+    eojNo = eojNo.startsWith("0X") ? eojNo.substring(2) : eojNo;
+    const className = "Unknown_" + eojNo;
+    const device:ElDeviceDescription = {
+      className: {ja:`不明なクラス EOJ:${eojNo}`, en:`Unknwon class EOJ:${eojNo}`},
+      elProperties: JSON.parse(JSON.stringify(superClass.elProperties)),
+      eoj: `0x${eojNo}`,
+      shortName: className,
+      validRelease: {from:"A", to:"latest"}
+    }
+
+    for(const prop of device.elProperties)
+    {
+      prop.data = this.convertFromRefType(prop.data, definitions);
+    }
+    return device;
+  }
+
+  public createDummyProperty(epcNo:string):ElPropertyDescription
+  {
+    const propertyName = `unknown_${epcNo}`;
+
+    return {
+      data:{
+        type:"raw",
+        minSize:0,
+        maxSize:255
+      },
+      descriptions:{ja: `不明なプロパティ EPC:${epcNo}`,en: `Unknown property EPC:${epcNo}`},
+      epc:`0x${epcNo}`,
+      shortName: propertyName,
+      accessRule:{
+        get:"optional",
+        set:"optional",
+        inf:"optional"
+      },
+      note:{ja:"",en:""},
+      propertyName: {ja: `不明なプロパティ EPC:${epcNo}`,en: `Unknown property EPC:${epcNo}`},
+      validRelease: {from:"A", to:"latest"},
+      remark:{ja:"",en:""}
+    }
+  }
+
   public toEchoNetLiteData(dataType:ElDataType, value:any):string|undefined
   {
     if("type" in dataType)
