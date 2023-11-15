@@ -18,15 +18,15 @@ export class EchoNetLiteController{
   private readonly deviceConverter:EchoNetDeviceConverter;
   private readonly controllerDeviceDefine:{[key: string]: { [key: string]: number[] }};
   private readonly usedIpByEchoNet:string;
-  private readonly multiNicMode:boolean;
+  private readonly legacyMultiNicMode:boolean;
   private readonly unknownAsError:boolean;
-  constructor(echonetTargetNetwork:string,  aliasOption: AliasOption, multiNicMode:boolean, unknownAsError:boolean)
+  constructor(echonetTargetNetwork:string,  aliasOption: AliasOption, legacyMultiNicMode:boolean, unknownAsError:boolean)
   {
     this.aliasOption = aliasOption;
     this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption, unknownAsError);
     this.echonetLiteRawController = new EchoNetLiteRawController();
     this.holdController = new EchoNetHoldController({request:this.requestDeviceProperty, set:this.setDevicePropertyPrivate, isBusy:()=>this.echonetLiteRawController.getSendQueueLength() >= 1});
-    this.multiNicMode = multiNicMode;
+    this.legacyMultiNicMode = legacyMultiNicMode;
     this.unknownAsError = unknownAsError;
 
     this.usedIpByEchoNet = "";
@@ -286,7 +286,7 @@ export class EchoNetLiteController{
     await this.echonetLiteRawController.initilize(
       Object.keys(this.controllerDeviceDefine),
       this.usedIpByEchoNet,
-      this.multiNicMode
+      this.legacyMultiNicMode
     );
 
     this.controllerDeviceDefine['05ff01']['83'] = this.echonetLiteRawController.updateidentifierFromMacAddress(this.controllerDeviceDefine['05ff01']['83']);

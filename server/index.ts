@@ -13,7 +13,7 @@ import path from "path";
 
 let echonetTargetNetwork = "";
 let echonetAliasFile="";
-let echonetAltMultiNicMode = false;
+let echonetLegacyMultiNicMode = false;
 let echonetUnknownAsError = false;
 let debugLog = false;
 let restApiPort = 3000;
@@ -38,9 +38,15 @@ if (
   echonetAliasFile = process.env.ECHONET_ALIAS_FILE.replace(/^"/g, "").replace(/"$/g, "");
 }
 
-if( "ECHONET_ALT_MULTI_NIC_MODE" in process.env && process.env.ECHONET_ALT_MULTI_NIC_MODE !== undefined)
+if( "ECHONET_LEGACY_MULTI_NIC_MODE" in process.env && process.env.ECHONET_LEGACY_MULTI_NIC_MODE !== undefined)
 {
-  echonetAltMultiNicMode = true;
+  if(process.env.ECHONET_LEGACY_MULTI_NIC_MODE !== "0" && 
+    process.env.ECHONET_LEGACY_MULTI_NIC_MODE !== "false" && 
+    process.env.ECHONET_LEGACY_MULTI_NIC_MODE !== "\"0\"" && 
+    process.env.ECHONET_LEGACY_MULTI_NIC_MODE !== "\"false\"")
+  {
+    echonetLegacyMultiNicMode = true;
+  }
 }
 
 if( "ECHONET_UNKNOWN_AS_ERROR" in process.env && process.env.ECHONET_UNKNOWN_AS_ERROR !== undefined)
@@ -114,9 +120,12 @@ for(var i = 2;i < process.argv.length; i++){
   {
     echonetAliasFile = value.replace(/^"/g, "").replace(/"$/g, "");
   }
-  if(name === "--echonetAltMultiNicMode".toLowerCase())
+  if(name === "--echonetLegacyMultiNicMode".toLowerCase())
   {
-    echonetAltMultiNicMode = true;
+    if(value !== "0" && value !== "false" && value !== "\"0\"" && value !== "\"false\"")
+    {
+      echonetLegacyMultiNicMode = true;
+    }
   }
   if(name === "--echonetUnknownAsError".toLowerCase())
   {
@@ -184,7 +193,7 @@ Logger.info("", "");
 
 logger.output(`echonetTargetNetwork=${echonetTargetNetwork}`);
 logger.output(`echonetAliasFile=${echonetAliasFile}`);
-logger.output(`echonetAltMultiNicMode=${echonetAltMultiNicMode}`);
+logger.output(`echonetLegacyMultiNicMode=${echonetLegacyMultiNicMode}`);
 logger.output(`echonetUnknownAsError=${echonetUnknownAsError}`);
 logger.output(`debugLog=${debugLog}`);
 logger.output(`restApiPort=${restApiPort}`);
@@ -266,7 +275,7 @@ const systemStatusRepository = new SystemStatusRepositry();
 
 const deviceStore = new DeviceStore();
 
-const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, aliasOption, echonetAltMultiNicMode, echonetUnknownAsError);
+const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, aliasOption, echonetLegacyMultiNicMode, echonetUnknownAsError);
 
 echoNetListController.addDeviceDetectedEvent((device:Device)=>{
   if(device === undefined)

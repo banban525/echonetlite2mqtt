@@ -458,9 +458,10 @@ export class EchoNetLiteRawController {
   }
 
   
-  public initilize = async (objList:string[], echonetTargetNetwork:string, multiNicMode:boolean):Promise<void> =>
+  public initilize = async (objList:string[], echonetTargetNetwork:string, legacyMultiNicMode:boolean):Promise<void> =>
   {
-    await EchoNetCommunicator.initialize(objList, 4, { v4: echonetTargetNetwork, autoGetProperties: false }, multiNicMode);
+    await EchoNetCommunicator.initialize(objList, 4, { v4: echonetTargetNetwork, autoGetProperties: false }, 
+      legacyMultiNicMode===false);
   }
 
   public start = async (): Promise<void> =>{
