@@ -15,6 +15,8 @@ let echonetTargetNetwork = "";
 let echonetAliasFile="";
 let echonetLegacyMultiNicMode = false;
 let echonetUnknownAsError = false;
+let echonetDeviceIpList = "";
+let echonetDisableAutoDeviceDiscovery = false;
 let debugLog = false;
 let restApiPort = 3000;
 let restApiHost = "0.0.0.0";
@@ -57,6 +59,24 @@ if( "ECHONET_UNKNOWN_AS_ERROR" in process.env && process.env.ECHONET_UNKNOWN_AS_
     process.env.ECHONET_UNKNOWN_AS_ERROR !== "\"false\"")
   {
     echonetUnknownAsError = true;
+  }
+}
+
+if ("ECHONET_DEVICE_IP_LIST" in process.env &&
+  process.env.ECHONET_DEVICE_IP_LIST !== undefined
+) {
+  echonetDeviceIpList = process.env.ECHONET_DEVICE_IP_LIST.replace(/^"/g, "").replace(/"$/g, "");
+}
+
+if( "ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY" in process.env && 
+  process.env.ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY !== undefined)
+{
+  if(process.env.ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY !== "0" && 
+    process.env.ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY !== "false" && 
+    process.env.ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY !== "\"0\"" && 
+    process.env.ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY !== "\"false\"")
+  {
+    echonetDisableAutoDeviceDiscovery = true;
   }
 }
 
@@ -103,6 +123,17 @@ if("MQTT_KEY_FILE" in process.env && process.env.MQTT_KEY_FILE !== undefined)
   mqttKeyFile = process.env.MQTT_KEY_FILE.replace(/^"/g, "").replace(/"$/g, "");
 }
 
+if("ECHONET_INTERVAL_TO_GET_PROPERTIES" in process.env && process.env.ECHONET_INTERVAL_TO_GET_PROPERTIES !== undefined)
+{
+  Logger.warn("", `The ECHONET_ALT_MULTI_NIC_MODE option has been deprecated. This option is ignored.`);
+}
+if("ECHONET_ALT_MULTI_NIC_MODE" in process.env && process.env.ECHONET_ALT_MULTI_NIC_MODE !== undefined)
+{
+  Logger.warn("", `The ECHONET_ALT_MULTI_NIC_MODE option has been deprecated. This option is ignored.`);
+}
+
+
+
 for(var i = 2;i < process.argv.length; i++){
   const name = process.argv[i].toLowerCase();
   const value = i + 1 < process.argv.length ? process.argv[i+1] : "";
@@ -132,6 +163,17 @@ for(var i = 2;i < process.argv.length; i++){
     if(value !== "0" && value !== "false" && value !== "\"0\"" && value !== "\"false\"")
     {
       echonetUnknownAsError = true;
+    }
+  }
+  if(name === "--echonetDeviceIpList".toLowerCase())
+  {
+    echonetDeviceIpList = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--echonetDisableAutoDeviceDiscovery".toLowerCase())
+  {
+    if(value !== "0" && value !== "false" && value !== "\"0\"" && value !== "\"false\"")
+    {
+      echonetDisableAutoDeviceDiscovery = true;
     }
   }
   if(name === "--RestApiPort".toLowerCase())
@@ -173,8 +215,16 @@ for(var i = 2;i < process.argv.length; i++){
   {
     mqttKeyFile = value.replace(/^"/g, "").replace(/"$/g, "");
   }
-}
 
+  if(name === "--echonetIntervalToGetProperties".toLowerCase())
+  {
+    Logger.warn("", `The echonetIntervalToGetProperties option has been deprecated. This option is ignored.`);
+  }
+  if(name === "--echonetAltMultiNicMode".toLowerCase())
+  {
+    Logger.warn("", `The echonetAltMultiNicMode option has been deprecated. This option is ignored.`);
+  }
+}
 
 
 const logger = new LogRepository();
@@ -195,6 +245,8 @@ logger.output(`echonetTargetNetwork=${echonetTargetNetwork}`);
 logger.output(`echonetAliasFile=${echonetAliasFile}`);
 logger.output(`echonetLegacyMultiNicMode=${echonetLegacyMultiNicMode}`);
 logger.output(`echonetUnknownAsError=${echonetUnknownAsError}`);
+logger.output(`echonetDeviceIpList=${echonetDeviceIpList}`);
+logger.output(`echonetDisableAutoDeviceDiscovery=${echonetDisableAutoDeviceDiscovery}`);
 logger.output(`debugLog=${debugLog}`);
 logger.output(`restApiPort=${restApiPort}`);
 logger.output(`restApiHost=${restApiHost}`);
@@ -267,6 +319,12 @@ if(echonetAliasFile!=="")
   }
 }
 
+const knownDeviceIpList = echonetDeviceIpList
+  .split(",")
+  .filter(_=>_.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/) !== undefined)
+  .map(_=>_.trim())
+  .filter(_=>_!=="");
+
 logger.output("");
 
 const eventRepository = new EventRepository();
@@ -275,7 +333,7 @@ const systemStatusRepository = new SystemStatusRepositry();
 
 const deviceStore = new DeviceStore();
 
-const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, aliasOption, echonetLegacyMultiNicMode, echonetUnknownAsError);
+const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, aliasOption, echonetLegacyMultiNicMode, echonetUnknownAsError, knownDeviceIpList, echonetDisableAutoDeviceDiscovery===false);
 
 echoNetListController.addDeviceDetectedEvent((device:Device)=>{
   if(device === undefined)
@@ -411,11 +469,6 @@ mqttController.addConnectionStateChangedEvent(():void=>{
   restApiController.setNewEvent();
 });
 
-setTimeout(()=>{
-  Logger.info("", "searching devices...");
-  echoNetListController.start();
-}, 100);
-
 restApiController.start();
 mqttController.start();
 if(mqttBroker === "")
@@ -423,3 +476,4 @@ if(mqttBroker === "")
   logger.output(`[MQTT] mqttBroker is not configured.`);
 }
 
+echoNetListController.start();

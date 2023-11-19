@@ -20,7 +20,14 @@ export class EchoNetLiteController{
   private readonly usedIpByEchoNet:string;
   private readonly legacyMultiNicMode:boolean;
   private readonly unknownAsError:boolean;
-  constructor(echonetTargetNetwork:string,  aliasOption: AliasOption, legacyMultiNicMode:boolean, unknownAsError:boolean)
+  private readonly knownDeviceIpList:string[];
+  private readonly searchDevices:boolean
+  constructor(echonetTargetNetwork:string,  
+    aliasOption: AliasOption, 
+    legacyMultiNicMode:boolean, 
+    unknownAsError:boolean,
+    knownDeviceIpList:string[],
+    searchDevices:boolean)
   {
     this.aliasOption = aliasOption;
     this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption, unknownAsError);
@@ -28,6 +35,8 @@ export class EchoNetLiteController{
     this.holdController = new EchoNetHoldController({request:this.requestDeviceProperty, set:this.setDevicePropertyPrivate, isBusy:()=>this.echonetLiteRawController.getSendQueueLength() >= 1});
     this.legacyMultiNicMode = legacyMultiNicMode;
     this.unknownAsError = unknownAsError;
+    this.knownDeviceIpList = knownDeviceIpList;
+    this.searchDevices = searchDevices;
 
     this.usedIpByEchoNet = "";
     if (echonetTargetNetwork.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+/)) {
@@ -291,7 +300,23 @@ export class EchoNetLiteController{
 
     this.controllerDeviceDefine['05ff01']['83'] = this.echonetLiteRawController.updateidentifierFromMacAddress(this.controllerDeviceDefine['05ff01']['83']);
 
-    await this.echonetLiteRawController.start();
+    await (new Promise<void>((resolve)=>setTimeout(()=>resolve(), 1000)));
+
+    if(this.knownDeviceIpList.length > 0)
+    {
+      for(const ip of this.knownDeviceIpList)
+      {
+        Logger.info("[ECHONETLite]", `collecting devices from ${ip}`);
+        await this.echonetLiteRawController.searchDeviceFromIp(ip);
+      }
+      Logger.info("[ECHONETLite]", `done collecting devices`);
+    }
+    if(this.searchDevices)
+    {
+      Logger.info("[ECHONETLite]", `searching devices...`);
+      await this.echonetLiteRawController.searchDevicesInNetwork();
+      Logger.info("[ECHONETLite]", `done searching devices`);
+    }
   }
 
   requestDeviceProperty = async (id:DeviceId, propertyName:string):Promise<void> =>

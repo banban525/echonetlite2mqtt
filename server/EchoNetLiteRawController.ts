@@ -327,7 +327,15 @@ export class EchoNetLiteRawController {
             });
 
             const newNode = await EchoNetLiteRawController.getNewNode(nodeTemp);
-            this.nodes.push(newNode);
+            const currentIndex = this.nodes.findIndex(_=>_.ip === newNode.ip);
+            if(currentIndex===-1)
+            {
+              this.nodes.push(newNode);
+            }
+            else
+            {
+              this.nodes[currentIndex] = newNode;
+            }
             this.fireDeviceDetected(newNode.devices.map(_=>({ip:_.ip, eoj:_.eoj})));
           }
           continue;
@@ -405,13 +413,22 @@ export class EchoNetLiteRawController {
         if (command === undefined) {
           throw Error("ありえない");
         }
-        const res = await EchoNetCommunicator.execCommandPromise(
-          command.ip,
-          command.seoj,
-          command.deoj,
-          command.esv,
-          command.epc,
-          command.edt);
+        let res: CommandResponse;
+        try
+        {
+          res = await EchoNetCommunicator.execCommandPromise(
+            command.ip,
+            command.seoj,
+            command.deoj,
+            command.esv,
+            command.epc,
+            command.edt);
+        }
+        catch(e)
+        {
+          Logger.warn("[ECHONETLite][raw]", `error send command: timeout ${command.ip} ${command.seoj} ${command.deoj} ${command.esv} ${command.epc} ${command.edt}`, {exception:e});
+          continue;
+        }
 
         // GET_RESの場合は、値を更新する
         if(res.responses[0].els.ESV === ELSV.GET_RES)
@@ -464,7 +481,69 @@ export class EchoNetLiteRawController {
       legacyMultiNicMode===false);
   }
 
-  public start = async (): Promise<void> =>{
+  public searchDeviceFromIp = async (ip:string):Promise<void> =>
+  {
+    let res: CommandResponse;
+    try {
+      res = await EchoNetCommunicator.execCommandPromise(ip, '0ef001', '0ef001', ELSV.GET, "d6", "");
+    }
+    catch (e) {
+      Logger.warn("[ECHONETLite][raw]", `error searchDeviceFromIp: timeout ${ip} 0ef001 d6`, {exception:e});
+      return undefined;
+    }
+    if(res.responses.length === 0)
+    {
+      Logger.warn("[ECHONETLite][raw]", `error searchDeviceFromIp: timeout ${ip}`);
+      return;
+    }
+    const response = res.responses[0];
+    if(response.els.ESV !== ELSV.GET_RES)
+    {
+      Logger.warn("[ECHONETLite][raw]", `error searchDeviceFromIp: returned ${response.els.ESV} ${ip}`)
+      return;
+    }
+    const data = response.els.DETAILs;
+    if (("d6" in data) === false) {
+      Logger.warn("[ECHONETLite][raw]", `error searchDeviceFromIp: data not found. ${ip}`);
+      return;
+    }
+    const node: RawNode = {
+      ip: response.rinfo.address,
+      devices: [
+        {
+          ip: response.rinfo.address,
+          eoj: "0ef001",
+          properties: [],
+          noExistsId: false
+        }
+      ]
+    };
+    EchoNetLiteRawController.convertToInstanceList(response.els.DETAILs["d6"]).forEach(eoj => {
+      node.devices.push({
+        ip: response.rinfo.address,
+        eoj: eoj,
+        properties: [],
+        noExistsId: false
+      });
+    });
+
+    // ノードの詳細を取得する
+    const newNode = await EchoNetLiteRawController.getNewNode(node);
+
+    const currentIndex = this.nodes.findIndex(_=>_.ip === newNode.ip);
+    if(currentIndex===-1)
+    {
+      this.nodes.push(newNode);
+    }
+    else
+    {
+      this.nodes[currentIndex] = newNode;
+    }
+
+    this.fireDeviceDetected(newNode.devices.map(_=>({ip:_.ip, eoj:_.eoj})));
+  }
+
+  public searchDevicesInNetwork = async (): Promise<void> =>{
 
     // ネットワーク内のすべてのノードからd6(自ノードインスタンスリスト)を取得する
     const res = await EchoNetCommunicator.getForTimeoutPromise(
@@ -506,7 +585,15 @@ export class EchoNetLiteRawController {
     // ノードの詳細を取得する
     for (const node of nodesTemp) {
       const newNode = await EchoNetLiteRawController.getNewNode(node);
-      this.nodes.push(newNode);
+      const currentIndex = this.nodes.findIndex(_=>_.ip === newNode.ip);
+      if(currentIndex===-1)
+      {
+        this.nodes.push(newNode);
+      }
+      else
+      {
+        this.nodes[currentIndex] = newNode;
+      }
       this.fireDeviceDetected(newNode.devices.map(_=>({ip:_.ip, eoj:_.eoj})));
     }
   }
