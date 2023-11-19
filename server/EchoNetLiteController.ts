@@ -1,6 +1,4 @@
 import { eldata,rinfo } from "echonet-lite";
-import os from "os";
-import ip from "ip";
 import { AliasOption, Device, DeviceId } from "./Property";
 import EchoNetDeviceConverter from "./EchoNetDeviceConverter";
 import { EchoNetLiteRawController } from "./EchoNetLiteRawController";
@@ -22,7 +20,7 @@ export class EchoNetLiteController{
   private readonly unknownAsError:boolean;
   private readonly knownDeviceIpList:string[];
   private readonly searchDevices:boolean
-  constructor(echonetTargetNetwork:string,  
+  constructor(usedIpByEchoNet:string,  
     aliasOption: AliasOption, 
     legacyMultiNicMode:boolean, 
     unknownAsError:boolean,
@@ -38,19 +36,7 @@ export class EchoNetLiteController{
     this.knownDeviceIpList = knownDeviceIpList;
     this.searchDevices = searchDevices;
 
-    this.usedIpByEchoNet = "";
-    if (echonetTargetNetwork.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+/)) {
-      const interfaces = os.networkInterfaces();
-      const matchedNetworkAddresses = Object.keys(interfaces)
-        .map((key) => interfaces[key])
-        .flat()
-        .filter((_) => _!==undefined && ip.cidrSubnet(echonetTargetNetwork).contains(_.address));
-      
-      if(matchedNetworkAddresses.length >= 1)
-      {
-        this.usedIpByEchoNet = matchedNetworkAddresses[0]?.address ?? "";
-      }
-    }
+    this.usedIpByEchoNet = usedIpByEchoNet;
 
     this.echonetLiteRawController.addReveivedHandler(( rinfo:rinfo, els:eldata ):void=>{
       if(els.ESV === ELSV.SET_RES)

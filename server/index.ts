@@ -10,6 +10,8 @@ import { EventRepository } from "./EventRepository";
 import { LogRepository } from "./LogRepository";
 import { Logger } from "./Logger";
 import path from "path";
+import os from "os";
+import ip from "ip";
 
 let echonetTargetNetwork = "";
 let echonetAliasFile="";
@@ -319,11 +321,128 @@ if(echonetAliasFile!=="")
   }
 }
 
-const knownDeviceIpList = echonetDeviceIpList
-  .split(",")
-  .filter(_=>_.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/) !== undefined)
-  .map(_=>_.trim())
-  .filter(_=>_!=="");
+// echonetTargetNetworkが xxx.xxx.xxx.xxx/yy の形式かチェックする
+if(echonetTargetNetwork !== "" && echonetTargetNetwork.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+/)===null )
+{
+  Logger.error("", `echonetTargetNetwork is invalid format. expected "xxx.xxx.xxx.xxx/yy". : "${echonetTargetNetwork}"`)
+  echonetTargetNetwork = "";
+}
+
+// echonetDeviceIpListが カンマ区切りのIPv4形式かチェックする
+let knownDeviceIpList:string[] = [];
+if(echonetDeviceIpList !== "")
+{
+  for(let ip of echonetDeviceIpList.split(","))
+  {
+    ip = ip.trim();
+    if(ip.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/) === null)
+    {
+      Logger.warn("", `echonetDeviceIpList is invalid format. expected  "xxx.xxx.xxx.xxx" separated by commas. : "${ip}"`)
+    }
+    else
+    {
+      knownDeviceIpList.push(ip);
+    }
+  }
+}
+
+// echonetDeviceIpListが渡されているなら、OSにあるネットワークインターフェースのネットワーク範囲に入っているかチェックする
+if(knownDeviceIpList.length > 0)
+{
+  let notMatchedDeviceIpList = [...knownDeviceIpList];
+
+  const networkInterfaces = os.networkInterfaces();
+  for (const interfaceName of Object.keys(networkInterfaces)) {
+    const interfaces = networkInterfaces[interfaceName];
+    if(interfaces === undefined)
+    {
+      continue;
+    }
+  
+    for(const interfaceInfo of interfaces.filter(_=>_.family === "IPv4"))
+    {
+      const subnet = ip.subnet(interfaceInfo.address, interfaceInfo.netmask);
+      notMatchedDeviceIpList = notMatchedDeviceIpList.filter(deviceIp=>subnet.contains(deviceIp)===false);
+    }
+  }
+
+  if(notMatchedDeviceIpList.length > 0)
+  {
+    for(const deviceIp of notMatchedDeviceIpList)
+    {
+      Logger.warn("", `"${deviceIp}" is not in the network range of the host.`);
+    }
+    knownDeviceIpList = knownDeviceIpList.filter(_=>notMatchedDeviceIpList.includes(_)==false);
+  }
+}
+
+let networkInterfaceForEchonet:os.NetworkInterfaceInfo|undefined = undefined;
+// echonetTargetNetworkが指定されていたら、合致するネットワークインターフェイスを探して、それを使用する。
+if (echonetTargetNetwork !== "") {
+
+  const interfaces = os.networkInterfaces();
+  const matchedNetworkAddresses = Object.keys(interfaces)
+    .map((key) => interfaces[key])
+    .flat()
+    .filter((_) => _!==undefined && ip.cidrSubnet(echonetTargetNetwork).contains(_.address));
+  
+  if(matchedNetworkAddresses.length > 0 && matchedNetworkAddresses[0] !== undefined)
+  {
+    networkInterfaceForEchonet = matchedNetworkAddresses[0];
+    Logger.info("", `use the network "${networkInterfaceForEchonet.address}" for echonet lite.`);
+  }
+  else
+  {
+    Logger.warn("", `the network "${echonetTargetNetwork}" is not found in the host.`);
+  }
+}
+
+// echonetTargetNetworkが指定されておらず、echonetDeviceIpListが渡されていたら、
+// echonetDeviceIpListの最初のIPアドレスが属するネットワークを使用する。
+if(networkInterfaceForEchonet === undefined && knownDeviceIpList.length > 0)
+{
+  const deviceIp = knownDeviceIpList[0];
+
+  const networkInterfaces = os.networkInterfaces();
+  for (const interfaceName of Object.keys(networkInterfaces)) {
+    const interfaces = networkInterfaces[interfaceName];
+    if(interfaces === undefined)
+    {
+      continue;
+    }
+  
+    const matchedInterfaces = interfaces.filter(_=>_.family === "IPv4").filter(interfaceInfo=>{
+      const subnet = ip.subnet(interfaceInfo.address, interfaceInfo.netmask);
+      if (subnet.contains(deviceIp)) {
+        return true;
+      }
+      return false;
+    });
+    if(matchedInterfaces.length > 0)
+    {
+      networkInterfaceForEchonet = matchedInterfaces[0];
+      Logger.info("", `use the network "${networkInterfaceForEchonet.address}" for echonet lite.`);
+      break;
+    }
+  }
+}
+
+if(networkInterfaceForEchonet !== undefined)
+{
+  // 決めたネットワークに含まれないデバイスIPは削除する
+  const subnet = ip.subnet(networkInterfaceForEchonet.address, networkInterfaceForEchonet.netmask);
+  for(const deviceIp of knownDeviceIpList)
+  {
+    if(subnet.contains(deviceIp) === false)
+    {
+      Logger.warn("", `"${deviceIp}" is not in the network range of the network ${networkInterfaceForEchonet.address}.`);
+    }
+  }
+
+  knownDeviceIpList = knownDeviceIpList.filter(deviceIp=>subnet.contains(deviceIp));
+}
+
+const networkAddressForEchonet = networkInterfaceForEchonet !== undefined ? networkInterfaceForEchonet.address : "";
 
 logger.output("");
 
@@ -333,7 +452,7 @@ const systemStatusRepository = new SystemStatusRepositry();
 
 const deviceStore = new DeviceStore();
 
-const echoNetListController = new EchoNetLiteController(echonetTargetNetwork, aliasOption, echonetLegacyMultiNicMode, echonetUnknownAsError, knownDeviceIpList, echonetDisableAutoDeviceDiscovery===false);
+const echoNetListController = new EchoNetLiteController(networkAddressForEchonet, aliasOption, echonetLegacyMultiNicMode, echonetUnknownAsError, knownDeviceIpList, echonetDisableAutoDeviceDiscovery===false);
 
 echoNetListController.addDeviceDetectedEvent((device:Device)=>{
   if(device === undefined)
