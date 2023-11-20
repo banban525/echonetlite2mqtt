@@ -232,12 +232,18 @@ export class ElMixedOneOfType
 
 export interface ElObjectType{
   type: "object";
+  /** array of element - 要素の列挙 */
   properties: {
+    /** element name - 要素名 */
     elementName: {
+      /** element name in Japanese - 要素名（日本語） */
       ja: string;
+      /** element name in English - 要素名（英語） */
       en: string;
     };
+    /** short name of the element name - 要素の short name */
     shortName: string;
+    /** data type object of the element - 要素のデータタイプオブジェクト */
     element: ElDataType;
   }[]
 }
@@ -268,9 +274,13 @@ export class ElObjectType
 
 export interface ElArrayType{
   type:"array";
+  /** data size of each item - 項目のデータサイズ */
   itemSize: number;
+  /** minimum number of items - 項目の最小数 */
   minItems?: number;
+  /** maximum number of items - 項目の最大数 */
   maxItems: number;
+  /** data type object - 項目のデータタイプオブジェクト */
   items: ElDataType;
 }
 
@@ -299,7 +309,9 @@ export class ElArrayType
 
 export interface ElRawType{
   type:"raw",
+  /** minimum data size - データサイズの最小値 */
   minSize:number,
+  /** maximum data size  - データサイズの最大値 */
   maxSize:number
 }
 
@@ -320,17 +332,27 @@ export class ElRawType
 
 export interface ElBitmapType{
   type: "bitmap";
+  /** size of total bitmaps data in bytes - 全体のデータサイズ（バイト数）を示す。 */
   size: number;
+  /** array of bitmap object - bitmap object の列挙 */
   bitmaps: {
+    /** bitmap name - bitmap 名*/
     name: string;
+    /** descriptions of bitmap - bitmap の説明 */
     descriptions: {
+      /** description in Japanese - bitmap の説明（日本語） */
       ja: string;
+      /** description in English - bitmap の説明（英語）*/
       en: string;
     },
+    /** position of bitmap - bitmap の位置 */
     position: {
+      /** index of byte-data - 何バイト目かを示す */
       index: number;
+      /** bitmask to specify bits - 該当するバイトの中のbitmapの１を示す */
       bitMask: string;
     };
+    /** data type object of the bitmap value - bitmapで表現する値のデータタイプオブジェクト */
     value: ElDataType;
   }[]
 }
@@ -361,8 +383,14 @@ export class ElBitmapType
 
 export interface ElTimeType{
   type:"time";
-  size?: number;  // default 3
-  maximumOfHour?: number;  // default 23
+  /** Data size in case of partial data - データサイズ（バイト数）を示す。
+   * @default 3
+   */
+  size?: number;
+  /** Specifies maximum value of hour. - Hour の最大値を設定する。 
+   * @default 23
+  */
+  maximumOfHour?: number;
 }
 
 export class ElTimeType
@@ -394,7 +422,10 @@ export class ElTimeType
 
 export interface ElDateTimeType{
   type:"date-time";
-  size?: number;  // default 7
+  /** Data size in case of partial data - データサイズ（バイト数）を示す。
+   * @default 7
+   */
+  size?: number;
 }
 export class ElDateTimeType
 {
@@ -433,7 +464,10 @@ export class ElDateTimeType
 
 export interface ElDateType{
   type:"date";
-  size?: number;  // default 4
+  /** Data size in case of partial data - データサイズ（バイト数）を示す。 
+   * @default 4
+  */
+  size?: number;
 }
 export class ElDateType
 {
@@ -471,10 +505,17 @@ export class ElDateType
 
 export interface ElLevelType{
   type: "level";
+  /** EDT value in Hex that is associated to LEVEL_1  - レベル 1 に対応する EDT 値の16進数表記 (string) の EDT値 
+   * @pattern ^0x[0-9A-F]+$
+  */
   base: string;
+  /** maximum level  - レベルの最大値 */
   maximum: number;
+  /** descriptions of the level - レベルの説明 */
   descriptions?:{
+    /** description in Japanese - レベルの説明（日本語） */
     ja: string;
+    /** description in English - レベルの説明（英語） */
     en: string;
   }
 }
@@ -500,10 +541,16 @@ export class ElLevelType
 
 export interface ElNumericValueType{
   type: "numericValue";
+  /** data size. 0 in case of bitmap  - データサイズ（バイト数）を示す。bitmap の場合は 0 とする。 */
   size: number;
+  /** array of numericValue object  - numericValue object を列挙する */
   enum: 
   {
+    /** EDT value in Hex - 16進数表記 (string) の EDT 値
+     * @pattern ^0x[0-9A-F]+$
+     */
     edt: string;
+    /** numeric value - 数値 */
     numericValue: number;
   }[];
 }
@@ -528,14 +575,33 @@ export class ElNumericValueType
 
 export interface ElStateType{
   type: "state";
+  /** data size. 0 in case of bitmap - データサイズ（バイト数）を示す。bitmap の場合は 0 とする。 */
   size: number;
+  /** array of state object - state object を列挙する */
   enum: {
+      /** EDT value in Hex - 16進数表記 (string) の EDT 値
+       * @pattern ^0x[0-9A-F]+$
+       */
       edt: string;
+      /** a name of the state - 状態の名前 */
       name: string;
+      /** descriptions of the state - 状態の説明 */
       descriptions: {
+        /** description in Japanese - 状態の説明（日本語） */
         ja: string;
+        /** description in English - 状態の説明（英語） */
         en: string;
       };
+      /** read only flag. 
+       * @default false
+       * @description
+       *   "readOnly" is set to "true" when it is utilized for the response of Get but not utilized for the response of Set.
+       *   For example, Chamber temperature setting (0xE3) of electronic oven (0x03B8), "0x8002: Not specified". 
+       *   When access rules of property are GET only, "readOnly" should not be used. 
+       *   Get のレスポンスとしては利用されるが、Set の値としては利用できない場合に readOnly を true にする。
+       *   例：オーブンレンジ (0x03B8) の庫内温度設定値 (0xE3) におけるプロパティ値, 0x8002: 未設定"。
+       *   なお、アクセスルールが Get のみのプロパティでは、readOnly を利用しない。
+       */
       readOnly?:boolean;
     }[];
 }
@@ -560,17 +626,33 @@ export class ElStateType
 export interface ElNumberType{
   type: "number";
   format: "int8"|"int16"|"int32"|"uint8"|"uint16"|"uint32";
+  /** unit - 単位 */
   unit?: string;
+  /** minimum number */
   minimum?: number;
+  /** maximum number */
   maximum?: number;
+  /** restricting values by enumeration  - 特定の値のみ利用する場合は、値を列挙する */
   enum?: number[];
+  /** multiple value - 係数 */
   multiple?: number;
+  /** step - 数値データのステップ */
   multipleOf?: number;
+  /** EPCs for coefficient in Hex(string)  - 係数として使用する EPCs (16進数表記 string) */
   coefficient?: string[]; //無視する。プログラムからは使えない
+  /** flag to utilize overflow code. default is true. - overflow code 利用のflag. 
+   * @default true
+   */
   overflowCode?: boolean;
+  /** flag to utilize underflow code. default is true. - underflow code 利用のflag. 
+   * @default true
+   */
   underflowCode?: boolean;
+  /** descriptions */
   descriptions?: {
+    /** description in Japanese */
     ja: string;
+    /** description in English */
     en: string;
   }
 }
@@ -616,48 +698,85 @@ export type ElDataType = ElNumberType|ElStateType|ElNumericValueType|ElLevelType
 
 export interface ElPropertyDescription
 {
+  /** EPC in Hex expression - EPCコードを16進数表記したもの
+   * @pattern ^0x[0-9A-F]{2}$
+   */
   epc: string;
+  /** range of valid release of Appendix - property の記述が有効なAppendixのリリースバージョンの範囲 */
   validRelease: {
+    /** beginning of the range - 有効範囲の始まりのAppendix */
     from: string;
+    /** end of the range - 有効範囲の終わりのAppendix */
     to: string;
   };
+  /** property name defined in Appendix - Appendix で定義された プロパティ名とproperty name */
   propertyName: {
+    /** property name in Japanese - プロパティ名：日本語 */
     ja: string;
+    /** property name in English - プロパティ名：英語 */
     en: string;
   };
+  /** short name of the property name - property name の short name */
   shortName:string;
+  /** access rule */
   accessRule: {
+    /** Get access rule - Get の実装 */
     get: "required"|"optional"|"notApplicable";
+    /** Set access rule - Set の実装 */
     set: "required"|"optional"|"notApplicable";
+    /** Anno access rule - 状変時アナウンスの実装 */
     inf: "required"|"optional";
   };
+  /** contents of property defined in Appendix - Appendix に記述された プロパティ内容とcontents of property */
   descriptions?: {
+    /** description in Japanese - プロパティの説明：日本語 */
     ja: string;
+    /** description in English - プロパティの説明：英語 */
     en: string;
   };
+  /** EPC in HEX that requires atomic operation(SET) befor GET  - atomic operation が必要な場合のプロパティ */
   atomic?: string;
+  /** data type of the property value - プロパティの値のデータタイプ */
   data: ElDataType;
+  /** remark defined in Appendix - 備考および参考情報 */
   remark?: {
+    /** remark in Japanese - 備考および参考情報：日本語 */
     ja: string;
+    /** remark in English - 備考および参考情報：英語 */
     en: string;
   };
+  /** additional information for Device Description of ECHONET Lite Web API - Device Description用の参考情報 */
   note?: {
+    /** note in Japanese - Device Description用の参考情報：日本語 */
     ja: string;
+    /** note in English  - Device Description用の参考情報：英語 */
     en: string;
   };
 }
 
 export interface ElDeviceDescription
 {
+  /** upper two bytes of EOJ in Hex expression - EOJコードの上位２バイトを16進数表記したもの 
+   * @example 0x0130
+   * @pattern ^0x[0-9A-F]{4}$
+  */
   eoj:string;
+  /** range of valid release of APPENDIX - 機器オブジェクト定義が有効なAppendixのバージョンの範囲 */
   validRelease: {
+    /** beginning of the range - 有効範囲の始まりのAppendixバージョン */
     from: string;
+    /** end of the range - 有効範囲の終わりのAppendixバージョン */
     to: string;
   };
+  /** class name defined in Appendix - クラス名 */
   className: {
+    /** class name defined in Appendix in Japanese - クラス名：日本語 */
     ja: string;
+    /** class name defined in Appendix in English - クラス名：英語 */
     en: string;
   };
+  /** short name of the class name - クラス名のショートネーム */
   shortName:string;
+  /** a collection of property description object - property description object を要素とした配列 */
   elProperties: ElPropertyDescription[]
 }

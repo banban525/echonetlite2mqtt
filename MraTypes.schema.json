@@ -1,0 +1,617 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "ElArrayType": {
+            "properties": {
+                "itemSize": {
+                    "description": "data size of each item - 項目のデータサイズ",
+                    "type": "number"
+                },
+                "items": {
+                    "$ref": "#/definitions/ElDataType",
+                    "description": "data type object - 項目のデータタイプオブジェクト"
+                },
+                "maxItems": {
+                    "description": "maximum number of items - 項目の最大数",
+                    "type": "number"
+                },
+                "minItems": {
+                    "description": "minimum number of items - 項目の最小数",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "array",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ElBitmapType": {
+            "properties": {
+                "bitmaps": {
+                    "description": "array of bitmap object - bitmap object の列挙",
+                    "items": {
+                        "properties": {
+                            "descriptions": {
+                                "description": "descriptions of bitmap - bitmap の説明",
+                                "properties": {
+                                    "en": {
+                                        "description": "description in English - bitmap の説明（英語）",
+                                        "type": "string"
+                                    },
+                                    "ja": {
+                                        "description": "description in Japanese - bitmap の説明（日本語）",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "name": {
+                                "description": "bitmap name - bitmap 名",
+                                "type": "string"
+                            },
+                            "position": {
+                                "description": "position of bitmap - bitmap の位置",
+                                "properties": {
+                                    "bitMask": {
+                                        "description": "bitmask to specify bits - 該当するバイトの中のbitmapの１を示す",
+                                        "type": "string"
+                                    },
+                                    "index": {
+                                        "description": "index of byte-data - 何バイト目かを示す",
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "value": {
+                                "$ref": "#/definitions/ElDataType",
+                                "description": "data type object of the bitmap value - bitmapで表現する値のデータタイプオブジェクト"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "size": {
+                    "description": "size of total bitmaps data in bytes - 全体のデータサイズ（バイト数）を示す。",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "bitmap",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ElDataType": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/ElNumberType"
+                },
+                {
+                    "$ref": "#/definitions/ElStateType"
+                },
+                {
+                    "$ref": "#/definitions/ElNumericValueType"
+                },
+                {
+                    "$ref": "#/definitions/ElLevelType"
+                },
+                {
+                    "$ref": "#/definitions/ElDateType"
+                },
+                {
+                    "$ref": "#/definitions/ElDateTimeType"
+                },
+                {
+                    "$ref": "#/definitions/ElTimeType"
+                },
+                {
+                    "$ref": "#/definitions/ElBitmapType"
+                },
+                {
+                    "$ref": "#/definitions/ElRawType"
+                },
+                {
+                    "$ref": "#/definitions/ElArrayType"
+                },
+                {
+                    "$ref": "#/definitions/ElObjectType"
+                },
+                {
+                    "$ref": "#/definitions/ElMixedOneOfType"
+                },
+                {
+                    "$ref": "#/definitions/ElRefType"
+                }
+            ]
+        },
+        "ElDateTimeType": {
+            "properties": {
+                "size": {
+                    "default": 7,
+                    "description": "Data size in case of partial data - データサイズ（バイト数）を示す。",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "date-time",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ElDateType": {
+            "properties": {
+                "size": {
+                    "default": 4,
+                    "description": "Data size in case of partial data - データサイズ（バイト数）を示す。",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "date",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ElLevelType": {
+            "properties": {
+                "base": {
+                    "description": "EDT value in Hex that is associated to LEVEL_1  - レベル 1 に対応する EDT 値の16進数表記 (string) の EDT値",
+                    "pattern": "^0x[0-9A-F]+$",
+                    "type": "string"
+                },
+                "descriptions": {
+                    "description": "descriptions of the level - レベルの説明",
+                    "properties": {
+                        "en": {
+                            "description": "description in English - レベルの説明（英語）",
+                            "type": "string"
+                        },
+                        "ja": {
+                            "description": "description in Japanese - レベルの説明（日本語）",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "maximum": {
+                    "description": "maximum level  - レベルの最大値",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "level",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ElMixedOneOfType": {
+            "properties": {
+                "oneOf": {
+                    "items": {
+                        "$ref": "#/definitions/ElDataType"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "ElNumberType": {
+            "properties": {
+                "coefficient": {
+                    "description": "EPCs for coefficient in Hex(string)  - 係数として使用する EPCs (16進数表記 string)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "descriptions": {
+                    "description": "descriptions",
+                    "properties": {
+                        "en": {
+                            "description": "description in English",
+                            "type": "string"
+                        },
+                        "ja": {
+                            "description": "description in Japanese",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "enum": {
+                    "description": "restricting values by enumeration  - 特定の値のみ利用する場合は、値を列挙する",
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                },
+                "format": {
+                    "enum": [
+                        "int16",
+                        "int32",
+                        "int8",
+                        "uint16",
+                        "uint32",
+                        "uint8"
+                    ],
+                    "type": "string"
+                },
+                "maximum": {
+                    "description": "maximum number",
+                    "type": "number"
+                },
+                "minimum": {
+                    "description": "minimum number",
+                    "type": "number"
+                },
+                "multiple": {
+                    "description": "multiple value - 係数",
+                    "type": "number"
+                },
+                "multipleOf": {
+                    "description": "step - 数値データのステップ",
+                    "type": "number"
+                },
+                "overflowCode": {
+                    "default": true,
+                    "description": "flag to utilize overflow code. default is true. - overflow code 利用のflag.",
+                    "type": "boolean"
+                },
+                "type": {
+                    "const": "number",
+                    "type": "string"
+                },
+                "underflowCode": {
+                    "default": true,
+                    "description": "flag to utilize underflow code. default is true. - underflow code 利用のflag.",
+                    "type": "boolean"
+                },
+                "unit": {
+                    "description": "unit - 単位",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ElNumericValueType": {
+            "properties": {
+                "enum": {
+                    "description": "array of numericValue object  - numericValue object を列挙する",
+                    "items": {
+                        "properties": {
+                            "edt": {
+                                "description": "EDT value in Hex - 16進数表記 (string) の EDT 値",
+                                "pattern": "^0x[0-9A-F]+$",
+                                "type": "string"
+                            },
+                            "numericValue": {
+                                "description": "numeric value - 数値",
+                                "type": "number"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "size": {
+                    "description": "data size. 0 in case of bitmap  - データサイズ（バイト数）を示す。bitmap の場合は 0 とする。",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "numericValue",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ElObjectType": {
+            "properties": {
+                "properties": {
+                    "description": "array of element - 要素の列挙",
+                    "items": {
+                        "properties": {
+                            "element": {
+                                "$ref": "#/definitions/ElDataType",
+                                "description": "data type object of the element - 要素のデータタイプオブジェクト"
+                            },
+                            "elementName": {
+                                "description": "element name - 要素名",
+                                "properties": {
+                                    "en": {
+                                        "description": "element name in English - 要素名（英語）",
+                                        "type": "string"
+                                    },
+                                    "ja": {
+                                        "description": "element name in Japanese - 要素名（日本語）",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "shortName": {
+                                "description": "short name of the element name - 要素の short name",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "const": "object",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ElPropertyDescription": {
+            "properties": {
+                "accessRule": {
+                    "description": "access rule",
+                    "properties": {
+                        "get": {
+                            "description": "Get access rule - Get の実装",
+                            "enum": [
+                                "notApplicable",
+                                "optional",
+                                "required"
+                            ],
+                            "type": "string"
+                        },
+                        "inf": {
+                            "description": "Anno access rule - 状変時アナウンスの実装",
+                            "enum": [
+                                "optional",
+                                "required"
+                            ],
+                            "type": "string"
+                        },
+                        "set": {
+                            "description": "Set access rule - Set の実装",
+                            "enum": [
+                                "notApplicable",
+                                "optional",
+                                "required"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "atomic": {
+                    "description": "EPC in HEX that requires atomic operation(SET) befor GET  - atomic operation が必要な場合のプロパティ",
+                    "type": "string"
+                },
+                "data": {
+                    "$ref": "#/definitions/ElDataType",
+                    "description": "data type of the property value - プロパティの値のデータタイプ"
+                },
+                "descriptions": {
+                    "description": "contents of property defined in Appendix - Appendix に記述された プロパティ内容とcontents of property",
+                    "properties": {
+                        "en": {
+                            "description": "description in English - プロパティの説明：英語",
+                            "type": "string"
+                        },
+                        "ja": {
+                            "description": "description in Japanese - プロパティの説明：日本語",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "epc": {
+                    "description": "EPC in Hex expression - EPCコードを16進数表記したもの",
+                    "pattern": "^0x[0-9A-F]{2}$",
+                    "type": "string"
+                },
+                "note": {
+                    "description": "additional information for Device Description of ECHONET Lite Web API - Device Description用の参考情報",
+                    "properties": {
+                        "en": {
+                            "description": "note in English  - Device Description用の参考情報：英語",
+                            "type": "string"
+                        },
+                        "ja": {
+                            "description": "note in Japanese - Device Description用の参考情報：日本語",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "propertyName": {
+                    "description": "property name defined in Appendix - Appendix で定義された プロパティ名とproperty name",
+                    "properties": {
+                        "en": {
+                            "description": "property name in English - プロパティ名：英語",
+                            "type": "string"
+                        },
+                        "ja": {
+                            "description": "property name in Japanese - プロパティ名：日本語",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "remark": {
+                    "description": "remark defined in Appendix - 備考および参考情報",
+                    "properties": {
+                        "en": {
+                            "description": "remark in English - 備考および参考情報：英語",
+                            "type": "string"
+                        },
+                        "ja": {
+                            "description": "remark in Japanese - 備考および参考情報：日本語",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "shortName": {
+                    "description": "short name of the property name - property name の short name",
+                    "type": "string"
+                },
+                "validRelease": {
+                    "description": "range of valid release of Appendix - property の記述が有効なAppendixのリリースバージョンの範囲",
+                    "properties": {
+                        "from": {
+                            "description": "beginning of the range - 有効範囲の始まりのAppendix",
+                            "type": "string"
+                        },
+                        "to": {
+                            "description": "end of the range - 有効範囲の終わりのAppendix",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "ElRawType": {
+            "properties": {
+                "maxSize": {
+                    "description": "maximum data size  - データサイズの最大値",
+                    "type": "number"
+                },
+                "minSize": {
+                    "description": "minimum data size - データサイズの最小値",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "raw",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ElRefType": {
+            "properties": {
+                "$ref": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ElStateType": {
+            "properties": {
+                "enum": {
+                    "description": "array of state object - state object を列挙する",
+                    "items": {
+                        "properties": {
+                            "descriptions": {
+                                "description": "descriptions of the state - 状態の説明",
+                                "properties": {
+                                    "en": {
+                                        "description": "description in English - 状態の説明（英語）",
+                                        "type": "string"
+                                    },
+                                    "ja": {
+                                        "description": "description in Japanese - 状態の説明（日本語）",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "edt": {
+                                "description": "EDT value in Hex - 16進数表記 (string) の EDT 値",
+                                "pattern": "^0x[0-9A-F]+$",
+                                "type": "string"
+                            },
+                            "name": {
+                                "description": "a name of the state - 状態の名前",
+                                "type": "string"
+                            },
+                            "readOnly": {
+                                "default": false,
+                                "description": "  \"readOnly\" is set to \"true\" when it is utilized for the response of Get but not utilized for the response of Set.\r\n  For example, Chamber temperature setting (0xE3) of electronic oven (0x03B8), \"0x8002: Not specified\". \r\n  When access rules of property are GET only, \"readOnly\" should not be used. \r\n  Get のレスポンスとしては利用されるが、Set の値としては利用できない場合に readOnly を true にする。\r\n  例：オーブンレンジ (0x03B8) の庫内温度設定値 (0xE3) におけるプロパティ値, 0x8002: 未設定\"。\r\n  なお、アクセスルールが Get のみのプロパティでは、readOnly を利用しない。",
+                                "type": "boolean"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "size": {
+                    "description": "data size. 0 in case of bitmap - データサイズ（バイト数）を示す。bitmap の場合は 0 とする。",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "state",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ElTimeType": {
+            "properties": {
+                "maximumOfHour": {
+                    "default": 23,
+                    "description": "Specifies maximum value of hour. - Hour の最大値を設定する。",
+                    "type": "number"
+                },
+                "size": {
+                    "default": 3,
+                    "description": "Data size in case of partial data - データサイズ（バイト数）を示す。",
+                    "type": "number"
+                },
+                "type": {
+                    "const": "time",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "properties": {
+        "className": {
+            "description": "class name defined in Appendix - クラス名",
+            "properties": {
+                "en": {
+                    "description": "class name defined in Appendix in English - クラス名：英語",
+                    "type": "string"
+                },
+                "ja": {
+                    "description": "class name defined in Appendix in Japanese - クラス名：日本語",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "elProperties": {
+            "description": "a collection of property description object - property description object を要素とした配列",
+            "items": {
+                "$ref": "#/definitions/ElPropertyDescription"
+            },
+            "type": "array"
+        },
+        "eoj": {
+            "description": "upper two bytes of EOJ in Hex expression - EOJコードの上位２バイトを16進数表記したもの",
+            "pattern": "^0x[0-9A-F]{4}$",
+            "type": "string"
+        },
+        "shortName": {
+            "description": "short name of the class name - クラス名のショートネーム",
+            "type": "string"
+        },
+        "validRelease": {
+            "description": "range of valid release of APPENDIX - 機器オブジェクト定義が有効なAppendixのバージョンの範囲",
+            "properties": {
+                "from": {
+                    "description": "beginning of the range - 有効範囲の始まりのAppendixバージョン",
+                    "type": "string"
+                },
+                "to": {
+                    "description": "end of the range - 有効範囲の終わりのAppendixバージョン",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "type": "object"
+}
+

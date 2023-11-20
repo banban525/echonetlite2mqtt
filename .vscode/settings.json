@@ -9,4 +9,11 @@
     "typescript",
     "typescriptreact"
   ],
+  "json.schemas": [
+    {
+      "url": "/MraTypes.schema.json",
+      "fileMatch": [
+        "/MRA_custom/*.json"]
+    }
+  ]
 }
