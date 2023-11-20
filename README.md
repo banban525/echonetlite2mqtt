@@ -268,6 +268,27 @@ See specs below.
 * (ja) https://echonet.jp/spec_g/#standard-05
 * (en) https://echonet.jp/spec-en/#standard-05
 
+### I want to add a device definition
+
+ECHONETLite2MQTT uses [Echonet lite Machine Readable Appendix (MRA)](https://echonet.jp/spec_mra_rq1/) as a device definition.
+However, you may want to use a device class that is not in MRA, or a manufacturer-specific extension.
+You can overwrite the MRA definition by creating a Json file with the eoj name in the "MRA_custom" folder.
+
+Example: For air conditioner (eoj=0x0130)
+````
+/MRA_custom/0x0130.json
+
+{
+   "eoj": "0x0130"
+   ...
+}
+
+````
+
+For the file format, please refer to [Echonet lite Machine Readable Appendix (MRA)](https://echonet.jp/spec_mra_rq1/).
+Also, Json Schema is provided in "MraTypes.schema.json".
+
+
 ## Third party use
 
 * The images in the repository use materials such as "いらすとや" (https://www.irasutoya.com/).

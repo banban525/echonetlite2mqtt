@@ -269,6 +269,27 @@ ECHONET Liteの「温度設定値」が1度単位なので対応できません�
 * (日本語) https://echonet.jp/spec_g/#standard-05
 * (英語) https://echonet.jp/spec-en/#standard-05
 
+### デバイスの定義を追加したい
+
+ECHONETLite2MQTTはデバイス定義として [Echonet lite Machine Readable Appendix (MRA)](https://echonet.jp/spec_mra_rq1/) を使用しています。
+しかし、MRAにないデバイスクラス、またはメーカー独自の拡張を使用したい場合があります。
+"MRA_custom"フォルダにeoj名のJsonファイルを作ると、MRAの定義を上書きすることができます。
+
+例: エアコン(eoj=0x0130)の場合
+```
+/MRA_custom/0x0130.json
+
+{
+  "eoj": "0x0130"
+  ...
+}
+
+```
+
+ファイルフォーマットは、 [Echonet lite Machine Readable Appendix (MRA)](https://echonet.jp/spec_mra_rq1/) を参考にしてください。
+また、 "MraTypes.schema.json" にJson Schemaが用意されています。
+
+
 ## 使用しているサードパーティ
 
 * リポジトリ内の画像は"いらすとや" (https://www.irasutoya.com/) の素材を使用しています。
