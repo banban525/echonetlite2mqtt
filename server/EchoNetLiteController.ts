@@ -255,7 +255,7 @@ export class EchoNetLiteController{
       }
     }
     {
-      const res = await this.echonetLiteRawController.execPromise({
+      let res = await this.echonetLiteRawController.execPromise({
         ip:id.ip, 
         seoj:"05ff01", 
         deoj:id.eoj, 
@@ -263,7 +263,26 @@ export class EchoNetLiteController{
         epc, 
         edt:"",
         tid:""});
-      if(res.responses.length > 0 && res.responses[0].els.ESV === ELSV.GET_RES && epc in res.responses[0].els.DETAILs)
+
+      if(res.responses.length === 0 || res.responses[0].els.ESV !== ELSV.GET_RES || (epc in res.responses[0].els.DETAILs)=== false)
+      {
+        // リトライする
+        Logger.warn("[ECHONETLite]", `setDeviceProperty: retry get property value. epc=${epc}`);
+        res = await this.echonetLiteRawController.execPromise({
+          ip:id.ip, 
+          seoj:"05ff01", 
+          deoj:id.eoj, 
+          esv: ELSV.GET, 
+          epc, 
+          edt:"",
+          tid:""});
+      }
+      if(res.responses.length === 0 || res.responses[0].els.ESV !== ELSV.GET_RES || (epc in res.responses[0].els.DETAILs)=== false)
+      {
+        Logger.warn("[ECHONETLite]", `setDeviceProperty: cannot get value after set. epc=${epc}`);
+        return;
+      }
+
       {
         const value = this.deviceConverter.convertPropertyValue(property, res.responses[0].els.DETAILs[epc]);
         if(value === undefined)
@@ -273,10 +292,7 @@ export class EchoNetLiteController{
         this.firePropertyChnagedEvent(id, property.name, value);
         this.holdController.receivedProperty(id, property.name, value);
       }
-      else
-      {
-        Logger.warn("[ECHONETLite]", `setDeviceProperty: cannot get value after set. epc=${epc}`);
-      }
+
     }
   }
 
@@ -323,7 +339,7 @@ export class EchoNetLiteController{
     {
       epc = epc.replace(/^0x/gi, "");
     }
-    const res = await this.echonetLiteRawController.execPromise({
+    let res = await this.echonetLiteRawController.execPromise({
       ip:id.ip, 
       seoj:"05ff01", 
       deoj:id.eoj, 
@@ -332,7 +348,25 @@ export class EchoNetLiteController{
       edt:"",
       tid:""});
 
-    if(res.responses.length > 0 && res.responses[0].els.ESV === ELSV.GET_RES && epc in res.responses[0].els.DETAILs)
+    if(res.responses.length === 0 || res.responses[0].els.ESV !== ELSV.GET_RES || (epc in res.responses[0].els.DETAILs)=== false)
+    {
+      // リトライする
+      Logger.warn("[ECHONETLite]", `requestDeviceProperty: retry get property value. epc=${epc}`);
+      res = await this.echonetLiteRawController.execPromise({
+        ip:id.ip, 
+        seoj:"05ff01", 
+        deoj:id.eoj, 
+        esv: ELSV.GET, 
+        epc, 
+        edt:"",
+        tid:""});
+    }
+    if(res.responses.length === 0 || res.responses[0].els.ESV !== ELSV.GET_RES || (epc in res.responses[0].els.DETAILs)=== false)
+    {
+      Logger.warn("[ECHONETLite]", `requestDeviceProperty: cannot get property value. epc=${epc}`);
+      return;
+    }
+
     {
       const value = this.deviceConverter.convertPropertyValue(property, res.responses[0].els.DETAILs[epc]);
       if(value === undefined)
@@ -340,10 +374,6 @@ export class EchoNetLiteController{
         return;
       }
       this.firePropertyChnagedEvent(id, property.name, value);
-    }
-    else
-    {
-      Logger.warn("[ECHONETLite]", `requestDeviceProperty: cannot get value after set. epc=${epc}`);
     }
   }
 
