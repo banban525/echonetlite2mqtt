@@ -248,7 +248,7 @@ export class EchoNetLiteController{
         epc, 
         edt:echoNetData,
         tid:""});
-      if(res.responses[0].els.ESV !== ELSV.SET_RES)
+      if(res.responses.length === 0 || res.responses[0].els.ESV !== ELSV.SET_RES)
       {
         Logger.warn("[ECHONETLite]", `setDeviceProperty res.responses[0].els.ESV !== ELSV.SET_RES`);
         return;

@@ -117,6 +117,11 @@ export class EchoNetLiteRawController {
       Logger.warn("[ECHONETLite][raw]", `error getProperty: timeout ${ip} ${eoj} ${epc}`, {exception:e});
       return undefined;
     }
+    if(res.responses.length === 0)
+    {
+      Logger.warn("[ECHONETLite][raw]", `error getProperty: returned nothing ${ip} ${eoj} ${epc}`);
+      return undefined;
+    }
     if (res.responses[0].els.ESV !== ELSV.GET_RES) {
       Logger.warn("[ECHONETLite][raw]", `error getProperty: returned ${res.responses[0].els.ESV} ${ip} ${eoj} ${epc}`);
       return undefined;
@@ -154,6 +159,11 @@ export class EchoNetLiteRawController {
         catch(e)
         {
           Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: exception ${result.ip} ${device.eoj}`, {exception:e});
+          continue;
+        }
+        if(res.responses.length === 0)
+        {
+          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: returned nothing ${result.ip} ${device.eoj}`);
           continue;
         }
         if(res.responses[0].els.ESV !== ELSV.GET_RES)
@@ -259,7 +269,11 @@ export class EchoNetLiteRawController {
         continue;
       }
 
-      if (res.responses[0].els.ESV === ELSV.GET_RES) {
+      if(res.responses.length === 0)
+      {
+        device.noExistsId = true;
+      }
+      else if (res.responses[0].els.ESV === ELSV.GET_RES) {
         const data = res.responses[0].els.DETAILs;
         let matchProperty = device.properties.find(_ => _.epc === "83");
         if (matchProperty === undefined) {
@@ -427,11 +441,15 @@ export class EchoNetLiteRawController {
         catch(e)
         {
           Logger.warn("[ECHONETLite][raw]", `error send command: timeout ${command.ip} ${command.seoj} ${command.deoj} ${command.esv} ${command.epc} ${command.edt}`, {exception:e});
+          if(command.callback !== undefined)
+          {
+            command.callback(new CommandResponse(command));
+          }
           continue;
         }
 
         // GET_RESの場合は、値を更新する
-        if(res.responses[0].els.ESV === ELSV.GET_RES)
+        if(res.responses.length > 0 && res.responses[0].els.ESV === ELSV.GET_RES)
         {
           const ip  = res.responses[0].rinfo.address;
           const eoj = res.responses[0].els.SEOJ;
