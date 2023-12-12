@@ -263,7 +263,7 @@ export class EchoNetLiteController{
         epc, 
         edt:"",
         tid:""});
-      if(res.responses[0].els.ESV === ELSV.GET_RES)
+      if(res.responses.length > 0 && res.responses[0].els.ESV === ELSV.GET_RES && epc in res.responses[0].els.DETAILs)
       {
         const value = this.deviceConverter.convertPropertyValue(property, res.responses[0].els.DETAILs[epc]);
         if(value === undefined)
@@ -272,6 +272,10 @@ export class EchoNetLiteController{
         }
         this.firePropertyChnagedEvent(id, property.name, value);
         this.holdController.receivedProperty(id, property.name, value);
+      }
+      else
+      {
+        Logger.warn("[ECHONETLite]", `setDeviceProperty: cannot get value after set. epc=${epc}`);
       }
     }
   }
@@ -328,7 +332,7 @@ export class EchoNetLiteController{
       edt:"",
       tid:""});
 
-    if(res.responses[0].els.ESV === ELSV.GET_RES)
+    if(res.responses.length > 0 && res.responses[0].els.ESV === ELSV.GET_RES && epc in res.responses[0].els.DETAILs)
     {
       const value = this.deviceConverter.convertPropertyValue(property, res.responses[0].els.DETAILs[epc]);
       if(value === undefined)
@@ -336,6 +340,10 @@ export class EchoNetLiteController{
         return;
       }
       this.firePropertyChnagedEvent(id, property.name, value);
+    }
+    else
+    {
+      Logger.warn("[ECHONETLite]", `requestDeviceProperty: cannot get value after set. epc=${epc}`);
     }
   }
 
