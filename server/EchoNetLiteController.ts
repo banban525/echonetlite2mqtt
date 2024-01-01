@@ -19,13 +19,15 @@ export class EchoNetLiteController{
   private readonly legacyMultiNicMode:boolean;
   private readonly unknownAsError:boolean;
   private readonly knownDeviceIpList:string[];
-  private readonly searchDevices:boolean
+  private readonly searchDevices:boolean;
+  private readonly commandTimeout:number;
   constructor(usedIpByEchoNet:string,  
     aliasOption: AliasOption, 
     legacyMultiNicMode:boolean, 
     unknownAsError:boolean,
     knownDeviceIpList:string[],
-    searchDevices:boolean)
+    searchDevices:boolean,
+    commandTimeout:number)
   {
     this.aliasOption = aliasOption;
     this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption, unknownAsError);
@@ -37,6 +39,7 @@ export class EchoNetLiteController{
     this.searchDevices = searchDevices;
 
     this.usedIpByEchoNet = usedIpByEchoNet;
+    this.commandTimeout = commandTimeout;
 
     this.echonetLiteRawController.addReveivedHandler(( rinfo:rinfo, els:eldata ):void=>{
       if(els.ESV === ELSV.SET_RES)
@@ -301,7 +304,8 @@ export class EchoNetLiteController{
     await this.echonetLiteRawController.initilize(
       Object.keys(this.controllerDeviceDefine),
       this.usedIpByEchoNet,
-      this.legacyMultiNicMode
+      this.legacyMultiNicMode,
+      this.commandTimeout
     );
 
     this.controllerDeviceDefine['05ff01']['83'] = this.echonetLiteRawController.updateidentifierFromMacAddress(this.controllerDeviceDefine['05ff01']['83']);

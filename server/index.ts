@@ -19,6 +19,7 @@ let echonetLegacyMultiNicMode = false;
 let echonetUnknownAsError = false;
 let echonetDeviceIpList = "";
 let echonetDisableAutoDeviceDiscovery = false;
+let echonetCommandTimeout = 3000;
 let debugLog = false;
 let restApiPort = 3000;
 let restApiHost = "0.0.0.0";
@@ -79,6 +80,17 @@ if( "ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY" in process.env &&
     process.env.ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY !== "\"false\"")
   {
     echonetDisableAutoDeviceDiscovery = true;
+  }
+}
+
+if( "ECHONET_COMMAND_TIMEOUT" in process.env && 
+  process.env.ECHONET_COMMAND_TIMEOUT !== undefined)
+{
+  const temp = process.env.ECHONET_COMMAND_TIMEOUT.replace(/^"/g, "").replace(/"$/g, "");
+  const tempNo = Number(temp);
+  if(isNaN(tempNo)===false)
+  {
+    echonetCommandTimeout = tempNo;
   }
 }
 
@@ -178,6 +190,14 @@ for(var i = 2;i < process.argv.length; i++){
       echonetDisableAutoDeviceDiscovery = true;
     }
   }
+  if(name === "--echonetCommandTimeout".toLowerCase())
+  {
+    const tempNo = Number(value.replace(/^"/g, "").replace(/"$/g, ""));
+    if(value!=="" && isNaN(tempNo)===false)
+    {
+      echonetCommandTimeout = tempNo;
+    }
+  }
   if(name === "--RestApiPort".toLowerCase())
   {
     const tempNo = Number(value.replace(/^"/g, "").replace(/"$/g, ""));
@@ -249,6 +269,7 @@ logger.output(`echonetLegacyMultiNicMode=${echonetLegacyMultiNicMode}`);
 logger.output(`echonetUnknownAsError=${echonetUnknownAsError}`);
 logger.output(`echonetDeviceIpList=${echonetDeviceIpList}`);
 logger.output(`echonetDisableAutoDeviceDiscovery=${echonetDisableAutoDeviceDiscovery}`);
+logger.output(`echonetCommandTimeout=${echonetCommandTimeout}`);
 logger.output(`debugLog=${debugLog}`);
 logger.output(`restApiPort=${restApiPort}`);
 logger.output(`restApiHost=${restApiHost}`);
@@ -452,7 +473,7 @@ const systemStatusRepository = new SystemStatusRepositry();
 
 const deviceStore = new DeviceStore();
 
-const echoNetListController = new EchoNetLiteController(networkAddressForEchonet, aliasOption, echonetLegacyMultiNicMode, echonetUnknownAsError, knownDeviceIpList, echonetDisableAutoDeviceDiscovery===false);
+const echoNetListController = new EchoNetLiteController(networkAddressForEchonet, aliasOption, echonetLegacyMultiNicMode, echonetUnknownAsError, knownDeviceIpList, echonetDisableAutoDeviceDiscovery===false, echonetCommandTimeout);
 
 echoNetListController.addDeviceDetectedEvent((device:Device)=>{
   if(device === undefined)

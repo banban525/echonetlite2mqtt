@@ -14,6 +14,7 @@ export class EchoNetLiteRawController {
   private readonly sendQueue: CommandWithCallback[] = [];
   private processing = false;
 
+
   constructor() {
     
     EchoNetCommunicator.addReveivedHandler((rinfo, els) => {
@@ -493,10 +494,10 @@ export class EchoNetLiteRawController {
   }
 
   
-  public initilize = async (objList:string[], echonetTargetNetwork:string, legacyMultiNicMode:boolean):Promise<void> =>
+  public initilize = async (objList:string[], echonetTargetNetwork:string, legacyMultiNicMode:boolean, commandTimeout:number):Promise<void> =>
   {
     await EchoNetCommunicator.initialize(objList, 4, { v4: echonetTargetNetwork, autoGetProperties: false }, 
-      legacyMultiNicMode===false);
+      legacyMultiNicMode===false, commandTimeout);
   }
 
   public searchDeviceFromIp = async (ip:string):Promise<void> =>

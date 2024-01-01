@@ -14,9 +14,11 @@ export class EchoNetCommunicator
       autoGetDelay?: number;
       debugMode?: boolean;
     },
-    multiNicMode?:boolean
+    multiNicMode?:boolean,
+    commandTimeout?:number
   ): Promise<{ sock4: any; sock6: any } | any> =>
   {
+    this.commandTimeout = commandTimeout ?? 1000;
     if(multiNicMode)
     {
       // 複数NICの代替モードの場合、echonet-lite.jsの初期化時にはipVerに-1(無効値)を渡してネットワーク廻りを初期化しない
@@ -240,7 +242,7 @@ export class EchoNetCommunicator
     return EL.replyGetDetail(rinfo, els, dev_details);
   }
 
-  static readonly DefaultCommandTimeout=1000;
+  static commandTimeout=1000;
   static commandResponse:CommandResponse|undefined = undefined;
   public static execCommandPromise(
     ip: string,
@@ -268,7 +270,7 @@ export class EchoNetCommunicator
     return new Promise<CommandResponse>((resolve,reject)=>{
       const handle = setTimeout(()=>{
         reject({message:"timeout", commandResponse});
-      }, this.DefaultCommandTimeout);
+      }, this.commandTimeout);
       commandResponse.setCallback(()=>{
         this.commandResponse = undefined;
         clearTimeout(handle);
@@ -306,7 +308,7 @@ export class EchoNetCommunicator
     return await new Promise<CommandResponse>((resolve,reject)=>{
       const handle = setTimeout(()=>{
         reject({message:"timeout", commandResponse});
-      }, this.DefaultCommandTimeout);
+      }, this.commandTimeout);
       commandResponse.setCallback(()=>{
         this.commandResponse = undefined;
         clearTimeout(handle);
