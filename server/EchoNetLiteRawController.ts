@@ -118,22 +118,14 @@ export class EchoNetLiteRawController {
       Logger.warn("[ECHONETLite][raw]", `error getProperty: timeout ${ip} ${eoj} ${epc}`, {exception:e});
       return undefined;
     }
-    if(res.responses.length === 0)
+    const response = res.matchResponse(_=>_.els.ESV === ELSV.GET_RES && (epc in _.els.DETAILs));
+    if(response === undefined)
     {
-      Logger.warn("[ECHONETLite][raw]", `error getProperty: returned nothing ${ip} ${eoj} ${epc}`);
-      return undefined;
-    }
-    if (res.responses[0].els.ESV !== ELSV.GET_RES) {
-      Logger.warn("[ECHONETLite][raw]", `error getProperty: returned ${res.responses[0].els.ESV} ${ip} ${eoj} ${epc}`);
+      Logger.warn("[ECHONETLite][raw]", `error getProperty: ${ip} ${eoj} ${epc}`, {responses:res.responses, command:res.command});
       return undefined;
     }
 
-    const data = res.responses[0].els.DETAILs;
-    if ((epc in data) === false) {
-      Logger.warn("[ECHONETLite][raw]", `error getProperty: data not found. ${ip} ${eoj} ${epc}`);
-      return undefined;
-    }
-    return data[epc];
+    return response.els.DETAILs[epc];
   }
 
   private static async getNewNode(node: RawNode): Promise<RawNode> {
@@ -159,30 +151,22 @@ export class EchoNetLiteRawController {
         }
         catch(e)
         {
-          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: exception ${result.ip} ${device.eoj}`, {exception:e});
+          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: exception from ${result.ip},${device.eoj}`, {exception:e});
           continue;
         }
-        if(res.responses.length === 0)
+        const response = res.matchResponse(_=>_.els.ESV === ELSV.GET_RES && (epc in _.els.DETAILs));
+        if(response === undefined)
         {
-          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: returned nothing ${result.ip} ${device.eoj}`);
+          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc} from ${result.ip},${device.eoj}`, {responses:res.responses, command:res.command});
           continue;
         }
-        if(res.responses[0].els.ESV !== ELSV.GET_RES)
-        {
-          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: returned not GET_RES ${result.ip} ${device.eoj}`);
-          continue;
-        }
-        const edt = res.responses[0].els.DETAILs;
-        if ((epc in edt) === false)
-        {
-          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: invalid reveive data ${result.ip} ${device.eoj} ${JSON.stringify(edt)}`);
-          continue;
-        }
+
+        const edt = response.els.DETAILs;
         const data = edt[epc];
         const propertyList = EchoNetLiteRawController.convertToPropertyList(data);
         if(propertyList === undefined)
         {
-          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: invalid reveive data 2 ${result.ip} ${device.eoj} ${JSON.stringify(edt)}`);
+          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: invalid reveive data ${result.ip},${device.eoj} ${JSON.stringify(edt)}`, {responses:res.responses, command:res.command});
           continue;
         }
         for(const propertyMapEpc of propertyList)
@@ -270,12 +254,15 @@ export class EchoNetLiteRawController {
         continue;
       }
 
-      if(res.responses.length === 0)
+      const respose = res.matchResponse(_=>_.els.ESV === ELSV.GET_RES && ("83" in _.els.DETAILs));
+
+      if(respose === undefined)
       {
         device.noExistsId = true;
       }
-      else if (res.responses[0].els.ESV === ELSV.GET_RES) {
-        const data = res.responses[0].els.DETAILs;
+      else 
+      {
+        const data = respose.els.DETAILs;
         let matchProperty = device.properties.find(_ => _.epc === "83");
         if (matchProperty === undefined) {
           matchProperty = {
@@ -292,9 +279,6 @@ export class EchoNetLiteRawController {
           device.properties.push(matchProperty);
         }
         matchProperty.value = data["83"];
-      }
-      else if (res.responses[0].els.ESV === ELSV.GET_SNA) {
-        device.noExistsId = true;
       }
     }
 
@@ -450,11 +434,14 @@ export class EchoNetLiteRawController {
         }
 
         // GET_RESの場合は、値を更新する
-        if(res.responses.length > 0 && res.responses[0].els.ESV === ELSV.GET_RES)
-        {
-          const ip  = res.responses[0].rinfo.address;
-          const eoj = res.responses[0].els.SEOJ;
-          const els = res.responses[0].els;
+        res.responses.forEach((response):void => {
+          if(response.els.ESV !== ELSV.GET_RES)
+          {
+            return;
+          }
+          const ip  = response.rinfo.address;
+          const eoj = response.els.SEOJ;
+          const els = response.els;
 
           for(const epc in els.DETAILs)
           {
@@ -476,7 +463,7 @@ export class EchoNetLiteRawController {
             //   oldValue, 
             //   matchProperty.value);
           }
-        }
+        });
 
         if(command.callback !== undefined)
         {
@@ -510,22 +497,13 @@ export class EchoNetLiteRawController {
       Logger.warn("[ECHONETLite][raw]", `error searchDeviceFromIp: timeout ${ip} 0ef001 d6`, {exception:e});
       return undefined;
     }
-    if(res.responses.length === 0)
+    const response = res.matchResponse(_=>_.els.ESV === ELSV.GET_RES && ("d6" in _.els.DETAILs));
+    if(response === undefined)
     {
-      Logger.warn("[ECHONETLite][raw]", `error searchDeviceFromIp: timeout ${ip}`);
+      Logger.warn("[ECHONETLite][raw]", `error searchDeviceFromIp: ${ip}`, {responses:res.responses, command:res.command});
       return;
     }
-    const response = res.responses[0];
-    if(response.els.ESV !== ELSV.GET_RES)
-    {
-      Logger.warn("[ECHONETLite][raw]", `error searchDeviceFromIp: returned ${response.els.ESV} ${ip}`)
-      return;
-    }
-    const data = response.els.DETAILs;
-    if (("d6" in data) === false) {
-      Logger.warn("[ECHONETLite][raw]", `error searchDeviceFromIp: data not found. ${ip}`);
-      return;
-    }
+
     const node: RawNode = {
       ip: response.rinfo.address,
       devices: [
@@ -575,7 +553,11 @@ export class EchoNetLiteRawController {
       5000);
 
     // 取得結果から、ノードを作成する
-    var nodesTemp = res.responses.map((response): RawNode => {
+    var nodesTemp = res.responses.map((response): RawNode|undefined => {
+      if(response.els.ESV !== ELSV.GET_RES)
+      {
+        return undefined;
+      }
       const result: RawNode = {
         ip: response.rinfo.address,
         devices: [
@@ -599,10 +581,14 @@ export class EchoNetLiteRawController {
         });
       }
       return result;
-    });
+    }).filter(_=>_!==undefined);
 
     // ノードの詳細を取得する
     for (const node of nodesTemp) {
+      if(node === undefined)
+      {
+        throw Error("ありえない");
+      }
       const newNode = await EchoNetLiteRawController.getNewNode(node);
       const currentIndex = this.nodes.findIndex(_=>_.ip === newNode.ip);
       if(currentIndex===-1)

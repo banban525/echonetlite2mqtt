@@ -251,9 +251,11 @@ export class EchoNetLiteController{
         epc, 
         edt:echoNetData,
         tid:""});
-      if(res.responses.length === 0 || res.responses[0].els.ESV !== ELSV.SET_RES)
+      
+      const response = res.matchResponse(_=>_.els.ESV === ELSV.SET_RES);
+      if(response === undefined)
       {
-        Logger.warn("[ECHONETLite]", `setDeviceProperty res.responses[0].els.ESV !== ELSV.SET_RES`);
+        Logger.warn("[ECHONETLite]", `error setDeviceProperty ${res.command.ip} ${res.command.deoj} ${res.command.epc}`, {responses:res.responses, command:res.command});
         return;
       }
     }
@@ -266,11 +268,11 @@ export class EchoNetLiteController{
         epc, 
         edt:"",
         tid:""});
-
-      if(res.responses.length === 0 || res.responses[0].els.ESV !== ELSV.GET_RES || (epc in res.responses[0].els.DETAILs)=== false)
+      let response = res.matchResponse(_=>_.els.ESV === ELSV.GET_RES && (epc in _.els.DETAILs));
+      if(response === undefined)
       {
         // リトライする
-        Logger.warn("[ECHONETLite]", `setDeviceProperty: retry get property value. epc=${epc}`);
+        Logger.warn("[ECHONETLite]", `setDeviceProperty: retry get property value. epc=${epc}`, {responses:res.responses, command:res.command});
         res = await this.echonetLiteRawController.execPromise({
           ip:id.ip, 
           seoj:"05ff01", 
@@ -279,15 +281,17 @@ export class EchoNetLiteController{
           epc, 
           edt:"",
           tid:""});
+
+          response = res.matchResponse(_=>_.els.ESV === ELSV.GET_RES && (epc in _.els.DETAILs));
       }
-      if(res.responses.length === 0 || res.responses[0].els.ESV !== ELSV.GET_RES || (epc in res.responses[0].els.DETAILs)=== false)
+      if(response === undefined)
       {
-        Logger.warn("[ECHONETLite]", `setDeviceProperty: cannot get value after set. epc=${epc}`);
+        Logger.warn("[ECHONETLite]", `setDeviceProperty: cannot get value after set. epc=${epc}`, {responses:res.responses, command:res.command});
         return;
       }
 
       {
-        const value = this.deviceConverter.convertPropertyValue(property, res.responses[0].els.DETAILs[epc]);
+        const value = this.deviceConverter.convertPropertyValue(property, response.els.DETAILs[epc]);
         if(value === undefined)
         {
           return;
@@ -351,11 +355,11 @@ export class EchoNetLiteController{
       epc, 
       edt:"",
       tid:""});
-
-    if(res.responses.length === 0 || res.responses[0].els.ESV !== ELSV.GET_RES || (epc in res.responses[0].els.DETAILs)=== false)
+    let response = res.matchResponse(_=>_.els.ESV === ELSV.GET_RES && (epc in _.els.DETAILs));
+    if(response === undefined)
     {
       // リトライする
-      Logger.warn("[ECHONETLite]", `requestDeviceProperty: retry get property value. epc=${epc}`);
+      Logger.warn("[ECHONETLite]", `requestDeviceProperty: retry get property value. epc=${epc}`, {responses:res.responses, command:res.command});
       res = await this.echonetLiteRawController.execPromise({
         ip:id.ip, 
         seoj:"05ff01", 
@@ -364,15 +368,16 @@ export class EchoNetLiteController{
         epc, 
         edt:"",
         tid:""});
+      response = res.matchResponse(_=>_.els.ESV === ELSV.GET_RES && (epc in _.els.DETAILs));
     }
-    if(res.responses.length === 0 || res.responses[0].els.ESV !== ELSV.GET_RES || (epc in res.responses[0].els.DETAILs)=== false)
+    if(response === undefined)
     {
-      Logger.warn("[ECHONETLite]", `requestDeviceProperty: cannot get property value. epc=${epc}`);
+      Logger.warn("[ECHONETLite]", `requestDeviceProperty: cannot get property value. epc=${epc}`, {responses:res.responses, command:res.command});
       return;
     }
 
     {
-      const value = this.deviceConverter.convertPropertyValue(property, res.responses[0].els.DETAILs[epc]);
+      const value = this.deviceConverter.convertPropertyValue(property, response.els.DETAILs[epc]);
       if(value === undefined)
       {
         return;

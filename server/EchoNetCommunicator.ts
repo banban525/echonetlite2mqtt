@@ -382,6 +382,16 @@ export class CommandResponse
   }
   responses:Response[] = [];
 
+  public matchResponse = (filter:(response:Response)=>boolean):Response|undefined =>
+  {
+    const results = this.responses.filter(filter);
+    if(results.length === 0)
+    {
+      return undefined;
+    }
+    return results[0];
+  }
+
   public setCallback(callback:()=>void):void
   {
     this.callback = callback;
