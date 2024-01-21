@@ -12,6 +12,7 @@ export class EchoNetLiteRawController {
   private readonly nodes: RawNode[] = [];
   private readonly infQueue: Response[] = [];
   private readonly sendQueue: CommandWithCallback[] = [];
+  private readonly requestQueue: Command[] = [];
   private processing = false;
 
 
@@ -325,6 +326,7 @@ export class EchoNetLiteRawController {
               });
             });
 
+            // ノート応答が遅い場合ここで待たされることになるが、一旦あきらめる
             const newNode = await EchoNetLiteRawController.getNewNode(nodeTemp);
             const currentIndex = this.nodes.findIndex(_=>_.ip === newNode.ip);
             if(currentIndex===-1)
@@ -380,32 +382,30 @@ export class EchoNetLiteRawController {
           });
 
           // 全プロパティを更新する
+          // ただし他のコマンドをブロッキングしてしまうので、リクエストキューに追加して優先度低で取得する
           for (const device of foundNode.devices) {
             for (const property of device.properties.filter(_=>_.operation.get)) {
-              const newValue = await EchoNetLiteRawController.getProperty(property.ip, property.eoj, property.epc);
-              if (newValue === undefined) {
-                continue;
-              }
-              const matchProperty = this.findProperty(property.ip, property.eoj, property.epc);
-              if (matchProperty === undefined) {
-                throw Error("ありえない");
-              }
 
-              const oldValue = matchProperty.value;
-              matchProperty.value = newValue;
-
-              // イベントを発火する
-              this.firePropertyChanged(
-                matchProperty.ip, 
-                matchProperty.eoj, 
-                matchProperty.epc, 
-                oldValue, 
-                matchProperty.value);
+              const command:Command = {
+                ip: device.ip,
+                seoj: '0ef001',
+                deoj: device.eoj,
+                epc: property.epc,
+                esv: ELSV.GET,
+                edt: '',
+                tid: ''
+              };
+              if(this.requestQueue.find(_=>
+                _.ip === command.ip &&
+                _.deoj === command.deoj && 
+                _.epc === command.epc) === undefined)
+              {
+                this.requestQueue.push(command);
+              }
             }
           }
         }
       }
-
 
       while (this.sendQueue.length > 0) {
         const command = this.sendQueue.shift();
@@ -470,12 +470,45 @@ export class EchoNetLiteRawController {
           command.callback(res);
         }
       }
+
+      // Requestキューは優先度低め。他に処理が来たときは中断してそちらを優先する
+      while (this.requestQueue.length > 0) {
+        if(this.infQueue.length > 0 || this.sendQueue.length > 0)
+        {
+          break;
+        }
+        const command = this.requestQueue.shift();
+        if(command === undefined)
+        {
+          throw Error("ありえない");
+        }
+        
+        const newValue = await EchoNetLiteRawController.getProperty(command.ip, command.deoj, command.epc);
+        if (newValue === undefined) {
+          continue;
+        }
+        const matchProperty = this.findProperty(command.ip, command.deoj, command.epc);
+        if (matchProperty === undefined) {
+          throw Error("ありえない");
+        }
+
+        const oldValue = matchProperty.value;
+        matchProperty.value = newValue;
+
+        // イベントを発火する
+        this.firePropertyChanged(
+          matchProperty.ip, 
+          matchProperty.eoj, 
+          matchProperty.epc, 
+          oldValue, 
+          matchProperty.value);
+      }
     }
     finally {
       this.processing = false;
     }
 
-    if (this.infQueue.length > 0 || this.sendQueue.length > 0) {
+    if (this.infQueue.length > 0 || this.sendQueue.length > 0 || this.requestQueue.length > 0) {
       setTimeout(this.processQueue, 1);
     }
   }
