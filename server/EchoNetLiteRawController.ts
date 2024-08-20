@@ -337,7 +337,7 @@ export class EchoNetLiteRawController {
             {
               this.nodes[currentIndex] = newNode;
             }
-            this.fireDeviceDetected(newNode.devices.map(_=>({ip:_.ip, eoj:_.eoj})));
+            this.fireDeviceDetected(newNode.ip, newNode.devices.map(_=>_.eoj));
           }
           continue;
         }
@@ -570,7 +570,7 @@ export class EchoNetLiteRawController {
       this.nodes[currentIndex] = newNode;
     }
 
-    this.fireDeviceDetected(newNode.devices.map(_=>({ip:_.ip, eoj:_.eoj})));
+    this.fireDeviceDetected(newNode.ip, newNode.devices.map(_=>_.eoj));
   }
 
   public searchDevicesInNetwork = async (): Promise<void> =>{
@@ -632,16 +632,16 @@ export class EchoNetLiteRawController {
       {
         this.nodes[currentIndex] = newNode;
       }
-      this.fireDeviceDetected(newNode.devices.map(_=>({ip:_.ip, eoj:_.eoj})));
+      this.fireDeviceDetected(newNode.ip, newNode.devices.map(_=>_.eoj));
     }
   }
 
-  private deviceDetectedListeners:((deviceKeys:{ip:string, eoj:string}[])=>void)[] = [];
-  public addDeviceDetectedEvent = (event:(deviceKeys:{ip:string, eoj:string}[])=>void):void =>{
+  private deviceDetectedListeners:((ip:string, eojList:string[])=>void)[] = [];
+  public addDeviceDetectedEvent = (event:(ip:string, eojList:string[])=>void):void =>{
     this.deviceDetectedListeners.push(event);
   }
-  private fireDeviceDetected = (deviceKeys:{ip:string, eoj:string}[]):void=>{
-    this.deviceDetectedListeners.forEach(_=>_(deviceKeys));
+  private fireDeviceDetected = (ip:string, eojList:string[]):void=>{
+    this.deviceDetectedListeners.forEach(_=>_(ip, eojList));
   }
 
   readonly propertyChangedHandlers:((ip:string, eoj:string, epc:string, oldValue:string, newValue:string) => void)[] = [];

@@ -111,31 +111,63 @@ export class EchoNetLiteController{
   }
 
   readonly detectedDeviceIdList:DeviceId[] = [];
-  private deviceDetected = (deviceKeys:{ip:string, eoj:string}[]):void =>
+  
+  // ノード単位で見つかったデバイスのEOJリストが通知されるので
+  // EchonetLite2MQTT用のデバイスを作る
+  // デバイスのIdは、echonetの識別番号(識別番号が無い場合はnodeProfileの識別番号+"_(eoj)")を使っていたが
+  // echonetの識別番号はノード内で重複する場合があるので、その場合は識別番号_eojの形にする
+  // 本当は、常に識別番号_eojまたはnodeProfile識別番号_eojの形にしたほうが一意性がありそうだが、
+  // 過去バージョンとの互換性のためにidの決定ルールを維持する
+  private deviceDetected = (ip:string, eojList:string[]):void =>
   {
-    const detectedDevices:Device[] = [];
-    const rawDataSet = this.echonetLiteRawController.getRawDataSet();
-    for(const deviceKey of deviceKeys)
+    // 全てデバイス作成済みなら何もしない
+    if(eojList.every(eoj=>this.detectedDeviceIdList.find(
+      deviceId=>deviceId.ip === ip && deviceId.eoj === eoj) !== undefined))
     {
-      if(this.detectedDeviceIdList.find(_=>_.id === deviceKey.ip && _.eoj === deviceKey.eoj) !== undefined)
+      return;
+    }
+
+    const rawDataSet = this.echonetLiteRawController.getRawDataSet();
+
+    const deviceIdsTemp:DeviceId[] = [];
+    for(const eoj of eojList)
+    {
+      let id="";
+      id = this.deviceConverter.getDeviceId(ip, eoj, rawDataSet);
+
+      if(id === undefined || id === "")
       {
         continue;
       }
 
-      let id="";
-      if(deviceKey.eoj === "0ef001")
+      deviceIdsTemp.push({ip, eoj, id});
+    }
+
+    // idが重複している場合は、id_eojの形にする
+    const deviceIds:DeviceId[] = [];
+    for(let i = 0; i<deviceIdsTemp.length; i++)
+    {
+      const deviceId = deviceIdsTemp[i];
+      const matchedDeviceIds = deviceIdsTemp.filter(_=>_.id === deviceId.id);
+      if(matchedDeviceIds.length <= 1)
       {
-        id = this.deviceConverter.getDeviceIdForNodeProfile(rawDataSet, deviceKey.ip);
+        deviceIds.push(deviceId);
       }
       else
       {
-        id = this.deviceConverter.getDeviceId(deviceKey.ip, deviceKey.eoj, rawDataSet);
+        deviceIds.push({ip:deviceId.ip, eoj:deviceId.eoj, id:`${deviceId.id}_${deviceId.eoj}`});
       }
-      if(id === undefined)
+    }
+
+    // デバイスIdからデバイスを作成
+    const detectedDevices:Device[] = [];
+    for(const deviceId of deviceIds)
+    {
+      if(this.detectedDeviceIdList.find(_=>_.id === deviceId.ip && _.eoj === deviceId.eoj) !== undefined)
       {
         continue;
       }
-      const deviceId:DeviceId = {...deviceKey, id};
+
       const device = this.deviceConverter.createDevice(deviceId, rawDataSet);
       if(device === undefined)
       {
@@ -145,6 +177,7 @@ export class EchoNetLiteController{
       detectedDevices.push(device);
     }
 
+    // イベントを通知する
     for(const device of detectedDevices)
     {
       this.fireDeviceDetected(device);
