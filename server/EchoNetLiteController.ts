@@ -144,6 +144,7 @@ export class EchoNetLiteController{
     }
 
     // idが重複している場合は、id_eojの形にする
+    // ただし、idの重複がnodeProfileともう1つだけなら、nodeProfileのみid_eojの形にする
     const deviceIds:DeviceId[] = [];
     for(let i = 0; i<deviceIdsTemp.length; i++)
     {
@@ -152,6 +153,18 @@ export class EchoNetLiteController{
       if(matchedDeviceIds.length <= 1)
       {
         deviceIds.push(deviceId);
+      }
+      else if(matchedDeviceIds.length === 2 && 
+        matchedDeviceIds.find(_=>_.eoj === "0ef001") !== undefined)
+      {
+        if(deviceId.eoj !== "0ef001")
+        {
+          deviceIds.push(deviceId);
+        }
+        else
+        {
+          deviceIds.push({ip:deviceId.ip, eoj:deviceId.eoj, id:`${deviceId.id}_${deviceId.eoj}`});
+        }
       }
       else
       {
