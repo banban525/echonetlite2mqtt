@@ -13,6 +13,27 @@ import path from "path";
 import os from "os";
 import ip from "ip";
 
+interface InputParameters{
+  echonetTargetNetwork:string;
+  echonetAliasFile:string;
+  echonetLegacyMultiNicMode:boolean;
+  echonetUnknownAsError:boolean;
+  echonetDeviceIpList:string;
+  echonetDisableAutoDeviceDiscovery:boolean;
+  echonetCommandTimeout:number;
+  debugLog:boolean;
+  restApiPort:number;
+  restApiHost:string;
+  mqttBroker:string;
+  mqttOptionFile:string;
+  mqttBaseTopic:string;
+  mqttCaFile:string;
+  mqttCertFile:string;
+  mqttKeyFile:string;
+  version:string;
+  buildInfo:string;
+};
+
 let echonetTargetNetwork = "";
 let echonetAliasFile="";
 let echonetLegacyMultiNicMode = false;
@@ -254,9 +275,10 @@ const logger = new LogRepository();
 
 Logger.info("", `${process.env.npm_package_name} ver.${process.env.npm_package_version}`);
 
+let buildInfo="";
 if(fs.existsSync(path.resolve(__dirname, "../buildinfo")))
 {
-  const buildInfo = fs.readFileSync(path.resolve(__dirname, "../buildinfo"), {encoding:"utf-8"});
+  buildInfo = fs.readFileSync(path.resolve(__dirname, "../buildinfo"), {encoding:"utf-8"});
   Logger.info("", buildInfo);
 }
 
@@ -280,6 +302,28 @@ logger.output(`mqttCaFile=${mqttCaFile}`);
 logger.output(`mqttCertFile=${mqttCertFile}`);
 logger.output(`mqttKeyFile=${mqttKeyFile}`);
 logger.output(``);
+
+const inputParameters:InputParameters =
+{
+  echonetTargetNetwork,
+  echonetAliasFile,
+  echonetLegacyMultiNicMode,
+  echonetUnknownAsError,
+  echonetDeviceIpList,
+  echonetDisableAutoDeviceDiscovery,
+  echonetCommandTimeout,
+  debugLog,
+  restApiPort,
+  restApiHost,
+  mqttBroker,
+  mqttOptionFile,
+  mqttBaseTopic,
+  mqttCaFile,
+  mqttCertFile,
+  mqttKeyFile,
+  version:`${process.env.npm_package_name} ver.${process.env.npm_package_version}`,
+  buildInfo:buildInfo
+};
 
 
 let mqttOption:mqtt.IClientOptions = {
@@ -524,7 +568,13 @@ echoNetListController.addPropertyChnagedEvent((id:DeviceId, propertyName:string,
   }
 });
 
-const restApiController = new RestApiController(deviceStore, systemStatusRepository, eventRepository, logger, echoNetListController, restApiHost, restApiPort, mqttBaseTopic);
+const detailLogsCallback : ()=>{fileName:string, content:string}[] = ()=>{
+  const fileName = "inputParameters.json";
+  const content = JSON.stringify(inputParameters, null, 2);
+  return [{fileName, content}];
+}
+
+const restApiController = new RestApiController(deviceStore, systemStatusRepository, eventRepository, logger, echoNetListController, restApiHost, restApiPort, mqttBaseTopic, detailLogsCallback);
 restApiController.addPropertyChangedRequestEvent(async (deviceId:string, propertyName:string, newValue:any):Promise<void>=>{
 
   const device = deviceStore.getFromNameOrId(deviceId);

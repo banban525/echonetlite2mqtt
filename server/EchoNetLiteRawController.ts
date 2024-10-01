@@ -685,12 +685,12 @@ export class EchoNetLiteRawController {
     return EchoNetCommunicator.updateidentifierFromMacAddress(base);
   }
 
-  public getInternalStatus = ():string =>
+  public getInternalStatus = ():unknown =>
   {
-    return JSON.stringify({
+    return {
       elData:EchoNetCommunicator.getFacilities(),
       nodes:this.nodes
-    }, null, 2);
+    };
   }
 
   public getRawDataSet = ():RawDataSet =>

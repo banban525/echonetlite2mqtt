@@ -27,6 +27,7 @@ export class RestApiController
   private readonly hostName:string;
   private readonly port:number;
   private readonly mqttBaseTopic:string;
+  private readonly detailLogsCallback:()=>{fileName:string, content:string}[];
   constructor(deviceStore:DeviceStore, 
     systemStatusRepository:SystemStatusRepositry,
     eventRepository:EventRepository, 
@@ -34,7 +35,8 @@ export class RestApiController
     echoNetLiteController:EchoNetLiteController,
     hostName:string, 
     port:number,
-    mqttBaseTopic:string){
+    mqttBaseTopic:string,
+    detailLogsCallback:()=>{fileName:string, content:string}[]){
 
     this.deviceStore = deviceStore;
     this.systemStatusRepository = systemStatusRepository;
@@ -44,6 +46,7 @@ export class RestApiController
     this.hostName = hostName;
     this.port = port;
     this.mqttBaseTopic = mqttBaseTopic;
+    this.detailLogsCallback = detailLogsCallback;
 
     setInterval(this.timeoutLongPolling, 10*1000);
   }
@@ -609,6 +612,10 @@ export class RestApiController
     zip.addFile("logs.json", Buffer.from(JSON.stringify(this.logRepository.logs, null, 2)))
     zip.addFile("ELRawData.json", Buffer.from(JSON.stringify(this.echoNetLiteController.getRawData(), null, 2)))
     zip.addFile("echoNetLiteController.json", Buffer.from(JSON.stringify(this.echoNetLiteController.getInternalStatus(), null, 2)))
+    for(const detailLog of this.detailLogsCallback())
+    {
+      zip.addFile(detailLog.fileName, Buffer.from(detailLog.content));
+    }
     zip.addLocalFolder(path.resolve(__dirname, "..", "logs"), "logs");
 
     const buffer = await zip.toBufferPromise();
