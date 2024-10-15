@@ -1,4 +1,4 @@
-import { AliasOption, Device, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
+import { AliasOption, Device, DeviceAlias, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
 import { EchoNetPropertyConverter } from "./EchoNetPropertyConverter";
 import { getUtcNowDateTimeText } from "./datetimeLib";
 import { RawDataSet } from "./EchoNetCommunicator";
@@ -199,7 +199,12 @@ export default class EchoNetDeviceConverter
       };
     }
 
-    const name = this.aliasOption.aliases.find(_=>_.id === id)?.name ?? id;
+    let name = id;
+    const matchedAliases = this.aliasOption.aliases.filter(_=>DeviceAlias.isMatch(_, id, eoj, ip));
+    if(matchedAliases.length > 0)
+    {
+      name = matchedAliases[0].name;
+    }
 
     return {
       id,

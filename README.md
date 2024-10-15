@@ -169,24 +169,27 @@ The Alias ​​Option File is a Json file with the following format:
 {
   "aliases":[
     {
-      "id":"fe00-your-device-id-00000000000000",
-      "name":"alias name"
-    },
-
-...
-
-    {
-      "id":"fe0000251c4190000081e5bb0000000000",
-      "name":"shutter"
+      "name":"living_aircon",
+      "eoj":"0130*",
+      "ip":"192.168.1.48"
     },
     {
-      "id":"fe000008dcfe23ba1ff000000000000000",
-      "name":"airconditioner-living"
+      "name":"bedroom_aircon",
+      "id":"fe0000251c4190000081e5bb0000000000"
     }
   ]
 }
 ```
 
+|Property| Description |
+| -------- | ---------------- |
+| name | [Required] Name of device to be used instead of ID |
+| ip | IP address to identify device. `*` can be used as wildcard. |
+| eoj | ECHONET Lite object ID to identify device. `*` can be used as wildcard. |
+| id | ID to identify device. `*` can be used as wildcard. |
+
+An alias is selected if all of the ip, eoj, and id conditions are met.
+If there are multiple matches, the first match takes precedence.
 
 ## How to migrate from version 1.x to version 2.x
 

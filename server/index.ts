@@ -374,9 +374,13 @@ if(echonetAliasFile!=="")
     }
     if(aliasOptionTemp !== undefined)
     {
-      if(AliasOption.validate(aliasOptionTemp) === false)
+      const validationResult = AliasOption.validate(aliasOptionTemp);
+      if(validationResult.valid === false)
       {
-        logger.output(`[ERROR] echonetAliasFile is unexpected format. : ${echonetAliasFile}`);
+        
+        logger.output(`[ERROR] echonetAliasFile is unexpected format. : ${echonetAliasFile}
+error details:
+${validationResult.message}`);
       }
       else
       {
