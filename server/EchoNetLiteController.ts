@@ -7,6 +7,7 @@ import { HoldOption } from "./MqttController";
 import { ELSV } from "./EchoNetCommunicator";
 import { Logger } from "./Logger";
 
+export type findDeviceCallback = (internalId:string)=>Device|undefined;
 
 export class EchoNetLiteController{
   
@@ -21,13 +22,15 @@ export class EchoNetLiteController{
   private readonly knownDeviceIpList:string[];
   private readonly searchDevices:boolean;
   private readonly commandTimeout:number;
+  private readonly findDeviceCallback:findDeviceCallback;
   constructor(usedIpByEchoNet:string,  
     aliasOption: AliasOption, 
     legacyMultiNicMode:boolean, 
     unknownAsError:boolean,
     knownDeviceIpList:string[],
     searchDevices:boolean,
-    commandTimeout:number)
+    commandTimeout:number,
+    findDeviceCallback:findDeviceCallback)
   {
     this.aliasOption = aliasOption;
     this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption, unknownAsError);
@@ -40,6 +43,7 @@ export class EchoNetLiteController{
 
     this.usedIpByEchoNet = usedIpByEchoNet;
     this.commandTimeout = commandTimeout;
+    this.findDeviceCallback = findDeviceCallback;
 
     this.echonetLiteRawController.addReveivedHandler(( rinfo:rinfo, els:eldata ):void=>{
       if(els.ESV === ELSV.SET_RES)
@@ -93,11 +97,7 @@ export class EchoNetLiteController{
 
   private propertyChnaged = (ip:string, eoj:string, epc:string, oldValue:string, newValue:string):void=>
   {
-    const deviceId = this.detectedDeviceIdList.find(_=>_.ip === ip &&  _.eoj === eoj);
-    if(deviceId===undefined){
-      return;
-    }
-    const property = this.deviceConverter.getPropertyWithEpc(deviceId, epc);
+    const property = this.deviceConverter.getPropertyWithEpc(ip, eoj, epc);
     if(property===undefined){
       return;
     }
@@ -107,10 +107,8 @@ export class EchoNetLiteController{
     {
       return;
     }
-    this.firePropertyChnagedEvent(deviceId, property.name, value);
+    this.firePropertyChnagedEvent(ip, eoj, property.name, value);
   }
-
-  readonly detectedDeviceIdList:DeviceId[] = [];
   
   // ノード単位で見つかったデバイスのEOJリストが通知されるので
   // EchonetLite2MQTT用のデバイスを作る
@@ -120,16 +118,16 @@ export class EchoNetLiteController{
   // 過去バージョンとの互換性のためにidの決定ルールを維持する
   private deviceDetected = (ip:string, eojList:string[]):void =>
   {
-    // 全てデバイス作成済みなら何もしない
-    if(eojList.every(eoj=>this.detectedDeviceIdList.find(
-      deviceId=>deviceId.ip === ip && deviceId.eoj === eoj) !== undefined))
+    const rawDataSet = this.echonetLiteRawController.getRawDataSet();
+
+    const nodeProfileId = this.deviceConverter.getDeviceRawId(ip, "0ef001", rawDataSet);
+    // ノードプロファイルのIdは常に存在するはず。無ければ未取得なので何もしない
+    if(nodeProfileId === undefined || nodeProfileId === "")
     {
       return;
     }
 
-    const rawDataSet = this.echonetLiteRawController.getRawDataSet();
-
-    const deviceIdsTemp:DeviceId[] = [];
+    const deviceIdsTemp:{eoj:string, id:string}[] = [];
     for(const eoj of eojList)
     {
       let id="";
@@ -139,13 +137,12 @@ export class EchoNetLiteController{
       {
         continue;
       }
-
-      deviceIdsTemp.push({ip, eoj, id});
+      deviceIdsTemp.push({eoj, id});
     }
 
     // idが重複している場合は、id_eojの形にする
     // ただし、idの重複がnodeProfileともう1つだけなら、nodeProfileのみid_eojの形にする
-    const deviceIds:DeviceId[] = [];
+    const deviceIds:{eoj:string, id:string}[] = [];
     for(let i = 0; i<deviceIdsTemp.length; i++)
     {
       const deviceId = deviceIdsTemp[i];
@@ -163,31 +160,48 @@ export class EchoNetLiteController{
         }
         else
         {
-          deviceIds.push({ip:deviceId.ip, eoj:deviceId.eoj, id:`${deviceId.id}_${deviceId.eoj}`});
+          deviceIds.push({eoj:deviceId.eoj, id:`${deviceId.id}_${deviceId.eoj}`});
         }
       }
       else
       {
-        deviceIds.push({ip:deviceId.ip, eoj:deviceId.eoj, id:`${deviceId.id}_${deviceId.eoj}`});
+        deviceIds.push({eoj:deviceId.eoj, id:`${deviceId.id}_${deviceId.eoj}`});
       }
     }
 
     // デバイスIdからデバイスを作成
     const detectedDevices:Device[] = [];
+    const updateDevices:{current:Device, new:Device}[] = [];
     for(const deviceId of deviceIds)
     {
-      if(this.detectedDeviceIdList.find(_=>_.id === deviceId.ip && _.eoj === deviceId.eoj) !== undefined)
-      {
-        continue;
-      }
+      let internalId = nodeProfileId + "_" + deviceId.eoj;
 
-      const device = this.deviceConverter.createDevice(deviceId, rawDataSet);
-      if(device === undefined)
+      const currentDevice = this.findDeviceCallback(internalId);
+      if(currentDevice===undefined)
       {
+        const device = this.deviceConverter.createDevice(ip, deviceId.eoj, deviceId.id, internalId, rawDataSet);
+        if(device === undefined)
+        {
+          // デバイスが作成できない場合は、必須プロパティが足りていないので、中止する
+          Logger.warn("[ECHONETLite]", `deviceDetected: cannot create new device: ${ip} ${deviceId.eoj}`);
+          return;
+        }
+        detectedDevices.push(device);
         continue;
       }
-      this.detectedDeviceIdList.push(deviceId);
-      detectedDevices.push(device);
+      if(currentDevice.id !== deviceId.id || 
+        currentDevice.ip !== ip ||
+        currentDevice.eoj !== deviceId.eoj)
+      {
+        const device = this.deviceConverter.createDevice(ip, deviceId.eoj, deviceId.id, internalId, rawDataSet);
+        if(device === undefined)
+        {
+          // デバイスが作成できない場合は、必須プロパティが足りていないので、中止する
+          Logger.warn("[ECHONETLite]", `deviceDetected: cannot recreate a device: ${ip} ${deviceId.eoj}`);
+          continue;
+        }
+        updateDevices.push({current:currentDevice, new:device});
+      }
     }
 
     // イベントを通知する
@@ -195,6 +209,11 @@ export class EchoNetLiteController{
     {
       this.fireDeviceDetected(device);
     }
+    for(const device of updateDevices)
+    {
+      this.fireDeviceUpdated(device.current, device.new);
+    }
+    
   }
 
   private ReceivedSetResponse = ( rinfo:rinfo, els:eldata ):void=>
@@ -224,20 +243,14 @@ export class EchoNetLiteController{
     }
   });
 
-  getDevice = (id:DeviceId):Device|undefined => 
-  {
-    const device = this.deviceConverter.createDevice(id, this.echonetLiteRawController.getRawDataSet());
-    return device;
-  }
-
-  propertyChnagedListeners:((id:DeviceId, propertyName:string, newValue:any)=>void)[] = [];
-  addPropertyChnagedEvent = (event:(id:DeviceId, propertyName:string, newValue:any)=>void)=>
+  propertyChnagedListeners:((ip:string, eoj:string, propertyName:string, newValue:any)=>void)[] = [];
+  addPropertyChnagedEvent = (event:(ip:string, eoj:string, propertyName:string, newValue:any)=>void)=>
   {
     this.propertyChnagedListeners.push(event);
   }
-  firePropertyChnagedEvent = (id:DeviceId, propertyName:string, newValue:any):void=>
+  firePropertyChnagedEvent = (ip:string, eoj:string, propertyName:string, newValue:any):void=>
   {
-    this.propertyChnagedListeners.forEach((_)=>_(id, propertyName, newValue));
+    this.propertyChnagedListeners.forEach((_)=>_(ip, eoj, propertyName, newValue));
   }
   
   deviceDetectedListeners:((device:Device)=>void)[] = [];
@@ -247,6 +260,15 @@ export class EchoNetLiteController{
   fireDeviceDetected = (device:Device):void=>{
     this.deviceDetectedListeners.forEach(_=>_(device));
   }
+  
+  deviceUpdatedListeners:((lastDevice:Device, device:Device)=>void)[] = [];
+  addDeviceUpdatedEvent = (event:(lastDevice:Device, device:Device)=>void):void =>{
+    this.deviceUpdatedListeners.push(event);
+  }
+  fireDeviceUpdated = (lastDevice:Device, device:Device):void=>{
+    this.deviceUpdatedListeners.forEach(_=>_(lastDevice, device));
+  }
+
 
   setDeviceProperty = async (id:DeviceId, propertyName:string, newValue:any, holdOption:HoldOption|undefined=undefined):Promise<void> =>
   {
@@ -342,7 +364,7 @@ export class EchoNetLiteController{
         {
           return;
         }
-        this.firePropertyChnagedEvent(id, property.name, value);
+        this.firePropertyChnagedEvent(id.ip, id.eoj, property.name, value);
         this.holdController.receivedProperty(id, property.name, value);
       }
 
@@ -428,7 +450,7 @@ export class EchoNetLiteController{
       {
         return;
       }
-      this.firePropertyChnagedEvent(id, property.name, value);
+      this.firePropertyChnagedEvent(id.ip, id.eoj, property.name, value);
     }
   }
 

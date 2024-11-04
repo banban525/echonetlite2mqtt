@@ -341,6 +341,50 @@ export class EchoNetLiteRawController {
           }
           continue;
         }
+        else
+        {
+          // 既存ノードからのd5通知(自ノードインスタンスリスト通知)ならば、デバイスが増えていたら再取得する
+          if ("d5" in inf.els.DETAILs) 
+          {
+            const nodeTemp: RawNode = {
+              ip: inf.rinfo.address,
+              devices: [{
+                ip: inf.rinfo.address,
+                eoj: "0ef001",
+                properties: [],
+                noExistsId: false
+              }]
+            };
+            const eojList = EchoNetLiteRawController.convertToInstanceList(inf.els.DETAILs["d5"]);
+
+            if(eojList.filter(newEoj=>foundNode.devices.find(currentDevice=>currentDevice.eoj === newEoj) === undefined).length === 0)
+            {
+              continue;
+            }
+
+            eojList.forEach(eoj => {
+              nodeTemp.devices.push({
+                ip: inf.rinfo.address,
+                eoj: eoj,
+                properties: [],
+                noExistsId: false
+              });
+            });
+
+            const newNode = await EchoNetLiteRawController.getNewNode(nodeTemp);
+            const currentIndex = this.nodes.findIndex(_=>_.ip === newNode.ip);
+            if(currentIndex===-1)
+            {
+              this.nodes.push(newNode);
+            }
+            else
+            {
+              this.nodes[currentIndex] = newNode;
+            }
+            this.fireDeviceDetected(newNode.ip, newNode.devices.map(_=>_.eoj));
+
+          }
+        }
         const foundDevice = foundNode.devices.find(_ => _.eoj === inf.els.SEOJ);
         if (foundDevice === undefined) {
           // 存在しないデバイスは無視する
@@ -365,45 +409,6 @@ export class EchoNetLiteRawController {
             foundProperty.epc, 
             oldValue, 
             foundProperty.value);
-        }
-
-        // 存在するノードからの d5 (自ノードインスタンスリスト通知)なら、
-        if (inf.els.SEOJ === "0ef001" && "d5" in inf.els.DETAILs) {
-          // 増えたインスタンスを追加する。削除は特に対処しない
-          const eojList = EchoNetLiteRawController.convertToInstanceList(inf.els.DETAILs["d5"]);
-          const currentEojList = foundNode.devices.map(_ => _.eoj);
-          eojList.filter(_ => currentEojList.includes(_) == false).forEach(eoj => {
-            foundNode.devices.push({
-              ip: inf.rinfo.address,
-              eoj: eoj,
-              properties: [],
-              noExistsId: false
-            });
-          });
-
-          // 全プロパティを更新する
-          // ただし他のコマンドをブロッキングしてしまうので、リクエストキューに追加して優先度低で取得する
-          for (const device of foundNode.devices) {
-            for (const property of device.properties.filter(_=>_.operation.get)) {
-
-              const command:Command = {
-                ip: device.ip,
-                seoj: '0ef001',
-                deoj: device.eoj,
-                epc: property.epc,
-                esv: ELSV.GET,
-                edt: '',
-                tid: ''
-              };
-              if(this.requestQueue.find(_=>
-                _.ip === command.ip &&
-                _.deoj === command.deoj && 
-                _.epc === command.epc) === undefined)
-              {
-                this.requestQueue.push(command);
-              }
-            }
-          }
         }
       }
 

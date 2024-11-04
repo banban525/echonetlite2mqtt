@@ -17,30 +17,28 @@ export default class EchoNetDeviceConverter
   }
 
 
-  public createDevice = (deviceId:DeviceId, echonetLiteFacilities:RawDataSet):Device|undefined => {
+  public createDevice = (ip:string, eoj:string, id:string, internalId:string, echonetLiteFacilities:RawDataSet):Device|undefined => {
 
-    const getPropertyNoList = this.convertGetPropertyNoList(deviceId.ip, deviceId.eoj, echonetLiteFacilities);
+    const getPropertyNoList = this.convertGetPropertyNoList(ip, eoj, echonetLiteFacilities);
     if(getPropertyNoList === undefined)
     {
       return undefined;
     }
 
-    let id = deviceId.id;
-
-    const manufacturer = this.getManufacturer(deviceId.ip, deviceId.eoj, echonetLiteFacilities.getRawData(deviceId.ip,deviceId.eoj,"8a")??undefined);
+    const manufacturer = this.getManufacturer(ip, eoj, echonetLiteFacilities.getRawData(ip,eoj,"8a")??undefined);
     if(manufacturer === undefined)
     {
       return undefined;
     }
     const setPropertyNoList:string[] = [];
-    const setPropertyListText = echonetLiteFacilities.getRawData(deviceId.ip, deviceId.eoj,"9e") ?? "";
+    const setPropertyListText = echonetLiteFacilities.getRawData(ip, eoj,"9e") ?? "";
     for(let i = 2; i < setPropertyListText.length; i+=2)
     {
       setPropertyNoList.push(setPropertyListText.substr(i, 2));
     }
 
     const notifyPropertyNoList:string[] = [];
-    const notifyPropertyListText = echonetLiteFacilities.getRawData(deviceId.ip, deviceId.eoj, "9d") ?? "";
+    const notifyPropertyListText = echonetLiteFacilities.getRawData(ip, eoj, "9d") ?? "";
     for(let i = 2; i < notifyPropertyListText.length; i+=2)
     {
       notifyPropertyNoList.push(notifyPropertyListText.substr(i, 2));
@@ -48,8 +46,9 @@ export default class EchoNetDeviceConverter
 
     const newDevice = this.createDevice2(
       id, 
-      deviceId.ip, 
-      deviceId.eoj, 
+      ip, 
+      eoj, 
+      internalId,
       getPropertyNoList, 
       setPropertyNoList, 
       notifyPropertyNoList, 
@@ -63,6 +62,7 @@ export default class EchoNetDeviceConverter
       id:string, 
       ip:string, 
       eoj:string, 
+      internalId:string,
       getPropertyNoList:string[], 
       setPropertyNoList:string[], 
       notifyPropertyNoList:string[],
@@ -81,6 +81,7 @@ export default class EchoNetDeviceConverter
           name:"",
           ip,
           eoj,
+          internalId,
           properties:[],
           deviceType:"unknown",
           descriptions: {
@@ -211,6 +212,7 @@ export default class EchoNetDeviceConverter
       name,
       ip,
       eoj,
+      internalId,
       deviceType: deviceType.shortName,
       descriptions: deviceType.className ?? {ja:"",en:""},
       properties,
@@ -273,6 +275,10 @@ export default class EchoNetDeviceConverter
     return getPropertyNoList;
   }
 
+  public getDeviceRawId = (ip:string, eoj:string, facilities:RawDataSet):string|undefined => {
+    return facilities.getRawData(ip, eoj, "83");
+  }
+  
   public getDeviceId = (ip:string, eoj:string, facilities:RawDataSet):string => {
     let id = "";
   
@@ -344,10 +350,10 @@ export default class EchoNetDeviceConverter
     return id;
   }
 
-  public getPropertyWithEpc = (deviceId: DeviceId, epc:string): Property|undefined =>{
+  public getPropertyWithEpc = (ip:string, eoj:string, epc:string): Property|undefined =>{
 
     // コンバート可能なデバイスかチェック
-    const deviceClass = "0x"+deviceId.eoj.substr(0, 4).toUpperCase();
+    const deviceClass = "0x"+eoj.substr(0, 4).toUpperCase();
     const foundDevice = this.echoNetPropertyConverter.getDevice(deviceClass);
     if(foundDevice === undefined){
       return undefined;
@@ -358,7 +364,7 @@ export default class EchoNetDeviceConverter
     {
       return undefined;
     }
-    return this.getProperty(deviceId.ip, deviceId.eoj, property.shortName);
+    return this.getProperty(ip, eoj, property.shortName);
   }
 
   public getProperty = (ip:string, eoj:string, propertyName:string): Property|undefined =>{

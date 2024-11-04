@@ -22,6 +22,7 @@ export interface Device{
   ip:string;
   deviceType:string;
   eoj:string;
+  internalId:string;
   descriptions:{
     ja:string;
     en:string;
@@ -66,6 +67,7 @@ export interface DeviceId {
   id:string;
   ip:string;
   eoj:string;
+  internalId:string;
 }
 
 export interface DeviceAlias

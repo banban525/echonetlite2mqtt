@@ -6,14 +6,20 @@ export class DeviceStore{
 
     private list:Device[] = [];
   
-    public exists = (id:string):boolean=>{
-      return this.list.find(_=>_.id === id) !== undefined;
+    public exists = (internalId:string):boolean=>{
+      return this.list.find(_=>_.internalId === internalId) !== undefined;
     }
     public add = (device:Device):void=>{
       this.list.push(device);
     }
+    public del = (internalId:string):void=>{
+      this.list = this.list.filter(_=>_.internalId !== internalId);
+    }
     public get = (id:string):Readonly<Device>|undefined => {
       return this.list.find(_=>_.id === id);
+    }
+    public getByIpEoj = (ip:string, eoj:string):Readonly<Device>|undefined=>{
+      return this.list.find(_=>_.ip === ip && _.eoj === eoj);
     }
     public getFromNameOrId = (id:string):Readonly<Device>|undefined => {
       const found = this.list.find(_=>_.name === id);
@@ -22,6 +28,9 @@ export class DeviceStore{
         return found;
       }
       return this.get(id);
+    }
+    public getByInternalId = (internalId:string):Readonly<Device>|undefined => {
+      return this.list.find(_=>_.internalId === internalId);
     }
     public getAll = ():Readonly<Device>[] => {
       return this.list.slice();

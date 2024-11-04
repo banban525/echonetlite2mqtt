@@ -521,19 +521,22 @@ const systemStatusRepository = new SystemStatusRepositry();
 
 const deviceStore = new DeviceStore();
 
-const echoNetListController = new EchoNetLiteController(networkAddressForEchonet, aliasOption, echonetLegacyMultiNicMode, echonetUnknownAsError, knownDeviceIpList, echonetDisableAutoDeviceDiscovery===false, echonetCommandTimeout);
+const echoNetListController = new EchoNetLiteController(networkAddressForEchonet, 
+  aliasOption, echonetLegacyMultiNicMode, echonetUnknownAsError, 
+  knownDeviceIpList, echonetDisableAutoDeviceDiscovery===false, echonetCommandTimeout,
+  (internalId:string)=>deviceStore.getByInternalId(internalId));
 
 echoNetListController.addDeviceDetectedEvent((device:Device)=>{
   if(device === undefined)
   {
     return;
   }
-  if(deviceStore.exists(device.id))
+  if(deviceStore.exists(device.internalId))
   {
     return;
   }
   
-  const deviceNameText = (device.name + "                                  ").slice(0, 34);
+  const deviceNameText = device.name.padEnd(41, " ");
   logger.output(`[ECHONETLite] new device:   ${deviceNameText} ${device.deviceType} ${device.ip} ${device.eoj}`);
   deviceStore.add(device);
   mqttController.publishDevices();
@@ -544,27 +547,41 @@ echoNetListController.addDeviceDetectedEvent((device:Device)=>{
   eventRepository.newEvent(`LOG`);
   restApiController.setNewEvent();
 });
+echoNetListController.addDeviceUpdatedEvent((currentDevice:Device, newDevice:Device)=>{
 
-echoNetListController.addPropertyChnagedEvent((id:DeviceId, propertyName:string, newValue:any):void =>{
+  const deviceNameText = newDevice.name.padEnd(41, " ");
+  logger.output(`[ECHONETLite] update device id:${deviceNameText} ${newDevice.deviceType} ${newDevice.ip} ${newDevice.eoj}`);
+  deviceStore.del(currentDevice.internalId)
+  deviceStore.add(newDevice);
+  mqttController.publishDevices();
+  mqttController.publishDevice(newDevice.id);
+  mqttController.publishDevicePropertiesAndAllProperty(newDevice.id);
+  eventRepository.newEvent(`${newDevice.id}`);
+  eventRepository.newEvent(`SYSTEM`);
+  eventRepository.newEvent(`LOG`);
+  restApiController.setNewEvent();
+});
+
+echoNetListController.addPropertyChnagedEvent((ip:string, eoj:string, propertyName:string, newValue:any):void =>{
   
   if(newValue === undefined)
   {
     return;
   }
-  const device = deviceStore.get(id.id);
+  const device = deviceStore.getByIpEoj(ip, eoj);
   if(device===undefined)
   {
     return;
   }
-  const oldValue = deviceStore.getProperty(id.id, propertyName);
+  const oldValue = deviceStore.getProperty(device.id, propertyName);
 
-  deviceStore.changeProperty(id.id, propertyName, newValue);
-  mqttController.publishDeviceProperties(id.id);
-  mqttController.publishDeviceProperty(id.id, propertyName);
-  eventRepository.newEvent(`${id.id}`);
+  deviceStore.changeProperty(device.id, propertyName, newValue);
+  mqttController.publishDeviceProperties(device.id);
+  mqttController.publishDeviceProperty(device.id, propertyName);
+  eventRepository.newEvent(`${device.id}`);
   if(JSON.stringify(oldValue) !== JSON.stringify(newValue))
   {
-    const deviceNameText = (device.name + "                                  ").slice(0, 34);
+    const deviceNameText = device.name.padEnd(41, " ");
     const valueText = typeof(newValue) === "object" ? JSON.stringify(newValue) : newValue.toString();
     logger.output(`[ECHONETLite] prop changed: ${deviceNameText} ${propertyName} ${valueText}`);
     eventRepository.newEvent(`LOG`);
@@ -585,12 +602,12 @@ restApiController.addPropertyChangedRequestEvent(async (deviceId:string, propert
   if(device === undefined){
     return;
   }
-  const deviceNameText = (device.name + "                                  ").slice(0, 34);
+  const deviceNameText = device.name.padEnd(41, " ");
   const valueText = typeof(newValue) === "object" ? JSON.stringify(newValue) : newValue.toString();
   logger.output(`[RESTAPI]     prop changed: ${deviceNameText} ${propertyName} ${valueText}`);
   eventRepository.newEvent(`LOG`);
 
-  await echoNetListController.setDeviceProperty({id: device.id, ip: device.ip, eoj:device.eoj}, propertyName, newValue);
+  await echoNetListController.setDeviceProperty({id: device.id, ip: device.ip, eoj:device.eoj, internalId:device.internalId}, propertyName, newValue);
 });
 restApiController.addPropertyRequestedRequestEvent(async (deviceId:string, propertyName:string):Promise<void>=>{
   const device = deviceStore.getFromNameOrId(deviceId);
@@ -604,11 +621,11 @@ restApiController.addPropertyRequestedRequestEvent(async (deviceId:string, prope
     return;
   }
 
-  const deviceNameText = (device.name + "                                  ").slice(0, 34);
+  const deviceNameText = device.name.padEnd(41, " ");
   logger.output(`[RESTAPI]     prop reuqest: ${deviceNameText} ${propertyName}`);
   eventRepository.newEvent(`LOG`);
 
-  await echoNetListController.requestDeviceProperty({id: deviceId, ip: device.ip, eoj:device.eoj}, propertyName);
+  await echoNetListController.requestDeviceProperty({id: deviceId, ip: device.ip, eoj:device.eoj, internalId:device.internalId}, propertyName);
 });
 
 const mqttController = new MqttController(deviceStore, mqttBroker, mqttOption, mqttBaseTopic);
@@ -628,12 +645,12 @@ mqttController.addPropertyChnagedEvent(async (deviceId:string, propertyName:stri
     logger.output(`[MQTT] start hold value : ${deviceId} ${propertyName} ${value} holdOption=${JSON.stringify(holdOption)}`);
   }
 
-  const deviceNameText = (device.name + "                                  ").slice(0, 34);
+  const deviceNameText = device.name.padEnd(41, " ");
   const valueText = typeof(value) === "object" ? JSON.stringify(value) : value.toString();
   logger.output(`[MQTT]        prop changed: ${deviceNameText} ${propertyName} ${valueText}`);
   eventRepository.newEvent(`LOG`);
 
-  await echoNetListController.setDeviceProperty({id: device.id, ip: device.ip, eoj:device.eoj}, propertyName, value, holdOption);
+  await echoNetListController.setDeviceProperty({id: device.id, ip: device.ip, eoj:device.eoj, internalId:device.internalId}, propertyName, value, holdOption);
 });
 mqttController.addPropertyRequestedEvent(async (deviceId:string, propertyName:string):Promise<void>=>{
   const device = deviceStore.getFromNameOrId(deviceId);
@@ -647,11 +664,11 @@ mqttController.addPropertyRequestedEvent(async (deviceId:string, propertyName:st
     return;
   }
 
-  const deviceNameText = (device.name + "                                  ").slice(0, 34);
+  const deviceNameText = device.name.padEnd(41, " ");
   logger.output(`[MQTT]        prop reuqest: ${deviceNameText} ${propertyName}`);
   eventRepository.newEvent(`LOG`);
 
-  await echoNetListController.requestDeviceProperty({id: deviceId, ip: device.ip, eoj:device.eoj}, propertyName);
+  await echoNetListController.requestDeviceProperty({id: deviceId, ip: device.ip, eoj:device.eoj, internalId:device.internalId}, propertyName);
 });
 
 
