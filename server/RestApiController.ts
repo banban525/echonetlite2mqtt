@@ -589,7 +589,6 @@ export class RestApiController
     {
       if((propertyName in foundDevice.propertiesValue)===false)
       {
-        res.end('property not found : ' + propertyName);
         Logger.warn("[RESTAPI]", 'property not found : ' + propertyName)
         continue;
       }
