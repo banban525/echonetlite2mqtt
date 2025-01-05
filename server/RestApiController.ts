@@ -75,6 +75,9 @@ export class RestApiController
     app.get("/elapi/v1/devices/:deviceId", this.getDevice);
     app.get("/elapi/v1/devices/:deviceId/properties", this.getProperties);
     app.get("/elapi/v1/devices/:deviceId/properties/:propertyName", this.getProperty);
+
+    app.put("/elapi/v1/devices/:deviceId/properties/request", this.requestProperties);
+
     
     app.put("/elapi/v1/devices/:deviceId/properties/:propertyName", this.putProperty);
     app.put("/elapi/v1/devices/:deviceId/properties/:propertyName/request", this.requestProperty);
@@ -565,6 +568,36 @@ export class RestApiController
     res.json({});
   }
 
+  private requestProperties = async (
+    req: express.Request,
+    res: express.Response
+  ): Promise<void> => {
+    const deviceId = req.params.deviceId;
+    const body = req.body as {[key:string]:any};
+
+    Logger.info("[RESTAPI]", `request properties: ${deviceId}\t${JSON.stringify(body)}`);
+
+    const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
+    if(foundDevice === undefined){
+      res.status(404);
+      res.end('device not found : ' + deviceId);
+      Logger.warn("[RESTAPI]", 'device not found : ' + deviceId)
+      return;
+    }
+
+    for(const propertyName in body)
+    {
+      if((propertyName in foundDevice.propertiesValue)===false)
+      {
+        res.end('property not found : ' + propertyName);
+        Logger.warn("[RESTAPI]", 'property not found : ' + propertyName)
+        continue;
+      }
+      await this.firePropertyRequestedRequestEvent(deviceId, propertyName);
+    }
+  
+    res.json({});
+  }
 
   private getStatus = (
     req: express.Request,

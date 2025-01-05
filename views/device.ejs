@@ -27,24 +27,39 @@
         <dd class="col-10" style="margin-bottom: 0px;"><%= context.mqttTopic %>/properties</dd>
         <dt class="col-2" style="margin-bottom: 0px;">set mqtt topic</dt>
         <dd class="col-10" style="margin-bottom: 0px;"><%= context.mqttTopic %>/properties/set</dd>
+        <dt class="col-2" style="margin-bottom: 0px;">request mqtt topic</dt>
+        <dd class="col-10" style="margin-bottom: 0px;"><%= context.mqttTopic %>/properties/request</dd>
       </dl>
-      <div class="accordion" id="accordionExample1">
+
+      <div class="accordion" id="allProperties">
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne1">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne1" aria-expanded="true" aria-controls="collapseOne">
-              All Properties
+              All Properties Actions
             </button>
           </h2>
-          <div id="collapseOne1" class="accordion-collapse collapse" aria-labelledby="headingOne1" data-bs-parent="#accordionExample1">
+          <div id="collapseOne1" class="accordion-collapse collapse" aria-labelledby="headingOne1" data-bs-parent="#allProperties">
             <div class="accordion-body">
-              <pre>
-<%= allProperties %>
-              </pre>
+              <div class="col col-md-12 card card-body">
+                <h5 class="card-title">Raw All Properties</h5>
+                <pre style="max-height: 300px;"><%= allProperties %></pre>
+              </div>
+              <div class="col col-md-12 card card-body">
+                <h5 class="card-title">Request Multiple Properties</h5>
+                <div>
+                  <input type="text" class="form-control" id="multi-req-prop-json" placeholder="Json" value='{"<%= device.properties.filter(_=>_.readable)[0].name %>":""}'>
+                  <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#multipleRequestForm" onclick="showMultiRequestModal();">
+                    Edit
+                  </button>
+                  <button type="button" class="btn btn-primary" onclick="requestMultiParameter();">
+                    Request
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      
       <h3>Properties</h3>
       <div class="container">
         <div class="row border-bottom border-dark">
@@ -124,7 +139,45 @@
       </div>
     </div>
   </div>
-
+  <div class="modal fade" id="multipleRequestForm" tabindex="-1" aria-labelledby="multipleRequestForm" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Request Multiple Properties</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table>
+            <thead>
+              <tr>
+                <th><input class="form-check-input mx-2" type="checkbox" id="multi-req-prop-checkall"  onchange="toggleMultiRequestCheckAll();" ></th>
+                <th>
+                  <label class="form-check-label" for="multi-req-prop-checkall">
+                    Property
+                  </label>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(const prop of device.properties.filter(_=>_.readable)) { %>
+              <tr>
+                <td><input class="form-check-input mx-2 multi-req-prop-check-list" type="checkbox" id="multi-req-prop-<%= prop.name %>-check" onclick="updateMultiReuqestCheckAll();"></td>
+                <td>
+                  <label class="form-check-label" for="multi-req-prop-<%= prop.name %>-check">
+                    <%= prop.name %>
+                  </label>
+                </td>
+              </tr>
+              <% } %>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="applyMultiRequestModal();">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script type="text/javascript">
 
@@ -354,5 +407,106 @@ function requestParameter(propertyName)
   }).done(function(data1,textStatus,jqXHR){
     
   });
+}
+
+function showMultiRequestModal()
+{
+  const original = document.getElementById("multi-req-prop-json").value;
+  
+  const checkboxes = document.getElementsByClassName("multi-req-prop-check-list");
+  for(const checkbox of checkboxes)
+  {
+    checkbox.checked = false;
+  }
+  updateMultiReuqestCheckAll();
+
+
+  const obj = JSON.parse(original);
+
+  for(const checkbox of checkboxes)
+  {
+    const propertyName = checkbox.id.match(/multi-req-prop-(.+)-check/)[1];
+    if(propertyName in obj)
+    {
+      checkbox.checked = true;
+    }
+    else
+    {
+      checkbox.checked = false;
+    }
+  }
+
+  updateMultiReuqestCheckAll();
+}
+
+function applyMultiRequestModal()
+{
+  const obj = {};
+
+  const checkboxes = document.getElementsByClassName("multi-req-prop-check-list");
+  for(const checkbox of checkboxes)
+  {
+    if(checkbox.checked)
+    {
+      const propertyName = checkbox.id.match(/multi-req-prop-(.+)-check/)[1];
+      obj[propertyName] = "";
+    }
+  }
+  document.getElementById("multi-req-prop-json").value = JSON.stringify(obj);
+}
+
+function requestMultiParameter()
+{
+  const json = document.getElementById("multi-req-prop-json").value;
+  try{
+    JSON.parse(json);
+  }
+  catch(e)
+  {
+    alert("Invalid JSON");
+    return;
+  }
+
+  $.ajax({
+    url:`/elapi/v1/devices/<%= device.name %>/properties/request`,
+    type: "put",
+    data: json,
+    contentType: 'application/json', //request type
+    dataType: 'json', // response type
+  }).done(function(data1,textStatus,jqXHR){
+    
+  });
+
+}
+
+function toggleMultiRequestCheckAll()
+{
+  const checked = document.getElementById("multi-req-prop-checkall").checked;
+  const checkboxes = document.getElementsByClassName("multi-req-prop-check-list");
+  for(const checkbox of checkboxes)
+  {
+    checkbox.checked = checked;
+  }
+}
+
+function updateMultiReuqestCheckAll()
+{
+  const checkboxes = document.getElementsByClassName("multi-req-prop-check-list");
+  const list = Array.from(checkboxes);
+  if(list.filter(_=>_.checked).length === list.length)
+  {
+    document.getElementById("multi-req-prop-checkall").indeterminate  = false;
+    document.getElementById("multi-req-prop-checkall").checked = true;
+  }
+  else if(list.filter(_=>_.checked).length === 0)
+  {
+    document.getElementById("multi-req-prop-checkall").indeterminate  = false;
+    document.getElementById("multi-req-prop-checkall").checked = false;
+  }
+  else
+  {
+    document.getElementById("multi-req-prop-checkall").indeterminate  = true;
+    document.getElementById("multi-req-prop-checkall").checked = false;
+  }
 }
   </script>
