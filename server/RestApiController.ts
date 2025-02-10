@@ -10,6 +10,9 @@ import admZip from 'adm-zip';
 import { EchoNetLiteController } from "./EchoNetLiteController";
 import { Logger } from "./Logger";
 import path from "path";
+import crypto from "crypto";
+import { RestApiOpenApiConverter } from "./RestApiOpenApiConverter";
+import swaggerUi from 'swagger-ui-express';
 
 interface ViewProperty{
   propertyName:string;
@@ -83,11 +86,19 @@ export class RestApiController
     app.put("/elapi/v1/devices/:deviceId/properties/:propertyName/request", this.requestProperty);
 
     app.get("/api/status", this.getStatus);
-    app.get("/api/events", this.getEventsWithLongPolling);
+    app.get("/api/events", this.getEventsWithLongPolling);  // OBSOLETE
     app.get("/api/logs", this.getLogs);
+    
+    app.get("/downloadlogs/zip", this.downloadLogs);
 
-    app.get("/downloadlogs/zip", this.downloadLogs)
+    app.get("/openapi.json", this.getOpenApiJson);
 
+    app.get("/api/serverevents", this.getServerEvents);
+
+    // openapi-ui
+    const swaggerUiOptions:swaggerUi.SwaggerOptions = {customfavIcon:"/favicon.ico", swaggerOptions:{url:"/openapi.json"}};
+    app.use('/api-docs', swaggerUi.serveFiles({}, swaggerUiOptions), swaggerUi.setup({}, swaggerUiOptions));
+  
     const server = app.listen(this.port, this.hostName, ():void => {
       Logger.info("[RESTAPI]", `Start listening to web server. ${this.hostName}:${this.port}`);
     });
@@ -372,7 +383,7 @@ export class RestApiController
       {
         id:"v1",
         status: "CURRENT",
-        updated: "2021-09-21T00:00:00+09:00"
+        updated: "2025-01-05T16:00:00+09:00"
       }
     ]
     res.json(result);
@@ -441,7 +452,7 @@ export class RestApiController
       ip: foundDevice.ip,
       mqttTopics: `${this.mqttBaseTopic}/${foundDevice.id}`,
       propertyValues: Device.ToProperiesObject(foundDevice.propertiesValue),
-      values: foundDevice.propertiesValue
+      values: {}
     };
     result.properties = foundDevice.properties.map((_):ApiDeviceProperty =>({
       epc: _.epc,
@@ -458,6 +469,16 @@ export class RestApiController
       mqttTopics: `${this.mqttBaseTopic}/${foundDevice.id}/properties/${_.name}`,
       name: _.name
     }));
+    for(const propertyName in foundDevice.propertiesValue)
+    {
+      result.values[propertyName] = {
+        name: propertyName,
+        value: foundDevice.propertiesValue[propertyName].value,
+        updated: foundDevice.propertiesValue[propertyName].updated
+      };
+    }
+
+    
     res.json(result);
     
   }
@@ -703,5 +724,42 @@ export class RestApiController
       //Logger.write(`no  EVENT:${_.lastEventId}`)
     });
     this.waitingResponseList = [];
+  }
+
+  private getServerEvents = (
+    req: express.Request,
+    res: express.Response
+  ): void => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    const eventReceiverId = crypto.randomUUID();
+    this.eventRepository.addEventCallback(eventReceiverId, 
+      async (eventName:string, deviceId:string):Promise<void>=>{
+        try
+        {
+          res.write(`event: ${eventName}\n`);
+          res.write(`data: ${JSON.stringify({event:eventName, id:deviceId})}\n\n`);
+        }
+        catch(e)
+        {
+          this.eventRepository.removeEventCallback(eventReceiverId);
+        }
+    });
+
+    // クライアントが接続を閉じた場合
+    req.on('close', () => {
+      this.eventRepository.removeEventCallback(eventReceiverId);
+    });
+  }
+
+  private getOpenApiJson = (
+    req: express.Request,
+    res: express.Response
+  ): void => {
+    var converter = new RestApiOpenApiConverter();
+    const jsonObj = converter.createOpenApiJson(this.deviceStore);
+    res.send(jsonObj);
   }
 }

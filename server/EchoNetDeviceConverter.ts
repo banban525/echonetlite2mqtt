@@ -74,6 +74,8 @@ export default class EchoNetDeviceConverter
     if(deviceType === undefined)
     {
       Logger.info("", `ERROR class not found. EOJ=${eoj}`);
+      deviceType = this.echoNetPropertyConverter.createDummyDevice(eoj);
+
       if(this.unknownAsError)
       {
         return {
@@ -84,6 +86,7 @@ export default class EchoNetDeviceConverter
           internalId,
           properties:[],
           deviceType:"unknown",
+          schema:deviceType,
           descriptions: {
             ja:"不明",
             en:"unknown"
@@ -96,7 +99,6 @@ export default class EchoNetDeviceConverter
           propertiesValue:{}
         };
       }
-      deviceType = this.echoNetPropertyConverter.createDummyDevice(eoj);
     }
   
     const set = new Set([...getPropertyNoList, ...setPropertyNoList, ...notifyPropertyNoList]);
@@ -214,6 +216,7 @@ export default class EchoNetDeviceConverter
       eoj,
       internalId,
       deviceType: deviceType.shortName,
+      schema: deviceType,
       descriptions: deviceType.className ?? {ja:"",en:""},
       properties,
       protocol:{

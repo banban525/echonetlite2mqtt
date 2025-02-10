@@ -1,4 +1,4 @@
-import { ElPropertyDescription } from "./MraTypes";
+import { ElDeviceDescription, ElPropertyDescription } from "./MraTypes";
 
 export interface Manufacturer{
   code: string;
@@ -21,6 +21,7 @@ export interface Device{
   name:string;
   ip:string;
   deviceType:string;
+  schema:ElDeviceDescription,
   eoj:string;
   internalId:string;
   descriptions:{

@@ -30,6 +30,25 @@ export class EventRepository
       id: this.lastId ,
       event: event
     });
+
+    if(event === "SYSTEM")
+    {
+      Object.keys(this.callbackMap).forEach((key) => {
+        this.callbackMap[key]("systemUpdated", "");
+      });
+    }
+    else if(event === "LOG")
+    {
+      Object.keys(this.callbackMap).forEach((key) => {
+        this.callbackMap[key]("logUpdated", "");
+      });
+    }
+    else
+    {
+      Object.keys(this.callbackMap).forEach((key) => {
+        this.callbackMap[key]("deviceUpdated", event);
+      });
+    }
   }
 
   existsNewEvents = (lastId:string):boolean =>{
@@ -50,6 +69,18 @@ export class EventRepository
       events: uniqueEvents
     };
     
+  }
+
+  callbackMap:{[key:string]:(eventName:string, deviceId:string)=>Promise<void>} = {};
+
+  addEventCallback = (eventReceiverId:string, 
+    callback:(eventName:string, deviceId:string)=>Promise<void>):void => {
+    
+      this.callbackMap[eventReceiverId] = callback;
+  }
+
+  removeEventCallback = (eventReceiverId:string):void => {
+    delete this.callbackMap[eventReceiverId];
   }
 }
 

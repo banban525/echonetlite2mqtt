@@ -1,6 +1,7 @@
 import { ElArrayType, ElBitmapType, ElDataType, ElDateTimeType, ElDateType, ElDefinitions, ElDeviceDescription, ElLevelType, ElMixedOneOfType, ElNumberType, ElNumericValueType, ElObjectType, ElPropertyDescription, ElRawType, ElStateType, ElTimeType } from "./MraTypes";
 import path from "path";
 import fs from "fs";
+import { OpenAPIV3 } from "openapi-types";
 
 // https://stackoverflow.com/questions/13468474/javascript-convert-a-hex-signed-integer-to-a-javascript-value
 function hexToSignedInt(hex:string):number 
@@ -1149,7 +1150,6 @@ export class EchoNetPropertyConverter
     }
     return 0;
   }
-  
 }
 
 
@@ -1224,5 +1224,172 @@ class EchoNetDefinitionRepository
     EchoNetDefinitionRepository.deviceDescriptionCache[eojClass]=device;
 
     return device;
+  }
+}
+
+export class EchoNetOpenApiConverter
+{
+  
+  public toOpenApiSchema(dataType:ElDataType):OpenAPIV3.SchemaObject
+  {
+    if("type" in dataType)
+    {
+      switch(dataType.type)
+      {
+        case "array":
+          return this.ArrayToOpenApiSchema(dataType);
+        case "bitmap":
+          return this.BitmapToOpenApiSchema(dataType);
+        case "date":
+          return this.DateToOpenApiSchema(dataType);
+        case "date-time":
+          return this.DateTimeToOpenApiSchema(dataType);
+        case "level":
+          return this.LevelToOpenApiSchema(dataType);
+        case "number":
+          return this.NumberToOpenApiSchema(dataType);
+        case "numericValue":
+          return this.NumericValueToOpenApiSchema(dataType);
+        case "object":
+          return this.ObjectToOpenApiSchema(dataType);
+        case "raw":
+          return this.RawToOpenApiSchema(dataType);
+        case "state":
+          return this.StateToOpenApiSchema(dataType);
+        case "time":
+          return this.TimeToOpenApiSchema(dataType);
+        default:
+          throw Error("Unexpected");
+      }
+    }
+    else if("$ref" in dataType)
+    {
+      throw Error("Unexpected");
+    }
+    else if("oneOf" in dataType)
+    {
+      const result:OpenAPIV3.SchemaObject = {oneOf:[]};
+      for(const item of dataType.oneOf)
+      {
+        result.oneOf?.push(this.toOpenApiSchema(item));
+      }
+      return result;
+    }    
+    throw Error("Unexpected");  
+  }
+  ArrayToOpenApiSchema(dataType: ElArrayType): OpenAPIV3.ArraySchemaObject {
+    return {
+      type: "array",
+      items: this.toOpenApiSchema(dataType.items),
+      maxItems: dataType.maxItems,
+      minItems: dataType.minItems,
+    };
+  }
+  BitmapToOpenApiSchema(dataType: ElBitmapType): OpenAPIV3.SchemaObject {
+    const properties:{[key:string]:OpenAPIV3.SchemaObject} = {};
+    for(const prop of dataType.bitmaps)
+    {
+      properties[prop.name] = this.toOpenApiSchema(prop.value);
+    }
+    return {
+      type: "object",
+      properties,
+    };
+  }
+  DateToOpenApiSchema(dataType: ElDateType): OpenAPIV3.SchemaObject {
+    return {
+      type: "string",
+      format: "date",
+    };
+  }
+  DateTimeToOpenApiSchema(dataType: ElDateTimeType): OpenAPIV3.SchemaObject {
+    return {
+      type: "string"
+    };
+  }
+  LevelToOpenApiSchema(dataType: ElLevelType): OpenAPIV3.SchemaObject {
+    return {
+      type: "integer",
+      minimum: 1,
+      maximum: dataType.maximum,
+    }
+  }
+  NumberToOpenApiSchema(dataType: ElNumberType): OpenAPIV3.SchemaObject {
+    let result:OpenAPIV3.SchemaObject = {
+      type: "number",
+    };
+    
+    if(dataType.minimum !== undefined)
+    {
+      result.minimum = dataType.minimum;
+    }
+    if(dataType.maximum !== undefined)
+    {
+      result.maximum = dataType.maximum;
+    }
+    if(dataType.multiple !== undefined)
+    {
+      result.multipleOf = dataType.multiple;
+    }
+    if(dataType.enum !== undefined)
+    {
+      result.enum = dataType.enum;
+    }
+    if(dataType.overflowCode===false && dataType.underflowCode===false)
+    {
+      return result;
+    }
+    const underflowOverflowSchema:OpenAPIV3.SchemaObject = {type:"string", enum:[]};
+    if(dataType.underflowCode)
+    {
+      underflowOverflowSchema.enum?.push("underflow");
+    }
+    if(dataType.overflowCode)
+    {
+      underflowOverflowSchema.enum?.push("overflow");
+    }
+    return {
+      oneOf: [
+        result,
+        underflowOverflowSchema
+      ]
+    }
+  }
+  NumericValueToOpenApiSchema(dataType: ElNumericValueType): OpenAPIV3.SchemaObject {
+    return {
+      type: "number",
+      enum: dataType.enum.map(_=>_.numericValue),
+    }
+  }
+  ObjectToOpenApiSchema(dataType: ElObjectType): OpenAPIV3.SchemaObject {
+    const properties:{[key:string]:OpenAPIV3.SchemaObject} = {};
+    for(const prop of dataType.properties)
+    {
+      properties[prop.shortName] = this.toOpenApiSchema(prop.element);
+    }
+    return {
+      type: "object",
+      properties,
+    };
+  }
+  RawToOpenApiSchema(dataType: ElRawType): OpenAPIV3.SchemaObject {
+    return {
+      type: "string",
+      format: "hex",
+      minLength: dataType.minSize * 2,
+      maxLength: dataType.maxSize * 2,
+    }
+  }
+  StateToOpenApiSchema(dataType: ElStateType): OpenAPIV3.SchemaObject {
+    return {
+      type: "string",
+      enum: dataType.enum.map(_=>_.name),
+    }
+  }
+  TimeToOpenApiSchema(dataType: ElTimeType): OpenAPIV3.SchemaObject {
+    return {
+      type: "string",
+      format: "time",
+    };
   }
 }

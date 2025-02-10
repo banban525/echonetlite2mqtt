@@ -181,7 +181,25 @@
 
   <script type="text/javascript">
 
+    
     $(function() {
+
+      const eventSource = new EventSource('/api/serverevents');
+      eventSource.addEventListener('systemUpdated', (event) => {
+        updateSystem();
+      });
+
+      eventSource.addEventListener('deviceUpdated', (event) => {
+        const id = JSON.parse(event.data).id;
+        if(id === "<%= device.id %>")
+        {
+          updateProperties();
+        }
+        else if(id === "<%= device.name %>")
+        {
+          updateProperties();
+        }
+      });
   
       $("#rootmenu-devices").addClass("active");
 
@@ -219,43 +237,13 @@
               $(`#prop-updated-${propName}`).text(utcTextToLocalText(propValue.updated));
             }
         });
-
-        
       }
-
-  
-      let eventId="";
-      function getEvents()
+      
+      const propertyDateList = '<%-  JSON.stringify(device.properties.map(prop=>({name:prop.name, updated:device.propertiesValue[prop.name].updated}))) %>';
+      for(const propDate of JSON.parse(propertyDateList))
       {
-        $.ajax({
-          type: "GET",
-          url: `/api/events?lastEvent=${eventId}`,
-          dataType : "json"
-        }).done((data)=>{
-          eventId = data.id;
-  
-          
-          for(const eventType of data.events)
-          {
-            if(eventType === "<%= device.id %>")
-            {
-              updateProperties();
-            }
-            else if(eventType === "<%= device.name %>")
-            {
-              updateProperties();
-            }
-          }
-  
-          setTimeout(getEvents, 500);
-        });
+        $(`#prop-updated-${propDate.name}`).text(utcTextToLocalText(propDate.updated));
       }
-  
-      getEvents();
-
-// <% for(const prop of device.properties) { %>
-      $(`#prop-updated-<%= prop.name %>`).text(utcTextToLocalText("<%= device.propertiesValue[prop.name].updated %>"));
-// <% } %>
 
     });
 
