@@ -75,6 +75,18 @@ const defaultCompose : ComposeSpecification = {
   
   
   test("check", async ():Promise<void> => {
+
+    try
+    {
+      await execFile('docker', ["-v"]);
+    }
+    catch(e)
+    {
+      console.log("Docker is not installed. Skip this test."); 
+      return;
+    }
+  
+
     const yml = yaml.dump(defaultCompose);
     fs.writeFileSync(path.resolve(__dirname, "../compose.yml"), yml, {encoding:"utf-8"});
     await execFile('docker', ['compose', "-f", path.resolve(__dirname, "../compose.yml"), 'up', "-d"]);
