@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "ts-node",
-            "type": "pwa-node",
+            "type": "node",
             "request": "launch",
             "args": [
                 "${relativeFile}"
@@ -17,7 +17,6 @@
                 "ts-node/register"
             ],
             "cwd": "${workspaceRoot}",
-            "protocol": "inspector",
             "internalConsoleOptions": "openOnSessionStart"
         }
     ]
