@@ -1,4 +1,4 @@
-import { AliasOption, Device, DeviceAlias, DeviceId, Manufacturer, Property, PropertyValue } from "./Property";
+import { AliasOption, Device, DeviceAlias, DeviceId, Manufacturer, Property, PropertyValue, Protocol } from "./Property";
 import { EchoNetPropertyConverter } from "./EchoNetPropertyConverter";
 import { getUtcNowDateTimeText } from "./datetimeLib";
 import { RawDataSet } from "./EchoNetCommunicator";
@@ -30,6 +30,9 @@ export default class EchoNetDeviceConverter
     {
       return undefined;
     }
+
+    const protocol = this.echoNetPropertyConverter.getProtocol(echonetLiteFacilities.getRawData(ip, eoj, "82")??"00000000");
+
     const setPropertyNoList:string[] = [];
     const setPropertyListText = echonetLiteFacilities.getRawData(ip, eoj,"9e") ?? "";
     for(let i = 2; i < setPropertyListText.length; i+=2)
@@ -53,6 +56,7 @@ export default class EchoNetDeviceConverter
       setPropertyNoList, 
       notifyPropertyNoList, 
       manufacturer,
+      protocol,
       echonetLiteFacilities);
     return newDevice;
   }
@@ -67,6 +71,7 @@ export default class EchoNetDeviceConverter
       setPropertyNoList:string[], 
       notifyPropertyNoList:string[],
       manufacturer:Manufacturer, 
+      protocol:Protocol,
       echonetLiteFacilities:RawDataSet):Device =>
   {
     const eojClass = "0x" + eoj.substring(0, 4).toUpperCase();
@@ -91,10 +96,7 @@ export default class EchoNetDeviceConverter
             ja:"不明",
             en:"unknown"
           },
-          protocol:{
-            type:"ECHONET_Lite v1.13",
-            version: "Rel.P"
-          },
+          protocol,
           manufacturer,
           propertiesValue:{}
         };
@@ -219,10 +221,7 @@ export default class EchoNetDeviceConverter
       schema: deviceType,
       descriptions: deviceType.className ?? {ja:"",en:""},
       properties,
-      protocol:{
-        type:"ECHONET_Lite v1.13",
-        version: "Rel.P"
-      },
+      protocol:protocol,
       manufacturer,
       propertiesValue
     }
@@ -247,18 +246,12 @@ export default class EchoNetDeviceConverter
   }
     
   private getManufacturer = (ip:string, eoj:string, rawData:string|undefined):Manufacturer|undefined => {
-    const manufacturerCode = rawData;
-    if(manufacturerCode===undefined)
+
+    if(rawData === undefined)
     {
       return undefined;
     }
-    return {
-      code:manufacturerCode,
-      descriptions:{
-        en:"",
-        ja:""
-      }
-    }
+    return this.echoNetPropertyConverter.getManufacturer(rawData);
   }
     
     

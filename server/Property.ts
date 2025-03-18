@@ -8,6 +8,11 @@ export interface Manufacturer{
   }
 }
 
+export interface Protocol{
+  type:string;
+  version:string;
+}
+
 export interface PropertyValue
 {
   name:string;
@@ -29,10 +34,7 @@ export interface Device{
     en:string;
   };
   properties:Property[];
-  protocol: {
-    type:string;
-    version:string;
-  };
+  protocol: Protocol;
   manufacturer:Manufacturer;
   propertiesValue: {[key:string]:PropertyValue};
 }
