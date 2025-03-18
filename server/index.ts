@@ -12,6 +12,7 @@ import { Logger } from "./Logger";
 import path from "path";
 import os from "os";
 import ip from "ip";
+import { ElwaController } from "./ElwaController";
 
 interface InputParameters{
   echonetTargetNetwork:string;
@@ -32,7 +33,20 @@ interface InputParameters{
   mqttKeyFile:string;
   version:string;
   buildInfo:string;
+  elwaOptions: ElwaParameters
 };
+
+interface ElwaParameters
+{
+  mqttBroker?:string;
+  mqttPort?:number;
+  mqttOptionFile?:string;
+  mqttCaFile?:string;
+  mqttCertFile?:string;
+  mqttKeyFile?:string;
+  clientToken?:string;
+  commandTimeout?:number;
+}
 
 let echonetTargetNetwork = "";
 let echonetAliasFile="";
@@ -50,6 +64,7 @@ let mqttBaseTopic = "echonetlite2mqtt/elapi/v2/devices";
 let mqttCaFile = "";
 let mqttCertFile = "";
 let mqttKeyFile = "";
+let elwaParameters:ElwaParameters = {};
 
 if (
   "ECHONET_TARGET_NETWORK" in process.env &&
@@ -158,6 +173,55 @@ if("MQTT_KEY_FILE" in process.env && process.env.MQTT_KEY_FILE !== undefined)
   mqttKeyFile = process.env.MQTT_KEY_FILE.replace(/^"/g, "").replace(/"$/g, "");
 }
 
+if("ELWA_MQTT_BROKER" in process.env && process.env.ELWA_MQTT_BROKER !== undefined)
+{
+  elwaParameters.mqttBroker = process.env.ELWA_MQTT_BROKER.replace(/^"/g, "").replace(/"$/g, "");
+}
+
+if("ELWA_MQTT_PORT" in process.env && process.env.ELWA_MQTT_PORT !== undefined)
+{
+  const tempMqttPort = process.env.ELWA_MQTT_PORT.replace(/^"/g, "").replace(/"$/g, "");
+  const tempMqttPortNum = Number(tempMqttPort);
+  if(isNaN(tempMqttPortNum) === false)
+  {
+    elwaParameters.mqttPort = tempMqttPortNum;
+  }
+}
+
+if("ELWA_MQTT_OPTION_FILE" in process.env && process.env.ELWA_MQTT_OPTION_FILE !== undefined)
+{
+  elwaParameters.mqttOptionFile = process.env.ELWA_MQTT_OPTION_FILE.replace(/^"/g, "").replace(/"$/g, "");
+}
+
+if("MQTT_CA_FILE" in process.env && process.env.MQTT_CA_FILE !== undefined)
+{
+  elwaParameters.mqttCaFile = process.env.MQTT_CA_FILE.replace(/^"/g, "").replace(/"$/g, "");
+}
+
+if("MQTT_CERT_FILE" in process.env && process.env.MQTT_CERT_FILE !== undefined)
+{
+  elwaParameters.mqttCertFile = process.env.MQTT_CERT_FILE.replace(/^"/g, "").replace(/"$/g, "");
+}
+
+if("MQTT_KEY_FILE" in process.env && process.env.MQTT_KEY_FILE !== undefined)
+{
+  elwaParameters.mqttKeyFile = process.env.MQTT_KEY_FILE.replace(/^"/g, "").replace(/"$/g, "");
+}
+
+if("ELWA_CLIENT_TOKEN" in process.env && process.env.ELWA_CLIENT_TOKEN !== undefined)
+{
+  elwaParameters.clientToken = process.env.ELWA_CLIENT_TOKEN.replace(/^"/g, "").replace(/"$/g, "");
+}
+
+if("ELWA_COMMAND_TIMEOUT" in process.env && process.env.ELWA_COMMAND_TIMEOUT !== undefined)
+{
+  const tempNo = Number(process.env.ELWA_COMMAND_TIMEOUT.replace(/^"/g, "").replace(/"$/g, ""));
+  if(isNaN(tempNo)===false)
+  {
+    elwaParameters.commandTimeout = tempNo;
+  }
+}
+
 if("ECHONET_INTERVAL_TO_GET_PROPERTIES" in process.env && process.env.ECHONET_INTERVAL_TO_GET_PROPERTIES !== undefined)
 {
   Logger.warn("", `The ECHONET_ALT_MULTI_NIC_MODE option has been deprecated. This option is ignored.`);
@@ -259,6 +323,47 @@ for(var i = 2;i < process.argv.length; i++){
     mqttKeyFile = value.replace(/^"/g, "").replace(/"$/g, "");
   }
 
+  if(name === "--ElwaMqttBroker".toLowerCase())
+  {
+    elwaParameters.mqttBroker = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--ElwaMqttPort".toLowerCase())
+  {
+    const tempNo = Number(value.replace(/^"/g, "").replace(/"$/g, ""));
+    if(value!=="" && isNaN(tempNo)===false)
+    {
+      elwaParameters.mqttPort = tempNo;
+    }
+  }
+  if(name === "--ElwaMqttOptionFile".toLowerCase())
+  {
+    elwaParameters.mqttOptionFile = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--ElwaMqttCaFile".toLowerCase())
+  {
+    elwaParameters.mqttCaFile = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--ElwaMqttCertFile".toLowerCase())
+  {
+    elwaParameters.mqttCertFile = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--ElwaMqttKeyFile".toLowerCase())
+  {
+    elwaParameters.mqttKeyFile = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--ElwaClientToken".toLowerCase())
+  {
+    elwaParameters.clientToken = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--ElwaCommandTimeout".toLowerCase())
+  {
+    const tempNo = Number(value.replace(/^"/g, "").replace(/"$/g, ""));
+    if(value!=="" && isNaN(tempNo)===false)
+    {
+      elwaParameters.commandTimeout = tempNo;
+    }
+  }
+
   if(name === "--echonetIntervalToGetProperties".toLowerCase())
   {
     Logger.warn("", `The echonetIntervalToGetProperties option has been deprecated. This option is ignored.`);
@@ -301,6 +406,17 @@ logger.output(`mqttBaseTopic=${mqttBaseTopic}`);
 logger.output(`mqttCaFile=${mqttCaFile}`);
 logger.output(`mqttCertFile=${mqttCertFile}`);
 logger.output(`mqttKeyFile=${mqttKeyFile}`);
+if(elwaParameters.mqttBroker !== undefined && elwaParameters.clientToken !== undefined)
+{
+  logger.output(`elwaMqttBroker=${elwaParameters.mqttBroker}`);
+  logger.output(`elwaMqttPort=${elwaParameters.mqttPort}`);
+  logger.output(`elwaMqttOptionFile=${elwaParameters.mqttOptionFile}`);
+  logger.output(`elwaMqttCaFile=${elwaParameters.mqttCaFile}`);
+  logger.output(`elwaMqttCertFile=${elwaParameters.mqttCertFile}`);
+  logger.output(`elwaMqttKeyFile=${elwaParameters.mqttKeyFile}`);
+  logger.output(`elwaClientToken=${elwaParameters.clientToken}`);
+  logger.output(`elwaCommandTimeout=${elwaParameters.commandTimeout}`);
+}
 logger.output(``);
 
 const inputParameters:InputParameters =
@@ -322,12 +438,17 @@ const inputParameters:InputParameters =
   mqttCertFile,
   mqttKeyFile,
   version:`${process.env.npm_package_name} ver.${process.env.npm_package_version}`,
-  buildInfo:buildInfo
+  buildInfo:buildInfo,
+  elwaOptions:elwaParameters
 };
 
 
 let mqttOption:mqtt.IClientOptions = {
   port:1883
+};
+
+let elwaMqttOption:mqtt.IClientOptions ={
+  port: elwaParameters.mqttPort !== undefined ? elwaParameters.mqttPort : 1883
 };
 
 if(mqttOptionFile !== "" && fs.existsSync(mqttOptionFile))
@@ -351,6 +472,32 @@ if(mqttKeyFile !== "" && fs.existsSync(mqttKeyFile))
   mqttOption.key = fs.readFileSync(mqttKeyFile, {encoding:"utf-8"});
   logger.output(`load ${mqttKeyFile}`)
 }
+
+
+if(elwaParameters.mqttOptionFile !== undefined && fs.existsSync(elwaParameters.mqttOptionFile))
+{
+  const mqttOptionText = fs.readFileSync(elwaParameters.mqttOptionFile, {encoding: "utf-8"});
+  elwaMqttOption = JSON.parse(mqttOptionText) as mqtt.IClientOptions;
+}
+
+if(elwaParameters.mqttCaFile !== undefined && fs.existsSync(elwaParameters.mqttCaFile))
+{
+  elwaMqttOption.ca = fs.readFileSync(elwaParameters.mqttCaFile, {encoding:"utf-8"});
+  logger.output(`load ${elwaParameters.mqttCaFile}`)
+}
+if(elwaParameters.mqttCertFile !== undefined && fs.existsSync(elwaParameters.mqttCertFile))
+{
+  elwaMqttOption.cert = fs.readFileSync(elwaParameters.mqttCertFile, {encoding:"utf-8"});
+  logger.output(`load ${elwaParameters.mqttCertFile}`)
+}
+if(elwaParameters.mqttKeyFile !== undefined && fs.existsSync(elwaParameters.mqttKeyFile))
+{
+  elwaMqttOption.key = fs.readFileSync(elwaParameters.mqttKeyFile, {encoding:"utf-8"});
+  logger.output(`load ${elwaParameters.mqttKeyFile}`)
+}
+
+  
+
 
 const aliasOption: AliasOption = AliasOption.empty;
 
@@ -542,6 +689,9 @@ echoNetListController.addDeviceDetectedEvent((device:Device)=>{
   mqttController.publishDevices();
   mqttController.publishDevice(device.id);
   mqttController.publishDevicePropertiesAndAllProperty(device.id);
+
+  elwaController.registerDevice(device);
+
   eventRepository.newEvent(`${device.id}`);
   eventRepository.newEvent(`SYSTEM`);
   eventRepository.newEvent(`LOG`);
@@ -578,6 +728,9 @@ echoNetListController.addPropertyChnagedEvent((ip:string, eoj:string, propertyNa
   deviceStore.changeProperty(device.id, propertyName, newValue);
   mqttController.publishDeviceProperties(device.id);
   mqttController.publishDeviceProperty(device.id, propertyName);
+
+  elwaController.publishDeviceProperty(device.id, propertyName);
+
   eventRepository.newEvent(`${device.id}`);
   if(JSON.stringify(oldValue) !== JSON.stringify(newValue))
   {
@@ -680,8 +833,47 @@ mqttController.addConnectionStateChangedEvent(():void=>{
   restApiController.setNewEvent();
 });
 
+
+
+const elwaController = new ElwaController(deviceStore, 
+  elwaParameters.mqttBroker??"", elwaMqttOption, elwaParameters.clientToken??"", elwaParameters.commandTimeout??10*1000);
+elwaController.addConnectionStateChangedEvent(():void=>{
+  systemStatusRepository.SystemStatus.elwaState = elwaController.ConnectionState;
+  logger.output(`[ELWA] ${elwaController.ConnectionState}`);
+  eventRepository.newEvent(`SYSTEM`);
+  eventRepository.newEvent(`LOG`);
+  restApiController.setNewEvent();
+});
+elwaController.addPropertyChnagedEvent(async (deviceId:string, propertyName:string, value:any):Promise<void>=>{
+  const device = deviceStore.getFromNameOrId(deviceId);
+  if(device === undefined){
+    logger.output('[ELWA] device not found : ' + deviceId)
+    return;
+  }
+  if((propertyName in device.propertiesValue)===false)
+  {
+    logger.output('[ELWA] property not found : ' + propertyName)
+    return;
+  }
+
+  const deviceNameText = device.name.padEnd(41, " ");
+  const valueText = typeof(value) === "object" ? JSON.stringify(value) : value.toString();
+  logger.output(`[ELWA]        prop changed: ${deviceNameText} ${propertyName} ${valueText}`);
+  eventRepository.newEvent(`LOG`);
+  
+  await echoNetListController.setDeviceProperty(
+    {id: device.id, ip: device.ip, eoj:device.eoj, internalId:device.internalId}, propertyName, value);
+
+});
+
+
 restApiController.start();
 mqttController.start();
+
+if(elwaParameters.mqttBroker !== undefined && elwaParameters.clientToken !== undefined)
+{
+  elwaController.start();
+}
 if(mqttBroker === "")
 {
   logger.output(`[MQTT] mqttBroker is not configured.`);

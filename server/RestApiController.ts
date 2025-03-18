@@ -625,6 +625,7 @@ export class RestApiController
   ): void => {
     const result:ServerStatus = {
       mqttState: this.systemStatusRepository.SystemStatus.mqttState,
+      elwaState: this.systemStatusRepository.SystemStatus.elwaState,
       systemVersion: process.env.npm_package_version ?? "",
       devices:[]
     };

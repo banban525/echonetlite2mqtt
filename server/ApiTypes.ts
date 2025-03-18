@@ -4,6 +4,7 @@ import { ElPropertyDescription } from "./MraTypes";
 
 export interface ServerStatus {
   mqttState: "Connected" | "Disconnected" | "NotConfigure";
+  elwaState: "Connected" | "Disconnected" | "NotConfigure";
   systemVersion: string,
   devices: ApiDeviceSummary[];
 }
@@ -11,6 +12,7 @@ export interface ServerStatus {
 export class ServerStatus{
   static empty:ServerStatus = {
     mqttState: "Disconnected",
+    elwaState: "NotConfigure",
     systemVersion: "0.0.0",
     devices:[]
   }
