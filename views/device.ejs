@@ -212,7 +212,17 @@
           }).done((data)=>{
   
             $("#mqtt-state").val(data.mqttState);
-            $("#footer-version").text(data.systemVersion)
+            $("#footer-version").text(data.systemVersion);
+            if(data.elwaState === "NotConfigure")
+            {
+              $("#elwa-section").hide();
+            }
+            else
+            {
+              $("#elwa-section").show();
+              $("#elwa-section").addClass("d-flex");
+              $("#elwa-state").val(data.elwaState);
+            }
         });
       }
       updateSystem();

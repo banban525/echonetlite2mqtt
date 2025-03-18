@@ -41,6 +41,16 @@
           }).done((data)=>{
             $("#footer-version").text(data.systemVersion)
             $("#mqtt-state").val(data.mqttState);
+            if(data.elwaState === "NotConfigure")
+            {
+              $("#elwa-section").hide();
+            }
+            else
+            {
+              $("#elwa-section").show();
+              $("#elwa-section").addClass("d-flex");
+              $("#elwa-state").val(data.elwaState);
+            }
         });
       }
       updateSystem();

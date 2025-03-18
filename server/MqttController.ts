@@ -81,7 +81,7 @@ export class MqttController
           
           //データのパース
           const bodyText = payload.toString();
-          const newValue = this.parseValueFromText(bodyText, property.schema.data);
+          const newValue = MqttController.parseValueFromText(bodyText, property.schema.data);
 
           await this.firePropertyChnagedEvent(deviceId, propertyName, newValue, HoldOption.empty);
         }
@@ -170,7 +170,7 @@ export class MqttController
               return;
             }
 
-            const newValue = this.parseValueFromText(propertyBodyText, property.schema.data);
+            const newValue = MqttController.parseValueFromText(propertyBodyText, property.schema.data);
             await this.firePropertyChnagedEvent(deviceId, propertyName, newValue, holdOption);
           }
         }
@@ -390,7 +390,7 @@ export class MqttController
       // error
       return ;
     }
-    const valueText = this.getValueText(foundDevice.propertiesValue[propertyName].value, foundDevice.propertiesValue[propertyName].deviceProperty.schema.data);
+    const valueText = MqttController.getValueText(foundDevice.propertiesValue[propertyName].value, foundDevice.propertiesValue[propertyName].deviceProperty.schema.data);
     this.mqttClient.publish(`${this.baseTopic}/${foundDevice.name}/properties/${propertyName}`, valueText, {retain:true});
     if(foundDevice.id !== foundDevice.name)
     {
@@ -398,7 +398,7 @@ export class MqttController
     }
   }
 
-  private getValueText = (value: unknown, dataType:ElDataType): string => {
+  public static getValueText = (value: unknown, dataType:ElDataType): string => {
     if(value === undefined){
       return "undefined"
     }
@@ -471,7 +471,7 @@ export class MqttController
     }
   };
 
-  private parseValueFromText = (valueText: string, dataType:ElDataType): any => {
+  public static parseValueFromText = (valueText: string, dataType:ElDataType): any => {
     
     if("type" in dataType)
     {
