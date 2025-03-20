@@ -5,7 +5,7 @@ slug: "echonetlite2mqtt"
 arch:
   - aarch64
   - amd64
-image: ghcr.io/yymyo1/echonetlite2mqtt-addon/{arch}
+image: _____APP_IMAGE_____
 init: false
 host_network: true
 services:

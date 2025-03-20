@@ -24,7 +24,8 @@ jobs:
         run: |
           rsync -a . ./ha_addon/src/ --exclude './ha_addon/'
           app_version=$(cat ./ha_addon/src/package.json | jq -r '.version')
-          sed -i -e "s/_____APP_VERSION_____/${app_version}/" ./ha_addon/config.yaml
+          yq -i ".version = \"${app_version}\"" ./ha_addon/config.yaml
+          yq -i ".image = \"ghcr.io/${{ github.actor }}/echonetlite2mqtt-addon/{arch}\"" ./ha_addon/config.yaml
           echo "app_version=${app_version}" >> "$GITHUB_OUTPUT" 
       - name: Publish
         uses: home-assistant/builder@master
