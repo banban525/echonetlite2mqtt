@@ -2,7 +2,7 @@
     <div class="row">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/">Devices</a></li>
+          <li class="breadcrumb-item"><a href="<%= root %>">Devices</a></li>
           <li class="breadcrumb-item active" aria-current="page"><%= device.name %></li>
         </ol>
       </nav>
@@ -184,7 +184,7 @@
     
     $(function() {
 
-      const eventSource = new EventSource('/api/serverevents');
+      const eventSource = new EventSource('<%= root %>/api/serverevents');
       eventSource.addEventListener('systemUpdated', (event) => {
         updateSystem();
       });
@@ -207,7 +207,7 @@
       {
         $.ajax({
             type: "GET",
-            url: "/api/status",
+            url: "<%= root %>/api/status",
             dataType : "json"
           }).done((data)=>{
   
@@ -221,7 +221,7 @@
       {
         $.ajax({
             type: "GET",
-            url: "/elapi/v1/devices/<%= device.name %>",
+            url: "<%= root %>/elapi/v1/devices/<%= device.name %>",
             dataType : "json"
           }).done((data)=>{
   
