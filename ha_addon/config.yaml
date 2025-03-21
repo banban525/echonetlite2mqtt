@@ -1,0 +1,45 @@
+name: "ECHONETLite2MQTT"
+description: "ECHONET Lite to MQTT bridge."
+version: "_____APP_VERSION_____"
+slug: "echonetlite2mqtt"
+arch:
+  - aarch64
+  - amd64
+image: _____APP_IMAGE_____
+init: false
+host_network: true
+services:
+  - mqtt:need
+ingress: true
+ingress_port: 8099
+ports:
+  8099/tcp: 8099
+ports_description:
+  8099/tcp: "Frontend tcp-listen port"
+map:
+  - path: "/config"
+    type: homeassistant_config
+    read_only: true
+options:
+  mqtt: {}
+  REST_API_PORT: 8099
+schema:
+  mqtt:
+    host: str?
+    port: int?
+    username: str?
+    password: str?
+    ssl: bool?
+  MQTT_CA_FILE: str?
+  MQTT_CERT_FILE: str?
+  MQTT_KEY_FILE: str?
+  MQTT_BASE_TOPIC: str?
+  REST_API_HOST: str?
+  REST_API_PORT: int?
+  ECHONET_TARGET_NETWORK: str?
+  ECHONET_DEVICE_IP_LIST: str?
+  ECHONET_COMMAND_TIMEOUT: int?
+  ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY: str?
+  ECHONET_ALIAS_FILE: str?
+  ECHONET_LEGACY_MULTI_NIC_MODE: str?
+  ECHONET_UNKNOWN_AS_ERROR: str?

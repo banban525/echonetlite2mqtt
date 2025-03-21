@@ -15,7 +15,7 @@
   </div>
 </div>
 <script type="text/javascript">
-  const eventSource = new EventSource('/api/serverevents');
+  const eventSource = new EventSource('<%= root %>/api/serverevents');
   eventSource.addEventListener('systemUpdated', (event) => {
     updateSystem();
   });
@@ -28,7 +28,7 @@
     {
       $.ajax({
           type: "GET",
-          url: "/api/status",
+          url: "<%= root %>/api/status",
           dataType : "json"
         }).done((data)=>{
 
