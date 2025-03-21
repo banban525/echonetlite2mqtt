@@ -375,7 +375,7 @@ function sendParameter(propertyName)
   const body = {};
   body[propertyName] = editingObject[propertyName];
   $.ajax({
-    url:`/elapi/v1/devices/<%= device.name %>/properties/${propertyName}`,
+    url:`<%= root %>/elapi/v1/devices/<%= device.name %>/properties/${propertyName}`,
     type: "put",
     data: JSON.stringify( body ),
     contentType: 'application/json', //request type
@@ -388,7 +388,7 @@ function sendParameter(propertyName)
 function requestParameter(propertyName)
 {
   $.ajax({
-    url:`/elapi/v1/devices/<%= device.name %>/properties/${propertyName}/request`,
+    url:`<%= root %>/elapi/v1/devices/<%= device.name %>/properties/${propertyName}/request`,
     type: "put",
     data: "",
     dataType: 'json', // response type
@@ -456,7 +456,7 @@ function requestMultiParameter()
   }
 
   $.ajax({
-    url:`/elapi/v1/devices/<%= device.name %>/properties/request`,
+    url:`<%= root %>/elapi/v1/devices/<%= device.name %>/properties/request`,
     type: "put",
     data: json,
     contentType: 'application/json', //request type
