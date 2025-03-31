@@ -3,6 +3,7 @@ import { DeviceStore } from "./DeviceStore";
 import { Device } from "./Property";
 import { Logger } from "./Logger";
 import { MqttController } from "./MqttController";
+import { ElStateType } from "./MraTypes";
 
 export class ElwaController
 {
@@ -158,14 +159,8 @@ export class ElwaController
 
     // set properties
     {
-      const propertiesPayload = Device.ToProperiesObject(device.propertiesValue);
+      const propertiesPayload = this.createMqttPayloadForAllProperties(device);
 
-      const propertyNames = Object.keys(propertiesPayload);
-
-      // プロトコルとメーカーを追加
-      propertiesPayload["protocol"] = device.protocol;
-      propertiesPayload["manufacturer"] = device.manufacturer;
-      
       Logger.info("[ELWA]", `set properties ${device.id} ...`);
       const res = await this.syncMqttClient.publishAndWaitResponse(`/server/${this.clientToken}/${device.id}/properties`, propertiesPayload, {});
       if(res.status !== 201){
@@ -175,6 +170,7 @@ export class ElwaController
       }
 
       // 登録したプロパティはサブスクライブを始める
+      const propertyNames = Object.keys(propertiesPayload);
       const subscribeList = propertyNames.map(propertyName=>`/client/${this.clientToken}/${device.id}/properties/${propertyName}`);
       this.mqttClient?.subscribe(subscribeList);
     }
@@ -193,14 +189,64 @@ export class ElwaController
       Logger.error("[ELWA]", `property not found ${deviceId}/${propertyName}`);
       return ;
     }
-    const valueText = MqttController.getValueText(foundDevice.propertiesValue[propertyName].value, 
-      foundDevice.propertiesValue[propertyName].deviceProperty.schema.data);
-    
-    const payload:{[key:string]:any} = {};
-    payload[propertyName] = valueText;
+
+    const payload = this.createMqttPayloadForProperty(foundDevice, propertyName);
 
     Logger.info("[ELWA]", `publish ${deviceId}/${propertyName} ...`);
     this.syncMqttClient?.publishAndWaitResponse(`/server/${this.clientToken}/${foundDevice.id}/properties/${propertyName}`, payload, {});
+  }
+
+
+  private createMqttPayloadForAllProperties = (device:Device):{[key:string]:any} =>
+  {
+    const result:{[key:string]:any}= {};
+    for(const property of device.properties)
+    {
+      const val = this.createMqttPayloadForProperty(device, property.name);
+      result[property.name] = val[property.name];
+    }
+    
+    // プロトコルとメーカーを追加
+    result["protocol"] = device.protocol;
+    result["manufacturer"] = device.manufacturer;
+    return result;
+  }
+  
+  private createMqttPayloadForProperty = (device:Device, propertyName:string):{[key:string]:any} =>
+  {
+    const result:{[key:string]:any}= {};
+    result[propertyName] = device.propertiesValue[propertyName].value;
+    
+    // WebApi用の独自変換を挟むならここで
+
+    // stateTypeがbooleanの場合は、文字列からbooleanに変換
+    if(this.isBooleanProperty(device, propertyName))
+    {
+      result[propertyName] = result[propertyName] === "true";
+    }
+    return result;
+  }
+  
+  private isBooleanProperty = (device:Device, propertyName:string):boolean =>
+  {
+    const property = device.properties.find(_=>_.name === propertyName);
+    if(property === undefined)
+    {
+      return false;
+    }
+    if(ElStateType.isTypeOf(property.schema.data))
+    {
+      if(property.schema.data.enum.length !== 2)
+      {
+        return false;
+      }
+      if(property.schema.data.enum[0].name === "true" && property.schema.data.enum[1].name === "false" ||
+        property.schema.data.enum[1].name === "true" && property.schema.data.enum[0].name === "false")
+      {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
