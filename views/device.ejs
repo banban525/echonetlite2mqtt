@@ -183,23 +183,6 @@
 
     
     $(function() {
-
-      const eventSource = new EventSource('/api/serverevents');
-      eventSource.addEventListener('systemUpdated', (event) => {
-        updateSystem();
-      });
-
-      eventSource.addEventListener('deviceUpdated', (event) => {
-        const id = JSON.parse(event.data).id;
-        if(id === "<%= device.id %>")
-        {
-          updateProperties();
-        }
-        else if(id === "<%= device.name %>")
-        {
-          updateProperties();
-        }
-      });
   
       $("#rootmenu-devices").addClass("active");
 
@@ -244,6 +227,67 @@
       {
         $(`#prop-updated-${propDate.name}`).text(utcTextToLocalText(propDate.updated));
       }
+
+
+      
+
+      // WebSocketによるサーバー側Pushイベントの受信
+      let reconnectAttempts = 0;
+      const maxReconnectDelay = 30000;
+
+      function connectWebSocket(){
+        const url = new URL(window.location.href);
+        url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
+        url.pathname = "/";
+        try
+        {
+          const ws = new WebSocket(url.href);
+
+          ws.onopen = () => {
+            console.log(`Connected to server ${url.href}`);
+            reconnectAttempts = 0;
+          }
+          ws.onmessage = (event) => {
+            const obj = JSON.parse(event.data);
+            if(obj.event === "systemUpdated")
+            {
+              updateSystem();
+            }
+
+            const id = obj.id;
+            if(id === "<%= device.id %>")
+            {
+              updateProperties();
+            }
+            else if(id === "<%= device.name %>")
+            {
+              updateProperties();
+            }
+
+          }
+          ws.onclose = () => {
+            console.log("Disconnected from server");
+            scheduleReconnect();
+          }
+          ws.onerror = (error) => {
+            console.error("Error WebSocket:", error);
+            ws?.close();
+          };
+        }
+        catch(e)
+        {
+          console.error("Error WebSocket:", e);
+          scheduleReconnect();
+        }
+      }
+      function scheduleReconnect() {
+        const delay = Math.min(1000 * (2 ** reconnectAttempts), maxReconnectDelay);
+        console.warn(`try reconnect after ${delay / 1000} sec...`);
+        setTimeout(connectWebSocket, delay);
+        reconnectAttempts++;
+      }
+
+      connectWebSocket();
 
     });
 

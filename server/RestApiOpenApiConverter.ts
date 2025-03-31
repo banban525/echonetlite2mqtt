@@ -1,8 +1,9 @@
-import { OpenAPIV3 } from "openapi-types";
+import { OpenAPIV3_1 } from "openapi-types";
 import { DeviceStore } from "./DeviceStore";
 import { EchoNetOpenApiConverter } from "./EchoNetPropertyConverter";
 import { Device, Property } from "./Property";
 import { ElDeviceDescription } from "./MraTypes";
+import { URL } from "url";
 
 
 export class RestApiOpenApiConverter{
@@ -10,15 +11,32 @@ export class RestApiOpenApiConverter{
   echoNetOpenApiConverter = new EchoNetOpenApiConverter();
   
 
-  createOpenApiJson = (deviceStore:DeviceStore): OpenAPIV3.Document =>
+  createOpenApiJson = (deviceStore:DeviceStore, host:string): OpenAPIV3_1.Document =>
   {
-    const result:OpenAPIV3.Document = {
-      openapi:'3.0.1',
+    const url = new URL(host);
+    url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
+    url.pathname = "/";
+    
+    const result:OpenAPIV3_1.Document = {
+      openapi:'3.1.0',
       info:{
         title:'ECHONETLite2MQTT Web API',
-        version: "1.0.0"
+        version: "1.1.0"
       },
+      servers:[
+        {
+          url: host,
+          description: 'HTTP server for REST API'
+        },
+        {
+          url:url.toString(),
+          description: 'WebSocket server for server-sent events'
+        }
+      ],
       paths: {},
+      webhooks:{
+        onMessage:this.getWebSocketWebHook()
+      },
       components:{
         schemas:{},
         responses:{
@@ -29,6 +47,10 @@ export class RestApiOpenApiConverter{
       }
     };
 
+    if(result.paths === undefined)
+    {
+      result.paths = {};
+    }
     result.paths[`/api/status`] = this.getSystemStatus();
     result.paths[`/api/logs`] = this.getLogs();
     result.paths[`/api/serverevents`] = this.getServerEvents();
@@ -82,7 +104,7 @@ export class RestApiOpenApiConverter{
   }
 
   
-  getComponentsApiDeviceSummary = ():OpenAPIV3.SchemaObject =>
+  getComponentsApiDeviceSummary = ():OpenAPIV3_1.SchemaObject =>
   {
     return {
       type:'object',
@@ -124,7 +146,7 @@ export class RestApiOpenApiConverter{
     };
   }
 
-  getComponentsApiDevice = ():OpenAPIV3.SchemaObject =>
+  getComponentsApiDevice = ():OpenAPIV3_1.SchemaObject =>
   {
     return {
       type:'object',
@@ -162,9 +184,9 @@ export class RestApiOpenApiConverter{
   }
 
   
-  getComponentsApiDeviceForDeviceType = (schema:ElDeviceDescription):OpenAPIV3.SchemaObject =>
+  getComponentsApiDeviceForDeviceType = (schema:ElDeviceDescription):OpenAPIV3_1.SchemaObject =>
   {
-    const valuesSchema:OpenAPIV3.SchemaObject = {
+    const valuesSchema:OpenAPIV3_1.SchemaObject = {
       type:'object', 
       description:'Current property values. The key is the property name. The value is the json value.',
       properties:{},
@@ -198,7 +220,7 @@ export class RestApiOpenApiConverter{
     };
   }
 
-  getComponentsApiDeviceProperty = ():OpenAPIV3.SchemaObject =>
+  getComponentsApiDeviceProperty = ():OpenAPIV3_1.SchemaObject =>
   {
     return {
       type:'object',
@@ -234,7 +256,7 @@ export class RestApiOpenApiConverter{
     }
   }
 
-  getComponentsApiDevicePropertyValue = ():OpenAPIV3.SchemaObject =>
+  getComponentsApiDevicePropertyValue = ():OpenAPIV3_1.SchemaObject =>
   {
     return {
       type:'object',
@@ -248,9 +270,9 @@ export class RestApiOpenApiConverter{
     }
   }
 
-  getComponentsDeviceTypeObject = (schema:ElDeviceDescription):OpenAPIV3.SchemaObject =>
+  getComponentsDeviceTypeObject = (schema:ElDeviceDescription):OpenAPIV3_1.SchemaObject =>
   {
-    const properties:{[key:string]:OpenAPIV3.SchemaObject} = {};
+    const properties:{[key:string]:OpenAPIV3_1.SchemaObject} = {};
     for(const prop of schema.elProperties)
     {
       const schema = this.echoNetOpenApiConverter.toOpenApiSchema(prop.data);
@@ -265,7 +287,7 @@ export class RestApiOpenApiConverter{
     };
   }
 
-  getSystemStatus = ():OpenAPIV3.PathItemObject =>
+  getSystemStatus = ():OpenAPIV3_1.PathItemObject =>
   {
     return {
       get:{
@@ -307,7 +329,7 @@ export class RestApiOpenApiConverter{
     };
   }
 
-  getLogs = ():OpenAPIV3.PathItemObject =>
+  getLogs = ():OpenAPIV3_1.PathItemObject =>
   {
     return {
       get:{
@@ -339,12 +361,15 @@ export class RestApiOpenApiConverter{
     };
   }
 
-  getServerEvents = ():OpenAPIV3.PathItemObject =>
+  getServerEvents = ():OpenAPIV3_1.PathItemObject =>
   {
     return {
       get:{
         summary:'Subscribe to server-sent events',
-        description:`This endpoint establishes a connection to the server to receive real-time events via Server-Sent Events (SSE).  
+        deprecated:true,
+        description:`This endpoint is deprecated. Use the WebSocket server for server-sent events.
+
+This endpoint establishes a connection to the server to receive real-time events via Server-Sent Events (SSE).  
 Clients should include an 'Accept' header with 'text/event-stream', and the response will remain open for streaming events.  
 Events will be sent in the following format:
 - event: <event-type>
@@ -408,7 +433,7 @@ data: {"event":"deviceUpdated", "id":"fe00-your-device-id-00000000000000"}
     };
   }
 
-  getApiVersionList = ():OpenAPIV3.PathItemObject =>
+  getApiVersionList = ():OpenAPIV3_1.PathItemObject =>
   {
     return {
       get:{
@@ -440,7 +465,7 @@ data: {"event":"deviceUpdated", "id":"fe00-your-device-id-00000000000000"}
     };
   }
 
-  GetServiceList = ():OpenAPIV3.PathItemObject =>
+  GetServiceList = ():OpenAPIV3_1.PathItemObject =>
   {
     return {
       get:{
@@ -481,7 +506,7 @@ data: {"event":"deviceUpdated", "id":"fe00-your-device-id-00000000000000"}
 
   // ApiDeviceSummaryのArrayを返す
   // GET /elapi/v1/devices
-  getDeviceList = ():OpenAPIV3.PathItemObject =>
+  getDeviceList = ():OpenAPIV3_1.PathItemObject =>
   {
     return{
       get:{
@@ -508,7 +533,7 @@ data: {"event":"deviceUpdated", "id":"fe00-your-device-id-00000000000000"}
   }
   
   // GET /elapi/v1/devices/:deviceId → ApiDeviceを返す
-  private getDeviceInfo = (device:Device):OpenAPIV3.PathItemObject =>
+  private getDeviceInfo = (device:Device):OpenAPIV3_1.PathItemObject =>
   {
     return {
       get:{
@@ -533,7 +558,7 @@ data: {"event":"deviceUpdated", "id":"fe00-your-device-id-00000000000000"}
 
   // プロパティの一括GETエンドポイント
   // GET /elapi/v1/devices/:deviceId/properties 
-  private getDeviceProperties = (device: Device):OpenAPIV3.PathItemObject =>
+  private getDeviceProperties = (device: Device):OpenAPIV3_1.PathItemObject =>
   {
     const schemaName = device.deviceType + "Object";
 
@@ -561,14 +586,14 @@ data: {"event":"deviceUpdated", "id":"fe00-your-device-id-00000000000000"}
 
   // プロパティの一括リクエストエンドポイント
   // /elapi/v1/devices/:deviceId/properties/request
-  private getDeviceRequestProperties = (device: Device):OpenAPIV3.PathItemObject =>
+  private getDeviceRequestProperties = (device: Device):OpenAPIV3_1.PathItemObject =>
   {
     const schemaName = device.deviceType + "Object";
 
     const requestProperties:{[key:string]:any} ={};
     for(const prop of device.properties.filter(_=>_.readable))
     {
-      const schema:OpenAPIV3.SchemaObject = {
+      const schema:OpenAPIV3_1.SchemaObject = {
         type:'string',
         description: 'The property to request update. The value can be anything.'
       }
@@ -610,9 +635,9 @@ data: {"event":"deviceUpdated", "id":"fe00-your-device-id-00000000000000"}
   // プロパティのGet/Setエンドポイント
   // GET /elapi/v1/devices/:deviceId/properties/:propertyName
   // PUT /elapi/v1/devices/:deviceId/properties/:propertyName
-  private getDeviceGetSetProperty = (device: Device):OpenAPIV3.PathItemObject =>
+  private getDeviceGetSetProperty = (device: Device):OpenAPIV3_1.PathItemObject =>
   {
-    const result:OpenAPIV3.PathItemObject = {};
+    const result:OpenAPIV3_1.PathItemObject = {};
 
     const schemaName = device.deviceType + "Object";
     const getPropertyList = device.properties.filter(_=>_.readable);
@@ -701,7 +726,7 @@ data: {"event":"deviceUpdated", "id":"fe00-your-device-id-00000000000000"}
 
   // プロパティのRequestエンドポイント
   // PUT /elapi/v1/devices/:deviceId/properties/:propertyName/request
-  private getDeviceRequestProperty = (device: Device):OpenAPIV3.PathItemObject =>
+  private getDeviceRequestProperty = (device: Device):OpenAPIV3_1.PathItemObject =>
   {
     const getPropertyList = device.properties.filter(_=>_.readable);
 
@@ -729,6 +754,38 @@ data: {"event":"deviceUpdated", "id":"fe00-your-device-id-00000000000000"}
               'application/json':{
                 schema:{
                   type:'object'
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+  }
+  
+  // WebSocket用End Pointを返す
+  private getWebSocketWebHook = ():OpenAPIV3_1.PathItemObject =>
+  {
+    return {
+      post: {
+        summary: 'Receive a message from the server',
+        description: 'Receive a message from the server',
+        tags:['Webhook'],
+        responses:{
+          '200':{
+            description:'',
+            content:{
+              'application/json':{
+                schema:{
+                  type:'object',
+                  properties:{
+                    data:{
+                      type:'string', 
+                      description:'the event data. The value is a JSON string containing the property "event" and "id".',
+                      example:'{"event":"deviceUpdated", "id":"fe00-your-device-id-00000000000000"}'
+                    }
+                  },
+                  required:['data']
                 }
               }
             }
