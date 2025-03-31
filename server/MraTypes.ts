@@ -12,6 +12,10 @@ export class ElRefType
   {
     return false;
   }
+  static isTypeOf(dataType:ElDataType): dataType is ElRefType
+  {
+    return "$ref" in dataType;
+  }
 }
 
 export interface ElMixedOneOfType{
@@ -20,66 +24,56 @@ export interface ElMixedOneOfType{
 
 export function isMatchToElDataType(dataType:ElDataType, value:number|string|object):boolean
 {
-  if("type" in dataType)
+  if(ElArrayType.isTypeOf(dataType))
   {
-    if(dataType.type === "array")
-    {
-      return ElArrayType.isMatch(dataType, value);
-    }
-    if(dataType.type === "bitmap")
-    {
-      return ElBitmapType.isMatch(dataType, value);
-    }
-    if(dataType.type === "date")
-    {
-      return ElDateType.isMatch(dataType, value);
-    }
-    if(dataType.type === "date-time")
-    {
-      return ElDateTimeType.isMatch(dataType, value);
-    }
-    if(dataType.type === "time")
-    {
-      return ElTimeType.isMatch(dataType, value);
-    }
-    if(dataType.type === "level")
-    {
-      return ElLevelType.isMatch(dataType, value);
-    }
-    if(dataType.type === "number")
-    {
-      return ElNumberType.isMatch(dataType, value);
-    }
-    if(dataType.type === "numericValue")
-    {
-      return ElNumericValueType.isMatch(dataType, value);
-    }
-    if(dataType.type === "object")
-    {
-      return ElObjectType.isMatch(dataType, value);
-    }
-    if(dataType.type === "raw")
-    {
-      return ElRawType.isMatch(dataType, value);
-    }
-    if(dataType.type === "state")
-    {
-      return ElStateType.isMatch(dataType, value);
-    }
-    return false;
+    return ElArrayType.isMatch(dataType, value);
   }
-  else
+  if(ElBitmapType.isTypeOf(dataType))
   {
-    if("oneOf" in dataType)
-    {
-      return ElMixedOneOfType.isMatch(dataType, value);
-    }
-    else
-    {
-      //data.$ref
-      return false;
-    }
+    return ElBitmapType.isMatch(dataType, value);
   }
+  if(ElDateType.isTypeOf(dataType))
+  {
+    return ElDateType.isMatch(dataType, value);
+  }
+  if(ElDateTimeType.isTypeOf(dataType))
+  {
+    return ElDateTimeType.isMatch(dataType, value);
+  }
+  if(ElTimeType.isTypeOf(dataType))
+  {
+    return ElTimeType.isMatch(dataType, value);
+  }
+  if(ElLevelType.isTypeOf(dataType))
+  {
+    return ElLevelType.isMatch(dataType, value);
+  }
+  if(ElNumberType.isTypeOf(dataType))
+  {
+    return ElNumberType.isMatch(dataType, value);
+  }
+  if(ElNumericValueType.isTypeOf(dataType))
+  {
+    return ElNumericValueType.isMatch(dataType, value);
+  }
+  if(ElObjectType.isTypeOf(dataType))
+  {
+    return ElObjectType.isMatch(dataType, value);
+  }
+  if(ElRawType.isTypeOf(dataType))
+  {
+    return ElRawType.isMatch(dataType, value);
+  }
+  if(ElStateType.isTypeOf(dataType))
+  {
+    return ElStateType.isMatch(dataType, value);
+  }
+  if(ElMixedOneOfType.isTypeOf(dataType))
+  {
+    return ElMixedOneOfType.isMatch(dataType, value);
+  }
+  //data.$ref
+  return false;
 }
 
 export class ElMixedOneOfType
@@ -94,6 +88,10 @@ export class ElMixedOneOfType
       }
     }
     return false;
+  }
+  static isTypeOf(dataType:ElDataType): dataType is ElMixedOneOfType
+  {
+    return "oneOf" in dataType;
   }
 
   public static searchSelectedIndex(dataType:ElMixedOneOfType, value:number|string|object):number
@@ -270,6 +268,11 @@ export class ElObjectType
 
     return true;
   }
+  
+  static isTypeOf(dataType:ElDataType): dataType is ElObjectType
+  {
+    return "type" in dataType && dataType.type === "object";
+  }
 }
 
 export interface ElArrayType{
@@ -305,6 +308,11 @@ export class ElArrayType
     }
     return true;
   }
+
+  static isTypeOf(dataType:ElDataType): dataType is ElArrayType
+  {
+    return "type" in dataType && dataType.type === "array";
+  }
 }
 
 export interface ElRawType{
@@ -327,6 +335,11 @@ export class ElRawType
     {
       return false;
     }
+  }
+
+  static isTypeOf(dataType:ElDataType): dataType is ElRawType
+  {
+    return "type" in dataType && dataType.type === "raw";
   }
 }
 
@@ -379,6 +392,11 @@ export class ElBitmapType
 
     return true;
   }
+
+  static isTypeOf(dataType:ElDataType): dataType is ElBitmapType
+  {
+    return "type" in dataType && dataType.type === "bitmap";
+  }
 }
 
 export interface ElTimeType{
@@ -416,6 +434,11 @@ export class ElTimeType
       }
     }
     return false;
+  }
+
+  static isTypeOf(dataType:ElDataType): dataType is ElTimeType
+  {
+    return "type" in dataType && dataType.type === "time";
   }
 }
 
@@ -457,6 +480,11 @@ export class ElDateTimeType
       }
     }
     return false;
+  }
+
+  static isTypeOf(dataType:ElDataType): dataType is ElDateTimeType
+  {
+    return "type" in dataType && dataType.type === "date-time";
   }
 }
 
@@ -500,6 +528,11 @@ export class ElDateType
     }
     return false;
   }
+
+  static isTypeOf(dataType:ElDataType): dataType is ElDateType
+  {
+    return "type" in dataType && dataType.type === "date";
+  }
 }
 
 
@@ -536,6 +569,11 @@ export class ElLevelType
       return false;
     }
   }
+
+  static isTypeOf(dataType:ElDataType): dataType is ElLevelType
+  {
+    return "type" in dataType && dataType.type === "level";
+  }
 }
 
 
@@ -570,6 +608,11 @@ export class ElNumericValueType
     {
       return false;
     }
+  }
+
+  static isTypeOf(dataType:ElDataType): dataType is ElNumericValueType
+  {
+    return "type" in dataType && dataType.type === "numericValue";
   }
 }
 
@@ -621,6 +664,11 @@ export class ElStateType
     {
       return false;
     }
+  }
+
+  static isTypeOf(dataType:ElDataType): dataType is ElStateType
+  {
+    return "type" in dataType && dataType.type === "state";
   }
 }
 export interface ElNumberType{
@@ -690,6 +738,11 @@ export class ElNumberType
       }
     }
     return true;
+  }
+
+  static isTypeOf(dataType:ElDataType): dataType is ElNumberType
+  {
+    return "type" in dataType && dataType.type === "number";
   }
 }
 export type ElDataType = ElNumberType|ElStateType|ElNumericValueType|ElLevelType|ElDateType|ElDateTimeType|ElTimeType|ElBitmapType|ElRawType|ElArrayType|ElObjectType|ElMixedOneOfType|ElRefType;
