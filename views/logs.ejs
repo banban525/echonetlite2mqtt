@@ -12,14 +12,14 @@
         <tbody>
         </tbody>
       </table>
-      <a href="/downloadlogs/zip">Download Logs and internal statues for debug.</a>
+      <a href="<%= root %>/downloadlogs/zip">Download Logs and internal statues for debug.</a>
     </div>
   </div>
   <script type="text/javascript">
 
 
     $(function() {
-      const eventSource = new EventSource('/api/serverevents');
+      const eventSource = new EventSource('<%= root %>/api/serverevents');
       eventSource.addEventListener('systemUpdated', (event) => {
         console.log("SSE:systemUpdated");
         updateSystem();
@@ -36,7 +36,7 @@
       {
         $.ajax({
             type: "GET",
-            url: "/api/status",
+            url: "<%= root %>/api/status",
             dataType : "json"
           }).done((data)=>{
             $("#footer-version").text(data.systemVersion)
@@ -49,7 +49,7 @@
       {
         $.ajax({
             type: "GET",
-            url: "/api/logs",
+            url: "<%= root %>/api/logs",
             dataType : "json"
           }).done((data)=>{
             $("#logsTable tbody").children().remove();
