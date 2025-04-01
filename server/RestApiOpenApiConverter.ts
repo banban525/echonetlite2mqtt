@@ -11,28 +11,14 @@ export class RestApiOpenApiConverter{
   echoNetOpenApiConverter = new EchoNetOpenApiConverter();
   
 
-  createOpenApiJson = (deviceStore:DeviceStore, host:string): OpenAPIV3_1.Document =>
+  createOpenApiJson = (deviceStore:DeviceStore): OpenAPIV3_1.Document =>
   {
-    const url = new URL(host);
-    url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
-    url.pathname = "/";
-    
     const result:OpenAPIV3_1.Document = {
       openapi:'3.1.0',
       info:{
         title:'ECHONETLite2MQTT Web API',
         version: "1.1.0"
       },
-      servers:[
-        {
-          url: host,
-          description: 'HTTP server for REST API'
-        },
-        {
-          url:url.toString(),
-          description: 'WebSocket server for server-sent events'
-        }
-      ],
       paths: {},
       webhooks:{
         onMessage:this.getWebSocketWebHook()

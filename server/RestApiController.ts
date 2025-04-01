@@ -778,12 +778,9 @@ export class RestApiController
     req: express.Request,
     res: express.Response
   ): void => {
-    
-    // reqからhttp://xxx.xxx.xxx/ の部分を抽出する
-    const host = req.protocol + '://' + req.get('host');
 
     var converter = new RestApiOpenApiConverter();
-    const jsonObj = converter.createOpenApiJson(this.deviceStore, host);
+    const jsonObj = converter.createOpenApiJson(this.deviceStore);
     res.send(jsonObj);
   }
 }
