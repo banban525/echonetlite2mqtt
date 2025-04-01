@@ -752,11 +752,52 @@ data: {"event":"deviceUpdated", "id":"fe00-your-device-id-00000000000000"}
   // WebSocket用End Pointを返す
   private getWebSocketWebHook = ():OpenAPIV3_1.PathItemObject =>
   {
+    const descriptions = [
+      "A WebSocket event that is triggered when a message received from the server.",
+      "",
+      "## WebSocket Connection",
+      "Connect to the WebSocket server using:",
+      "",
+      "```js",
+      "// Connect to WebSocket server (non-secure)",
+      "const ws = new WebSocket(\"ws://(your host)/\");",
+      "",
+      "// Or connect securely",
+      "const wss = new WebSocket(\"wss://(your host)/\");",
+      "",
+      "ws.onmessage = (event) => {",
+      "  const obj = JSON.parse(event.data);",
+      "  console.log(obj);",
+      "};",
+      "```",
+      "",
+      "The WebSocket server is available at:",
+      "- **ws://(your host)/** (non-secure)",
+      "- **wss://(your host)/** (secure)",
+      "",
+      "## Event Data",
+      "",
+      "Events will be sent in stringified JSON object.",
+      "example:",
+      " ```",
+      " {",
+      "   \"event\":\"deviceUpdated\",",
+      "   \"id\":\"fe00-your-device-id-00000000000000\"",
+      " }",
+      " ```",
+      "",
+      "event types:",
+      "* 'systemUpdated': Notifies about changes in the system state.",
+      "* 'logUpdated': Notifies when a new log entry is added.",
+      "* 'deviceUpdated': Notifies about changes related to a device.",
+      "  In this case, the 'id' field is passed. ",
+    ];
+
     return {
       post: {
         summary: 'Receive a message from the server',
-        description: 'Receive a message from the server',
-        tags:['Webhook'],
+        description: descriptions.join('\n'),
+        tags:['WebSocket'],
         responses:{
           '200':{
             description:'',
