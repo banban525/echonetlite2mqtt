@@ -17,7 +17,7 @@ jobs:
   build:
     name: Publish
     permissions:
-      contents: write
+      contents: read
       packages: write
     runs-on: ubuntu-latest
     steps:
@@ -78,7 +78,7 @@ jobs:
             --aarch64 \
             --addon \
             --docker-hub ghcr.io/${{ github.actor }} \
-            --image trials-ha-addon-addon/{arch} \
+            --image echonetlite2mqtt-addon/{arch} \
             --target . \
             --additional-tag ${{ github.ref_name }} \
             --version v${{ env.VERSION }}-alpha \
