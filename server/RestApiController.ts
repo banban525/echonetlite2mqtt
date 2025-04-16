@@ -13,6 +13,7 @@ import path from "path";
 import crypto from "crypto";
 import { RestApiOpenApiConverter } from "./RestApiOpenApiConverter";
 import swaggerUi from 'swagger-ui-express';
+import { WebSocket, WebSocketServer } from "ws";
 
 interface ViewProperty{
   propertyName:string;
@@ -32,6 +33,8 @@ export class RestApiController
   private readonly root:string;
   private readonly mqttBaseTopic:string;
   private readonly detailLogsCallback:()=>{fileName:string, content:string}[];
+  private wss:WebSocketServer|undefined;
+
   constructor(deviceStore:DeviceStore, 
     systemStatusRepository:SystemStatusRepositry,
     eventRepository:EventRepository, 
@@ -106,7 +109,24 @@ export class RestApiController
     const server = app.listen(this.port, this.hostName, ():void => {
       Logger.info("[RESTAPI]", `Start listening to web server. ${this.hostName}:${this.port}`);
     });
+
+    this.wss = new WebSocketServer({server});
+
+    this.eventRepository.addEventCallback("RestApiController", 
+      async (eventName:string, deviceId:string):Promise<void>=>{
+        if(this.wss === undefined)
+        {
+          return;
+        }
+        this.wss.clients.forEach((client:WebSocket) => {
+          if(client.readyState === WebSocket.OPEN)
+          {
+            client.send(JSON.stringify({event:eventName, id:deviceId}));
+          }
+        });
+    });
   }
+
 
   private readonly propertyChangedRequestEvents:((deviceId:string,propertyName:string,newValue:any)=>Promise<void>)[] = [];
   public addPropertyChangedRequestEvent = (event:(deviceId:string,propertyName:string,newValue:any)=>Promise<void>):void =>{
@@ -135,6 +155,7 @@ export class RestApiController
     res: express.Response
   ): void => {
     const root = this.root;
+    res.locals["root"] = root;
     res.render("./index.ejs", {root:root});
   }
 
@@ -143,6 +164,7 @@ export class RestApiController
     res: express.Response
   ): void => {
     const root = this.root;
+    res.locals["root"] = root;
     res.render("./logs.ejs", {root:root});
   }
 
@@ -163,6 +185,7 @@ export class RestApiController
     const mqttTopic = `${this.mqttBaseTopic}/${foundDevice.name}`;
 
     const allProperties = JSON.stringify(Device.ToProperiesObject(foundDevice.propertiesValue), null, 2);
+    res.locals["root"] = root;
     res.render("./device.ejs", {device:foundDevice, allProperties, propertyViewModels, context:{mqttTopic}, root:root});
   }
 
