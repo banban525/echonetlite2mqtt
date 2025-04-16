@@ -30,6 +30,9 @@ export class EventRepository
       id: this.lastId ,
       event: event
     });
+    if(this.eventRecords.length > 200){
+      this.eventRecords.shift();
+    }
 
     if(event === "SYSTEM")
     {
