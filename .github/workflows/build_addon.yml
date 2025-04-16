@@ -58,8 +58,6 @@ jobs:
       # docker-entrypoint_addon.shをdocker-entrypoint.shにリネームする
       - name: Rename docker-entrypoint_addon.sh to docker-entrypoint.sh
         run: |
-          rm -f docker-entrypoint.sh
-          mv docker-entrypoint_addon.sh docker-entrypoint.sh
           echo "Renamed docker-entrypoint_addon.sh to docker-entrypoint.sh"
 
 
