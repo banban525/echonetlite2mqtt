@@ -787,7 +787,7 @@ export class RestApiController
     req: express.Request,
     res: express.Response
   ): void => {
-    res.send(this.createOpenApiJson);
+    res.send(this.createOpenApiJson());
   }
 
   private createOpenApiJson = (
