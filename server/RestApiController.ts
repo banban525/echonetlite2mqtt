@@ -793,7 +793,7 @@ export class RestApiController
   private createOpenApiJson = (
   ) => {
     var converter = new RestApiOpenApiConverter();
-    const jsonObj = converter.createOpenApiJson(this.deviceStore);
+    const jsonObj = converter.createOpenApiJson(this.deviceStore, this.root);
     return jsonObj;
   }
 }
