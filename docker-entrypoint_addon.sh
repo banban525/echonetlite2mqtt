@@ -1,48 +1,5 @@
-#!/usr/bin/with-contenv bashio
+#!/usr/bin/env bashio
 
-export MQTT_OPTION_FILE=/localconfig/echonetlite2mqtt/config.json
-
-declare MQTT_PREFIX
-declare MQTT_HOST
-declare MQTT_PORT
-declare MQTT_USERNAME
-declare MQTT_PASSWORD
-declare MQTT_BROKER
-
-if ! bashio::services.available "mqtt"; then
-    bashio::log.error "No internal MQTT service found"
-else
-    bashio::log.info "MQTT service found, fetching credentials ..."
-    if bashio::var.true "$(bashio::services 'mqtt' 'ssl')"; then
-      MQTT_PREFIX="mqtts://";
-    else
-      MQTT_PREFIX="mqtt://";
-    fi
-    MQTT_HOST=$(bashio::services mqtt "host")
-    MQTT_PORT=$(bashio::services mqtt "port")
-    MQTT_USERNAME=$(bashio::services mqtt "username")
-    MQTT_PASSWORD=$(bashio::services mqtt "password")
-fi
-
-if (! bashio::config.is_empty 'mqtt'); then
-  if (bashio::config.true 'mqtt.ssl'); then
-    MQTT_PREFIX="mqtts://";
-  else
-    MQTT_PREFIX="mqtt://";
-  fi
-  if (bashio::config.has_value 'mqtt.host'); then
-    MQTT_HOST=$(bashio::config "mqtt.host")
-  fi
-  if (bashio::config.has_value 'mqtt.port'); then
-    MQTT_PORT=$(bashio::config "mqtt.port")
-  fi
-  if (bashio::config.has_value 'mqtt.username'); then
-    MQTT_USERNAME=$(bashio::config "mqtt.username")
-  fi
-  if (bashio::config.has_value 'mqtt.password'); then
-    MQTT_PASSWORD=$(bashio::config "mqtt.password")
-  fi
-fi
 
 if (bashio::config.has_value 'MQTT_CA_FILE'); then
   export MQTT_CA_FILE=$(bashio::config "MQTT_CA_FILE")
@@ -88,15 +45,6 @@ export MQTT_BROKER="${MQTT_PREFIX}${MQTT_HOST}:${MQTT_PORT}";
 bashio::log.info "MQTT_BROKER=$MQTT_BROKER"
 bashio::log.info "MQTT_USRNAME=$MQTT_USERNAME"
 
-mkdir -p `dirname $MQTT_OPTION_FILE`
-
-cat << EOD > $MQTT_OPTION_FILE
-{
-  "port": ${MQTT_PORT},
-  "username": "${MQTT_USERNAME}",
-  "password": "${MQTT_PASSWORD}"
-}
-EOD
 
 INGRESS_URL=$(bashio::addon.ingress_url)
 INGRESS_ENTRY=$(bashio::addon.ingress_entry)
