@@ -1,6 +1,11 @@
 #!/usr/bin/env bashio
 
-
+if (bashio::config.has_value 'MQTT_BROKER'); then
+  export MQTT_BROKER=$(bashio::config "MQTT_BROKER")
+fi
+if (bashio::config.has_value 'MQTT_OPTION_FILE'); then
+  export MQTT_OPTION_FILE=$(bashio::config "MQTT_OPTION_FILE")
+fi
 if (bashio::config.has_value 'MQTT_CA_FILE'); then
   export MQTT_CA_FILE=$(bashio::config "MQTT_CA_FILE")
 fi
@@ -41,9 +46,6 @@ if (bashio::config.has_value 'ECHONET_UNKNOWN_AS_ERROR'); then
   export ECHONET_UNKNOWN_AS_ERROR=$(bashio::config "ECHONET_UNKNOWN_AS_ERROR")
 fi
 
-export MQTT_BROKER="${MQTT_PREFIX}${MQTT_HOST}:${MQTT_PORT}";
-bashio::log.info "MQTT_BROKER=$MQTT_BROKER"
-bashio::log.info "MQTT_USRNAME=$MQTT_USERNAME"
 
 
 INGRESS_URL=$(bashio::addon.ingress_url)

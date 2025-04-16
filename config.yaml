@@ -23,12 +23,8 @@ options:
   mqtt: {}
   REST_API_PORT: 8099
 schema:
-  mqtt:
-    host: str?
-    port: int?
-    username: str?
-    password: str?
-    ssl: bool?
+  MQTT_BROKER: str?
+  MQTT_OPTION_FILE: str?
   MQTT_CA_FILE: str?
   MQTT_CERT_FILE: str?
   MQTT_KEY_FILE: str?
