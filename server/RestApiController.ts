@@ -102,9 +102,8 @@ export class RestApiController
     app.get("/api/serverevents", this.getServerEvents);
 
     // openapi-ui
-    const jsonObj = this.createOpenApiJson();
-    const swaggerUiOptions:swaggerUi.SwaggerOptions = {customfavIcon:"/favicon.ico", swaggerOptions:{}};
-    app.use('/api-docs', swaggerUi.serveFiles(jsonObj, swaggerUiOptions), swaggerUi.setup(jsonObj, swaggerUiOptions));
+    const swaggerUiOptions:swaggerUi.SwaggerOptions = {customfavIcon:this.root+"/favicon.ico", swaggerOptions:{url:this.root+"/openapi.json"}};
+    app.use('/api-docs', swaggerUi.serveFiles({}, swaggerUiOptions), swaggerUi.setup({}, swaggerUiOptions));
     
     const server = app.listen(this.port, this.hostName, ():void => {
       Logger.info("[RESTAPI]", `Start listening to web server. ${this.hostName}:${this.port}`);
