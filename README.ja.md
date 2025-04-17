@@ -126,6 +126,10 @@ MQTT オプション
 |  環境変数 | コマンドライン引数 | 説明 |
 | ------------------     | --------------------- | ----------- |
 |  `MQTT_BROKER`       | `--MqttBroker`     | MQTTブローカーのURLを指定します。"mqtt://" または "mqtts://"で始まる必要があります。  |
+|  `MQTT_PORT`         | `--MqttPort`       | MQTTブローカーのポートNoを指定します。(デフォルト: 1883) |
+|  `MQTT_CLIENT_ID`    | `--MqttClientId`   | MQTTのクライアントIDを指定します。 (Default: (空)))|
+|  `MQTT_USERNAME`     | `--MqttUsername`   | MQTTのユーザー名を指定します。 (Default: (空))|
+|  `MQTT_PASSWORD`     | `--MqttPassword`   | MQTTのパスワードを指定します。 (Default: (空))|
 |  `MQTT_OPTION_FILE`  | `--MqttOptionFile` | MQTTのオプションファイルのパスを指定します。ファイルの形式は [MQTT.js](https://github.com/mqttjs/MQTT.js) の Client Options を参照してください。 (デフォルト: (空))  |
 |  `MQTT_CA_FILE`      | `--MqttCaFile`     | MQTTの CA ファイルのパスを指定します。パスが指定されればロードして、MQTTのオプションの"ca"に設定されます。 (デフォルト: ロードしない)  |
 |  `MQTT_CERT_FILE`    | `--MqttCertFile`   | MQTTの cert ファイルのパスを指定します。パスが指定されればロードして、MQTTのオプションの"cert"に設定されます。 (デフォルト: ロードしない)  |
@@ -139,7 +143,7 @@ REST API オプション
 | ------------------     | --------------------- | ----------- |
 | `REST_API_HOST` | `--RestApiHost` | 管理者ページのIPを指定します。複数のIPがある場合にこの設定が使用されます。(デフォルト: 0.0.0.0) |
 | `REST_API_PORT` | `--RestApiPort` | 管理者ページのポートNoを指定します. (デフォルト: 3000) |
-
+| `REST_API_ROOT` | `--RestApiRoot` | REST APIのURLのプレフィックスを指定します。 (Default: empty) |
 
 ECHONET Lite オプション
 
@@ -212,39 +216,6 @@ npm start -- --MqttBroker "mqtt://your.mqtt.brocker" --MqttBaseTopic "echonetlit
 
 
 ## FAQ
-
-### MQTTブローカーの接続オプションを変更したい
-
-MQTTブローカーの接続オプションはJsonファイルで変更できます。
-Jsonファイルの形式は、 [mqtt.jsのClient Options](https://github.com/mqttjs/MQTT.js#client) です。
-
-例えば、ユーザー名とパスワードを指定したい場合は次のようにします。
-
-1. 適当なフォルダに次のようなオプションファイルを配置します。(例: /(any folder)/config.json)
-
-```
-{
-  "port": 1883,
-  "username": "your-username",
-  "password": "your-password"
-}
-```
-
-2. [docker] `-v` オプションを使って設定ファイルをマウントし、環境変数 `MQTT_OPTION_FILE` でパスを指定します。
-
-```shell:commandline
-docker run -d --net=host \ 
--v /(any folder)/config.json:/app/config/config.json \
--e MQTT_OPTION_FILE=/app/config/config.json \
--e MQTT_BROKER="mqtt://your.mqtt.brocker" \
-banban525/echonetlite2mqtt
-```
-
-3. [node.js] `--MqttOptionFile` を使って、設定ファイルのパスを指定します。
-
-```
-npm start -- --MqttBroker "mqtt://your.mqtt.brocker" --MqttOptionFile /(any folder)/config.json
-```
 
 ### プロパティが自動で更新されない
 

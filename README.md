@@ -129,7 +129,11 @@ MQTT Options
 
 |  Environment Variables | Commandline Parameter | Description |
 | ------------------     | --------------------- | ----------- |
-|  `MQTT_BROKER`       | `--MqttBroker`     | MQTT Brocker's URL. starts with "mqtt://" or "mqtts://".  |
+|  `MQTT_BROKER`       | `--MqttBroker`     | The MQTT broker's URL. starts with "mqtt://" or "mqtts://".  |
+|  `MQTT_PORT`         | `--MqttPort`       | The MQTT broker port number. (Default: 1883) |
+|  `MQTT_CLIENT_ID`    | `--MqttClientId`   | The MQTT client id. (Default: empty)|
+|  `MQTT_USERNAME`     | `--MqttUsername`   | The MQTT user name. (Default: empty)|
+|  `MQTT_PASSWORD`     | `--MqttPassword`   | The MQTT password. (Default: empty)|
 |  `MQTT_OPTION_FILE`  | `--MqttOptionFile` | the MQTT option file path. The schema is [MQTT.js](https://github.com/mqttjs/MQTT.js) ClientOptions. (Default: empty)  |
 |  `MQTT_CA_FILE`      | `--MqttCaFile`     | The MQTT CA file path. If this file exists, it will be loaded and set as an "ca" option. (Default: not load)  |
 |  `MQTT_CERT_FILE`    | `--MqttCertFile`   | The MQTT cert file path. If this file exists, it will be loaded and set as an "cert" option. (Default: not load)  |
@@ -143,6 +147,7 @@ REST API Options
 | ------------------     | --------------------- | ----------- |
 | `REST_API_HOST` | `--RestApiHost` | Host IP of the administrator page. If there are multiple IPs, specify them. (Default: 0.0.0.0) |
 | `REST_API_PORT` | `--RestApiPort` | Admin page port number. (Default: 3000) |
+| `REST_API_ROOT` | `--RestApiRoot` | Rest API url prefix. (Default: empty) |
 
 
 ECHONET Lite Options
@@ -211,39 +216,6 @@ npm start -- --MqttBroker "mqtt://your.mqtt.brocker" --MqttBaseTopic "echonetlit
 
 
 ## FAQ
-
-### How to change MQTT broker connection options
-
-You can set connection options in the json file.
-The schema of the json file is [Client Options in mqtt.js](https://github.com/mqttjs/MQTT.js#client).
-
-For example, if you want to specify a username and password:
-
-1. Save the connection options file in any folder. (Example: /(any folder)/config.json)
-
-```
-{
-  "port": 1883,
-  "username": "your-username",
-  "password": "your-password"
-}
-```
-
-2. [docker]Mount the configuration file with the -v option and set the file path with MQTT_OPTION_FILE.
-
-```shell:commandline
-docker run -d --net=host \ 
--v /(any folder)/config.json:/app/config/config.json \
--e MQTT_OPTION_FILE=/app/config/config.json \
--e MQTT_BROKER="mqtt://your.mqtt.brocker" \
-banban525/echonetlite2mqtt
-```
-
-3. [node.js] Use the `--MqttOptionFile` option to set the file path of the configuration file.
-
-```
-npm start -- --MqttBroker "mqtt://your.mqtt.brocker" --MqttOptionFile /(any folder)/config.json
-```
 
 ### Property values are not updated automatically
 

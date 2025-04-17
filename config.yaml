@@ -32,6 +32,10 @@ schema:
     cert_file: str?
     key_file: str?
     base_topic: str?
+    username: str?
+    password: str?
+    client_id: str?
+    port: int?
   echonet:
     target_network: str?
     device_ip_list: str?

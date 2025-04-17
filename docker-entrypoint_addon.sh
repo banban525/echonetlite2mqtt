@@ -18,6 +18,19 @@ fi
 if (bashio::config.has_value 'mqtt.base_topic'); then
   export MQTT_BASE_TOPIC=$(bashio::config "mqtt.base_topic")
 fi
+if (bashio::config.has_value 'mqtt.username'); then
+  export MQTT_USERNAME=$(bashio::config "mqtt.username")
+fi
+if (bashio::config.has_value 'mqtt.password'); then
+  export MQTT_PASSWORD=$(bashio::config "mqtt.password")
+fi
+if (bashio::config.has_value 'mqtt.port'); then
+  export MQTT_PORT=$(bashio::config "mqtt.port")
+fi
+if (bashio::config.has_value 'mqtt.client_id'); then
+  export MQTT_CLIENT_ID=$(bashio::config "mqtt.client_id")
+fi
+
 if (bashio::config.has_value 'echonet.target_network'); then
   export ECHONET_TARGET_NETWORK=$(bashio::config "echonet.target_network")
 fi

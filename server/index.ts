@@ -31,6 +31,9 @@ interface InputParameters{
   mqttCaFile:string;
   mqttCertFile:string;
   mqttKeyFile:string;
+  mqttUserName:string;
+  mqttPort:number;
+  mqttClientId:string;
   version:string;
   buildInfo:string;
 };
@@ -52,6 +55,10 @@ let mqttBaseTopic = "echonetlite2mqtt/elapi/v2/devices";
 let mqttCaFile = "";
 let mqttCertFile = "";
 let mqttKeyFile = "";
+let mqttUserName = "";
+let mqttPassword = "";
+let mqttPort = 1883;
+let mqttClientId = "";
 
 if (
   "ECHONET_TARGET_NETWORK" in process.env &&
@@ -163,6 +170,27 @@ if("MQTT_KEY_FILE" in process.env && process.env.MQTT_KEY_FILE !== undefined)
 {
   mqttKeyFile = process.env.MQTT_KEY_FILE.replace(/^"/g, "").replace(/"$/g, "");
 }
+if("MQTT_USERNAME" in process.env && process.env.MQTT_USERNAME !== undefined)
+{
+  mqttUserName = process.env.MQTT_USERNAME.replace(/^"/g, "").replace(/"$/g, "");
+}
+if("MQTT_PASSWORD" in process.env && process.env.MQTT_PASSWORD !== undefined)
+{
+  mqttPassword = process.env.MQTT_PASSWORD.replace(/^"/g, "").replace(/"$/g, "");
+}
+if("MQTT_PORT" in process.env && process.env.MQTT_PORT !== undefined)
+{
+  const tempNo = Number(process.env.MQTT_PORT.replace(/^"/g, "").replace(/"$/g, ""));
+  if(isNaN(tempNo)===false)
+  {
+    mqttPort = tempNo;
+  }
+}
+if("MQTT_CLIENT_ID" in process.env && process.env.MQTT_CLIENT_ID !== undefined)
+{
+  mqttClientId = process.env.MQTT_CLIENT_ID.replace(/^"/g, "").replace(/"$/g, "");
+}
+
 
 if("ECHONET_INTERVAL_TO_GET_PROPERTIES" in process.env && process.env.ECHONET_INTERVAL_TO_GET_PROPERTIES !== undefined)
 {
@@ -271,6 +299,26 @@ for(var i = 2;i < process.argv.length; i++){
   {
     mqttKeyFile = value.replace(/^"/g, "").replace(/"$/g, "");
   }
+  if(name === "--MqttUsername".toLowerCase())
+  {
+    mqttUserName = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--MqttPassword".toLowerCase())
+  {
+    mqttPassword = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
+  if(name === "--MqttPort".toLowerCase())
+  {
+    const tempNo = Number(value.replace(/^"/g, "").replace(/"$/g, ""));
+    if(value!=="" && isNaN(tempNo)===false)
+    {
+      mqttPort = tempNo;
+    }
+  }
+  if(name === "--MqttClientId".toLowerCase())
+  {
+    mqttClientId = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
 
   if(name === "--echonetIntervalToGetProperties".toLowerCase())
   {
@@ -310,6 +358,10 @@ logger.output(`restApiPort=${restApiPort}`);
 logger.output(`restApiHost=${restApiHost}`);
 logger.output(`restApiRoot=${restApiRoot}`);
 logger.output(`mqttBroker=${mqttBroker}`);
+logger.output(`mqttPort=${mqttPort}`);
+logger.output(`mqttClientId=${mqttClientId}`);
+logger.output(`mqttUserName=${mqttUserName}`);
+logger.output(`mqttPassword=${mqttPassword !== "" ? "******" : ""}`);
 logger.output(`mqttOptionFile=${mqttOptionFile}`);
 logger.output(`mqttBaseTopic=${mqttBaseTopic}`);
 logger.output(`mqttCaFile=${mqttCaFile}`);
@@ -336,13 +388,16 @@ const inputParameters:InputParameters =
   mqttCaFile,
   mqttCertFile,
   mqttKeyFile,
+  mqttUserName,
+  mqttPort,
+  mqttClientId,
   version:`${process.env.npm_package_name} ver.${process.env.npm_package_version}`,
   buildInfo:buildInfo
 };
 
 
 let mqttOption:mqtt.IClientOptions = {
-  port:1883
+  port:mqttPort
 };
 
 if(mqttOptionFile !== "" && fs.existsSync(mqttOptionFile))
@@ -365,6 +420,22 @@ if(mqttKeyFile !== "" && fs.existsSync(mqttKeyFile))
 {
   mqttOption.key = fs.readFileSync(mqttKeyFile, {encoding:"utf-8"});
   logger.output(`load ${mqttKeyFile}`)
+}
+if(mqttPort !== 1883)
+{
+  mqttOption.port = mqttPort;
+}
+if(mqttUserName !== "")
+{
+  mqttOption.username = mqttUserName;
+}
+if(mqttPassword !== "")
+{
+  mqttOption.password = mqttPassword;
+}
+if(mqttClientId !== "")
+{
+  mqttOption.clientId = mqttClientId;
 }
 
 const aliasOption: AliasOption = AliasOption.empty;
