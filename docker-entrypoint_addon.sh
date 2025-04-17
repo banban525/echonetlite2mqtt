@@ -45,7 +45,7 @@ fi
 INGRESS_PORT=$(bashio::addon.ingress_port)
 INGRESS_URL=$(bashio::addon.ingress_url)
 INGRESS_ENTRY=$(bashio::addon.ingress_entry)
-export REST_API_PORT=INGRESS_PORT
+export REST_API_PORT=$INGRESS_PORT
 export REST_API_ROOT=$INGRESS_ENTRY
 
 npm run start:built

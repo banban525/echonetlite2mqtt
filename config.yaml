@@ -11,10 +11,6 @@ services:
   - mqtt:need
 ingress: true
 ingress_port: 8099
-ports:
-  8099/tcp: 8099
-ports_description:
-  8099/tcp: "Frontend tcp-listen port"
 map:
   - path: "/addon_config"
     type: addon_config
