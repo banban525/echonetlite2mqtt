@@ -16,25 +16,32 @@ ports:
 ports_description:
   8099/tcp: "Frontend tcp-listen port"
 map:
-  - path: "/config"
-    type: homeassistant_config
+  - path: "/addon_config"
+    type: addon_config
+    read_only: true
+  - path: "/ssl"
+    type: ssl
+    read_only: true
+  - path: "/data"
+    type: data
     read_only: true
 options:
   mqtt: {}
-  REST_API_PORT: 8099
+  echonet: {}
 schema:
-  MQTT_BROKER: str?
-  MQTT_OPTION_FILE: str?
-  MQTT_CA_FILE: str?
-  MQTT_CERT_FILE: str?
-  MQTT_KEY_FILE: str?
-  MQTT_BASE_TOPIC: str?
-  REST_API_HOST: str?
-  REST_API_PORT: int?
-  ECHONET_TARGET_NETWORK: str?
-  ECHONET_DEVICE_IP_LIST: str?
-  ECHONET_COMMAND_TIMEOUT: int?
-  ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY: str?
-  ECHONET_ALIAS_FILE: str?
-  ECHONET_LEGACY_MULTI_NIC_MODE: str?
-  ECHONET_UNKNOWN_AS_ERROR: str?
+  mqtt:
+    broker: str?
+    option_file: str?
+    ca_file: str?
+    cert_file: str?
+    key_file: str?
+    base_topic: str?
+  echonet:
+    target_network: str?
+    device_ip_list: str?
+    command_timeout: int?
+    disable_auto_device_discovery: bool?
+    alias_file: str?
+    legacy_multi_nic_mode: bool?
+    unknown_as_error: bool?
+
