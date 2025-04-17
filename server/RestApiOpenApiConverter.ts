@@ -11,7 +11,7 @@ export class RestApiOpenApiConverter{
   echoNetOpenApiConverter = new EchoNetOpenApiConverter();
   
 
-  createOpenApiJson = (deviceStore:DeviceStore): OpenAPIV3_1.Document =>
+  createOpenApiJson = (deviceStore:DeviceStore, restApiRoot:string): OpenAPIV3_1.Document =>
   {
     const result:OpenAPIV3_1.Document = {
       openapi:'3.1.0',
@@ -19,6 +19,12 @@ export class RestApiOpenApiConverter{
         title:'ECHONETLite2MQTT Web API',
         version: "1.1.0"
       },
+      servers:[
+        {
+          url:`${restApiRoot}/`,
+          description:'REST API server'
+        }
+      ],
       paths: {},
       webhooks:{
         onMessage:this.getWebSocketWebHook()

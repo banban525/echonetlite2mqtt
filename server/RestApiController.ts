@@ -30,6 +30,7 @@ export class RestApiController
   private readonly echoNetLiteController:EchoNetLiteController;
   private readonly hostName:string;
   private readonly port:number;
+  private readonly root:string;
   private readonly mqttBaseTopic:string;
   private readonly detailLogsCallback:()=>{fileName:string, content:string}[];
   private wss:WebSocketServer|undefined;
@@ -41,6 +42,7 @@ export class RestApiController
     echoNetLiteController:EchoNetLiteController,
     hostName:string, 
     port:number,
+    root:string,
     mqttBaseTopic:string,
     detailLogsCallback:()=>{fileName:string, content:string}[]){
 
@@ -51,6 +53,7 @@ export class RestApiController
     this.echoNetLiteController = echoNetLiteController;
     this.hostName = hostName;
     this.port = port;
+    this.root = root;
     this.mqttBaseTopic = mqttBaseTopic;
     this.detailLogsCallback = detailLogsCallback;
 
@@ -99,9 +102,9 @@ export class RestApiController
     app.get("/api/serverevents", this.getServerEvents);
 
     // openapi-ui
-    const swaggerUiOptions:swaggerUi.SwaggerOptions = {customfavIcon:"/favicon.ico", swaggerOptions:{url:"/openapi.json"}};
+    const swaggerUiOptions:swaggerUi.SwaggerOptions = {customfavIcon:this.root+"/favicon.ico", swaggerOptions:{url:this.root+"/openapi.json"}};
     app.use('/api-docs', swaggerUi.serveFiles({}, swaggerUiOptions), swaggerUi.setup({}, swaggerUiOptions));
-  
+    
     const server = app.listen(this.port, this.hostName, ():void => {
       Logger.info("[RESTAPI]", `Start listening to web server. ${this.hostName}:${this.port}`);
     });
@@ -150,20 +153,25 @@ export class RestApiController
     req: express.Request,
     res: express.Response
   ): void => {
-    res.render("./index.ejs");
+    const root = this.root;
+    res.locals["root"] = root;
+    res.render("./index.ejs", {root:root});
   }
 
   private viewLogs = (
     req: express.Request,
     res: express.Response
   ): void => {
-    res.render("./logs.ejs");
+    const root = this.root;
+    res.locals["root"] = root;
+    res.render("./logs.ejs", {root:root});
   }
 
   private viewDevice = (
     req: express.Request,
     res: express.Response
   ): void => {
+    const root = this.root;
     const deviceId = req.params.deviceId;
     const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
     if(foundDevice === undefined){
@@ -176,7 +184,8 @@ export class RestApiController
     const mqttTopic = `${this.mqttBaseTopic}/${foundDevice.name}`;
 
     const allProperties = JSON.stringify(Device.ToProperiesObject(foundDevice.propertiesValue), null, 2);
-    res.render("./device.ejs", {device:foundDevice, allProperties, propertyViewModels, context:{mqttTopic}});
+    res.locals["root"] = root;
+    res.render("./device.ejs", {device:foundDevice, allProperties, propertyViewModels, context:{mqttTopic}, root:root});
   }
 
 
@@ -778,9 +787,13 @@ export class RestApiController
     req: express.Request,
     res: express.Response
   ): void => {
+    res.send(this.createOpenApiJson());
+  }
 
+  private createOpenApiJson = (
+  ) => {
     var converter = new RestApiOpenApiConverter();
-    const jsonObj = converter.createOpenApiJson(this.deviceStore);
-    res.send(jsonObj);
+    const jsonObj = converter.createOpenApiJson(this.deviceStore, this.root);
+    return jsonObj;
   }
 }

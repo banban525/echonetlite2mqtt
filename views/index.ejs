@@ -24,7 +24,7 @@
     {
       $.ajax({
           type: "GET",
-          url: "/api/status",
+          url: "<%= root %>/api/status",
           dataType : "json"
         }).done((data)=>{
 
@@ -50,7 +50,7 @@
     function connectWebSocket(){
       const url = new URL(window.location.href);
       url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
-      url.pathname = "/";
+      url.pathname = "<%= root %>/";
 
       try
       {

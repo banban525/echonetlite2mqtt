@@ -1,0 +1,86 @@
+name: Build and Publish HA Addon
+
+on:
+  push:
+    branches:
+    - '*'
+    tags: [ 'v*.*.*' ]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+
+jobs:
+  build:
+    name: Publish
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      # Install the cosign tool except on PR
+      # https://github.com/sigstore/cosign-installer
+      - name: Install cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 #v3.5.0
+        with:
+          cosign-release: 'v2.2.4'
+      # Login against a Docker registry except on PR
+      # https://github.com/docker/login-action
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # package.jsonからバージョンを抽出する
+      - name: Extract version from package.json
+        id: extract_version
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Extracted version: $VERSION"
+
+      # config.yamlのversionを上書きする
+      - name: Update config.yaml version
+        run: |
+          sed -i "s/version: .*/version: \"v$VERSION\"/" config.yaml
+          echo "Updated config.yaml with version $VERSION"
+
+      # docker-entrypoint_addon.shをdocker-entrypoint.shにリネームする
+      - name: Rename docker-entrypoint_addon.sh to docker-entrypoint.sh
+        run: |
+          rm -f docker-entrypoint.sh
+          mv docker-entrypoint_addon.sh docker-entrypoint.sh
+          echo "Renamed docker-entrypoint_addon.sh to docker-entrypoint.sh"
+
+
+      # build for ha addon
+      # haのスクリプトでaddonをビルドする
+      # amd64とaarch64の両方をビルドして、github registryにpushする
+      # pushによるビルドではブランチ名とバージョン"-alpha"をタグにする
+      # なお、タグによるビルドではgitタグをdockerタグにする
+      - name: Publish
+        uses: home-assistant/builder@master
+        env:
+          VERSION: ${{ env.VERSION }}
+        with:
+          args: |
+            --amd64 \
+            --aarch64 \
+            --addon \
+            --docker-hub ghcr.io/${{ github.actor }} \
+            --image echonetlite2mqtt-addon/{arch} \
+            --target . \
+            --additional-tag ${{ github.ref_name }} \
+            --version v${{ env.VERSION }}-alpha \
+
+

@@ -1,0 +1,43 @@
+name: "ECHONETLite2MQTT"
+description: "ECHONET Lite to MQTT bridge."
+version: "v0.0.0"
+slug: "echonetlite2mqtt"
+arch:
+  - aarch64
+  - amd64
+init: false
+host_network: true
+services:
+  - mqtt:need
+ingress: true
+ingress_port: 0
+map:
+  - path: "/addon_config"
+    type: addon_config
+    read_only: true
+  - path: "/ssl"
+    type: ssl
+    read_only: true
+  - path: "/data"
+    type: data
+    read_only: true
+options:
+  mqtt: {}
+  echonet: {}
+schema:
+  mqtt:
+    broker: str?
+    option_file: str?
+    ca_file: str?
+    cert_file: str?
+    key_file: str?
+    base_topic: str?
+  echonet:
+    target_network: str?
+    device_ip_list: str?
+    command_timeout: int?
+    disable_auto_device_discovery: bool?
+    alias_file: str?
+    legacy_multi_nic_mode: bool?
+    unknown_as_error: bool?
+

@@ -24,6 +24,7 @@ interface InputParameters{
   debugLog:boolean;
   restApiPort:number;
   restApiHost:string;
+  restApiRoot:string;
   mqttBroker:string;
   mqttOptionFile:string;
   mqttBaseTopic:string;
@@ -44,6 +45,7 @@ let echonetCommandTimeout = 3000;
 let debugLog = false;
 let restApiPort = 3000;
 let restApiHost = "0.0.0.0";
+let restApiRoot = "";
 let mqttBroker = "";
 let mqttOptionFile = "";
 let mqttBaseTopic = "echonetlite2mqtt/elapi/v2/devices";
@@ -132,6 +134,10 @@ if("REST_API_PORT" in process.env && process.env.REST_API_PORT !== undefined)
 if("REST_API_HOST" in process.env && process.env.REST_API_HOST !== undefined)
 {
   restApiHost = process.env.REST_API_HOST.replace(/^"/g, "").replace(/"$/g, "");
+}
+if("REST_API_ROOT" in process.env && process.env.REST_API_ROOT !== undefined)
+{
+  restApiRoot = process.env.REST_API_ROOT.replace(/^"/g, "").replace(/"$/g, "");
 }
 if("MQTT_BROKER" in process.env && process.env.MQTT_BROKER !== undefined)
 {
@@ -234,6 +240,13 @@ for(var i = 2;i < process.argv.length; i++){
       restApiHost = value.replace(/^"/g, "").replace(/"$/g, "");
     }
   }
+  if(name === "--RestApiRoot".toLowerCase())
+  {
+    if(value!=="")
+    {
+      restApiRoot = value.replace(/^"/g, "").replace(/"$/g, "");
+    }
+  }
   if(name === "--MqttBroker".toLowerCase())
   {
     mqttBroker = value.replace(/^"/g, "").replace(/"$/g, "");
@@ -295,6 +308,7 @@ logger.output(`echonetCommandTimeout=${echonetCommandTimeout}`);
 logger.output(`debugLog=${debugLog}`);
 logger.output(`restApiPort=${restApiPort}`);
 logger.output(`restApiHost=${restApiHost}`);
+logger.output(`restApiRoot=${restApiRoot}`);
 logger.output(`mqttBroker=${mqttBroker}`);
 logger.output(`mqttOptionFile=${mqttOptionFile}`);
 logger.output(`mqttBaseTopic=${mqttBaseTopic}`);
@@ -315,6 +329,7 @@ const inputParameters:InputParameters =
   debugLog,
   restApiPort,
   restApiHost,
+  restApiRoot,
   mqttBroker,
   mqttOptionFile,
   mqttBaseTopic,
@@ -595,7 +610,7 @@ const detailLogsCallback : ()=>{fileName:string, content:string}[] = ()=>{
   return [{fileName, content}];
 }
 
-const restApiController = new RestApiController(deviceStore, systemStatusRepository, eventRepository, logger, echoNetListController, restApiHost, restApiPort, mqttBaseTopic, detailLogsCallback);
+const restApiController = new RestApiController(deviceStore, systemStatusRepository, eventRepository, logger, echoNetListController, restApiHost, restApiPort, restApiRoot, mqttBaseTopic, detailLogsCallback);
 restApiController.addPropertyChangedRequestEvent(async (deviceId:string, propertyName:string, newValue:any):Promise<void>=>{
 
   const device = deviceStore.getFromNameOrId(deviceId);
