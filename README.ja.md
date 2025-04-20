@@ -127,7 +127,7 @@ MQTT オプション
 | ------------------     | --------------------- | ----------- |
 |  `MQTT_BROKER`       | `--MqttBroker`     | MQTTブローカーのURLを指定します。"mqtt://" または "mqtts://"で始まる必要があります。  |
 |  `MQTT_PORT`         | `--MqttPort`       | MQTTブローカーのポートNoを指定します。(デフォルト: 1883) |
-|  `MQTT_CLIENT_ID`    | `--MqttClientId`   | MQTTのクライアントIDを指定します。 (Default: (空)))|
+|  `MQTT_CLIENT_ID`    | `--MqttClientId`   | MQTTのクライアントIDを指定します。 (Default: (空)) |
 |  `MQTT_USERNAME`     | `--MqttUsername`   | MQTTのユーザー名を指定します。 (Default: (空))|
 |  `MQTT_PASSWORD`     | `--MqttPassword`   | MQTTのパスワードを指定します。 (Default: (空))|
 |  `MQTT_OPTION_FILE`  | `--MqttOptionFile` | MQTTのオプションファイルのパスを指定します。ファイルの形式は [MQTT.js](https://github.com/mqttjs/MQTT.js) の Client Options を参照してください。 (デフォルト: (空))  |
@@ -152,8 +152,7 @@ ECHONET Lite オプション
 | `ECHONET_TARGET_NETWORK` | `--echonetTargetNetwork` | ECHONET Liteのネットワークを"000.000.000.000/00"の形で指定します。 (デフォルト: 自動) |
 | `ECHONET_DEVICE_IP_LIST` | `--echonetDeviceIpList` | デバイスのIPをカンマ区切りで指定します。(デフォルト:無し) |
 | `ECHONET_COMMAND_TIMEOUT` | `--echonetCommandTimeout` | ECHONET Liteコマンドの応答待ちの時間を指定します. (単位: ms) (デフォルト: 3000) |
-| `ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY` | `--echonetDisableAutoDeviceDiscovery` | デバイスの自動探索を無効にします。(デフォルト: 
-off) |
+| `ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY` | `--echonetDisableAutoDeviceDiscovery` | デバイスの自動探索を無効にします。(デフォルト: off) |
 | `ECHONET_ALIAS_FILE`   | `--echonetAliasFile`  | エイリアスオプションファイルを指定します。 (デフォルト: (空)) |
 | `ECHONET_LEGACY_MULTI_NIC_MODE` | `--echonetLegacyMultiNicMode` | 以前の通信モードに戻します。 (デフォルト: off) |
 | `ECHONET_UNKNOWN_AS_ERROR`   | `--echonetUnknownAsError`  | 不明なデバイスクラスや不明なプロパティをエラーとして扱います。 (デフォルト: off) |
