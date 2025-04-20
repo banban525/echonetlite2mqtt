@@ -1,56 +1,56 @@
 #!/usr/bin/env bashio
 
-if (bashio::config.has_value 'mqtt.broker'); then
-  export MQTT_BROKER=$(bashio::config "mqtt.broker")
+if (bashio::config.has_value 'MQTT_BROKER'); then
+  export MQTT_BROKER=$(bashio::config "MQTT_BROKER")
 fi
 if (bashio::config.has_value 'MQTT_OPTION_FILE'); then
   export MQTT_OPTION_FILE=/addon_config/$(bashio::config "MQTT_OPTION_FILE")
 fi
-if (bashio::config.has_value 'mqtt.ca_file'); then
-  export MQTT_CA_FILE=/ssl/$(bashio::config "mqtt.ca_file")
+if (bashio::config.has_value 'MQTT_CA_FILE'); then
+  export MQTT_CA_FILE=/ssl/$(bashio::config "MQTT_CA_FILE")
 fi
-if (bashio::config.has_value 'mqtt.cert_file'); then
-  export MQTT_CERT_FILE=/ssl/$(bashio::config "mqtt.cert_file")
+if (bashio::config.has_value 'MQTT_CERT_FILE'); then
+  export MQTT_CERT_FILE=/ssl/$(bashio::config "MQTT_CERT_FILE")
 fi
-if (bashio::config.has_value 'mqtt.key_file'); then
-  export MQTT_KEY_FILE=/ssl/$(bashio::config "mqtt.key_file")
+if (bashio::config.has_value 'MQTT_KEY_FILE'); then
+  export MQTT_KEY_FILE=/ssl/$(bashio::config "MQTT_KEY_FILE")
 fi
-if (bashio::config.has_value 'mqtt.base_topic'); then
-  export MQTT_BASE_TOPIC=$(bashio::config "mqtt.base_topic")
+if (bashio::config.has_value 'MQTT_BASE_TOPIC'); then
+  export MQTT_BASE_TOPIC=$(bashio::config "MQTT_BASE_TOPIC")
 fi
-if (bashio::config.has_value 'mqtt.username'); then
-  export MQTT_USERNAME=$(bashio::config "mqtt.username")
+if (bashio::config.has_value 'MQTT_USERNAME'); then
+  export MQTT_USERNAME=$(bashio::config "MQTT_USERNAME")
 fi
-if (bashio::config.has_value 'mqtt.password'); then
-  export MQTT_PASSWORD=$(bashio::config "mqtt.password")
+if (bashio::config.has_value 'MQTT_PASSWORD'); then
+  export MQTT_PASSWORD=$(bashio::config "MQTT_PASSWORD")
 fi
-if (bashio::config.has_value 'mqtt.port'); then
-  export MQTT_PORT=$(bashio::config "mqtt.port")
+if (bashio::config.has_value 'MQTT_PORT'); then
+  export MQTT_PORT=$(bashio::config "MQTT_PORT")
 fi
-if (bashio::config.has_value 'mqtt.client_id'); then
-  export MQTT_CLIENT_ID=$(bashio::config "mqtt.client_id")
+if (bashio::config.has_value 'MQTT_CLIENT_ID'); then
+  export MQTT_CLIENT_ID=$(bashio::config "MQTT_CLIENT_ID")
 fi
 
-if (bashio::config.has_value 'echonet.target_network'); then
-  export ECHONET_TARGET_NETWORK=$(bashio::config "echonet.target_network")
+if (bashio::config.has_value 'ECHONET_TARGET_NETWORK'); then
+  export ECHONET_TARGET_NETWORK=$(bashio::config "ECHONET_TARGET_NETWORK")
 fi
-if (bashio::config.has_value 'echonet.device_ip_list'); then
-  export ECHONET_DEVICE_IP_LIST=$(bashio::config "echonet.device_ip_list")
+if (bashio::config.has_value 'ECHONET_DEVICE_IP_LIST'); then
+  export ECHONET_DEVICE_IP_LIST=$(bashio::config "ECHONET_DEVICE_IP_LIST")
 fi
-if (bashio::config.has_value 'echonet.command_timeout'); then
-  export ECHONET_COMMAND_TIMEOUT=$(bashio::config "echonet.command_timeout")
+if (bashio::config.has_value 'ECHONET_COMMAND_TIMEOUT'); then
+  export ECHONET_COMMAND_TIMEOUT=$(bashio::config "ECHONET_COMMAND_TIMEOUT")
 fi
-if (bashio::config.has_value 'echonet.disable_auto_device_discovery'); then
-  export ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY=$(bashio::config "echonet.disable_auto_device_discovery")
+if (bashio::config.has_value 'ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY'); then
+  export ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY=$(bashio::config "ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY")
 fi
-if (bashio::config.has_value 'echonet.alias_file'); then
-  export ECHONET_ALIAS_FILE=/addon_config/$(bashio::config "echonet.alias_file")
+if (bashio::config.has_value 'ECHONET_ALIAS_FILE'); then
+  export ECHONET_ALIAS_FILE=/addon_config/$(bashio::config "ECHONET_ALIAS_FILE")
 fi
-if (bashio::config.has_value 'echonet.legacy_multi_nic_mode'); then
-  export ECHONET_LEGACY_MULTI_NIC_MODE=$(bashio::config "echonet.legacy_multi_nic_mode")
+if (bashio::config.has_value 'ECHONET_LEGACY_MULTI_NIC_MODE'); then
+  export ECHONET_LEGACY_MULTI_NIC_MODE=$(bashio::config "ECHONET_LEGACY_MULTI_NIC_MODE")
 fi
-if (bashio::config.has_value 'echonet.unknown_as_error'); then
-  export ECHONET_UNKNOWN_AS_ERROR=$(bashio::config "echonet.unknown_as_error")
+if (bashio::config.has_value 'ECHONET_UNKNOWN_AS_ERROR'); then
+  export ECHONET_UNKNOWN_AS_ERROR=$(bashio::config "ECHONET_UNKNOWN_AS_ERROR")
 fi
 
 

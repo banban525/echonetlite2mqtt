@@ -21,27 +21,23 @@ map:
   - path: "/data"
     type: data
     read_only: true
-options:
-  mqtt: {}
-  echonet: {}
 schema:
-  mqtt:
-    broker: str?
-    option_file: str?
-    ca_file: str?
-    cert_file: str?
-    key_file: str?
-    base_topic: str?
-    username: str?
-    password: str?
-    client_id: str?
-    port: int?
-  echonet:
-    target_network: str?
-    device_ip_list: str?
-    command_timeout: int?
-    disable_auto_device_discovery: bool?
-    alias_file: str?
-    legacy_multi_nic_mode: bool?
-    unknown_as_error: bool?
+  MQTT_BROKER: str?
+  MQTT_PORT: port?
+  MQTT_CLIENT_ID: str?
+  MQTT_USERNAME: str?
+  MQTT_PASSWORD: password?
+  MQTT_OPTION_FILE: str?
+  MQTT_CA_FILE: str?
+  MQTT_CERT_FILE: str?
+  MQTT_KEY_FILE: str?
+  MQTT_BASE_TOPIC: str?
+  ECHONET_TARGET_NETWORK: str?
+  ECHONET_DEVICE_IP_LIST: str?
+  ECHONET_COMMAND_TIMEOUT: int?
+  ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY: bool?
+  ECHONET_ALIAS_FILE: str?
+  ECHONET_LEGACY_MULTI_NIC_MODE: bool?
+  ECHONET_UNKNOWN_AS_ERROR: bool?
+
 
