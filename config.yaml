@@ -22,6 +22,7 @@ map:
     type: data
     read_only: true
 schema:
+  MQTT_DISABLE_AUTO_CONFIG: bool?
   MQTT_BROKER: str?
   MQTT_PORT: port?
   MQTT_CLIENT_ID: str?

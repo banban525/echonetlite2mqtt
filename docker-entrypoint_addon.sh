@@ -1,6 +1,7 @@
 #!/usr/bin/env bashio
 
 if bashio::services.available "mqtt"; then
+  if ! bashio::var.true "$(bashio::config 'MQTT_DISABLE_AUTO_CONFIG')"; then
     bashio::log.info "MQTT service found, fetching credentials ..."
     if bashio::var.true "$(bashio::services 'mqtt' 'ssl')"; then
       MQTT_PREFIX="mqtts://";
@@ -12,6 +13,9 @@ if bashio::services.available "mqtt"; then
     export MQTT_USERNAME=$(bashio::services mqtt "username")
     export MQTT_PASSWORD=$(bashio::services mqtt "password")
     export MQTT_BROKER="${MQTT_PREFIX}${MQTT_HOST}:${MQTT_PORT}";
+  else
+    bashio::log.info "MQTT auto-configuration disabled via MQTT_DISABLE_AUTO_CONFIG option."
+  fi
 fi
 
 if (bashio::config.has_value 'MQTT_BROKER'); then
