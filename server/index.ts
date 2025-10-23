@@ -11,7 +11,46 @@ import { LogRepository } from "./LogRepository";
 import { Logger } from "./Logger";
 import path from "path";
 import os from "os";
-import ip from "ip";
+import * as ipaddr from "ipaddr.js";
+
+// Helper function to check if an IP is in a subnet
+function isIpInSubnet(testIp: string, networkIp: string, netmask: string): boolean {
+  try {
+    const test = ipaddr.parse(testIp);
+    const network = ipaddr.parse(networkIp);
+    const mask = ipaddr.parse(netmask);
+
+    if (test.kind() !== 'ipv4' || network.kind() !== 'ipv4' || mask.kind() !== 'ipv4') {
+      return false;
+    }
+
+    // Calculate prefix length from netmask
+    const prefixLength = mask.toByteArray().reduce((acc, byte) =>
+      acc + byte.toString(2).split('1').length - 1, 0);
+
+    return test.match(network, prefixLength);
+  } catch {
+    return false;
+  }
+}
+
+// Helper function to parse CIDR and check if IP is in range
+function isIpInCidr(testIp: string, cidr: string): boolean {
+  try {
+    const test = ipaddr.parse(testIp);
+    const [networkStr, prefixStr] = cidr.split('/');
+    const network = ipaddr.parse(networkStr);
+    const prefix = parseInt(prefixStr, 10);
+
+    if (test.kind() !== network.kind()) {
+      return false;
+    }
+
+    return test.match(network, prefix);
+  } catch {
+    return false;
+  }
+}
 
 interface InputParameters{
   echonetTargetNetwork:string;
@@ -516,8 +555,8 @@ if(knownDeviceIpList.length > 0)
   
     for(const interfaceInfo of interfaces.filter(_=>_.family === "IPv4"))
     {
-      const subnet = ip.subnet(interfaceInfo.address, interfaceInfo.netmask);
-      notMatchedDeviceIpList = notMatchedDeviceIpList.filter(deviceIp=>subnet.contains(deviceIp)===false);
+      notMatchedDeviceIpList = notMatchedDeviceIpList.filter(deviceIp=>
+        !isIpInSubnet(deviceIp, interfaceInfo.address, interfaceInfo.netmask));
     }
   }
 
@@ -539,7 +578,7 @@ if (echonetTargetNetwork !== "") {
   const matchedNetworkAddresses = Object.keys(interfaces)
     .map((key) => interfaces[key])
     .flat()
-    .filter((_) => _!==undefined && ip.cidrSubnet(echonetTargetNetwork).contains(_.address));
+    .filter((_) => _!==undefined && isIpInCidr(_.address, echonetTargetNetwork));
   
   if(matchedNetworkAddresses.length > 0 && matchedNetworkAddresses[0] !== undefined)
   {
@@ -567,11 +606,7 @@ if(networkInterfaceForEchonet === undefined && knownDeviceIpList.length > 0)
     }
   
     const matchedInterfaces = interfaces.filter(_=>_.family === "IPv4").filter(interfaceInfo=>{
-      const subnet = ip.subnet(interfaceInfo.address, interfaceInfo.netmask);
-      if (subnet.contains(deviceIp)) {
-        return true;
-      }
-      return false;
+      return isIpInSubnet(deviceIp, interfaceInfo.address, interfaceInfo.netmask);
     });
     if(matchedInterfaces.length > 0)
     {
@@ -585,16 +620,16 @@ if(networkInterfaceForEchonet === undefined && knownDeviceIpList.length > 0)
 if(networkInterfaceForEchonet !== undefined)
 {
   // 決めたネットワークに含まれないデバイスIPは削除する
-  const subnet = ip.subnet(networkInterfaceForEchonet.address, networkInterfaceForEchonet.netmask);
   for(const deviceIp of knownDeviceIpList)
   {
-    if(subnet.contains(deviceIp) === false)
+    if(!isIpInSubnet(deviceIp, networkInterfaceForEchonet.address, networkInterfaceForEchonet.netmask))
     {
       Logger.warn("", `"${deviceIp}" is not in the network range of the network ${networkInterfaceForEchonet.address}.`);
     }
   }
 
-  knownDeviceIpList = knownDeviceIpList.filter(deviceIp=>subnet.contains(deviceIp));
+  knownDeviceIpList = knownDeviceIpList.filter(deviceIp=>
+    isIpInSubnet(deviceIp, networkInterfaceForEchonet!.address, networkInterfaceForEchonet!.netmask));
 }
 
 const networkAddressForEchonet = networkInterfaceForEchonet !== undefined ? networkInterfaceForEchonet.address : "";
