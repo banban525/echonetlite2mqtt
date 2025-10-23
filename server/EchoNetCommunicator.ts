@@ -29,12 +29,10 @@ export class EchoNetCommunicator
       EL.Node_details["8a"][1]=0xff;
       EL.Node_details["8a"][2]=0xfe;
 
-      await EL.initialize(objList, this.echonetUserFunc, -1, Options)
-        .then(()=>{
-          EL.Node_details["83"][1]=0xff;
-          EL.Node_details["83"][2]=0xff;
-          EL.Node_details["83"][3]=0xfe;
-        });
+      EL.initialize(objList, this.echonetUserFunc, -1, Options);
+      EL.Node_details["83"][1]=0xff;
+      EL.Node_details["83"][2]=0xff;
+      EL.Node_details["83"][3]=0xfe;
       
       // 向地を渡したipVerを元に戻す
       EL.ipVer = ipVer ?? 4;
@@ -93,12 +91,11 @@ export class EchoNetCommunicator
     EL.Node_details["8a"][1]=0xff;
     EL.Node_details["8a"][2]=0xfe;
 
-    return await EL.initialize(objList, this.echonetUserFunc, ipVer, Options)
-      .then(()=>{
-        EL.Node_details["83"][1]=0xff;
-        EL.Node_details["83"][2]=0xff;
-        EL.Node_details["83"][3]=0xfe;
-      });
+    const result = EL.initialize(objList, this.echonetUserFunc, ipVer, Options);
+    EL.Node_details["83"][1]=0xff;
+    EL.Node_details["83"][2]=0xff;
+    EL.Node_details["83"][3]=0xfe;
+    return result;
   }
 
   public static release():void
