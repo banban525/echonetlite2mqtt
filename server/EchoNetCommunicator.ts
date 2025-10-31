@@ -1,5 +1,6 @@
 import EL, { facilitiesType,eldata,rinfo, DeviceDetailsType } from "echonet-lite";
 import dgram from "dgram";
+import { Logger } from "./Logger";
 
 export class EchoNetCommunicator
 {
@@ -118,6 +119,14 @@ export class EchoNetCommunicator
 
   static echonetUserFunc = (rinfo: rinfo, els: eldata):void =>
   {
+    if(els == undefined || els === null || Object.keys(els).length === 0){
+      if (rinfo == undefined) {
+        Logger.error("[ECHONETLite][userfunc]", "rinfo and eldata are undefined");
+      } else {
+        Logger.error("[ECHONETLite][userfunc]", `els is undefined (from ${rinfo.address})`);
+      }
+      return;
+    }
     if(els.ESV === ELSV.SET_RES)
     {
       this.setResponseHandlers.forEach(_=>_(rinfo,els));
