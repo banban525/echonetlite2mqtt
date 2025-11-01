@@ -57,7 +57,7 @@ export class MqttController
 
     
     this.mqttClient.on("message", async (topic: string, payload: Buffer, packet: IPublishPacket):Promise<void>=>{
-      //Logger.write('subscriber.on.message', 'topic:', topic, 'message:', payload.toString());
+      // Logger.debug('[MQTT]', `topic:${topic} message:${payload.toString()}`);
 
       // set
       {
@@ -70,12 +70,12 @@ export class MqttController
 
           const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
           if(foundDevice===undefined){
-            //error
+            Logger.error('[MQTT][set]', `can't find device. topic:${topic} message:${payload.toString()}`);
             return;
           }
           const property = foundDevice.properties.find(_=>_.name === propertyName);
           if(property===undefined){
-            //error
+            Logger.error('[MQTT][set]', `can't find property. topic:${topic} message:${payload.toString()}`);
             return;
           }
           
@@ -97,12 +97,12 @@ export class MqttController
 
           const foundDevice = this.deviceStore.getFromNameOrId(deviceId);
           if(foundDevice===undefined){
-            //error
+            Logger.error('[MQTT][request]', `can't find device. topic:${topic} message:${payload.toString()}`);
             return;
           }
           const property = foundDevice.properties.find(_=>_.name === propertyName);
           if(property===undefined){
-            //error
+            Logger.error('[MQTT][request]', `can't find property. topic:${topic} message:${payload.toString()}`);
             return;
           }
 
