@@ -396,21 +396,21 @@ export default class EchoNetDeviceConverter
     const deviceClass = "0x"+eoj.substr(0, 4).toUpperCase();
     const foundDevice = this.echoNetPropertyConverter.getDevice(deviceClass);
     if(foundDevice === undefined){
-      Logger.warn("", `propertyToEchoNetData foundDevice === undefined`)
+      Logger.warn("[propertyToEchoNetData]", `foundDevice === undefined`)
       return undefined;
     }
     
     const foundProperty = foundDevice.elProperties.find(_=>_.shortName === propertyName);
     if(foundProperty === undefined)
     {
-      Logger.warn("", `propertyToEchoNetData deviceProperty === undefined`)
+      Logger.warn("[propertyToEchoNetData]", `deviceProperty === undefined`)
       return undefined;
     }
 
     const echoNetData = this.echoNetPropertyConverter.toEchoNetLiteData(foundProperty.data, value);
     
     if(echoNetData===undefined){
-      Logger.warn("", `propertyToEchoNetData echoNetData===undefined`)
+      Logger.warn("[propertyToEchoNetData]", `echoNetData===undefined`)
       return undefined;
     }
 
