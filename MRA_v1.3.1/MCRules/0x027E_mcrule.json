@@ -1,0 +1,23 @@
+{
+  "eoj": "0x027E",
+  "properties": [
+    {
+      "epc": "0x89",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x8C",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xCD",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE6",
+      "data": {
+        "$ref": "#/definitions/raw_0-24"
+      }
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "eoj": "0x0011",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "温度センサ",
+    "en": "Temperature sensor"
+  },
+  "shortName": "temperatureSensor",
+  "elProperties": [
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "温度計測値",
+        "en": "Measured temperature value"
+      },
+      "shortName": "value",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "温度計測値を(0.1℃単位で)示す",
+        "en": "This property indicates the measured temperature value in units of 0.1C."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-273.2-3276.6Celsius"
+      }
+    }
+  ]
+}

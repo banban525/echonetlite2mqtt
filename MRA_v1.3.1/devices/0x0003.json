@@ -1,0 +1,62 @@
+{
+  "eoj": "0x0003",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "非常ボタン",
+    "en": "Emergency button"
+  },
+  "shortName": "emergencyButton",
+  "elProperties": [
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "非常発生状態",
+        "en": "Emergency occurrence status"
+      },
+      "shortName": "occurrenceOfEmergency",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "非常事態の発生状況を示す。",
+        "en": "This property indicates occurrence of an emergency situation."
+      },
+      "data": {
+        "$ref": "#/definitions/state_YES-NO_4142"
+      }
+    },
+    {
+      "epc": "0xBF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "非常発生状態リセット設定",
+        "en": "Emergency occurrence status resetting"
+      },
+      "shortName": "reset",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "0x00 を書き込むことにより、非常発生状態をリセットする。",
+        "en": "Resets emergency occurrence status by setting 0x00."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reset_00"
+      }
+    }
+  ]
+}

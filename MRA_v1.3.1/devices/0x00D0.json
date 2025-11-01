@@ -1,0 +1,70 @@
+{
+  "eoj": "0x00D0",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "照度センサ",
+    "en": "Illuminance sensor"
+  },
+  "shortName": "illuminanceSensor",
+  "elProperties": [
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "照度計測値1",
+        "en": "Measured illuminance value 1"
+      },
+      "shortName": "valueInLux",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "照度計測値を lux の単位で示す",
+        "en": "This property indicates measured illuminance value in lux."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533lux"
+      },
+      "remark": {
+        "ja": "0xE0 または 0xE1 のいずれかを必須",
+        "en": "Either 0xE0 or 0xE1 is required."
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "照度計測値2",
+        "en": "Measured illuminance value 2"
+      },
+      "shortName": "valueInKlux",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "照度計測値を klux の単位で示す",
+        "en": "This property indicates measured illuminance value in klux."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533klux"
+      },
+      "remark": {
+        "ja": "0xE0 または 0xE1 のいずれかを必須",
+        "en": "Either 0xE0 or 0xE1 is required."
+      }
+    }
+  ]
+}

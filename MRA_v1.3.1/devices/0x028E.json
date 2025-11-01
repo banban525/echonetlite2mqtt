@@ -1,0 +1,1008 @@
+{
+  "eoj": "0x028E",
+  "validRelease": {
+    "from": "Q",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "分散型電源電力量メータ",
+    "en": "distributed generator's electric energy meter"
+  },
+  "shortName": "drElectricEnergyMeter",
+  "elProperties": [
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "機器種別",
+        "en": "Device type"
+      },
+      "shortName": "deviceType",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計量対象の機器(発電設備等)のクラスグループコード、クラスコード、系統連携方式",
+        "en": "Class group code, class code, and system interconnection type for devices to be measured (power generating unit, etc.))."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_3"
+      },
+      "note": {
+        "ja": "1バイト目はクラスグループコード。2バイト目はクラスコード。3バイト目は系統連携方式(0x00：系統連携方式、0x01：スタンドアロン方式)",
+        "en": "1st data is class group code. 2nd data is class code and 3rd data is system interconnection type (0x00: system interconnected type, 0x01: stand-alone type)."
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "機器ID",
+        "en": "Device ID"
+      },
+      "shortName": "deviceId",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計量対象の機器を特定するID",
+        "en": "ID to identify devices to be measured"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_7"
+      },
+      "note": {
+        "ja": "1～6バイト目：ECHONET LiteノードのMACアドレス、7バイト目：ECHONET Liteノードに搭載される分散型電源電力量メータを識別する番号",
+        "en": "1st–6th byte: MAC address of ECHONET Lite node, 7th byte: Number that identifies the decentralized electric energy meter implemented in the ECHONET Lite node."
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "公差階級",
+        "en": "Tolerance class"
+      },
+      "shortName": "toleranceClass",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計量対象の機器(発電設備等)の公差階級",
+        "en": "Tolerance class of the device to be measured (power generating unit, etc.)"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x01",
+            "name": "n1",
+            "descriptions": {
+              "ja": "n1",
+              "en": "n1"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "n2",
+            "descriptions": {
+              "ja": "n2",
+              "en": "n2"
+            }
+          },
+          {
+            "edt": "0x03",
+            "name": "n3",
+            "descriptions": {
+              "ja": "n3",
+              "en": "n3"
+            }
+          },
+          {
+            "edt": "0x04",
+            "name": "n4",
+            "descriptions": {
+              "ja": "n4",
+              "en": "n4"
+            }
+          },
+          {
+            "edt": "0x05",
+            "name": "n5",
+            "descriptions": {
+              "ja": "n5",
+              "en": "n5"
+            }
+          },
+          {
+            "edt": "0x06",
+            "name": "n6",
+            "descriptions": {
+              "ja": "n6",
+              "en": "n6"
+            }
+          },
+          {
+            "edt": "0x07",
+            "name": "n7",
+            "descriptions": {
+              "ja": "n7",
+              "en": "n7"
+            }
+          },
+          {
+            "edt": "0xFF",
+            "name": "others",
+            "descriptions": {
+              "ja": "その他",
+              "en": "others"
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "発電設備等の計測する計量精度を、特定計量制度に係るガイドラインに定められる、取引規模に応じた公差の階級で示す。",
+        "en": "The measurement accuracy of the power generating unit, etc., is shown as a tolerance class according to the scale of transactions, as specified in the Guidelines on Specific Measurement Scheme."
+      }
+    },
+    {
+      "epc": "0xD3",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値履歴保持日数",
+        "en": "Number of days to retain historical data of measured cumulative amounts of electric energy"
+      },
+      "shortName": "retentionDaysOfCumulativeElectricEnergyLog",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量計測値履歴の最大保持日数",
+        "en": "Maximum number of days to retain historical data of measured cumulative amounts of electric energy)"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99_u16"
+          },
+          {
+            "type": "state",
+            "size": 2,
+            "enum": [
+              {
+                "edt": "0xFFFF",
+                "name": "historyUnavailable",
+                "descriptions": {
+                  "ja": "履歴未対応",
+                  "en": "History unavailable"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "note": {
+        "ja": "0x0000(0)は当日の履歴のみを持つ。0x0001(1)は当日＋前日の履歴を持つ。0x0063(99)は当日＋99日前までの履歴を持つ",
+        "en": "0x0000(0) has the history of the current day only. 0x0001(1) has the history of the current day and the previous day. 0x0063(99) has the history of the current day through 99 days earlier."
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量単位",
+        "en": "Unit for cumulative amounts of electric energy"
+      },
+      "shortName": "cumulativeAmountsOfElectricEnergyUnit",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量単位(交流出力、交流入力、自立出力)",
+        "en": "Unit for cumulative amounts of electric energy (AC output, AC input and output during a power outage)"
+      },
+      "data": {
+        "type": "numericValue",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "numericValue": 1
+          },
+          {
+            "edt": "0x01",
+            "numericValue": 0.1
+          },
+          {
+            "edt": "0x02",
+            "numericValue": 0.01
+          },
+          {
+            "edt": "0x03",
+            "numericValue": 0.001
+          },
+          {
+            "edt": "0x04",
+            "numericValue": 0.0001
+          },
+          {
+            "edt": "0x0A",
+            "numericValue": 10
+          },
+          {
+            "edt": "0x0B",
+            "numericValue": 100
+          },
+          {
+            "edt": "0x0C",
+            "numericValue": 1000
+          },
+          {
+            "edt": "0x0D",
+            "numericValue": 10000
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD5",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算履歴収集日",
+        "en": "Day on which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+      },
+      "shortName": "dayForTheHistoricalDataOfCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required_c",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "30 分毎の計測値履歴データを収集する日",
+        "en": "This property indicates the day on which the historical data of measured cumulative amount of electric energy (which consists of 48 pieces of half-hourly data for the preceding 24 hours) is to be retrieved."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99_u16"
+          },
+          {
+            "$ref": "#/definitions/state_initial_FFFF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "積算電力量計測値履歴を保持する分散型電源電力量メータは搭載を必須とする。",
+        "en": "Distributed generator's electric energy meters that retain historical data of measured cumulative amounts of electric energy must implement this property."
+      },
+      "note": {
+        "ja": "積算電力量計測値履歴(EPC=0xE1、0xE3、0xE5)の積算履歴収集日を設定する。0x0000(0)は当日(前時限値まで)の計測データ。0x0063(99)は99日前の履歴を持つ",
+        "en": "This property specifies the day for which the historical data of measured cumulative amounts of electric energy (EPC=0xE1, 0xE3, 0xE5) is to be retrieved. 0x0000 (0): specifies the data on the current day (up to the last hour). 0x0063 (99) specifies the data on the day 99 days before."
+      }
+    },
+    {
+      "epc": "0xD6",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計量対象機器識別番号",
+        "en": "Identification number of device to be metered"
+      },
+      "shortName": "targetDeviceId",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計量対象機器の識別番号",
+        "en": " Identification number of device to be metered"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_17"
+      },
+      "note": {
+        "ja": "1バイト目は0xFE。2～4バイト目はメーカコード。残りは機器毎のユニーク値",
+        "en": "1st data is 0xFE. 2nd to 4th data is manufacture code. The rest should be unique to each device."
+      }
+    },
+    {
+      "epc": "0xDA",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "現在時分秒設定",
+        "en": "Current hour, minute, and second setting"
+      },
+      "shortName": "currentTime",
+      "accessRule": {
+        "get": "required_c",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現在時刻HH：MM：SS",
+        "en": "Current time (HH: MM: SS format)"
+      },
+      "data": {
+        "type": "time"
+      },
+      "remark": {
+        "ja": "積算電力量計測値履歴を保持する分散型電源電力量メータは搭載を必須とする。",
+        "en": "Distributed generator's electric energy meters that retain historical data of measured cumulative amounts of electric energy must implement this property."
+      }
+    },
+    {
+      "epc": "0xDB",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "時刻同期状態",
+        "en": "Time synchronization status"
+      },
+      "shortName": "timeSynchronizationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "NTPサーバ等との時刻同期の状態を示す。",
+        "en": "This property indicates the status of time synchronization with NTP servers, etc."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "name": "noSync",
+            "descriptions": {
+              "ja": "時刻同期なし",
+              "en": "no time synchronization"
+            }
+          },
+          {
+            "edt": "0x01",
+            "name": "success",
+            "descriptions": {
+              "ja": "時刻同期成功",
+              "en": "time synchronization successful"
+            }
+          },
+          {
+            "edt": "0x02",
+            "name": "fail",
+            "descriptions": {
+              "ja": "時刻同期失敗",
+              "en": "time synchronization failed"
+            }
+          },
+          {
+            "edt": "0xFF",
+            "name": "notImplemented",
+            "descriptions": {
+              "ja": "時刻同期機能未搭載",
+              "en": "time synchronization function not implemented"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値(交流入力)",
+        "en": "Measured cumulative amounts of electric energy (AC input)"
+      },
+      "shortName": "acInputCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量を10進表記において、9桁で示す",
+        "en": "This property indicates cumulative amounts of electric energy in decimal (9 digits)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999kWh",
+        "coefficient": [
+          "0xD4"
+        ]
+      },
+      "remark": {
+        "ja": "積算電力量計測値は稼働時からの累積値とし、単位は積算電力量単位のプロパティで示す。積算電力量計測値(交流入力)と積算電力量計測値(交流出力)は何れかの搭載を必須とする",
+        "en": "The measured cumulative amounts of electric energy shall be a cumulative amount from the beginning of operation and its unit is indicated in the unit for cumulative amounts of electric energy property. Either the implement measured cumulative amounts of electric energy (AC input) or the integrated measured cumulative amounts of electric energy (AC output) must be installed."
+      },
+      "note": {
+        "ja": "0xD4の値を乗算する必要あり",
+        "en": "It is necessary to mutiply the value of 0xD4."
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値履歴(交流入力)",
+        "en": "Historical data of measured cumulative amounts of electric energy (AC input)"
+      },
+      "shortName": "acInputCumulativeElectricEnergyLog",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xD5",
+      "descriptions": {
+        "ja": "積算履歴収集日 (0xD5) の30分毎 (00:00 ～ 23:30) の積算電力量計測値(交流入力)を取得する。",
+        "en": "This property indicates measured cumulative amount of electric energy (AC Input) for the duration of 00:00 and 23:30 at every 30 minute on the day specified by the EPC: 0xD5."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day on which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_initial_FFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-999999999kWh",
+                    "coefficient": [
+                      "0xD4"
+                    ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "積算電力量計測値は稼働時からの累積値とし、単位は積算電力量単位のプロパティで示す。交流入力を計測し履歴を保持する分散型電源電力量メータは搭載を必須とする。計測データなしは、当日の未来時刻、計量開始以前、計量部異常による未計測、時刻合わせによる時刻飛び、停電等による未計測の場合等である",
+        "en": "The measured cumulative amounts of electric energy shall be a cumulative amount from the beginning of operation and its unit is indicated in the unit for cumulative amounts of electric energy  property. Distributed generator’s electric energy meters that measure and retain AC input must implement this property. No measured data is lack of data in the cases such as for the future time of the day, for the time before the start of measurement, unable to measure due to an error of metering unit, for the skipped time caused by time synchronization, unable to measure due to system power failure, etc."
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値(交流出力)",
+        "en": "Measured cumulative amounts of electric energy (AC output)"
+      },
+      "shortName": "acOutputCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量を10進表記において、9桁で示す",
+        "en": "This property indicates cumulative amounts of electric energy in decimal (9 digits)."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-999999999kWh",
+        "coefficient": [
+          "0xD4"
+        ]
+      },
+      "remark": {
+        "ja": "積算電力量計測値は稼働時からの累積値とし、単位は積算電力量単位のプロパティで示す。積算電力量計測値(交流入力)と積算電力量計測値(交流出力)は何れかの搭載を必須とする。スタンドアロン方式蓄電システム(系統から受電して、蓄電池に充電し、蓄電池からの放電を出力用端子又はコンセントから給電する方式の蓄電システム)における蓄電エネルギー運転時の出力や、電気自動車等からの放電を出力量端子又はコンセントから出力する場合も交流出力として扱う",
+        "en": "The measured cumulative amounts of electric energy shall be a cumulative amount from the beginning of operation and its unit is indicated in the unit for cumulative amounts of electric energy property. Either the implement measured cumulative amounts of electric energy (AC input) or the integrated measured cumulative amounts of electric energy (AC output) must be installed. Stand-alone type storage battery system (a battery system that receives power to charge and discharges to the load from a dedicated output terminal or outlet) in a better discharge operation mode. As an AC output. Discharge from the EV via the dedicated output terminal or outlet is also treated as AC output."
+      },
+      "note": {
+        "ja": "0xD4の値を乗算する必要あり",
+        "en": "It is necessary to mutiply the value of 0xD4."
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値履歴(交流出力)",
+        "en": "Historical data of measured cumulative amounts of electric energy (AC output)"
+      },
+      "shortName": "acOutputCumulativeElectricEnergyLog",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xD5",
+      "descriptions": {
+        "ja": "積算履歴収集日 (0xD5) の30分毎 (00:00 ～ 23:30) の積算電力量計測値(交流入力)を取得する。",
+        "en": "This property indicates measured cumulative amount of electric energy (AC Input) for the duration of 00:00 and 23:30 at every 30 minute on the day specified by the EPC: 0xD5."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day on which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_initial_FFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-999999999kWh",
+                    "coefficient": [
+                      "0xD4"
+                    ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "積算電力量計測値は稼働時からの累積値とし、単位は積算電力量単位のプロパティで示す。交流出力を計測し履歴を保持する分散型電源電力量メータは搭載を必須とする。スタンドアロン方式蓄電システム(系統から受電して、蓄電池に充電し、蓄電池からの放電を出力用端子又はコンセントから給電する方式の蓄電システム)における蓄電エネルギー運転時の出力や、電気自動車等からの放電を出力量端子又はコンセントから出力する場合も交流出力として扱う。計測データなしは、当日の未来時刻、計量開始以前、計量部異常による未計測、時刻合わせによる時刻飛び、停電等による未計測の場合等である",
+        "en": "The measured cumulative amounts of electric energy shall be a cumulative amount from the beginning of operation and its unit is indicated in the unit for cumulative amounts of electric energy  property. Distributed generator’s electric energy meters that measure and retain AC output must implement this property. Stand-alone type storage battery system (a battery system that receives power to charge and discharges to the load from a dedicated output terminal or outlet) in a better discharge operation mode. As an AC output. Discharge from the EV via the dedicated output terminal or outlet is also treated as AC output. No measured data is lack of data in the cases such as for the future time of the day, for the time before the start of measurement, unable to measure due to an error of metering unit, for the skipped time caused by time synchronization, unable to measure due to system power failure, etc."
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値(自立出力)",
+        "en": "Measured cumulative amounts of electric energy (output during a power outage)"
+      },
+      "shortName": "independentOperationCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量を10進表記において、9桁で示す",
+        "en": "This property indicates cumulative amounts of electric energy in decimal (9 digits)."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-999999999kWh",
+            "coefficient": [
+              "0xD4"
+            ]
+          },
+          {
+            "$ref": "#/definitions/state_NoData_FFFFFFFE"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "積算電力量計測値は稼働時からの累積値とし、単位は積算電力量単位のプロパティで示す。計測データなしは、当日の未来時刻、計量開始以前、計量部異常による未計測、時刻合わせによる時刻飛び、停電等による未計測の場合等である",
+        "en": "The measured cumulative amounts of electric energy shall be a cumulative amount from the beginning of operation and its unit is indicated in the unit for cumulative amounts of electric energy  property. No measured data is lack of data in the cases such as for the future time of the day, for the time before the start of measurement, unable to measure due to an error of metering unit, for the skipped time caused by time synchronization, unable to measure due to system power failure, etc."
+      },
+      "note": {
+        "ja": "0xD4の値を乗算する必要あり",
+        "en": "It is necessary to mutiply the value of 0xD4."
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値履歴(自立出力)",
+        "en": "Historical data of measured cumulative amounts of electric energy (output during a power outage )"
+      },
+      "shortName": "independentOperationCumulativeElectricEnergyLog",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xD5",
+      "descriptions": {
+        "ja": "積算履歴収集日 (0xD5) の30分毎 (00:00 ～ 23:30) の積算電力量計測値(交流入力)を取得する。",
+        "en": "This property indicates measured cumulative amount of electric energy (AC Input) for the duration of 00:00 and 23:30 at every 30 minute on the day specified by the EPC: 0xD5."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day on which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_initial_FFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-999999999kWh",
+                    "coefficient": [
+                      "0xD4"
+                    ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "積算電力量計測値は稼働時からの累積値とし、単位は積算電力量単位のプロパティで示す。計測データなしは、当日の未来時刻、計量開始以前、計量部異常による未計測、時刻合わせによる時刻飛び、停電等による未計測の場合等である",
+        "en": "The measured cumulative amounts of electric energy shall be a cumulative amount from the beginning of operation and its unit is indicated in the unit for cumulative amounts of electric energy  property. No measured data is lack of data in the cases such as for the future time of the day, for the time before the start of measurement, unable to measure due to an error of metering unit, for the skipped time caused by time synchronization, unable to measure due to system power failure, etc."
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定時積算電力量計測値(交流入力)",
+        "en": "Cumulative amounts of electric energy measured at fixed time (AC input)"
+      },
+      "shortName": "acInputCumulativeElectricEnergyAtEvery30Min",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "30分毎の最新の計測時刻における積算電力量(交流入力)",
+        "en": "The latest cumulative amount of electric energy (AC input) at every 30 minute"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-999999999kWh",
+                  "coefficient": [
+                    "0xD4"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "積算電力量計測値は稼働時からの累積値とし、単位は積算電力量単位のプロパティで示す。交流入力を計測し履歴を保持する分散型電源電力量メータは搭載を必須とする。計測データなしは、当日の未来時刻、計量開始以前、計量部異常による未計測、時刻合わせによる時刻飛び、停電等による未計測の場合等である",
+        "en": "The measured cumulative amounts of electric energy shall be a cumulative amount from the beginning of operation and its unit is indicated in the unit for cumulative amounts of electric energy  property. Distributed generator’s electric energy meters that measure and retain AC input must implement this property. No measured data is lack of data in the cases such as for the future time of the day, for the time before the start of measurement, unable to measure due to an error of metering unit, for the skipped time caused by time synchronization, unable to measure due to system power failure, etc."
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定時積算電力量計測値(交流出力)",
+        "en": "Cumulative amounts of electric energy measured at fixed time (AC output)"
+      },
+      "shortName": "acOutputCumulativeElectricEnergyAtEvery30Min",
+      "accessRule": {
+        "get": "required_c",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "30分毎の最新の計測時刻における積算電力量(交流入力)",
+        "en": "The latest cumulative amount of electric energy (AC input) at every 30 minute"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-999999999kWh",
+                  "coefficient": [
+                    "0xD4"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "積算電力量計測値は稼働時からの累積値とし、単位は積算電力量単位のプロパティで示す。交流出力を計測し履歴を保持する分散型電源電力量メータは搭載を必須とする。スタンドアロン方式蓄電システム(系統から受電して、蓄電池に充電し、蓄電池からの放電を出力用端子又はコンセントから給電する方式の蓄電システム)における蓄電エネルギー運転時の出力や、電気自動車等からの放電を出力量端子又はコンセントから出力する場合も交流出力として扱う。計測データなしは、当日の未来時刻、計量開始以前、計量部異常による未計測、時刻合わせによる時刻飛び、停電等による未計測の場合等である",
+        "en": "The measured cumulative amounts of electric energy shall be a cumulative amount from the beginning of operation and its unit is indicated in the unit for cumulative amounts of electric energy  property. Distributed generator’s electric energy meters that measure and retain AC output must implement this property. Stand-alone type storage battery system (a battery system that receives power to charge and discharges to the load from a dedicated output terminal or outlet) in a better discharge operation mode. As an AC output. Discharge from the EV via the dedicated output terminal or outlet is also treated as AC output. No measured data is lack of data in the cases such as for the future time of the day, for the time before the start of measurement, unable to measure due to an error of metering unit, for the skipped time caused by time synchronization, unable to measure due to system power failure, etc."
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "定時積算電力量計測値(自立出力)",
+        "en": "Cumulative amounts of electric energy measured at fixed time (output during a power outage)"
+      },
+      "shortName": "independentOperationCumulativeElectricEnergyAtEvery30Min",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "30分毎の最新の計測時刻における積算電力量(交流入力)",
+        "en": "The latest cumulative amount of electric energy (AC input) at every 30 minute"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-999999999kWh",
+                  "coefficient": [
+                    "0xD4"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "積算電力量計測値は稼働時からの累積値とし、単位は積算電力量単位のプロパティで示す。計測データなしは、当日の未来時刻、計量開始以前、計量部異常による未計測、時刻合わせによる時刻飛び、停電等による未計測の場合等である",
+        "en": "The measured cumulative amounts of electric energy shall be a cumulative amount from the beginning of operation and its unit is indicated in the unit for cumulative amounts of electric energy  property. No measured data is lack of data in the cases such as for the future time of the day, for the time before the start of measurement, unable to measure due to an error of metering unit, for the skipped time caused by time synchronization, unable to measure due to system power failure, etc."
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電力計測値(交流入出力)",
+        "en": "Measured instantaneous electric power (AC input/output)"
+      },
+      "shortName": "acInstantaneousElectricPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "交流入出力の電力実効値の瞬時値を1W単位で示す。",
+        "en": "This property indicates the effective instantaneous electric power (AC input/output) in units of 1W."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-2147483647-2147483645W"
+          },
+          {
+            "$ref": "#/definitions/state_NoData_7FFFFFFE"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "スタンドアロン方式蓄電システム(系統から受電して、蓄電池に充電し、蓄電池からの放電を出力用端子又はコンセントから給電する方式の蓄電システム)における蓄電エネルギー運転時の出力や、電気自動車等からの放電を出力量端子又はコンセントから出力する場合も交流出力として扱う。",
+        "en": "Stand-alone type storage battery system (a battery system that receives power to charge and discharges to the load from a dedicated output terminal or outlet) in a better discharge operation mode. As an AC output. Discharge from the EV via the dedicated output terminal or outlet is also treated as AC output."
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電力計測値(自立出力)",
+        "en": "Measured instantaneous electric power (output during a power outage)"
+      },
+      "shortName": "independentOperationInstantaneousElectricPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "自立出力の電力実効値の瞬時値を1W単位で示す。",
+        "en": " This property indicates the effective instantaneous electric power (output during a power outage) in units of 1W."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-2147483647-2147483645W"
+          },
+          {
+            "$ref": "#/definitions/state_NoData_7FFFFFFE"
+          }
+        ]
+      }
+    }
+  ]
+}

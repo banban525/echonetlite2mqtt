@@ -1,0 +1,217 @@
+{
+  "eoj": "0x0602",
+  "properties": [
+    {
+      "epc": "0x80",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xB2",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "shortName": "ansiX34Equipped",
+            "element": {
+              "size": 0,
+              "type": "state",
+              "enum": [
+                {
+                  "edt": "0x00",
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "非搭載",
+                    "en": "Not implemented"
+                  }
+                },
+                {
+                  "edt": "0x01",
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "搭載",
+                    "en": "Implemented"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "shiftJisEquipped",
+            "element": {
+              "size": 0,
+              "type": "state",
+              "enum": [
+                {
+                  "edt": "0x00",
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "非搭載",
+                    "en": "Not implemented"
+                  }
+                },
+                {
+                  "edt": "0x01",
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "搭載",
+                    "en": "Implemented"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "jisEquipped",
+            "element": {
+              "size": 0,
+              "type": "state",
+              "enum": [
+                {
+                  "edt": "0x00",
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "非搭載",
+                    "en": "Not implemented"
+                  }
+                },
+                {
+                  "edt": "0x01",
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "搭載",
+                    "en": "Implemented"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "japaneseEucEquipped",
+            "element": {
+              "size": 0,
+              "type": "state",
+              "enum": [
+                {
+                  "edt": "0x00",
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "非搭載",
+                    "en": "Not implemented"
+                  }
+                },
+                {
+                  "edt": "0x01",
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "搭載",
+                    "en": "Implemented"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "ucs4Equipped",
+            "element": {
+              "size": 0,
+              "type": "state",
+              "enum": [
+                {
+                  "edt": "0x00",
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "非搭載",
+                    "en": "Not implemented"
+                  }
+                },
+                {
+                  "edt": "0x01",
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "搭載",
+                    "en": "Implemented"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "ucs2Equipped",
+            "element": {
+              "size": 0,
+              "type": "state",
+              "enum": [
+                {
+                  "edt": "0x00",
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "非搭載",
+                    "en": "Not implemented"
+                  }
+                },
+                {
+                  "edt": "0x01",
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "搭載",
+                    "en": "Implemented"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "latin1Equipped",
+            "element": {
+              "size": 0,
+              "type": "state",
+              "enum": [
+                {
+                  "edt": "0x00",
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "非搭載",
+                    "en": "Not implemented"
+                  }
+                },
+                {
+                  "edt": "0x01",
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "搭載",
+                    "en": "Implemented"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "utf8Equipped",
+            "element": {
+              "size": 0,
+              "type": "state",
+              "enum": [
+                {
+                  "edt": "0x00",
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "非搭載",
+                    "en": "Not implemented"
+                  }
+                },
+                {
+                  "edt": "0x01",
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "搭載",
+                    "en": "Implemented"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

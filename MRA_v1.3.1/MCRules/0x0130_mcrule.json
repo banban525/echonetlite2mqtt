@@ -1,0 +1,141 @@
+{
+  "eoj": "0x0130",
+  "properties": [
+    {
+      "epc": "0x80",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x8F",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x90",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "shortName": "timeBased",
+            "element": {
+              "type": "state",
+              "size": 1,
+              "enum": [
+                {
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "予約入",
+                    "en": "Reservation ON"
+                  }
+                },
+                {
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "予約切",
+                    "en": "Reservation OFF"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "relativeTimeBased",
+            "element": {
+              "type": "state",
+              "size": 1,
+              "enum": [
+                {
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "予約入",
+                    "en": "Reservation ON"
+                  }
+                },
+                {
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "予約切",
+                    "en": "Reservation OFF"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "EDT: [{0x41:(時刻:ON,相対時間:ON)}, {0x42:(時刻:OFF,相対時間:OFF)}, {0x43:(時刻:ON,相対時間:OFF)}, {0x44:(時刻:OFF,相対時間:ON)}]",
+        "en": "EDT: [{0x41:(time:ON,relative time:ON)}, {0x42:(time:OFF,relative time:OFF)}, {0x43:(time:ON,relative time:OFF)}, {0x44:(time:OFF,relative time:ON)}]"
+      }
+    },
+    {
+      "epc": "0x92",
+      "data": {
+        "$ref": "#/definitions/number_0-15359minute"
+      }
+    },
+    {
+      "epc": "0x94",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "shortName": "timeBased",
+            "element": {
+              "type": "state",
+              "size": 1,
+              "enum": [
+                {
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "予約入",
+                    "en": "Reservation ON"
+                  }
+                },
+                {
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "予約切",
+                    "en": "Reservation OFF"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "relativeTimeBased",
+            "element": {
+              "type": "state",
+              "size": 1,
+              "enum": [
+                {
+                  "name": "true",
+                  "descriptions": {
+                    "ja": "予約入",
+                    "en": "Reservation ON"
+                  }
+                },
+                {
+                  "name": "false",
+                  "descriptions": {
+                    "ja": "予約切",
+                    "en": "Reservation OFF"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "EDT: [{0x41:(時刻:ON,相対時間:ON)}, {0x42:(時刻:OFF,相対時間:OFF)}, {0x43:(時刻:ON,相対時間:OFF)}, {0x44:(時刻:OFF,相対時間:ON)}]",
+        "en": "EDT: [{0x41:(time:ON,relative time:ON)}, {0x42:(time:OFF,relative time:OFF)}, {0x43:(time:ON,relative time:OFF)}, {0x44:(time:OFF,relative time:ON)}]"
+      }
+    },
+    {
+      "epc": "0x96",
+      "data": {
+        "$ref": "#/definitions/number_0-15359minute"
+      }
+    }
+  ]
+}

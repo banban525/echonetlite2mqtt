@@ -1,0 +1,830 @@
+{
+  "eoj": "0x03CE",
+  "validRelease": {
+    "from": "F",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "業務用ショーケース",
+    "en": "Commercial showcase"
+  },
+  "shortName": "commercialShowcase",
+  "elProperties": [
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "F",
+        "to": "H"
+      },
+      "propertyName": {
+        "ja": "運転モード",
+        "en": "Operation mode"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "冷却、非冷、霜取り、その他の運転モードを設定し、設定状態を取得する",
+        "en": "Used to set cooling, non-cooling, defrosting, and other operating modes and to acquire the setting status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "cooling",
+            "descriptions": {
+              "ja": "冷却",
+              "en": "Cooling"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "nonCooling",
+            "descriptions": {
+              "ja": "非冷",
+              "en": "Non-cooling"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "defrosting",
+            "descriptions": {
+              "ja": "霜取り",
+              "en": "Defrosting"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "draining",
+            "descriptions": {
+              "ja": "水切り",
+              "en": "draining"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Others"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転モード設定",
+        "en": "Operation mode setting"
+      },
+      "shortName": "operationMode",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "冷却、非冷、霜取り、その他の運転モードを設定し、設定状態を取得する",
+        "en": "Used to set cooling, non-cooling, defrosting, and other operating modes and to acquire the setting status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "cooling",
+            "descriptions": {
+              "ja": "冷却",
+              "en": "Cooling"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "nonCooling",
+            "descriptions": {
+              "ja": "非冷",
+              "en": "Non-cooling"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "defrosting",
+            "descriptions": {
+              "ja": "霜取り",
+              "en": "Defrosting"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Others"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBD",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "吐出温度計測値",
+        "en": "Used to acquire measurements of discharge temperature."
+      },
+      "shortName": "dischargeTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "吐出温度の計測値を取得する",
+        "en": "Used to acquire measurements of discharge temperature."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-125Celsius"
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "F",
+        "to": "H"
+      },
+      "propertyName": {
+        "ja": "グループ情報",
+        "en": "Group information"
+      },
+      "shortName": "groupInformation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースとショーケース向け室外機との紐づけをするための情報",
+        "en": "Information to link showcases with outdoor units for showcases."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_1"
+      }
+    },
+    {
+      "epc": "0xCA",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "グループ情報",
+        "en": "Group information"
+      },
+      "shortName": "groupInformation",
+      "accessRule": {
+        "get": "required",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースとショーケース向け室外機との紐づけをするための情報",
+        "en": "Information to link showcases with outdoor units for showcases."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-253"
+          },
+          {
+            "$ref": "#/definitions/state_None_00"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ショーケースタイプ情報",
+        "en": "This property indicates the type of the showcase."
+      },
+      "shortName": "showcaseType",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースの種別を示す",
+        "en": "This property indicates the type of the showcase."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "nonFluorocarbonInverter",
+            "descriptions": {
+              "ja": "ノンフロンインバータ (CO2)",
+              "en": "Non-fluorocarbon inverter (CO2)"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "inverter",
+            "descriptions": {
+              "ja": "インバータ",
+              "en": "Inverter"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Other"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ドアタイプ情報",
+        "en": "This property indicates the type of the showcase door."
+      },
+      "shortName": "doorType",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースのドアの種別を示す",
+        "en": "This property indicates the type of the showcase door."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "open",
+            "descriptions": {
+              "ja": "オープン",
+              "en": "Open"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "closed",
+            "descriptions": {
+              "ja": "クローズ",
+              "en": "Closed"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷凍機内蔵型か冷凍機別置型かを示すショーケース構成情報",
+        "en": "This property indicates refrigerator type, such as built-in or separate."
+      },
+      "shortName": "refrigeratorType",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "冷凍機内蔵型か、冷凍機別置型かを示す",
+        "en": "This property indicates refrigerator type, such as built-in or separate."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "separate",
+            "descriptions": {
+              "ja": "別置型",
+              "en": "Separate type"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "builtIn",
+            "descriptions": {
+              "ja": "内蔵型",
+              "en": "Built-in type"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD3",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ショーケース形状情報",
+        "en": "This property indicates the shape of the showcase."
+      },
+      "shortName": "shapeType",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースの形状を示す",
+        "en": "This property indicates the shape of the showcase."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "box",
+            "descriptions": {
+              "ja": "箱形",
+              "en": "Box type"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "desktop",
+            "descriptions": {
+              "ja": "卓上形",
+              "en": "Desktop type"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "tripleGlass",
+            "descriptions": {
+              "ja": "三面ガラス式",
+              "en": "Triple glass type"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "quadrupleQuintupleGlass",
+            "descriptions": {
+              "ja": "四面 (五面) ガラス式",
+              "en": "Quadruple (quintuple) glass type"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "reachIn",
+            "descriptions": {
+              "ja": "リーチイン",
+              "en": "Reach-in type"
+            }
+          },
+          {
+            "edt": "0x46",
+            "name": "glassTop",
+            "descriptions": {
+              "ja": "ガラストップ",
+              "en": "Glass top type"
+            }
+          },
+          {
+            "edt": "0x47",
+            "name": "multistageOpenAndCeilingBlowoff",
+            "descriptions": {
+              "ja": "多段形オープン (天井吹出形)",
+              "en": "Multistage open (ceiling blowoff type)"
+            }
+          },
+          {
+            "edt": "0x48",
+            "name": "multistageOpenAndBacksideBlowoff",
+            "descriptions": {
+              "ja": "多段形オープン (背面吹出形)",
+              "en": "Multistage open (backside blowoff type)"
+            }
+          },
+          {
+            "edt": "0x49",
+            "name": "flat",
+            "descriptions": {
+              "ja": "平形",
+              "en": "Flat type"
+            }
+          },
+          {
+            "edt": "0x4A",
+            "name": "walkIn",
+            "descriptions": {
+              "ja": "ウォークイン",
+              "en": "Walk-in type"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Other"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷蔵用途か冷凍用途かを示す庫内温度帯情報",
+        "en": "This property indicates the purpose of the showcase, either refrigeration or freezing."
+      },
+      "shortName": "purposeType",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースが冷蔵用途、冷凍用途のいずれかを示す",
+        "en": "This property indicates the purpose of the showcase, either refrigeration or freezing."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "refrigeration",
+            "descriptions": {
+              "ja": "冷蔵",
+              "en": "Refrigeration"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "freezing",
+            "descriptions": {
+              "ja": "冷凍",
+              "en": "Freezing"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "庫内照明動作状態",
+        "en": "Indicates on/off status of lighting installed inside the showcase."
+      },
+      "shortName": "internalLightingOperationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ショーケース庫内に設置している照明のON/OFFの状態を示す",
+        "en": "Indicates on/off status of lighting installed inside the showcase."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "庫外照明動作状態",
+        "en": "Indicates ON/OFF status of lighting installed outside the showcase."
+      },
+      "shortName": "externalLightingOperationStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ショーケース庫外に設置している照明のON/OFFの状態を示す",
+        "en": "Indicates on/off status of lighting installed outside the showcase."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "コンプレッサ動作状態",
+        "en": "Indicates on/off status of compressor when showcase and compressor are a single unit."
+      },
+      "shortName": "compressorOperationStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースとコンプレッサが一体となっている場合、コンプレッサのON/OFFの状態を示す",
+        "en": "Indicates on/off status of compressor when showcase and compressor are a single unit."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "庫内温度計測値",
+        "en": "Used to acquire internal temperature measurements inside the showcase."
+      },
+      "shortName": "internalTemperature",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケース内の庫内温度計測値を取得する",
+        "en": "Used to acquire internal temperature measurements inside the showcase."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-125Celsius"
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "冷却時に要する定格消費電力 (冷凍能力値)",
+        "en": "Indicates rated power consumption necessary when showcase is cooling."
+      },
+      "shortName": "ratedElectricPowerForFreezing",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースが冷却時に要する定格の消費電力を示す",
+        "en": "Indicates rated power consumption necessary when showcase is cooling."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "霜取りヒータ稼働時の定格消費電力",
+        "en": "Indicates rated power consumption when heater is operating during showcase defrosting."
+      },
+      "shortName": "ratedElectricPowerForDefrostingHeater",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースが霜取り時にヒータを稼働する場合の定格消費電力を示す",
+        "en": "Indicates rated power consumption when heater is operating during showcase defrosting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ファンモータ稼働時の定格消費電力",
+        "en": "Indicates rated power consumption when showcase is operating fan motor."
+      },
+      "shortName": "ratedElectricPowerForFanMotor",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケースがファンモータを稼働する場合の定格消費電力を示す",
+        "en": "Indicates rated power consumption when showcase is operating fan motor."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533W"
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "F",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ホット用ヒーター動作状態 (ヒーターモード)",
+        "en": "Indicates on/off status of showcases with heater for hot function."
+      },
+      "shortName": "heaterOperationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ホット機能のあるショーケースのホット用ヒーターのON/OFFの状態を示す",
+        "en": "Indicates on/off status of showcases with heater for hot function."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      },
+      "remark": {
+        "ja": "脚注参照、ホット機能のあるショーケースのみ、搭載必須とする",
+        "en": "Refer to footnote. Only required for showcases with hot function."
+      }
+    },
+    {
+      "epc": "0xEB",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "庫内照明タイプ",
+        "en": "Indicates type of lighting installed inside the showcase."
+      },
+      "shortName": "insideLightingType",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケース庫内に設置している照明のタイプを示す",
+        "en": "Indicates type of lighting installed inside the showcase."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LightingType_40-43"
+      }
+    },
+    {
+      "epc": "0xEC",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "庫外照明タイプ",
+        "en": "Indicates type of lighting installed outside the showcase."
+      },
+      "shortName": "outsideLightingType",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケース庫外に設置している照明のタイプを示す",
+        "en": "Indicates type of lighting installed outside the showcase."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LightingType_40-43"
+      }
+    },
+    {
+      "epc": "0xED",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "庫内照明照度レベル設定",
+        "en": "Indicates lighting level in % installed inside of the showcase."
+      },
+      "shortName": "targetInsideBrightness",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケース庫内に設置している照明の照度レベルを％で示す",
+        "en": "Indicates lighting level in % installed inside of the showcase."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xEE",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "庫外照明照度レベル設定",
+        "en": "Indicates lighting level in % installed outside of the showcase."
+      },
+      "shortName": "targetOutsideBrightness",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ショーケース庫外に設置している照明の照度レベルを％で示す",
+        "en": "Indicates lighting level in % installed outside of the showcase."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xEF",
+      "validRelease": {
+        "from": "I",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "庫内温度設定値",
+        "en": "Set temperature setting of inside the case and acquire the current setting."
+      },
+      "shortName": "targetInsideTemperature",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "庫内の温度設定値を設定し、設定状態を取得する",
+        "en": "Set temperature setting of inside the case and acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-126Celsius"
+      }
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "eoj": "0x001D",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "VOCセンサ",
+    "en": "VOC sensor"
+  },
+  "shortName": "vocSensor",
+  "elProperties": [
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "検知閾値レベル設定",
+        "en": "Detection threshold level"
+      },
+      "shortName": "thresholdLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "検知閾値レベルを8段階で指定",
+        "en": "Specifies detection threshold level (8-step)"
+      },
+      "data": {
+        "$ref": "#/definitions/level_31-8"
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "VOC 検知状態",
+        "en": "VOC detection status"
+      },
+      "shortName": "detection",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "VOC 検知有無を示す",
+        "en": "This property indicates VOC detection status"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Detected-NotDetected_4142"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "VOC 濃度計測値",
+        "en": "Measured value of VOC concentration"
+      },
+      "shortName": "value",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "VOC 濃度計測値を ppm の単位で示す",
+        "en": "This property indicates measured value of VOC concentration value in ppm."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533ppm"
+      }
+    }
+  ]
+}

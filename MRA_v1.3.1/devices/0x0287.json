@@ -1,0 +1,2319 @@
+{
+  "eoj": "0x0287",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "分電盤メータリング",
+    "en": "Power distribution board metering"
+  },
+  "shortName": "powerDistributionBoardMetering",
+  "elProperties": [
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "主幹定格容量",
+        "en": "Master rated capacity"
+      },
+      "shortName": "masterRatedCapacity",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "主幹の定格容量値を示す",
+        "en": "This property indicates the rated capacity of the master circuit."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-253A"
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル数 (片方向)",
+        "en": "Number of measurement channels (simplex)"
+      },
+      "shortName": "numberOfMeasurementChannelsSimplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "片方向を計測するチャンネル数を示す",
+        "en": "This property indicates the number of simplex measurement channels."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-252"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測チャンネル範囲指定 (片方向)",
+        "en": "Channel range specification for cumulative amount of electric power consumption measurement (simplex)"
+      },
+      "shortName": "channelRangeForCumulativeElectricPowerConsumptionSimplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量計測値リスト(片方向)で取得する範囲を指定する",
+        "en": "This property is used to specify the range of acquisition by the measured cumulative amount of electric power consumption list (simplex)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-60"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB3",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値リスト (片方向)",
+        "en": "Measured cumulative amount of electric power consumption list (simplex)"
+      },
+      "shortName": "cumulativeElectricEnergyListSimplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xB2",
+      "descriptions": {
+        "ja": "積算電力量計測チャンネル範囲指定(片方向)によって指定された、計測チャンネルの積算電力量計測値を示す",
+        "en": "This property indicates the measured cumulative amount of electric power consumption of a measurement channel specified by the property of 'Channel range specification for cumulative amount of electric power consumption measurement (simplex).'"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-60"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amount of electric power consumption"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "maxItems": 60,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWh",
+                    "coefficient": [
+                      "0xC2"
+                    ],
+                    "overflowCode": false,
+                    "underflowCode": false
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "Atomic operation with EPC=0xB2",
+        "en": "Atomic operation with EPC=0xB2"
+      }
+    },
+    {
+      "epc": "0xB4",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電流計測チャンネル範囲指定 (片方向)",
+        "en": "Channel range specification for instantaneous current measurement (simplex)"
+      },
+      "shortName": "channelRangeForInstantaneousCurrentSimplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時電流計測値リスト(片方向)で取得する範囲を指定する",
+        "en": "This property is used to specify the range of acquisition by the measured instantaneous current list (simplex)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-60"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB5",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電流計測値リスト (片方向)",
+        "en": "Measured instantaneous current list (simplex)"
+      },
+      "shortName": "instantaneousCurrentListSimplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xB4",
+      "descriptions": {
+        "ja": "瞬時電流計測チャンネル範囲指定(片方向)によって指定された、計測チャンネルの瞬時電流計測値を示す",
+        "en": "This property indicates the measured instantaneous current of a measurement channel specified by the property of 'Channel range specification for instantaneous current measurement (simplex).'"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-60"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "瞬時電流計測値",
+              "en": "Measured instantaneous current"
+            },
+            "shortName": "instantaneousCurrent",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "maxItems": 60,
+              "items": {
+                "type": "object",
+                "properties": [
+                  {
+                    "elementName": {
+                      "ja": "R相",
+                      "en": "R phase"
+                    },
+                    "shortName": "rPhase",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_-3276.7-3276.5A"
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_7FFE"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "elementName": {
+                      "ja": "T相",
+                      "en": "T phase"
+                    },
+                    "shortName": "tPhase",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_-3276.7-3276.5A"
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_7FFE"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "Atomic operation with EPC=0xB4",
+        "en": "Atomic operation with EPC=0xB4"
+      }
+    },
+    {
+      "epc": "0xB6",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電力計測チャンネル範囲指定 (片方向)",
+        "en": "Channel range specification for instantaneous power consumption measurement (simplex)"
+      },
+      "shortName": "channelRangeForInstantaneousPowerConsumptionSimplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時電力計測値リスト(片方向)で取得する範囲を指定する",
+        "en": "This property is used to specify the range of acquisition by the measured instantaneous power consumption list (simplex)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-60"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB7",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電力計測値リスト (片方向)",
+        "en": "Measured instantaneous power consumption list (simplex)"
+      },
+      "shortName": "instantaneousElectricPowerListSimplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xB6",
+      "descriptions": {
+        "ja": "瞬時電力計測チャンネル範囲指定(片方向)によって指定された、計測チャンネルの瞬時電力計測値を示す",
+        "en": "This property indicates the measured instantaneous power consumption of a measurement channel specified by the property of 'Channel range specification for instantaneous power consumption measurement (simplex).'"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-60"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "瞬時電力計測値",
+              "en": "Measured instantaneous power consumption"
+            },
+            "shortName": "instantaneousElectricPower",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "maxItems": 60,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_-2147483647-2147483645W"
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_7FFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "Atomic operation with EPC=0xB6",
+        "en": "Atomic operation with EPC=0xB6"
+      }
+    },
+    {
+      "epc": "0xB8",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル数 (双方向)",
+        "en": "Number of measurement channels (duplex)"
+      },
+      "shortName": "numberOfMeasurementChannelsDuplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "双方向を計測するチャンネル数を示す",
+        "en": "This property indicates the number of duplex measurement channels."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_1-252"
+          },
+          {
+            "$ref": "#/definitions/state_Undefined_FD"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB9",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測チャンネル範囲指定 (双方向)",
+        "en": "Channel range specification for cumulative amount of electric power consumption measurement (duplex)"
+      },
+      "shortName": "channelRangeForCumulativeElectricPowerConsumptionDuplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量計測値リスト(双方向)で取得する範囲を指定する",
+        "en": "This property is used to specify the range of acquisition by the measured cumulative amount of electric power consumption list (duplex)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-30"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBA",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値リスト (双方向)",
+        "en": "Measured cumulative amount of electric power consumption list (duplex)"
+      },
+      "shortName": "cumulativeElectricEnergyListDuplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xB9",
+      "descriptions": {
+        "ja": "積算電力量計測チャンネル範囲指定(双方向)によって指定された、計測チャンネルの積算電力量計測値を示す",
+        "en": "This property indicates the measured cumulative amount of electric power consumption of a measurement channel specified by the property of 'Channel range specification for cumulative amount of electric power consumption measurement (duplex).'"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-30"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amount of electric power consumption"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 8,
+              "maxItems": 30,
+              "items": {
+                "type": "object",
+                "properties": [
+                  {
+                    "elementName": {
+                      "ja": "積算電力量計測値 (正方向)",
+                      "en": "Measured cumulative amount of electric power consumption (forward direction)"
+                    },
+                    "shortName": "normalDirectionElectricEnergy",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_0-99999999kWh",
+                          "coefficient": [
+                            "0xC2"
+                          ],
+                          "overflowCode": false,
+                          "underflowCode": false
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "elementName": {
+                      "ja": "積算電力量計測値 (逆方向)",
+                      "en": "Measured cumulative amount of electric power consumption (reverse direction)"
+                    },
+                    "shortName": "reverseDirectionElectricEnergy",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_0-99999999kWh",
+                          "coefficient": [
+                            "0xC2"
+                          ],
+                          "overflowCode": false,
+                          "underflowCode": false
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "Atomic operation with EPC=0xB9",
+        "en": "Atomic operation with EPC=0xB9"
+      }
+    },
+    {
+      "epc": "0xBB",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電流計測チャンネル範囲指定 (双方向)",
+        "en": "Channel range specification for instantaneous current measurement (duplex)"
+      },
+      "shortName": "channelRangeForInstantaneousCurrentDuplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時電流計測値リスト(双方向)で取得する範囲を指定する",
+        "en": "This property is used to specify the range of acquisition by the measured instantaneous current list (duplex)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-60"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBC",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電流計測値リスト (双方向)",
+        "en": "Measured instantaneous current list (duplex)"
+      },
+      "shortName": "instantaneousCurrentListDuplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xBB",
+      "descriptions": {
+        "ja": "瞬時電流値計測チャンネル範囲指定(双方向)によって指定された、計測チャンネルの瞬時電流計測値を示す",
+        "en": "This property indicates the measured instantaneous current of a measurement channel specified by the property of 'Channel range specification for instantaneous current measurement (duplex).'"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-60"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "瞬時電流計測値",
+              "en": "Measured instantaneous current"
+            },
+            "shortName": "instantaneousCurrent",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "maxItems": 60,
+              "items": {
+                "type": "object",
+                "properties": [
+                  {
+                    "elementName": {
+                      "ja": "R相",
+                      "en": "R phase"
+                    },
+                    "shortName": "rPhase",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_-3276.7-3276.5A"
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_7FFE"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "elementName": {
+                      "ja": "T相",
+                      "en": "T phase"
+                    },
+                    "shortName": "tPhase",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_-3276.7-3276.5A"
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_7FFE"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "Atomic operation with EPC=0xBB",
+        "en": "Atomic operation with EPC=0xBB"
+      }
+    },
+    {
+      "epc": "0xBD",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電力計測チャンネル範囲指定 (双方向)",
+        "en": "Channel range specification for instantaneous power consumption measurement (duplex)"
+      },
+      "shortName": "channelRangeForInstantaneousPowerConsumptionDuplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "瞬時電力計測値リスト(双方向)で取得する範囲を指定する",
+        "en": "This property is used to specify the range of acquisition by the measured instantaneous power consumption list (duplex)."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-60"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBE",
+      "validRelease": {
+        "from": "E",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電力計測値リスト (双方向)",
+        "en": "Measured instantaneous power consumption list (duplex)"
+      },
+      "shortName": "instantaneousElectricPowerListDuplex",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xBD",
+      "descriptions": {
+        "ja": "瞬時電力計測チャンネル範囲指定(双方向)によって指定された、計測チャンネルの瞬時電力計測値を示す",
+        "en": "This property indicates the measured instantaneous power consumption of a measurement channel specified by the property of 'Channel range specification for instantaneous power consumption measurement (duplex).'"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "取得開始チャンネル",
+              "en": "Acquisition start channel"
+            },
+            "shortName": "startChannel",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-252"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "取得開始チャンネルからの範囲を指定",
+              "en": "Range from the acquisition start channel"
+            },
+            "shortName": "range",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_1-60"
+                },
+                {
+                  "$ref": "#/definitions/state_Undefined_FD"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "瞬時電力計測値",
+              "en": "Measured instantaneous power consumption"
+            },
+            "shortName": "instantaneousElectricPower",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "maxItems": 60,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_-2147483647-2147483645W"
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_7FFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "Atomic operation with EPC=0xBD",
+        "en": "Atomic operation with EPC=0xBD"
+      }
+    },
+    {
+      "epc": "0xC0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値 (正方向)",
+        "en": "Measured cumulative amount of electric energy (normal direction)"
+      },
+      "shortName": "normalDirectionCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量を10進表記において、8桁で示す",
+        "en": "This property indicates the measured cumulative amount of electric energy using an 8-digit decimal notation number."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99999999kWh",
+            "coefficient": [
+              "0xC2"
+            ],
+            "overflowCode": false,
+            "underflowCode": false
+          },
+          {
+            "$ref": "#/definitions/state_NoData_FFFFFFFE"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値 (逆方向)",
+        "en": "Measured cumulative amount of electric energy (reverse direction)"
+      },
+      "shortName": "reverseDirectionCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量を10進表記において、8桁で示す",
+        "en": "This property indicates the measured cumulative amount of electric energy using an 8-digit decimal notation number."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99999999kWh",
+            "coefficient": [
+              "0xC2"
+            ],
+            "overflowCode": false,
+            "underflowCode": false
+          },
+          {
+            "$ref": "#/definitions/state_NoData_FFFFFFFE"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量単位",
+        "en": "Unit for cumulative amounts of electric energy"
+      },
+      "shortName": "unitForCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算電力量計測値及び履歴の単位(乗率)を示す",
+        "en": "This property indicates the unit (multiplying factor) used for the measured cumulative amount of electric energy and the historical data of measured cumulative amounts of electric energy."
+      },
+      "data": {
+        "type": "numericValue",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x00",
+            "numericValue": 1
+          },
+          {
+            "edt": "0x01",
+            "numericValue": 0.1
+          },
+          {
+            "edt": "0x02",
+            "numericValue": 0.01
+          },
+          {
+            "edt": "0x03",
+            "numericValue": 0.001
+          },
+          {
+            "edt": "0x04",
+            "numericValue": 0.0001
+          },
+          {
+            "edt": "0x0A",
+            "numericValue": 10
+          },
+          {
+            "edt": "0x0B",
+            "numericValue": 100
+          },
+          {
+            "edt": "0x0C",
+            "numericValue": 1000
+          },
+          {
+            "edt": "0x0D",
+            "numericValue": 10000
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値履歴 (正方向)",
+        "en": "Historical data of measured cumulative amounts of electric energy (normal direction)"
+      },
+      "shortName": "normalDirectionCumulativeElectricEnergyLog",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xC5",
+      "descriptions": {
+        "ja": "積算履歴収集日及び積算電力量(8桁)の計測結果履歴を、30分毎データを過去24時間で示す",
+        "en": "This property indicates the day for which the historical data of measured cumulative amounts of electric energy is to be retrieved and the historical data of measured cumulative amounts of electric energy (8 digits), which consists of 48 pieces of half-hourly data for the preceding 24 hours."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量(8桁)の計測結果履歴",
+              "en": "The historical data of measured cumulative amounts of electric energy (8 digits)"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWh",
+                    "coefficient": [
+                      "0xC2"
+                    ],
+                    "overflowCode": false,
+                    "underflowCode": false
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "Atomic operation with EPC=0xC5",
+        "en": "Atomic operation with EPC=0xC5"
+      },
+      "note": {
+        "ja": "Queryは履歴収集日 (省略時は0)。電力量はEPC=0xC2の値を乗算済みの値",
+        "en": "Query is Day for collection (default value is 0). Electric power is multipled by EPC=0xC2."
+      }
+    },
+    {
+      "epc": "0xC4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算電力量計測値履歴 (逆方向)",
+        "en": "Historical data of measured cumulative amounts of electric energy (reverse direction)"
+      },
+      "shortName": "reverseDirectionCumulativeElectricEnergyLog",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "atomic": "0xC5",
+      "descriptions": {
+        "ja": "積算履歴収集日及び積算電力量(8桁)の計測結果履歴を、30分毎データを過去24時間で示す",
+        "en": "This property indicates the day for which the historical data of measured cumulative amounts of electric energy is to be retrieved and the historical data of measured cumulative amounts of electric energy (8 digits), which consists of 48 pieces of half-hourly data for the preceding 24 hours."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量(8桁)の計測結果履歴",
+              "en": "The historical data of measured cumulative amounts of electric energy (8 digits)"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWh",
+                    "coefficient": [
+                      "0xC2"
+                    ],
+                    "overflowCode": false,
+                    "underflowCode": false
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "Atomic operation with EPC=0xC5",
+        "en": "Atomic operation with EPC=0xC5"
+      },
+      "note": {
+        "ja": "Queryは履歴収集日 (省略時は0)。電力量はEPC=0xC2の値を乗算済みの値",
+        "en": "Query is Day for collection (default value is 0). Electric power is multipled by EPC=0xC2."
+      }
+    },
+    {
+      "epc": "0xC5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算履歴収集日",
+        "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+      },
+      "shortName": "dayForTheHistoricalDataCumulativeElectricEnergy",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "30分毎の計測値履歴データを収集する日を示す",
+        "en": "This property indicates the day for which the historical data of measured cumulative amounts of electric energy (which consists of 48 pieces of half-hourly data for the preceding 24 hours) is to be retrieved."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-99"
+          },
+          {
+            "$ref": "#/definitions/state_DefaultValue_FF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "Atomic operation with EPC=0xC3 and 0xC4",
+        "en": "Atomic operation with EPC=0xC3 and 0xC4"
+      }
+    },
+    {
+      "epc": "0xC6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電力計測値",
+        "en": "Measured instantaneous amount of electric energy"
+      },
+      "shortName": "instantaneousElectricPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "電力実効値の瞬時値をWで示す",
+        "en": "This property indicates the measured effective instantaneous amount of electric energy in watts."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_-2147483647-2147483645W"
+          },
+          {
+            "$ref": "#/definitions/state_NoData_7FFFFFFE"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電流計測値",
+        "en": "Measured instantaneous currents"
+      },
+      "shortName": "instantaneousCurrent",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "実効電流値の瞬時値をAでR相T相を並べて示す単相2線式の場合は、T相に0x7FFEをセット",
+        "en": "This property indicates the measured effective instantaneous R and T phase currents in amperes.In the case of a single-phase, two-wire system, 0x7FFE shall be used for the T phase."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "R相",
+              "en": "R phase"
+            },
+            "shortName": "rPhase",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_-3276.7-3276.5A"
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_7FFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "T相",
+              "en": "T phase"
+            },
+            "shortName": "tPhase",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_-3276.7-3276.5A"
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_7FFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "瞬時電圧計測値",
+        "en": "Measured instantaneous voltages"
+      },
+      "shortName": "instantaneousVoltage",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "実効電圧値の瞬時値をVでR-S(N)間、S(N)‐T間を並べて示す。単相2線式の場合は、S(N)-T間に0xFFFEをセット",
+        "en": "This property indicates the measured effective instantaneous R-S(N) and S(N)-T voltages in volts. In the case of a single-phase, two-wire system, 0xFFFE shall be used for the S(N)-T voltage."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "R-S(N)間",
+              "en": "Between R and S(N)"
+            },
+            "shortName": "rS",
+            "element": {
+              "$ref": "#/definitions/number_0-6553.3V"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "S(N)-T間",
+              "en": "Between S(N) and T"
+            },
+            "shortName": "sT",
+            "element": {
+              "$ref": "#/definitions/number_0-6553.3V"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル1",
+        "en": "Measurement channel 1"
+      },
+      "shortName": "measurementChannel1",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル1の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 1 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル2",
+        "en": "Measurement channel 2"
+      },
+      "shortName": "measurementChannel2",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル2の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 2 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル3",
+        "en": "Measurement channel 3"
+      },
+      "shortName": "measurementChannel3",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル3の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 3 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xD3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル4",
+        "en": "Measurement channel 4"
+      },
+      "shortName": "measurementChannel4",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル4の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 4 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル5",
+        "en": "Measurement channel 5"
+      },
+      "shortName": "measurementChannel5",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル5の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 5 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xD5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル6",
+        "en": "Measurement channel 6"
+      },
+      "shortName": "measurementChannel6",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル6の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 6 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xD6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル7",
+        "en": "Measurement channel 7"
+      },
+      "shortName": "measurementChannel7",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル7の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 7 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xD7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル8",
+        "en": "Measurement channel 8"
+      },
+      "shortName": "measurementChannel8",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル8の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 8 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xD8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル9",
+        "en": "Measurement channel 9"
+      },
+      "shortName": "measurementChannel9",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル9の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 9 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xD9",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル10",
+        "en": "Measurement channel 10"
+      },
+      "shortName": "measurementChannel10",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル10の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 10 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xDA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル11",
+        "en": "Measurement channel 11"
+      },
+      "shortName": "measurementChannel11",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル11の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 11 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xDB",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル12",
+        "en": "Measurement channel 12"
+      },
+      "shortName": "measurementChannel12",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル12の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 12 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xDC",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル13",
+        "en": "Measurement channel 13"
+      },
+      "shortName": "measurementChannel13",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル13の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 13 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xDD",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル14",
+        "en": "Measurement channel 14"
+      },
+      "shortName": "measurementChannel14",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル14の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 14 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xDE",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル15",
+        "en": "Measurement channel 15"
+      },
+      "shortName": "measurementChannel15",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル15の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 15 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xDF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル16",
+        "en": "Measurement channel 16"
+      },
+      "shortName": "measurementChannel16",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル16の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 16 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル17",
+        "en": "Measurement channel 17"
+      },
+      "shortName": "measurementChannel17",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル17の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 17 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル18",
+        "en": "Measurement channel 18"
+      },
+      "shortName": "measurementChannel18",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル18の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 18 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル19",
+        "en": "Measurement channel 19"
+      },
+      "shortName": "measurementChannel19",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル19の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 19 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル20",
+        "en": "Measurement channel 20"
+      },
+      "shortName": "measurementChannel20",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル1の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 20 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル21",
+        "en": "Measurement channel 21"
+      },
+      "shortName": "measurementChannel21",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル21の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 21 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル22",
+        "en": "Measurement channel 22"
+      },
+      "shortName": "measurementChannel22",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル22の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 22 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル23",
+        "en": "Measurement channel 23"
+      },
+      "shortName": "measurementChannel23",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル23の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 23 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル24",
+        "en": "Measurement channel 24"
+      },
+      "shortName": "measurementChannel24",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル24の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 24 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル25",
+        "en": "Measurement channel 25"
+      },
+      "shortName": "measurementChannel25",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル25の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 25 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル26",
+        "en": "Measurement channel 26"
+      },
+      "shortName": "measurementChannel26",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル26の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 26 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル27",
+        "en": "Measurement channel 27"
+      },
+      "shortName": "measurementChannel27",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル27の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 27 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xEB",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル28",
+        "en": "Measurement channel 28"
+      },
+      "shortName": "measurementChannel28",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル28の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 28 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xEC",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル29",
+        "en": "Measurement channel 29"
+      },
+      "shortName": "measurementChannel29",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル29の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 29 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xED",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル30",
+        "en": "Measurement channel 30"
+      },
+      "shortName": "measurementChannel30",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル30の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 30 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xEE",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル31",
+        "en": "Measurement channel 31"
+      },
+      "shortName": "measurementChannel31",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル31の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 31 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    },
+    {
+      "epc": "0xEF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "計測チャンネル32",
+        "en": "Measurement channel 32"
+      },
+      "shortName": "measurementChannel32",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "計測チャンネル32の計測データをkWh,A(R相),A(T相)で並べて示す",
+        "en": "This property indicates the measurement data for Measurement channel 32 (cumulative amount of electric energy (kWh) and effective instantaneous R and T phase currents (amperes))."
+      },
+      "data": {
+        "$ref": "#/definitions/object_PDB_01"
+      }
+    }
+  ]
+}

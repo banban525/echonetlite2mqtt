@@ -1,0 +1,437 @@
+{
+  "eoj": "0x02A6",
+  "validRelease": {
+    "from": "L",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "ハイブリッド給湯機",
+    "en": "Hybrid water heater"
+  },
+  "shortName": "hybridWaterHeater",
+  "elProperties": [
+    {
+      "epc": "0xB0",
+      "propertyName": {
+        "ja": "沸き上げ自動設定",
+        "en": "Automatic water heating setting"
+      },
+      "shortName": "automaticWaterHeating",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "自動沸き上げON/OFFを表す",
+        "en": "This property indicates automatic water heating ON/OFF.Unsigned char1 byte-Set/GetWater heating status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "auto",
+            "descriptions": {
+              "ja": "自動沸き上げ",
+              "en": "Automatic water heating"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "manualNotHeating",
+            "descriptions": {
+              "ja": "手動沸き上げ停止",
+              "en": "Water heating manual stop"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "manualHeating",
+            "descriptions": {
+              "ja": "手動沸き上げ",
+              "en": "Manual water heating"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "propertyName": {
+        "ja": "給湯沸き上げ中状態",
+        "en": "Water heating status"
+      },
+      "shortName": "waterHeatingStatus",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "給湯の沸き上げ中状態を示す",
+        "en": "This property indicates water heating status. Unsigned char1 byte-GetHeater status"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "沸き上げ中",
+              "en": "Water is heating."
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "非沸き上げ中",
+              "en": "Water is not heating."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB3",
+      "propertyName": {
+        "ja": "暖房沸き上げ中状態",
+        "en": "Heater status"
+      },
+      "shortName": "heaterStatus",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "暖房の沸き上げ中状態を示す",
+        "en": "This property indicates heater status. Unsigned char1 byte-GetHot water supply mode setting for auxiliary heat source machine"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "沸き上げ中",
+              "en": "Water is heating."
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "非沸き上げ中",
+              "en": "Water is not heating."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB6",
+      "propertyName": {
+        "ja": "補助熱源機給湯モード設定",
+        "en": "Hot water supply mode setting for auxiliary heat source machine"
+      },
+      "shortName": "hotWaterSupplyModeForAuxiliaryHeatSourceMachine",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "給湯運転を補助熱源のみに設定する",
+        "en": "Set hot water supply operation to auxiliary heat source only. Unsigned char1 byte-Set/GetHeater mode setting for auxiliary heat source machine"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "設定する",
+              "en": "Set"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "設定しない",
+              "en": "No setting"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB7",
+      "propertyName": {
+        "ja": "補助熱源機暖房モード設定",
+        "en": "Heater mode setting for auxiliary heat source machine."
+      },
+      "shortName": "heaterModeForAuxiliaryHeatSourceMachine",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "暖房運転を補助熱源のみに設定する",
+        "en": "Set heater operation to auxiliary heat source only. Unsigned char1 byte-Set/GetLinkage mode setting for solar power generation"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "設定する",
+              "en": "Set"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "設定しない",
+              "en": "No setting"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB8",
+      "propertyName": {
+        "ja": "太陽光発電連携モード設定",
+        "en": "Linkage mode setting for solar power generation"
+      },
+      "shortName": "linkageModeForSolarPowerGeneration",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "太陽光発電連携時のモードを設定し、設定状態を取得する",
+        "en": "Used to specify a mode when linked with the solar power generations, and to acquire the current setting.Unsigned char1 byte-Set/GetSolar power generations utilization time."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "modeOff",
+            "descriptions": {
+              "ja": "モード切",
+              "en": "Mode off"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "householdConsumption",
+            "descriptions": {
+              "ja": "自家消費",
+              "en": "Household consumption"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "prioritizingElectricitySales",
+            "descriptions": {
+              "ja": "売電優先",
+              "en": "Prioritizing electricity sales"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "economicEfficiency",
+            "descriptions": {
+              "ja": "経済",
+              "en": "Economic efficiency"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB9",
+      "propertyName": {
+        "ja": "太陽光発電利用時間",
+        "en": "Solar power generations utilization time"
+      },
+      "shortName": "solarPowerGenerationsUtilizationTime",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "開始時刻:終了時刻HH:MM:HH:MM",
+        "en": "Start time: End time HH:MM:HH:MM Unsigned char x 44 bytes-Set/GetHot water supply status"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "開始時刻",
+              "en": "Start time"
+            },
+            "shortName": "startTime",
+            "element": {
+              "$ref": "#/definitions/time_2"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "終了時刻",
+              "en": "End time"
+            },
+            "shortName": "endTime",
+            "element": {
+              "$ref": "#/definitions/time_2"
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0xC3",
+      "propertyName": {
+        "ja": "給湯中状態",
+        "en": "Hot water supply status"
+      },
+      "shortName": "hotWaterSupplyStatus",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "給湯中状態を示す",
+        "en": "This property indicates the status of supplying hot water.Unsigned char1 byte-GetMeasured amount of hot water remaining in tank."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "給湯中",
+              "en": "Supplying hot water"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "非給湯中",
+              "en": "Not supplying hot water"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE1",
+      "propertyName": {
+        "ja": "残湯量計測値",
+        "en": "Measured amount of hot water remaining in tank"
+      },
+      "shortName": "remainingWater",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "残湯量計測値を㍑で示す",
+        "en": "This property indicates the measured amount of hot water left in the tank in liters.Unsigned char2 byteslitersGetTank capacity."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533L"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "propertyName": {
+        "ja": "タンク容量値",
+        "en": "Tank capacity"
+      },
+      "shortName": "tankCapacity",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タンク容量値を㍑で示す",
+        "en": "This property indicates the tank capacity in liters.Unsigned char2 byteslitersGet."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-65533L"
+      }
+    }
+  ]
+}

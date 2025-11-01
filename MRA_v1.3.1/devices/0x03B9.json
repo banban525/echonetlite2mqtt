@@ -1,0 +1,604 @@
+{
+  "eoj": "0x03B9",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "クッキングヒータ",
+    "en": "Cooking heater"
+  },
+  "shortName": "cookingHeater",
+  "elProperties": [
+    {
+      "epc": "0x96",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "切タイマ相対時間設定値",
+        "en": "Relative time settings of off timers"
+      },
+      "shortName": "relativeTimeOfOffTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "左コンロ切タイマ時間：右コンロ切タイマ時間：奥コンロ切タイマ時間：ロースタ切タイマ時間",
+        "en": "Relative time setting of the left stove off timer: relative time setting of the right stove off timer: relative time setting of the far-side stove off timer: relative time setting of the roaster off timer"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "左コンロ切タイマ時間",
+              "en": "Relative time setting of the left stove off timer"
+            },
+            "shortName": "leftStove",
+            "element": {
+              "oneOf": [
+                {
+                  "type": "time"
+                },
+                {
+                  "$ref": "#/definitions/state_NoSetting_FFFFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "右コンロ切タイマ時間",
+              "en": "Relative time setting of the right stove off timer"
+            },
+            "shortName": "rightStove",
+            "element": {
+              "oneOf": [
+                {
+                  "type": "time"
+                },
+                {
+                  "$ref": "#/definitions/state_NoSetting_FFFFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "奥コンロ切タイマ時間",
+              "en": "Relative time setting of the far-side stove off timer"
+            },
+            "shortName": "farSideStove",
+            "element": {
+              "oneOf": [
+                {
+                  "type": "time"
+                },
+                {
+                  "$ref": "#/definitions/state_NoSetting_FFFFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "ロースタ切タイマ時間",
+              "en": "Relative time setting of the roaster off timer"
+            },
+            "shortName": "roaster",
+            "element": {
+              "oneOf": [
+                {
+                  "type": "time"
+                },
+                {
+                  "$ref": "#/definitions/state_NoSetting_FFFFFF"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "チャイルドロック設定",
+        "en": "Child lock setting"
+      },
+      "shortName": "childLock",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "チャイルドロックON/OFF設定",
+        "en": "Child lock ON/OFF setting"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "チャイルドロックON",
+              "en": "Child lock on"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "false",
+            "descriptions": {
+              "ja": "チャイルドロックOFF",
+              "en": "Child lock off"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xA2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ラジエントヒータロック設定",
+        "en": "Radiant heater lock setting"
+      },
+      "shortName": "radiantHeaterLock",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ラジエントヒータロックON/OFF",
+        "en": "Radiant heater lock ON/OFF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "ラジエントヒータロックON",
+              "en": "Radiant heater lock on"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "false",
+            "descriptions": {
+              "ja": "ラジエントヒータロックOFF",
+              "en": "Radiant heater lock off"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "加熱状態",
+        "en": "Heating status"
+      },
+      "shortName": "heatingStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "左コンロ加熱状態：右コンロ加熱状態：奥コンロ加熱状態：ロースタ加熱状態",
+        "en": "Heating status of the left stove: heating status of the right stove: heating status of the far-side stove: heating status of the roaster."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "左コンロ加熱状態",
+              "en": "Heating status of the left stove"
+            },
+            "shortName": "leftStove",
+            "element": {
+              "$ref": "#/definitions/state_HeatingStatus_40-4250FF"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "右コンロ加熱状態",
+              "en": "Heating status of the right stove"
+            },
+            "shortName": "rightStove",
+            "element": {
+              "$ref": "#/definitions/state_HeatingStatus_40-4250FF"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "奥コンロ加熱状態",
+              "en": "Heating status of the far-side stove"
+            },
+            "shortName": "farSideStove",
+            "element": {
+              "$ref": "#/definitions/state_HeatingStatus_40-4250FF"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "ロースタ加熱状態",
+              "en": "Heating status of the roaster"
+            },
+            "shortName": "roaster",
+            "element": {
+              "$ref": "#/definitions/state_HeatingStatus_40-4250FF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "加熱設定",
+        "en": "Heating setting"
+      },
+      "shortName": "heatingOperation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "左コンロ設定：右コンロ設定：奥コンロ設定：ロースタ設定",
+        "en": "Left stove setting: right stove setting: far-side stove setting: roaster setting"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "左コンロ設定",
+              "en": "Left stove setting"
+            },
+            "shortName": "leftStove",
+            "element": {
+              "$ref": "#/definitions/state_HeatingOperation_40-42FF"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "右コンロ設定",
+              "en": "Right stove setting"
+            },
+            "shortName": "rightStove",
+            "element": {
+              "$ref": "#/definitions/state_HeatingOperation_40-42FF"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "奥コンロ設定",
+              "en": "Far-side stove setting"
+            },
+            "shortName": "farSideStove",
+            "element": {
+              "$ref": "#/definitions/state_HeatingOperation_40-42FF"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "ロースタ設定",
+              "en": "Roaster setting"
+            },
+            "shortName": "roaster",
+            "element": {
+              "$ref": "#/definitions/state_HeatingOperation_40-42FF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "一括停止設定",
+        "en": "All stop setting"
+      },
+      "shortName": "allStop",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "required_o",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "左コンロ/右コンロ/奥コンロ/ロースタのすべての加熱停止を設定する",
+        "en": "Used to stop the heating on all the left stove, right stove, far-side stove and roaster."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x40",
+            "name": "allStop",
+            "descriptions": {
+              "ja": "一括加熱停止",
+              "en": "Stop the heating on all of the left stove, right stove, far-side stove and roaster."
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "ECHONET LiteではSet only property",
+        "en": "Access rule of the corresponding ECHONET Lite property is set only."
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "コンロ加熱モード設定",
+        "en": "Heating modes of stoves"
+      },
+      "shortName": "heatingModesOfStoves",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "左コンロ加熱モード：右コンロ加熱モード：奥コンロ加熱モード",
+        "en": "Heating mode of the left stove: heating mode of the right stove: heating mode of the far-side stove"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "左コンロ加熱モード",
+              "en": "Heating mode of the left stove"
+            },
+            "shortName": "leftStove",
+            "element": {
+              "$ref": "#/definitions/state_HeatingMode_41-45FF"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "右コンロ加熱モード",
+              "en": "Heating mode of the right stove"
+            },
+            "shortName": "rightStove",
+            "element": {
+              "$ref": "#/definitions/state_HeatingMode_41-45FF"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "奥コンロ加熱モード",
+              "en": "Heating mode of the far-side stove"
+            },
+            "shortName": "farSideStove",
+            "element": {
+              "$ref": "#/definitions/state_HeatingMode_41-45FF"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "加熱温度設定値",
+        "en": "Heating temperature setting"
+      },
+      "shortName": "heatingTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "左コンロ設定温度：右コンロ設定温度：奥コンロ設定温度",
+        "en": "Left stove temperature setting: right stove temperature setting: far-side stove temperature setting"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "左コンロ設定温度",
+              "en": "Left stove temperature setting"
+            },
+            "shortName": "leftStove",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_50-250Celsius"
+                },
+                {
+                  "$ref": "#/definitions/state_NoSetting_FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "右コンロ設定温度",
+              "en": "Right stove temperature setting"
+            },
+            "shortName": "rightStove",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_50-250Celsius"
+                },
+                {
+                  "$ref": "#/definitions/state_NoSetting_FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "奥コンロ設定温度",
+              "en": "Far-side stove temperature setting"
+            },
+            "shortName": "farSideStove",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_50-250Celsius"
+                },
+                {
+                  "$ref": "#/definitions/state_NoSetting_FF"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "加熱出力設定",
+        "en": "Heating power setting"
+      },
+      "shortName": "heatingPower",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "左コンロ加熱出力：右コンロ加熱出力：奥コンロ加熱出力：ロースタ加熱出力",
+        "en": "Heating power of the left stove: heating power of the right stove: heating power of the far-side stove: heating power of the roaster"
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "左コンロ加熱出力",
+              "en": "Heating power of the left stove"
+            },
+            "shortName": "leftStove",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-10000W"
+                },
+                {
+                  "$ref": "#/definitions/level_3000-17"
+                },
+                {
+                  "$ref": "#/definitions/state_HeatingPower_4002-400AFFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "右コンロ加熱出力",
+              "en": "Heating power of the right stove"
+            },
+            "shortName": "rightStove",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-10000W"
+                },
+                {
+                  "$ref": "#/definitions/level_3000-17"
+                },
+                {
+                  "$ref": "#/definitions/state_HeatingPower_4002-400AFFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "奥コンロ加熱出力",
+              "en": "Heating power of the far-side stove"
+            },
+            "shortName": "farSideStove",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-10000W"
+                },
+                {
+                  "$ref": "#/definitions/level_3000-17"
+                },
+                {
+                  "$ref": "#/definitions/state_HeatingPower_4002-400AFFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "ロースタ加熱出力",
+              "en": "Heating power of the roaster"
+            },
+            "shortName": "roaster",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-10000W"
+                },
+                {
+                  "$ref": "#/definitions/level_3000-17"
+                },
+                {
+                  "$ref": "#/definitions/state_HeatingPower_4002-400AFFFF"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,392 @@
+{
+  "eoj": "0x028E",
+  "properties": [
+    {
+      "epc": "0xD4",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xD5",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE0",
+      "data": {
+        "$ref": "#/definitions/number_0-99999999kWh",
+          "coefficient": [
+              "0xD4"
+           ]
+      },
+      "note": {
+        "ja": "値は0xD4の値を乗算した値。",
+        "en": "This value is already multiplied with 0xD4."
+      }
+    },
+    {
+      "epc": "0xE1",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day on which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_initial_FFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWh",
+                    "coefficient": [
+                      "0xD4"
+                    ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day on which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      },
+      "note": {
+        "ja": "積算履歴収集日(EPC:0xD5)をqueryで設定する。値は0xD4の値を乗算した値。",
+        "en": "Day for the log(EPC:0xD5) should be set as a query. The value is already multiplied with 0xD4."
+      }
+    },
+    {
+      "epc": "0xE2",
+      "data": {
+          "$ref": "#/definitions/number_0-99999999kWh",
+          "coefficient": [
+              "0xD4"
+           ]
+      },
+      "note": {
+        "ja": "値は0xD4の値を乗算した値。",
+        "en": "This value is already multiplied with 0xD4."
+      }
+    },
+    {
+      "epc": "0xE3",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day on which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_initial_FFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWh",
+                    "coefficient": [
+                      "0xD4"
+                    ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day on which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      },
+      "note": {
+        "ja": "積算履歴収集日(EPC:0xD5)をqueryで設定する。値は0xD4の値を乗算した値。",
+        "en": "Day for the log(EPC:0xD5) should be set as a query. The value is already multiplied with 0xD4."
+      }
+    },
+    {
+      "epc": "0xE4",
+      "data": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/number_0-99999999kWh",
+                "coefficient": [
+                  "0xD4"
+                ]
+              },
+              {
+                "$ref": "#/definitions/state_NoData_FFFFFFFE"
+              }
+            ]
+      },
+      "note": {
+        "ja": "値は0xD4の値を乗算した値。",
+        "en": "This value is already multiplied with 0xD4."
+      }
+    },
+    {
+      "epc": "0xE5",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day on which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_initial_FFFF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Measured cumulative amounts of electric energy"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWh",
+                    "coefficient": [
+                      "0xD4"
+                    ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day on which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      },
+      "note": {
+        "ja": "積算履歴収集日(EPC:0xD5)をqueryで設定する。値は0xD4の値を乗算した値。",
+        "en": "Day for the log(EPC:0xD5) should be set as a query. The value is already multiplied with 0xD4."
+      }
+    },
+    {
+      "epc": "0xE6",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWh",
+                    "coefficient": [
+                      "0xD4"
+                    ]
+                  },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "値は0xD4の値を乗算した値。",
+        "en": "This value is already multiplied with 0xD4."
+      }
+    },
+    {
+      "epc": "0xE7",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWh",
+                    "coefficient": [
+                      "0xD4"
+                    ]
+                  },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "値は0xD4の値を乗算した値。",
+        "en": "This value is already multiplied with 0xD4."
+      }
+    },
+    {
+      "epc": "0xE8",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算電力量計測値",
+              "en": "Cumulative amounts of electric energy measured"
+            },
+            "shortName": "electricEnergy",
+            "element": {
+              "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWh",
+                    "coefficient": [
+                      "0xD4"
+                    ]
+                  },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "値は0xD4の値を乗算した値。",
+        "en": "This value is already multiplied with 0xD4."
+      }
+    }
+  ]
+}

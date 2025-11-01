@@ -1,0 +1,249 @@
+{
+  "eoj": "0x03B9",
+  "properties": [
+    {
+      "epc": "0xE7",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "shortName": "leftStove",
+            "elementName": {
+              "ja": "左コンロ加熱出力",
+              "en": "Heating power of the left stove"
+            },
+            "element": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "wattage",
+                      "elementName": {
+                        "ja": "出力設定形式",
+                        "en": "Output wattage"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/number_0-1000W"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "level",
+                      "elementName": {
+                        "ja": "レベル設定形式",
+                        "en": "Level"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/leveldd_0-16"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "stateOfFlame",
+                      "elementName": {
+                        "ja": "状態表現形式",
+                        "en": "The state of flame"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/state_HeatingPower_4002-400AFFFF"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "rightStove",
+            "elementName": {
+              "ja": "右コンロ加熱出力",
+              "en": "Heating power of the right stove"
+            },
+            "element": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "wattage",
+                      "elementName": {
+                        "ja": "出力設定形式",
+                        "en": "Output wattage"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/number_0-1000W"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "level",
+                      "elementName": {
+                        "ja": "レベル設定形式",
+                        "en": "Level"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/leveldd_0-16"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "stateOfFlame",
+                      "elementName": {
+                        "ja": "状態表現形式",
+                        "en": "The state of flame"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/state_HeatingPower_4002-400AFFFF"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "farSideStove",
+            "elementName": {
+              "ja": "奥コンロ加熱出力",
+              "en": "Heating power of the far-side stove"
+            },
+            "element": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "wattage",
+                      "elementName": {
+                        "ja": "出力設定形式",
+                        "en": "Output wattage"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/number_0-1000W"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "level",
+                      "elementName": {
+                        "ja": "レベル設定形式",
+                        "en": "Level"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/leveldd_0-16"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "stateOfFlame",
+                      "elementName": {
+                        "ja": "状態表現形式",
+                        "en": "The state of flame"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/state_HeatingPower_4002-400AFFFF"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          {
+            "shortName": "roaster",
+            "elementName": {
+              "ja": "ロースタ加熱出力",
+              "en": "Heating power of the roaster"
+            },
+            "element": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "wattage",
+                      "elementName": {
+                        "ja": "出力設定形式",
+                        "en": "Output wattage"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/number_0-1000W"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "level",
+                      "elementName": {
+                        "ja": "レベル設定形式",
+                        "en": "Level"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/leveldd_0-16"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "shortName": "stateOfFlame",
+                      "elementName": {
+                        "ja": "状態表現形式",
+                        "en": "The state of flame"
+                      },
+                      "element": {
+                        "$ref": "#/definitions/state_HeatingPower_4002-400AFFFF"
+                      }
+                    }
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

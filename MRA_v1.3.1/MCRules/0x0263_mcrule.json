@@ -1,0 +1,12 @@
+{
+  "eoj": "0x0263",
+  "properties": [
+    {
+      "epc": "0xED",
+      "data": {
+        "$ref": "#/definitions/number_1-8",
+        "multipleOf": 1
+      }
+    }
+  ]
+}

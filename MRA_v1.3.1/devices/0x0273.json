@@ -1,0 +1,923 @@
+{
+  "eoj": "0x0273",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "浴室暖房乾燥機",
+    "en": "Bathroom heater dryer"
+  },
+  "shortName": "bathroomHeaterDryer",
+  "elProperties": [
+    {
+      "epc": "0x90",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ予約設定1",
+        "en": "On timer reservation setting 1"
+      },
+      "shortName": "onTimerReservation1",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切を設定し、設定状態を取得する",
+        "en": "Used to set the ON/OFF status of the ON timer-based reservation function and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ReservationD_4142"
+      },
+      "note": {
+        "ja": "ONタイマ予約設定2が別途定義",
+        "en": "On timer reservation setting 2 is defined for bathroom heater dryer."
+      }
+    },
+    {
+      "epc": "0x91",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ時刻設定値",
+        "en": "On timer setting value"
+      },
+      "shortName": "timeOfOnTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値 HH:MM を設定し、設定状態を取得する",
+        "en": "Used to set the time setting for the time-based reservation function for the ON timer (in the HH:MM format) and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0x92",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ相対時間設定値",
+        "en": "On relative timer setting value"
+      },
+      "shortName": "timeOfOffTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値 HH:MM を設定し、設定状態を取得する",
+        "en": "Used to set the relative time setting for the relative time-based reservation function for the ON timer (in the HH:MM format) and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0x94",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFFタイマ予約設定",
+        "en": "Off timer reservation setting"
+      },
+      "shortName": "offTimerReservation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "予約入/予約切を設定し、設定状態を取得する",
+        "en": "Used to set the ON/OFF status of the OFF timer-based reservation function and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ReservationD_4142"
+      }
+    },
+    {
+      "epc": "0x95",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFFタイマ時刻設定値",
+        "en": "OFF timer setting value"
+      },
+      "shortName": "relativeTimeOfOnTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値 HH:MM を設定し、設定状態を取得する",
+        "en": "Used to set the time setting for the time-based reservation function for the OFF timer (in the HH:MM format) and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0x96",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "OFFタイマ相対時間設定値",
+        "en": "Off relative timer setting value"
+      },
+      "shortName": "relativeTimeOfOffTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "タイマ値 HH:MM を設定し、設定状態を取得する",
+        "en": "Used to set the relative time setting for the relative time-based reservation function for the OFF timer (in the HH:MM format) and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "A",
+        "to": "K"
+      },
+      "propertyName": {
+        "ja": "運転設定",
+        "en": "Operation setting"
+      },
+      "shortName": "operationSetting",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "換気/入浴前予備暖房/入浴中暖房/乾燥/涼風の各運転モードと停止を設定し、設定状態を取得する",
+        "en": "Used to set the operation mode (ventilation mode, bathroom pre-warmer mode, bathroom heater mode, bathroom dryer mode, cool air circulator mode or 'stop'), and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x10",
+            "name": "ventilation",
+            "descriptions": {
+              "ja": "換気運転",
+              "en": "Ventilation"
+            }
+          },
+          {
+            "edt": "0x20",
+            "name": "prewarming",
+            "descriptions": {
+              "ja": "入浴前予備暖房運転",
+              "en": "Prewarming operation"
+            }
+          },
+          {
+            "edt": "0x30",
+            "name": "heating",
+            "descriptions": {
+              "ja": "入浴中暖房運転",
+              "en": "Heating operation"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "drying",
+            "descriptions": {
+              "ja": "乾燥運転",
+              "en": "Drying operation"
+            }
+          },
+          {
+            "edt": "0x50",
+            "name": "circulation",
+            "descriptions": {
+              "ja": "涼風運転",
+              "en": "Circulation"
+            }
+          },
+          {
+            "edt": "0x00",
+            "name": "stop",
+            "descriptions": {
+              "ja": "停止",
+              "en": "Stop"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転設定",
+        "en": "Operation setting"
+      },
+      "shortName": "operationSetting",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "換気/入浴前予備暖房/入浴中暖房/乾燥/涼風/ミストサウナ/水ミストの各運転モードと停止を設定し、設定状態を取得する",
+        "en": "Used to set the operation mode (ventilation mode, bathroom pre-warmer mode, bathroom heater mode, bathroom dryer mode, cool air circulator mode, mist sauna mode, water mist mode or 'stop'), and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x10",
+            "name": "ventilation",
+            "descriptions": {
+              "ja": "換気運転",
+              "en": "Ventilation"
+            }
+          },
+          {
+            "edt": "0x20",
+            "name": "prewarming",
+            "descriptions": {
+              "ja": "入浴前予備暖房運転",
+              "en": "Prewarming operation"
+            }
+          },
+          {
+            "edt": "0x30",
+            "name": "heating",
+            "descriptions": {
+              "ja": "入浴中暖房運転",
+              "en": "Heating operation"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "drying",
+            "descriptions": {
+              "ja": "乾燥運転",
+              "en": "Drying operation"
+            }
+          },
+          {
+            "edt": "0x50",
+            "name": "circulation",
+            "descriptions": {
+              "ja": "涼風運転",
+              "en": "Circulation"
+            }
+          },
+          {
+            "edt": "0x60",
+            "name": "mistSauna",
+            "descriptions": {
+              "ja": "ミストサウナ運転",
+              "en": "Mist sauna operation"
+            }
+          },
+          {
+            "edt": "0x61",
+            "name": "waterMist",
+            "descriptions": {
+              "ja": "水ミスト運転",
+              "en": "Water mist operation"
+            }
+          },
+          {
+            "edt": "0x00",
+            "name": "stop",
+            "descriptions": {
+              "ja": "停止",
+              "en": "Stop"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換気運転設定",
+        "en": "Ventilation operation setting"
+      },
+      "shortName": "ventilationSetting",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "換気モード時の換気風量レベルを設定し、設定状態を取得する",
+        "en": "Used to set the ventilation air flow rate level for the ventilation mode and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto-Standard_4142"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "A",
+        "to": "G"
+      },
+      "propertyName": {
+        "ja": "入浴前予備暖房運転設定",
+        "en": "Bathroom prewarming operation setting"
+      },
+      "shortName": "bathroomPrewarming",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "入浴前予備暖房モード時の運転能力レベルを設定し、設定状態を取得する",
+        "en": "Used to set the bathroom pre-warming level for the bathroom pre-warmer mode and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto-Standard_4142"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "H",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "入浴前予備暖房運転設定",
+        "en": "Bathroom prewarming operation setting"
+      },
+      "shortName": "bathroomPrewarming",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "入浴前予備暖房モード時の運転能力レベルを設定し、設定状態を取得する",
+        "en": "Used to set the bathroom pre-warming level for the bathroom pre-warmer mode and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto-Standard_4142"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "入浴中暖房運転設定",
+        "en": "Bathroom heating operation setting"
+      },
+      "shortName": "bathroomHeating",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "入浴中暖房モード時の運転能力レベルを設定し、設定状態を取得する",
+        "en": "Used to set the bathroom heating level for the bathroom heater mode and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto-Standard_4142"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "乾燥運転設定",
+        "en": "Bathroom drying operation setting"
+      },
+      "shortName": "bathroomDrying",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "乾燥モード時の運転能力レベルを設定し、設定状態を取得する",
+        "en": "Used to set the bathroom drying level for the bathroom dryer mode and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto-Standard_4142"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "涼風運転設定",
+        "en": "Cool air circulation operation setting"
+      },
+      "shortName": "coolAirCirculation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "涼風モード時の運転能力レベルを設定し、設定状態を取得する",
+        "en": "Used to set the cool air circulation level for the cool air circulator mode and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto-Standard_4142"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB6",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ミストサウナ運転設定",
+        "en": "Mist sauna operation setting"
+      },
+      "shortName": "mistSauna",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ミストサウナ運転の運転能力レベルを設定し、設定状態を取得する",
+        "en": "Set operation capacity level of mist sauna and acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto-Standard_4142"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB7",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "水ミスト運転設定",
+        "en": "Water mist operation setting"
+      },
+      "shortName": "waterMist",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "水ミスト運転の運転能力レベルを設定し、設定状態を取得する",
+        "en": "Set operation capacity level of water mist and acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto-Standard_4142"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xBA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "浴室内相対湿度計測値",
+        "en": "Measured value of bathroom relative humidity"
+      },
+      "shortName": "bathroomHumidity",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "浴室内の相対湿度計測値を取得する",
+        "en": "Used to acquire the measured relative humidity of the bathroom."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      }
+    },
+    {
+      "epc": "0xBB",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "浴室内温度計測値",
+        "en": "Measured value of bathroom temperature"
+      },
+      "shortName": "bathroomTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "浴室内の温度計測値を取得する",
+        "en": "Used to acquire the measured temperature of the bathroom."
+      },
+      "data": {
+        "$ref": "#/definitions/number_-127-125Celsius"
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "換気風量設定",
+        "en": "Ventilation air flow rate setting"
+      },
+      "shortName": "ventilationAirFlowLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "24時間換気の風量レベルを設定し､設定状態を取得する",
+        "en": "Used to set the air flow rate level for the around-the-clock ventilation function and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_41"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "フィルタサイン設定",
+        "en": "Filter cleaning reminder sign setting"
+      },
+      "shortName": "filterCleaningReminderSign",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "フィルタサインの点灯/消灯を設定し､状態を取得する",
+        "en": "Used to set the filter cleaning reminder sign status (lit/not lit) and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "点灯",
+              "en": "Lit"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "消灯",
+              "en": "Not lit"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "人体検知状態",
+        "en": "Human body detection status"
+      },
+      "shortName": "humanBodyDetectionStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "人体検知の状態を取得する",
+        "en": "Used to acquire the human body detection status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "true",
+            "descriptions": {
+              "ja": "人体検知あり",
+              "en": "Detected"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "false",
+            "descriptions": {
+              "ja": "人体検知なし",
+              "en": "Not detected"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "K"
+      },
+      "propertyName": {
+        "ja": "ONタイマ予約設定2",
+        "en": "On timer reservation setting 2"
+      },
+      "shortName": "onTimerReservation2",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "運転開始時のモードを設定して予約入/予約切を設定し、設定状態を取得する",
+        "en": "Used to set the ON/OFF status of the ON timer-based reservation function with the mode in which the device starts operating specified, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x10",
+            "name": "ventilationReservation",
+            "descriptions": {
+              "ja": "換気運転予約",
+              "en": "Ventilation reservation"
+            }
+          },
+          {
+            "edt": "0x20",
+            "name": "prewarmingReservation",
+            "descriptions": {
+              "ja": "入浴前予備暖房運転予約",
+              "en": "Prewarming operation reservation"
+            }
+          },
+          {
+            "edt": "0x30",
+            "name": "heatingReservation",
+            "descriptions": {
+              "ja": "入浴中暖房運転予約",
+              "en": "Heating operation reservation"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "dryingReservation",
+            "descriptions": {
+              "ja": "乾燥運転予約",
+              "en": "Drying operation reservation"
+            }
+          },
+          {
+            "edt": "0x50",
+            "name": "circulationReservation",
+            "descriptions": {
+              "ja": "涼風運転予約",
+              "en": "Circulation reservation"
+            }
+          },
+          {
+            "edt": "0x00",
+            "name": "noReservation",
+            "descriptions": {
+              "ja": "予約切",
+              "en": "No reservation"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "L",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ予約設定2",
+        "en": "On timer reservation setting 2"
+      },
+      "shortName": "onTimerReservation2",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "運転開始時のモードを設定して予約入/予約切を設定し、設定状態を取得する",
+        "en": "Used to set the ON/OFF status of the ON timer-based reservation function with the mode in which the device starts operating specified, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x10",
+            "name": "ventilationReservation",
+            "descriptions": {
+              "ja": "換気運転予約",
+              "en": "Ventilation reservation"
+            }
+          },
+          {
+            "edt": "0x20",
+            "name": "prewarmingReservation",
+            "descriptions": {
+              "ja": "入浴前予備暖房運転予約",
+              "en": "Prewarming operation reservation"
+            }
+          },
+          {
+            "edt": "0x30",
+            "name": "heatingReservation",
+            "descriptions": {
+              "ja": "入浴中暖房運転予約",
+              "en": "Heating operation reservation"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "dryingReservation",
+            "descriptions": {
+              "ja": "乾燥運転予約",
+              "en": "Drying operation reservation"
+            }
+          },
+          {
+            "edt": "0x50",
+            "name": "circulationReservation",
+            "descriptions": {
+              "ja": "涼風運転予約",
+              "en": "Circulation reservation"
+            }
+          },
+          {
+            "edt": "0x60",
+            "name": "mistSaunaReservation",
+            "descriptions": {
+              "ja": "ミストサウナ運転予約",
+              "en": "Mist sauna operation reservation"
+            }
+          },
+          {
+            "edt": "0x61",
+            "name": "waterMistReservation",
+            "descriptions": {
+              "ja": "水ミスト運転予約",
+              "en": "Water mist operation reservation"
+            }
+          },
+          {
+            "edt": "0x00",
+            "name": "noReservation",
+            "descriptions": {
+              "ja": "予約切",
+              "en": "No reservation"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

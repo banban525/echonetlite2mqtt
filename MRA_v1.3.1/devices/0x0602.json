@@ -1,0 +1,470 @@
+{
+  "eoj": "0x0602",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "テレビ",
+    "en": "Television"
+  },
+  "shortName": "tv",
+  "elProperties": [
+    {
+      "epc": "0x80",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作状態",
+        "en": "Operation status"
+      },
+      "shortName": "operationStatus",
+      "accessRule": {
+        "get": "required",
+        "set": "required_o",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "ON/OFF状態を表す",
+        "en": "This property indicates the ON/OFF status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFF_3031"
+      },
+      "remark": {
+        "ja": "エネルギーサービスに対応する場合、Set搭載は必須",
+        "en": "In the case where an 'energy service' is to be supported, the implementation of the SET function for this property is mandatory."
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "表示制御設定",
+        "en": "Display control setting"
+      },
+      "shortName": "displayControlStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "文字表示・非表示を設定し、設定状態を取得する",
+        "en": "Sets the status as to whether the displaying of characters is enabled or disabled and acquires the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x30",
+            "name": "enabled",
+            "descriptions": {
+              "ja": "表示",
+              "en": "Displaying enabled"
+            }
+          },
+          {
+            "edt": "0x31",
+            "name": "disabled",
+            "descriptions": {
+              "ja": "非表示",
+              "en": "Displaying disabled"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "文字列設定受付可能状態",
+        "en": "Character string setting acceptance status"
+      },
+      "shortName": "stringSettingAcceptanceStatus",
+      "accessRule": {
+        "get": "required_o",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "伝達文字列を受付けられる状態にあるか否かを示す",
+        "en": "This property indicates whether or not the device is ready to accept the character string to present to the user."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x30",
+            "name": "ready",
+            "descriptions": {
+              "ja": "Ready",
+              "en": "Ready"
+            }
+          },
+          {
+            "edt": "0x31",
+            "name": "busy",
+            "descriptions": {
+              "ja": "Busy",
+              "en": "Busy"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "快適支援サービスとセキュリティサービスに対応する場合、本プロパティの搭載は必須とする",
+        "en": "In the case where a 'home amenity service' or a 'security service' is to be supported, the implementation of this property is mandatory."
+      },
+      "note": {
+        "ja": "快適支援サービスとセキュリティサービスに対応する場合、本プロパティの搭載は必須とする",
+        "en": "In the case where a 'home amenity service' or a 'security service' is to be supported, the implementation of this property is mandatory."
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "表示可能文字コード",
+        "en": "Supported character codes"
+      },
+      "shortName": "supportedCharacterCode",
+      "accessRule": {
+        "get": "required_o",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "表示可能文字コードをビットマップで示す",
+        "en": "This property indicates, in a bit map format, the implemented character codes that can be used to present character strings."
+      },
+      "data": {
+        "type": "bitmap",
+        "size": 2,
+        "bitmaps": [
+          {
+            "name": "ansiX34Equipped",
+            "descriptions": {
+              "ja": "ANSI X3.4",
+              "en": "ANSI X3.4"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000001"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotImplemented-Implemented_00-01"
+            }
+          },
+          {
+            "name": "shiftJisEquipped",
+            "descriptions": {
+              "ja": "Shift-JIS",
+              "en": "Shift-JIS"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000010"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotImplemented-Implemented_00-01"
+            }
+          },
+          {
+            "name": "jisEquipped",
+            "descriptions": {
+              "ja": "JIS",
+              "en": "JIS"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00000100"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotImplemented-Implemented_00-01"
+            }
+          },
+          {
+            "name": "japaneseEucEquipped",
+            "descriptions": {
+              "ja": "日本語EUC",
+              "en": "Japanese EUC"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00001000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotImplemented-Implemented_00-01"
+            }
+          },
+          {
+            "name": "ucs4Equipped",
+            "descriptions": {
+              "ja": "UCS-4",
+              "en": "UCS-4"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00010000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotImplemented-Implemented_00-01"
+            }
+          },
+          {
+            "name": "ucs2Equipped",
+            "descriptions": {
+              "ja": "UCS-2",
+              "en": "UCS-2"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b00100000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotImplemented-Implemented_00-01"
+            }
+          },
+          {
+            "name": "latin1Equipped",
+            "descriptions": {
+              "ja": "Latin-1",
+              "en": "Latin-1"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b01000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotImplemented-Implemented_00-01"
+            }
+          },
+          {
+            "name": "utf8Equipped",
+            "descriptions": {
+              "ja": "UTF-8",
+              "en": "UTF-8"
+            },
+            "position": {
+              "index": 0,
+              "bitMask": "0b10000000"
+            },
+            "value": {
+              "$ref": "#/definitions/state4bitmap_NotImplemented-Implemented_00-01"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "快適支援サービスとセキュリティサービスに対応する場合、本プロパティの搭載は必須とする",
+        "en": "In the case where a 'home amenity service' or a 'security service' is to be supported, the implementation of this property is mandatory."
+      },
+      "note": {
+        "ja": "快適支援サービスとセキュリティサービスに対応する場合、本プロパティの搭載は必須とする",
+        "en": "In the case where a 'home amenity service' or a 'security service' is to be supported, the implementation of this property is mandatory."
+      }
+    },
+    {
+      "epc": "0xB3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "伝達文字列設定",
+        "en": "Character string to present to the user"
+      },
+      "shortName": "characterStringPresented",
+      "accessRule": {
+        "get": "optional",
+        "set": "required",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ユーザに伝達するべき文字列、その伝達文字列長及び使用文字コードを設定し、設定保持値を取得する。伝達文字バイト列データ長を最上位バイトに、次バイトに使用文字コード、次バイトは0x00(for future reserved),次に伝達文字列先頭バイト、伝達文字列末尾バイトを最下位バイトに設定する",
+        "en": "Sets the character string to present to the user, the length of the character string and the character code to use to present the character string and acquires the stored setting.The highest-order byte shall indicate the byte sequence data length of the character string to present to the user and the second-highest-order byte shall indicate the character code to use. The second-highest-order byte shall be followed by a byte containing '0x00' (reserved for future use), which shall be followed by a number of bytes, each assigned with one of the first and succeeding bytes, starting with the first byte, of the character string to present to the user. The lowest-order byte shall be assigned with the last byte of the character string to present to the user."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "伝達文字バイトコード列データ長の16 進換算値",
+              "en": "Byte code sequence data length of the character string to present to the user converted to the hexadecimal format"
+            },
+            "shortName": "length",
+            "element": {
+              "$ref": "#/definitions/number_0-244"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "使用文字コード",
+              "en": "Character code to use"
+            },
+            "shortName": "characterCode",
+            "element": {
+              "type": "state",
+              "size": 1,
+              "enum": [
+                {
+                  "edt": "0x01",
+                  "name": "ansi_x3_4",
+                  "descriptions": {
+                    "ja": "ANSI X3.4",
+                    "en": "ANSI X3.4"
+                  }
+                },
+                {
+                  "edt": "0x02",
+                  "name": "shift_jis",
+                  "descriptions": {
+                    "ja": "Shift-JIS",
+                    "en": "Shift-JIS"
+                  }
+                },
+                {
+                  "edt": "0x03",
+                  "name": "jis",
+                  "descriptions": {
+                    "ja": "JIS",
+                    "en": "JIS"
+                  }
+                },
+                {
+                  "edt": "0x04",
+                  "name": "japanese_euc",
+                  "descriptions": {
+                    "ja": "日本語EUC",
+                    "en": "Japanese EUC"
+                  }
+                },
+                {
+                  "edt": "0x05",
+                  "name": "ucs_4",
+                  "descriptions": {
+                    "ja": "UCS-4",
+                    "en": "UCS-4"
+                  }
+                },
+                {
+                  "edt": "0x06",
+                  "name": "ucs_2",
+                  "descriptions": {
+                    "ja": "UCS-2",
+                    "en": "UCS-2"
+                  }
+                },
+                {
+                  "edt": "0x07",
+                  "name": "latin_1",
+                  "descriptions": {
+                    "ja": "Latin-1",
+                    "en": "Latin-1"
+                  }
+                },
+                {
+                  "edt": "0x08",
+                  "name": "utf_8",
+                  "descriptions": {
+                    "ja": "UTF-8",
+                    "en": "UTF-8"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "reserved",
+              "en": "reserved"
+            },
+            "shortName": "RFU",
+            "element": {
+              "$ref": "#/definitions/state_Reserved_00"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "Max244Byte 分の伝達文字列バイトコード列",
+              "en": "Byte code sequence of the character string to present to the user (max.244 bytes)"
+            },
+            "shortName": "characterString",
+            "element": {
+              "$ref": "#/definitions/raw_1-244"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xB4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "受付け伝達文字列長",
+        "en": "Length of character string accepted"
+      },
+      "shortName": "lengthOfStringAccepted",
+      "accessRule": {
+        "get": "required_o",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "設定された伝達文字列で最新の保持文字列の総バイト数を示す",
+        "en": "This property indicates the total number of bytes of the newest character string to present to the user which has been set and is being held."
+      },
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "文字列の総バイト数",
+              "en": "data size of the string"
+            },
+            "shortName": "length",
+            "element": {
+              "$ref": "#/definitions/number_0-244"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "reserved",
+              "en": "reserved"
+            },
+            "shortName": "RFU",
+            "element": {
+              "$ref": "#/definitions/state_Reserved_00"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "快適支援サービスとセキュリティサービスに対応する場合、本プロパティの搭載は必須とする",
+        "en": "In the case where a 'home amenity service' or a 'security service' is to be supported, the implementation of this property is mandatory."
+      },
+      "note": {
+        "ja": "快適支援サービスとセキュリティサービスに対応する場合、本プロパティの搭載は必須とする",
+        "en": "In the case where a 'home amenity service' or a 'security service' is to be supported, the implementation of this property is mandatory."
+      }
+    }
+  ]
+}

@@ -1,0 +1,2002 @@
+{
+  "eoj": "0x03D3",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "洗濯乾燥機",
+    "en": "Washer and dryer"
+  },
+  "shortName": "washerDryer",
+  "elProperties": [
+    {
+      "epc": "0x90",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ予約設定",
+        "en": "On timer reservation setting"
+      },
+      "shortName": "onTimerReservationStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ONタイマ予約を設定し、ONタイマ予約状態を取得する",
+        "en": "Used to specify whether or not to use the ON timer-based reservation function, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ReservationF_4142"
+      }
+    },
+    {
+      "epc": "0x91",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ時刻設定値",
+        "en": "On timer setting"
+      },
+      "shortName": "onTimerAbsolute",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ONタイマ時刻を設定し、設定状態を取得する",
+        "en": "Used to specify the time for the time-based reservation function of the ON timer and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      },
+      "note": {
+        "ja": "秒の指定は無視される",
+        "en": "Number of seconds is ignored."
+      }
+    },
+    {
+      "epc": "0x92",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ相対時間設定値",
+        "en": "Relative time-based on timer setting"
+      },
+      "shortName": "relativeTimeOfOnTimer",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ONタイマ相対時間を設定し、予約残時間を取得する",
+        "en": "Used to specify the relative time for the relative time-based reservation function of the ON timer and to acquire the time remaining for the current reservation."
+      },
+      "data": {
+        "$ref": "#/definitions/time_2_255"
+      }
+    },
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "扉・蓋開閉状態",
+        "en": "Door/cover open/close status"
+      },
+      "shortName": "doorOpenStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "扉・蓋開/閉状態を取得する",
+        "en": "Used to acquire the status of the door/cover (i.e. open or closed)."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Open-ClosedB_4142"
+      }
+    },
+    {
+      "epc": "0xB2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "洗濯・乾燥設定",
+        "en": "Washer and dryer setting"
+      },
+      "shortName": "runningStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "洗濯乾燥機の動作運転開始･停止を設定し、運転状態を取得する",
+        "en": "Used to specify whether to start or stop the washing, drying or washing and drying cycle, and to acquire the current status."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "run",
+            "descriptions": {
+              "ja": "洗濯乾燥開始・再開／洗濯乾燥運転中",
+              "en": "Start/restart(ed) or in progress"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "pause",
+            "descriptions": {
+              "ja": "洗濯乾燥一時停止",
+              "en": "Suspend(ed)"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "stop",
+            "descriptions": {
+              "ja": "洗濯乾燥停止",
+              "en": "Stop(ped)"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "洗濯乾燥コース設定1",
+        "en": "Washer and dryer cycle setting 1"
+      },
+      "shortName": "washerDryerCycle1",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "洗濯乾燥/洗濯/乾燥のコースを設定し、設定状態を取得する。各コース設定に、以下の範囲の領域を割り当てる洗濯乾燥コース：0x21 to 0x3F洗濯乾燥コースメーカオリジナルコード 0x40 to 0x4F洗濯コース：0x61 to 0x7F洗濯コースメーカオリジナルコード 0x80 to 0x8F乾燥コース：0xA1 to 0xBF乾燥コースメーカオリジナルコード 0xC0 to 0xCF",
+        "en": "Used to specify the washer and dryer cycle option(s) to use in the 'washing and drying,' 'washing' or 'drying' mode and to acquire the current setting(s). The value ranges shall be as follows: Washing and drying course: 0x21 to 0x3F, Washing and drying course maker original code: 0x40 to 0x4F, Washing course: 0x61 to 0x7F, Washing course maker original code: 0x80 to 0x8F, Drying course: 0xA1 to 0xBF, Drying course maker original code: 0xC0 to 0xDF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x21",
+            "name": "washDryStandard",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞標準",
+              "en": "<Washing and drying course> Standard"
+            }
+          },
+          {
+            "edt": "0x22",
+            "name": "washDrySilent",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞静音",
+              "en": "<Washing and drying course> Silent"
+            }
+          },
+          {
+            "edt": "0x23",
+            "name": "washDryHeavilySoiled",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞汚れ大",
+              "en": "<Washing and drying course> Heavily soiled clothes"
+            }
+          },
+          {
+            "edt": "0x24",
+            "name": "washDryHardToRemove",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞しつこい汚れ",
+              "en": "<Washing and drying course> Hard-to-remove stains"
+            }
+          },
+          {
+            "edt": "0x25",
+            "name": "washDryPresoaking",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞つけおき",
+              "en": "<Washing and drying course> Presoaking"
+            }
+          },
+          {
+            "edt": "0x26",
+            "name": "washDryBlankets",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞毛布",
+              "en": "<Washing and drying course> Blankets"
+            }
+          },
+          {
+            "edt": "0x27",
+            "name": "washDrySoft",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞ソフト",
+              "en": "<Washing and drying course> Soft"
+            }
+          },
+          {
+            "edt": "0x28",
+            "name": "washDryDrymark",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞ドライ",
+              "en": "<Washing and drying course> Dry"
+            }
+          },
+          {
+            "edt": "0x29",
+            "name": "washDryCleanRinsing",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞清潔すすぎ",
+              "en": "<Washing and drying course> Clean rinsing"
+            }
+          },
+          {
+            "edt": "0x2A",
+            "name": "washDryIroning",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞アイロン／Yシャツ",
+              "en": "<Washing and drying course> Ironing/business shirts"
+            }
+          },
+          {
+            "edt": "0x2B",
+            "name": "washDryHangDrying",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞吊り干し",
+              "en": "<Washing and drying course> Hang drying"
+            }
+          },
+          {
+            "edt": "0x2C",
+            "name": "washDryThick",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞厚物",
+              "en": "<Washing and drying course> Thick clothes"
+            }
+          },
+          {
+            "edt": "0x2D",
+            "name": "washDryDisinfection",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞除菌",
+              "en": "<Washing and drying course> Disinfection"
+            }
+          },
+          {
+            "edt": "0x2E",
+            "name": "washDryOilStrains",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞油汚れ",
+              "en": "<Washing and drying course> Oil stains"
+            }
+          },
+          {
+            "edt": "0x2F",
+            "name": "washDryMemory",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞メモリー",
+              "en": "<Washing and drying course> Memory"
+            }
+          },
+          {
+            "edt": "0x30",
+            "name": "washDryDetergentSaving",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞省洗剤",
+              "en": "<Washing and drying course> Detergent saving"
+            }
+          },
+          {
+            "edt": "0x31",
+            "name": "washDryLightlySoiled",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞汚れ小",
+              "en": "<Washing and drying course> Lightly soiled clothes"
+            }
+          },
+          {
+            "edt": "0x32",
+            "name": "washDrySmallAmountQuick",
+            "descriptions": {
+              "ja": "＜洗濯乾燥コース＞少量短時間",
+              "en": "<Washing and drying course> Quick wash of small amount of laundry"
+            }
+          },
+          {
+            "edt": "0x61",
+            "name": "washStandard",
+            "descriptions": {
+              "ja": "＜洗濯コース＞標準",
+              "en": "<Washing course> Standard"
+            }
+          },
+          {
+            "edt": "0x62",
+            "name": "washSilent",
+            "descriptions": {
+              "ja": "＜洗濯コース＞静音",
+              "en": "<Washing course> Silent"
+            }
+          },
+          {
+            "edt": "0x63",
+            "name": "washHeavilySoiled",
+            "descriptions": {
+              "ja": "＜洗濯コース＞汚れ大",
+              "en": "<Washing course> Heavily soiled clothes"
+            }
+          },
+          {
+            "edt": "0x64",
+            "name": "washHardToRemove",
+            "descriptions": {
+              "ja": "＜洗濯コース＞しつこい汚れ",
+              "en": "<Washing course> Hard-to-remove stains"
+            }
+          },
+          {
+            "edt": "0x65",
+            "name": "washPresoaking",
+            "descriptions": {
+              "ja": "＜洗濯コース＞つけおき",
+              "en": "<Washing course> Presoaking"
+            }
+          },
+          {
+            "edt": "0x66",
+            "name": "washBlankets",
+            "descriptions": {
+              "ja": "＜洗濯コース＞毛布",
+              "en": "<Washing course> Blankets"
+            }
+          },
+          {
+            "edt": "0x67",
+            "name": "washSoft",
+            "descriptions": {
+              "ja": "＜洗濯コース＞ソフト",
+              "en": "<Washing course> Soft"
+            }
+          },
+          {
+            "edt": "0x68",
+            "name": "washDrymark",
+            "descriptions": {
+              "ja": "＜洗濯コース＞ドライ",
+              "en": "<Washing course> Dry"
+            }
+          },
+          {
+            "edt": "0x69",
+            "name": "washCleanRinsing",
+            "descriptions": {
+              "ja": "＜洗濯コース＞清潔すすぎ",
+              "en": "<Washing course> Clean rinsing"
+            }
+          },
+          {
+            "edt": "0x6A",
+            "name": "washDisinfection",
+            "descriptions": {
+              "ja": "＜洗濯コース＞除菌",
+              "en": "<Washing course> Disinfection"
+            }
+          },
+          {
+            "edt": "0x6B",
+            "name": "washOilStrains",
+            "descriptions": {
+              "ja": "＜洗濯コース＞油汚れ",
+              "en": "<Washing course> Oil stains"
+            }
+          },
+          {
+            "edt": "0x6C",
+            "name": "washMemory",
+            "descriptions": {
+              "ja": "＜洗濯コース＞メモリー",
+              "en": "<Washing course> Memory"
+            }
+          },
+          {
+            "edt": "0x6D",
+            "name": "washDetergentSaving",
+            "descriptions": {
+              "ja": "＜洗濯コース＞省洗剤",
+              "en": "<Washing course> Detergent saving"
+            }
+          },
+          {
+            "edt": "0x6E",
+            "name": "washLightlySoiled",
+            "descriptions": {
+              "ja": "＜洗濯コース＞汚れ小",
+              "en": "<Washing course> Lightly soiled clothes"
+            }
+          },
+          {
+            "edt": "0x6F",
+            "name": "washSmallAmountQuick",
+            "descriptions": {
+              "ja": "＜洗濯コース＞少量短時間",
+              "en": "<Washing course> Quick wash of small amount of laundry"
+            }
+          },
+          {
+            "edt": "0x7F",
+            "name": "washTankCleaning",
+            "descriptions": {
+              "ja": "＜洗濯コース＞槽洗浄",
+              "en": "<Washing course> Tank cleaning"
+            }
+          },
+          {
+            "edt": "0xA1",
+            "name": "dryStandard",
+            "descriptions": {
+              "ja": "＜乾燥コース＞標準",
+              "en": "<Drying course> Standard"
+            }
+          },
+          {
+            "edt": "0xA2",
+            "name": "dryBlankets",
+            "descriptions": {
+              "ja": "＜乾燥コース＞毛布",
+              "en": "<Drying course> Blankets"
+            }
+          },
+          {
+            "edt": "0xA3",
+            "name": "drySoft",
+            "descriptions": {
+              "ja": "＜乾燥コース＞ソフト",
+              "en": "<Drying course> Soft"
+            }
+          },
+          {
+            "edt": "0xA4",
+            "name": "dryDrymark",
+            "descriptions": {
+              "ja": "＜乾燥コース＞ドライ",
+              "en": "<Drying course> Dry"
+            }
+          },
+          {
+            "edt": "0xA5",
+            "name": "dryIroning",
+            "descriptions": {
+              "ja": "＜乾燥コース＞アイロン／Yシャツ",
+              "en": "<Drying course> Ironing/business shirts"
+            }
+          },
+          {
+            "edt": "0xA6",
+            "name": "dryHangDrying",
+            "descriptions": {
+              "ja": "＜乾燥コース＞吊り干し",
+              "en": "<Drying course> Hang drying"
+            }
+          },
+          {
+            "edt": "0xA7",
+            "name": "dryThick",
+            "descriptions": {
+              "ja": "＜乾燥コース＞厚物",
+              "en": "<Drying course> Thick clothes"
+            }
+          },
+          {
+            "edt": "0xA8",
+            "name": "dryDisinfection",
+            "descriptions": {
+              "ja": "＜乾燥コース＞除菌",
+              "en": "<Drying course> Disinfection"
+            }
+          },
+          {
+            "edt": "0xA9",
+            "name": "dryShrinkageMinimization",
+            "descriptions": {
+              "ja": "＜乾燥コース＞縮み低減",
+              "en": "<Drying course> Shrinkage minimization"
+            }
+          },
+          {
+            "edt": "0xAA",
+            "name": "dryFinishing",
+            "descriptions": {
+              "ja": "＜乾燥コース＞仕上げ",
+              "en": "<Drying course> Finishing"
+            }
+          },
+          {
+            "edt": "0xAB",
+            "name": "dryStationaryDrying",
+            "descriptions": {
+              "ja": "＜乾燥コース＞静止乾燥",
+              "en": "<Drying course> Stationary drying"
+            }
+          },
+          {
+            "edt": "0xAC",
+            "name": "dryUserDefinedTime",
+            "descriptions": {
+              "ja": "＜乾燥コース＞時間指定",
+              "en": "<Drying course> User definition of drying time"
+            }
+          },
+          {
+            "edt": "0xAD",
+            "name": "dryWarming",
+            "descriptions": {
+              "ja": "＜乾燥コース＞衣類あたため",
+              "en": "<Drying course> Garment warming"
+            }
+          },
+          {
+            "edt": "0xBF",
+            "name": "dryTankDrying",
+            "descriptions": {
+              "ja": "＜乾燥コース＞槽洗浄",
+              "en": "<Drying course> Tank cleaning"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "脚注参照、洗濯・乾燥のコース設定は洗濯乾燥コース設定1プロパティ (EPC=0xD0) によって行うか、あるいは洗濯乾燥コース設定2 プロパティ (EPC=0xD1) と乾燥コース設定プロパティ (EPC=0xD2) の組み合わせによって行う。機器には、どちらか一方のみを実装することとし、もう一方は実装してはならない。0x40 to 0x4F : 洗濯乾燥コース／メーカオリジナルコース, 0x80 to 0x8F : 洗濯コース／メーカオリジナルコース, 0xC0 to 0xCF : 乾燥コース／メーカオリジナルコース",
+        "en": "Refer to footnote, The washer and dryer cycle shall be specified either by the 'washer and dryer cycle setting 1' property (EPC = 0xD0) or by the 'washer and dryer cycle setting 2' property (EPC = 0xD1) combined with the 'drying cycle setting' property (EPC = 0xD2). Either the 'washer and dryer cycle setting 1' property or the 'washer and dryer cycle setting 2' and 'drying cycle setting' properties shall be implemented in the actual piece of equipment (the alternative shall not be implemented). 0x40 to 0x4F : Washing and drying course / maker original course, 0x80 to 0x8F : Washing course /  maker original course, 0xC0 to 0xCF : Drying course / maker original course."
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "洗濯乾燥コース設定2",
+        "en": "Washer and dryer cycle setting 2"
+      },
+      "shortName": "washerDryerCycle2",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "洗濯乾燥コースを設定し、設定状態を取得する。なお、乾燥方法の指定は、乾燥方法設定(EPC=0xD2)を使用するメーカオリジナルコード=0xE0 to 0xEF",
+        "en": "Used to specify the washer and dryer cycle option(s) to use in the 'washing and drying' mode, and to acquire the current setting(s). The drying option(s) to use shall be specified with the 'drying cycle setting' property (EPC = 0xD2). Maker original code = 0xE0 to 0xEF"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x20",
+            "name": "washDryNoWash",
+            "descriptions": {
+              "ja": "洗濯なし",
+              "en": "No washing"
+            }
+          },
+          {
+            "edt": "0x21",
+            "name": "washDryStandard",
+            "descriptions": {
+              "ja": "標準",
+              "en": "Standard"
+            }
+          },
+          {
+            "edt": "0x22",
+            "name": "washDrySilent",
+            "descriptions": {
+              "ja": "静音",
+              "en": "Silent"
+            }
+          },
+          {
+            "edt": "0x23",
+            "name": "washDryHeavilySoiled",
+            "descriptions": {
+              "ja": "汚れ大",
+              "en": "Heavily soiled clothes"
+            }
+          },
+          {
+            "edt": "0x24",
+            "name": "washDryHardToRemove",
+            "descriptions": {
+              "ja": "しつこい汚れ",
+              "en": "Hard-to-remove stains"
+            }
+          },
+          {
+            "edt": "0x25",
+            "name": "washDryPresoaking",
+            "descriptions": {
+              "ja": "つけおき",
+              "en": "Presoaking"
+            }
+          },
+          {
+            "edt": "0x26",
+            "name": "washDryBlankets",
+            "descriptions": {
+              "ja": "毛布",
+              "en": "Blankets"
+            }
+          },
+          {
+            "edt": "0x27",
+            "name": "washDrySoft",
+            "descriptions": {
+              "ja": "ソフト",
+              "en": "Soft"
+            }
+          },
+          {
+            "edt": "0x28",
+            "name": "washDryDrymark",
+            "descriptions": {
+              "ja": "ドライ",
+              "en": "Dry"
+            }
+          },
+          {
+            "edt": "0x29",
+            "name": "washDryCleanRinsing",
+            "descriptions": {
+              "ja": "清潔すすぎ",
+              "en": "Clean rinsing"
+            }
+          },
+          {
+            "edt": "0x2D",
+            "name": "washDryDisinfection",
+            "descriptions": {
+              "ja": "除菌",
+              "en": "Disinfection"
+            }
+          },
+          {
+            "edt": "0x2E",
+            "name": "washDryOilStrains",
+            "descriptions": {
+              "ja": "油汚れ",
+              "en": "Oil stains"
+            }
+          },
+          {
+            "edt": "0x2F",
+            "name": "washDryMemory",
+            "descriptions": {
+              "ja": "メモリー",
+              "en": "Memory"
+            }
+          },
+          {
+            "edt": "0x30",
+            "name": "washDryDetergentSaving",
+            "descriptions": {
+              "ja": "省洗剤",
+              "en": "Detergent saving"
+            }
+          },
+          {
+            "edt": "0x31",
+            "name": "washDryLightlySoiled",
+            "descriptions": {
+              "ja": "汚れ小",
+              "en": "Lightly soiled clothes"
+            }
+          },
+          {
+            "edt": "0x32",
+            "name": "washDrySmallAmountQuick",
+            "descriptions": {
+              "ja": "少量短時間",
+              "en": "Quick wash of small amount of laundry"
+            }
+          },
+          {
+            "edt": "0x3F",
+            "name": "washDryTankCleaning",
+            "descriptions": {
+              "ja": "槽洗浄",
+              "en": "Tank cleaning"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "脚注参照、メーカオリジナルコード = 0xE0 to 0xEF、メーカオリジナルコース = 0xE0 to 0xEF",
+        "en": "Refer to footnote, Maker original code = 0xE0 to 0xEF, Maker original course = 0xE0 to 0xEF"
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "乾燥方法設定",
+        "en": "Drying cycle setting"
+      },
+      "shortName": "dryerCycle",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "乾燥方法を設定し、設定状態を取得する。なお、洗濯乾燥コースの指定は、洗濯乾燥コース設定2(EPC=0xD1)を使用するメーカオリジナルコード=0xE0 to 0xEF",
+        "en": "Used to specify the drying cycle option(s) to use, and to acquire the current setting. For the 'washing and drying' mode, the 'washer and dryer cycle setting 2' property (EPC = 0xD1) shall be used. Maker original code = 0xE0 to 0xEF."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0xA0",
+            "name": "dryNoDrying",
+            "descriptions": {
+              "ja": "乾燥なし",
+              "en": "No drying"
+            }
+          },
+          {
+            "edt": "0xA1",
+            "name": "dryStandard",
+            "descriptions": {
+              "ja": "標準",
+              "en": "Standard"
+            }
+          },
+          {
+            "edt": "0xA2",
+            "name": "dryBlankets",
+            "descriptions": {
+              "ja": "毛布",
+              "en": "Blankets"
+            }
+          },
+          {
+            "edt": "0xA3",
+            "name": "drySoft",
+            "descriptions": {
+              "ja": "ソフト",
+              "en": "Soft"
+            }
+          },
+          {
+            "edt": "0xA4",
+            "name": "dryDrymark",
+            "descriptions": {
+              "ja": "ドライ",
+              "en": "Dry"
+            }
+          },
+          {
+            "edt": "0xA5",
+            "name": "dryIroning",
+            "descriptions": {
+              "ja": "アイロン／Yシャツ",
+              "en": "Ironing/business shirts"
+            }
+          },
+          {
+            "edt": "0xA6",
+            "name": "dryHangDrying",
+            "descriptions": {
+              "ja": "吊り干し",
+              "en": "Hang drying"
+            }
+          },
+          {
+            "edt": "0xA7",
+            "name": "dryThick",
+            "descriptions": {
+              "ja": "厚物",
+              "en": "Thick clothes"
+            }
+          },
+          {
+            "edt": "0xA8",
+            "name": "dryDisinfection",
+            "descriptions": {
+              "ja": "除菌",
+              "en": "Disinfection"
+            }
+          },
+          {
+            "edt": "0xA9",
+            "name": "dryShrinkageMinimization",
+            "descriptions": {
+              "ja": "縮み低減",
+              "en": "Shrinkage minimization"
+            }
+          },
+          {
+            "edt": "0xAA",
+            "name": "dryFinishing",
+            "descriptions": {
+              "ja": "仕上げ",
+              "en": "Finishing"
+            }
+          },
+          {
+            "edt": "0xAB",
+            "name": "dryStationaryDrying",
+            "descriptions": {
+              "ja": "静止乾燥",
+              "en": "Stationary drying"
+            }
+          },
+          {
+            "edt": "0xAC",
+            "name": "dryUserDefinedTime",
+            "descriptions": {
+              "ja": "時間指定",
+              "en": "User definition of drying time"
+            }
+          },
+          {
+            "edt": "0xAD",
+            "name": "dryWarming",
+            "descriptions": {
+              "ja": "衣類あたため",
+              "en": "Garment warming"
+            }
+          },
+          {
+            "edt": "0xAE",
+            "name": "dryHeaterCurrentLimit",
+            "descriptions": {
+              "ja": "ヒータ入力制限",
+              "en": "Heater current limit"
+            }
+          },
+          {
+            "edt": "0xBF",
+            "name": "dryTankDrying",
+            "descriptions": {
+              "ja": "槽洗浄",
+              "en": "Tank drying"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "脚注参照、メーカオリジナルコード＝0xE0 to 0xEF、メーカオリジナルコース＝0xE0 to 0xEF",
+        "en": "Refer to footnote, Maker original code = 0xE0 to 0xEF, Maker original course = 0xE0 to 0xEF"
+      }
+    },
+    {
+      "epc": "0xD3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "設定可能コース情報1",
+        "en": "Washer and dryer cycle option list 1"
+      },
+      "shortName": "washerDryerCycleOptions1",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "洗濯乾燥コース設定1で、設定可能なコースをビットマップで取得する",
+        "en": "Used to acquire a bitmap list of the washer and dryer cycle options that can be specified with the 'washer and dryer cycle setting 1' property"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_12"
+      },
+      "remark": {
+        "ja": "ビットが1 の場合、対応するコースの設定が可能なことを、0 の場合は不可能なことを示す。ビットとコースの関係はPDFの詳細を参照のこと",
+        "en": "When the value contained in the bit for the desired washer and dryer cycle option is '1', the option can be specified. When the value contained in the bit for the desired washer and dryer cycle option is '0', the option cannot be specified. For the requirement as to which bit must be used for which option, refer to the detailed explanation in the PDF."
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "設定可能コース情報2",
+        "en": "Washer and dryer cycle option list 2"
+      },
+      "shortName": "washerDryerCycleOptions2",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "洗濯乾燥コース設定2で、設定可能なコースをビットマップで取得する",
+        "en": "Used to acquire a bitmap list of the washer and dryer cycle options that can be specified with the 'washer and dryer cycle setting 2' property"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_4"
+      },
+      "remark": {
+        "ja": "ビットが1 の場合、対応するコースの設定が可能なことを、0 の場合は不可能なことを示す。ビットとコースの関係はPDFの詳細を参照のこと",
+        "en": "When the value contained in the bit for the desired washer and dryer cycle option is '1', the option can be specified. When the value contained in the bit for the desired washer and dryer cycle option is '0', the option cannot be specified. For the requirement as to which bit must be used for which option, refer to the detailed explanation in the PDF."
+      }
+    },
+    {
+      "epc": "0xD5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "設定可能コース情報3",
+        "en": "Washer and dryer cycle option list 3"
+      },
+      "shortName": "washerDryerCycleOptions3",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "乾燥方法設定で、設定可能なコースをビットマップで取得する",
+        "en": "Used to acquire a bitmap list of the drying cycle options that can be specified with the 'drying cycle setting' property"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_4"
+      },
+      "remark": {
+        "ja": "ビットが1 の場合、対応するコースの設定が可能なことを、0 の場合は不可能なことを示す。ビットとコースの関係はPDFの詳細を参照のこと",
+        "en": "When the value contained in the bit for the desired washer and dryer cycle option is '1', the option can be specified. When the value contained in the bit for the desired washer and dryer cycle option is '0', the option cannot be specified. For the requirement as to which bit must be used for which option, refer to the detailed explanation in the PDF."
+      }
+    },
+    {
+      "epc": "0xD6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "水流設定",
+        "en": "Water flow rate setting"
+      },
+      "shortName": "waterFlowRate",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "水流を段階で設定し、設定状態を取得する",
+        "en": "Used to specify the water flow rate by selecting a level from among the predefined levels and to acquire the current setting"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-16"
+          },
+          {
+            "$ref": "#/definitions/level_A0-8"
+          },
+          {
+            "$ref": "#/definitions/level_C0-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_FF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "0x31 to 0x40 絶対値指定、0xA0 to 0xA7 プラス相対指定、0xC0 to 0xC7 マイナス相対指定",
+        "en": "0x31 to 0x40 Absolute setting, 0xA0 to 0xA7 Relative plus, 0xC0 to 0xC7 Relative minus"
+      }
+    },
+    {
+      "epc": "0xD7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "脱水回転数設定値",
+        "en": "Rotation speed for spin drying setting"
+      },
+      "shortName": "spinDryingRotationSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "脱水回転数をr/min単位で設定し、設定状態を取得する",
+        "en": "Used to specify the rotation speed for spin drying in r/min. and to acquire the current setting"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-4095rmin"
+          },
+          {
+            "$ref": "#/definitions/level_A000-2048"
+          },
+          {
+            "$ref": "#/definitions/level_C000-2048"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_FFFF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "0xA000 to 0xA7FF プラス相対指定、0xC000 to 0xC7FF マイナス相対指定",
+        "en": "0xA000 to 0xA7FF Relative plus, 0xC000 to 0xC7FF Relative minus"
+      }
+    },
+    {
+      "epc": "0xD8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "乾燥度設定",
+        "en": "Degree of drying setting"
+      },
+      "shortName": "dryingDegree",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "乾燥度を16段階で設定し、設定状態を取得する",
+        "en": "Used to specify the degree of drying to achieve by selecting a level from among the 16 predefined levels and to acquire the current setting"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-16"
+          },
+          {
+            "$ref": "#/definitions/level_A0-8"
+          },
+          {
+            "$ref": "#/definitions/level_C0-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_FF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "0x31 to 0x40 絶対値指定、0xA0 to 0xA7 プラス相対指定、0xC0 to 0xC7 マイナス相対指定",
+        "en": "0x31 to 0x40 Absolute setting, 0xA0 to 0xA7 Relative plus, 0xC0 to 0xC7 Relative minus"
+      }
+    },
+    {
+      "epc": "0xDB",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "洗濯残り時間",
+        "en": "Remaining washing time"
+      },
+      "shortName": "washingTimeRemaining",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "洗濯残り時間をHH:MMで取得する",
+        "en": "Acquires the remaining washing time in the 'HH:MM' format."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/time_2_255"
+          },
+          {
+            "$ref": "#/definitions/state_Unknown_FFFF"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDC",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "乾燥残り時間",
+        "en": "Remaining drying time"
+      },
+      "shortName": "dryingTimeRemaining",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "乾燥残り時間をHH:MMで取得する",
+        "en": "Acquires the remaining drying time in the 'HH:MM' format."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/time_2_255"
+          },
+          {
+            "$ref": "#/definitions/state_Unknown_FFFF"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xDF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ONタイマ経過時間",
+        "en": "Elapsed time on the ON timer"
+      },
+      "shortName": "onTimerElapsed",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ONタイマ予約の経過時間を取得する",
+        "en": "Used to acquire the time elapsed on the ON timer after the ON timer was activated."
+      },
+      "data": {
+        "$ref": "#/definitions/time_2"
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "つけおき行程時間設定値",
+        "en": "Presoaking time setting"
+      },
+      "shortName": "presoakingTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "つけおき行程時間を設定し、設定状態を取得する",
+        "en": "Used to specify the duration of the presoaking process and to acquire the current setting"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/time_2"
+          },
+          {
+            "$ref": "#/definitions/level_A000-60"
+          },
+          {
+            "$ref": "#/definitions/level_C000-60"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_FFFF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "0xA000 to 0xA03B プラス相対指定、0xC000 to 0xC03B マイナス相対指定",
+        "en": "0xA000 to 0xA03B Relative plus, 0xC000 to 0xC03B Relative minus"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "洗濯乾燥遷移状態",
+        "en": "Current stage of washer and dryer cycle"
+      },
+      "shortName": "currentStage",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "洗濯乾燥遷移状態を取得する",
+        "en": "Used to acquire the current stage of the washer and dryer cycle"
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "washing",
+            "descriptions": {
+              "ja": "洗い",
+              "en": "Washing"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "rinsing",
+            "descriptions": {
+              "ja": "すすぎ",
+              "en": "Rinsing"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "spinDrying",
+            "descriptions": {
+              "ja": "脱水",
+              "en": "Spin drying"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "suspended",
+            "descriptions": {
+              "ja": "一時停止",
+              "en": "Suspended"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "washingCompleted",
+            "descriptions": {
+              "ja": "洗濯完了",
+              "en": "Washing completed"
+            }
+          },
+          {
+            "edt": "0x51",
+            "name": "washingDryingCompleted",
+            "descriptions": {
+              "ja": "洗濯／乾燥 (ソフトキープなし) 完了",
+              "en": "Washing/drying (without wrinkling minimization) completed"
+            }
+          },
+          {
+            "edt": "0x52",
+            "name": "drying",
+            "descriptions": {
+              "ja": "乾燥",
+              "en": "Drying"
+            }
+          },
+          {
+            "edt": "0x53",
+            "name": "wrinkleMinimizing",
+            "descriptions": {
+              "ja": "ソフトキープ",
+              "en": "Wrinkling minimization"
+            }
+          },
+          {
+            "edt": "0x54",
+            "name": "dryingWrinkleMinimizingCompleted",
+            "descriptions": {
+              "ja": "乾燥 (ソフトキープあり) 完了",
+              "en": "Drying (with wrinkling minimization) completed"
+            }
+          },
+          {
+            "edt": "0x61",
+            "name": "standby",
+            "descriptions": {
+              "ja": "運転前待機中",
+              "en": "Standing by to start"
+            }
+          },
+          {
+            "edt": "0x71",
+            "name": "1stRinsing",
+            "descriptions": {
+              "ja": "第1すすぎ",
+              "en": "1st rinsing"
+            }
+          },
+          {
+            "edt": "0x72",
+            "name": "2ndRinsing",
+            "descriptions": {
+              "ja": "第2すすぎ",
+              "en": "2nd rinsing"
+            }
+          },
+          {
+            "edt": "0x73",
+            "name": "3rdRinsing",
+            "descriptions": {
+              "ja": "第3すすぎ",
+              "en": "3rd rinsing"
+            }
+          },
+          {
+            "edt": "0x74",
+            "name": "4thRinsing",
+            "descriptions": {
+              "ja": "第4すすぎ",
+              "en": "4th rinsing"
+            }
+          },
+          {
+            "edt": "0x75",
+            "name": "5thRinsing",
+            "descriptions": {
+              "ja": "第5すすぎ",
+              "en": "5th rinsing"
+            }
+          },
+          {
+            "edt": "0x76",
+            "name": "6thRinsing",
+            "descriptions": {
+              "ja": "第6すすぎ",
+              "en": "6th rinsing"
+            }
+          },
+          {
+            "edt": "0x77",
+            "name": "7thRinsing",
+            "descriptions": {
+              "ja": "第7すすぎ",
+              "en": "7th rinsing"
+            }
+          },
+          {
+            "edt": "0x78",
+            "name": "8thRinsing",
+            "descriptions": {
+              "ja": "第8すすぎ",
+              "en": "8th rinsing"
+            }
+          },
+          {
+            "edt": "0x81",
+            "name": "1stSpinDrying",
+            "descriptions": {
+              "ja": "第1脱水",
+              "en": "1st spin drying"
+            }
+          },
+          {
+            "edt": "0x82",
+            "name": "2ndSpinDrying",
+            "descriptions": {
+              "ja": "第2脱水",
+              "en": "2nd spin drying"
+            }
+          },
+          {
+            "edt": "0x83",
+            "name": "3rdSpinDrying",
+            "descriptions": {
+              "ja": "第3脱水",
+              "en": "3rd spin drying"
+            }
+          },
+          {
+            "edt": "0x84",
+            "name": "4thSpinDrying",
+            "descriptions": {
+              "ja": "第4脱水",
+              "en": "4th spin drying"
+            }
+          },
+          {
+            "edt": "0x85",
+            "name": "5thSpinDrying",
+            "descriptions": {
+              "ja": "第5脱水",
+              "en": "5th spin drying"
+            }
+          },
+          {
+            "edt": "0x86",
+            "name": "6thSpinDrying",
+            "descriptions": {
+              "ja": "第6脱水",
+              "en": "6th spin drying"
+            }
+          },
+          {
+            "edt": "0x87",
+            "name": "7thSpinDrying",
+            "descriptions": {
+              "ja": "第7脱水",
+              "en": "7th spin drying"
+            }
+          },
+          {
+            "edt": "0x88",
+            "name": "8thSpinDrying",
+            "descriptions": {
+              "ja": "第8脱水",
+              "en": "8th spin drying"
+            }
+          },
+          {
+            "edt": "0x91",
+            "name": "preheatSpinDrying",
+            "descriptions": {
+              "ja": "プリヒート脱水",
+              "en": "Preheat spin drying"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "脚注参照、0xE0 to 0xEF : メーカオリジナルコード",
+        "en": "Refer to footnote, 0xE0 to 0xEF : Unique code defined by the manufacture."
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "水量設定1",
+        "en": "Water volume setting 1"
+      },
+      "shortName": "waterVolumeByLiter",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "水量を㍑単位で設定し、設定状態を取得する",
+        "en": "Used to specify the water volume in liters and to acquire the current setting"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-127L"
+          },
+          {
+            "$ref": "#/definitions/level_A0-32"
+          },
+          {
+            "$ref": "#/definitions/level_C0-32"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_FF"
+          }
+        ]
+      },
+      "note": {
+        "ja": "0xA0 to 0xBF プラス相対指定、0xC0 to 0xDF マイナス相対指定",
+        "en": "0xA0 to 0xBF Relative plus, 0xC0 to 0xDF Relative minus"
+      }
+    },
+    {
+      "epc": "0xE4",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "水量設定2",
+        "en": "Water volume setting 2"
+      },
+      "shortName": "waterVolumeByStep",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "水量を段階で設定し、設定状態を取得する",
+        "en": "Used to specify the water volume by selecting a level from among the predefined levels and to acquire the current setting"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/level_31-16"
+          },
+          {
+            "$ref": "#/definitions/level_A0-8"
+          },
+          {
+            "$ref": "#/definitions/level_C0-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_FF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "0x31 to 0x40 絶対値指定、0xA0 to 0xA7 プラス相対指定、0xC0 to 0xC7 マイナス相対指定",
+        "en": "0x31 to 0x40 Absolute setting, 0xA0 to 0xA7 Relative plus, 0xC0 to 0xC7 Relative minus"
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "洗い時間設定値",
+        "en": "Washing time setting"
+      },
+      "shortName": "washingTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "洗い時間を設定し、設定状態を取得する",
+        "en": "Used to specify the duration of the washing process and to acquire the current setting"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/time_2"
+          },
+          {
+            "$ref": "#/definitions/level_A000-60"
+          },
+          {
+            "$ref": "#/definitions/level_C000-60"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_FFFF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "0xA000 to 0xA03B プラス相対指定、0xC000 to 0xC03B マイナス相対指定",
+        "en": "0xA000 to 0xA03B Relative plus, 0xC000 to 0xC03B Relative minus"
+      }
+    },
+    {
+      "epc": "0xE6",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "すすぎ回数設定値",
+        "en": "Number of times of rinsing setting"
+      },
+      "shortName": "rinsingCount",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "すすぎ回数を設定し、設定状態を取得する",
+        "en": "Used to specify the number of times of rinsing and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-8"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_FF"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "すすぎモード設定",
+        "en": "Rinsing process setting"
+      },
+      "shortName": "rinsingProcess",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "すすぎモードをビットマップで設定し、設定状態を取得する。ビットとすすぎ回数の関係を以下に示す0,1,2,3ビット：第1すすぎ4,5,6,7ビット：第2すすぎ8,9,10,11ビット：第3すすぎ12,13,14,15ビット：第4すすぎ16,17,18,19ビット：第5すすぎ20,21,22,23ビット：第6すすぎ24,25,26,27ビット：第7すすぎ28,29,30,31ビット：第8すすぎ",
+        "en": "Used to specify the rinsing process(es) to use by means of a bitmap, and to acquire the current setting. Four bits are used to represent each rinsing process as follows:Bits 0 through bit 3: 1st rinsingBits 4 through bit 7: 2nd rinsingBits 8 through bit 11: 3rd rinsingBits 12 through bit 15: 4th rinsingBits 16 through bit 19: 5th rinsingBits 20 through bit 23: 6th rinsingBits 24 through bit 27: 7th rinsingBits 28 through bit 31: 8th rinsing"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_4"
+      },
+      "remark": {
+        "ja": "0,1,2,3 ビット：第1 すすぎ、4,5,6,7 ビット：第2 すすぎ、8,9,10,11 ビット：第3 すすぎ、12,13,14,15 ビット：第4 すすぎ、16,17,18,19 ビット：第5 すすぎ、20,21,22,23 ビット：第6 すすぎ、24,25,26,27 ビット：第7 すすぎ、28,29,30,31 ビット：第8 すすぎ、0000：モード自動設定、0001：溜めすすぎ、0010：流水すすぎ、0011：シャワーすすぎ",
+        "en": "Bits 0 through bit 3: 1st rinsing, Bits 4 through bit 7: 2nd rinsing, Bits 8 through bit 11: 3rd rinsing, Bits 12 through bit 15: 4th rinsing, Bits 16 through bit 19: 5th rinsing, Bits 20 through bit 23: 6th rinsing, Bits 24 through bit 27: 7th rinsing, Bits 28 through bit 31: 8th rinsing, 0000: Automatic mode, 0001: Rinsing without additional feeding of water from the tap, 0010: Rinsing with additional feeding of water from the tap, 0011: Shower rinsing"
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "脱水時間設定値",
+        "en": "Spin drying time setting"
+      },
+      "shortName": "spinDryingTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "脱水時間を分単位で設定し、設定状態を取得する",
+        "en": "Used to specify the duration of the spin drying process in minutes and to acquire the current setting"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-59minutes"
+          },
+          {
+            "$ref": "#/definitions/level_A0-32"
+          },
+          {
+            "$ref": "#/definitions/level_C0-32"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_FF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "0xA000 to 0xA03B プラス相対指定、0xC000 to 0xC03B マイナス相対指定",
+        "en": "0xA000 to 0xA03B Relative plus, 0xC000 to 0xC03B Relative minus"
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "乾燥時間設定値",
+        "en": "Drying time setting"
+      },
+      "shortName": "dryingTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "乾燥時間を設定し、設定状態を取得する",
+        "en": "Used to specify the duration of the drying process and to acquire the current setting"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/time_2"
+          },
+          {
+            "$ref": "#/definitions/level_A000-60"
+          },
+          {
+            "$ref": "#/definitions/level_C000-60"
+          },
+          {
+            "$ref": "#/definitions/state_Auto_FFFF"
+          }
+        ]
+      },
+      "remark": {
+        "ja": "0xA000 to 0xA03B プラス相対指定、0xC000 to 0xC03B マイナス相対指定",
+        "en": "0xA000 to 0xA03B Relative plus, 0xC000 to 0xC03B Relative minus"
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "洗い温水設定値",
+        "en": "Warm water setting"
+      },
+      "shortName": "waterTemperature",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "洗い時の水温を℃単位で設定し、設定状態を取得する",
+        "en": "Used to specify the temperature of laundry water in C and to acquire the current setting."
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/number_0-100Celsius"
+          },
+          {
+            "type": "state",
+            "size": 1,
+            "enum": [
+              {
+                "edt": "0xFE",
+                "name": "noWarmWater",
+                "descriptions": {
+                  "ja": "温水不使用",
+                  "en": "Not to use warm water"
+                }
+              },
+              {
+                "edt": "0xFF",
+                "name": "auto",
+                "descriptions": {
+                  "ja": "温度自動設定",
+                  "en": "Automatic water temperature setting"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEB",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風呂水設定",
+        "en": "Bathtub water recycle setting"
+      },
+      "shortName": "bathtubWaterRecycle",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "風呂水給水を行うタイミングを設定し、設定状態を取得する",
+        "en": "Used to specify whether or not, and when, to recycle used bathtub water, and acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x40",
+            "name": "none",
+            "descriptions": {
+              "ja": "風呂水給水なし",
+              "en": "Bathtub water not used"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "washing",
+            "descriptions": {
+              "ja": "洗いのみ",
+              "en": "Washing only"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "rinsingWithoutFinal",
+            "descriptions": {
+              "ja": "すすぎのみ (除く最終すすぎ)",
+              "en": "Rinsing only (excluding the final rinsing)"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "rinsing",
+            "descriptions": {
+              "ja": "全すすぎ",
+              "en": "All rinsing processes"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "washingRinsingWithoutFinal",
+            "descriptions": {
+              "ja": "洗い+すすぎ (除く最終すすぎ)",
+              "en": "Washing + rinsing (excluding the final rinsing)"
+            }
+          },
+          {
+            "edt": "0x45",
+            "name": "washingRinsing",
+            "descriptions": {
+              "ja": "洗い＋全すすぎ",
+              "en": "Washing + all rinsing processes"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEC",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ソフトキープ設定",
+        "en": "Wrinkling minimization setting"
+      },
+      "shortName": "wrinklingMinimization",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ソフトキープを行うか否かを設定し、設定状態を取得する",
+        "en": "Used to specify whether or not to use the wrinkling minimization function, and to acquire the current setting."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "enable",
+            "descriptions": {
+              "ja": "ソフトキープ入り",
+              "en": "Wrinkling minimization function on"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "disable",
+            "descriptions": {
+              "ja": "ソフトキープ切り",
+              "en": "Wrinkling minimization function off"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xED",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "洗濯乾燥残り時間",
+        "en": "Time remaining to complete washer and dryer cycle"
+      },
+      "shortName": "washingDryingTimeRemaining",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "洗濯乾燥残り時間をHH:MMで取得する",
+        "en": "Used to acquire the time remaining to complete the current washer and dryer cycle in the 'HH:MM' format"
+      },
+      "data": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/time_2"
+          },
+          {
+            "$ref": "#/definitions/state_Unknown_FFFF"
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xEE",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転中扉・蓋ロック設定",
+        "en": "Door/cover lock setting"
+      },
+      "shortName": "doorLockStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "運転中の扉・蓋のロック、アンロックを設定し、設定状態を取得する",
+        "en": "Used to specify the state of the door/cover lock during operation and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Lock-UnlockA_4142"
+      }
+    },
+    {
+      "epc": "0xEF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "洗濯乾燥行程情報",
+        "en": "Washer and dryer cycle"
+      },
+      "shortName": "washerAndDryerCycle",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "現在設定されている行程を取得する",
+        "en": "Used to acquire the current washer and dryer cycle setting."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_24"
+      },
+      "remark": {
+        "ja": "第1,2 バイト：有効な表示項目をビットマップで示す。第3 バイト：つけおき行程 つけおき行程あり：0x41、つけおき行程なし：0x42。第4,5 バイト：洗い時間 値は洗い時間設定値を参照。第6 バイト：すすぎ回数 値はすすぎ回数設定値を参照。第7 to 10 バイト：すすぎモード 値はすすぎモード設定を参照。第11 バイト：脱水時間 値は脱水時間設定値を参照。第12, 13 バイト：乾燥時間 値は乾燥時間設定値を参照。第14 バイト：温水設定 値は温水設定を参照。第15 バイト：水量設定1 値は水量設定1を参照。第16 バイト：水量設定2 値は水量設定2を参照。第17 バイト：風呂水設定 値は風呂水設定を参照。第18 バイト：水流設定 値は水流設定を参照。第19,20 バイト：脱水回転数設定 値は脱水回転数設定値を参照。第21 バイト：乾燥度設定 値は乾燥度設定を参照。第22,23 バイト：つけおき行程時間設定 値はつけおき行程時間設定を参照。第24 バイト：ソフトキープ設定 値はソフトキープ設定を参照",
+        "en": "This property indicates the available items in a bitmap format. Byte 3: Presoaking, With presoaking: 0x41, Without presoaking: 0x42. Bytes 4 and 5: Washing time, The value of the 'washing time setting' property shall be referenced. Byte 6: Number of times of rinsing, The value of the 'number of times of rinsing' setting property shall be referenced. Bytes 7 through 10: Rinsing process, The value of the 'rinsing process setting' property shall be referenced. Byte 11: Spin drying time, The value of the 'spin drying time setting' property shall be referenced. Bytes 12 and 13: Drying time, The value of the 'drying time setting' property shall be referenced. Byte 14: Warm water setting, The value of the 'warm water setting' property shall be referenced. Byte 15: Water volume setting 1, The value of the 'water volume setting 1' property shall be referenced. Byte 16: Water volume setting 2, The value of the 'water volume setting 2' property shall be referenced. Byte 17: Bathtub water recycle setting, The value of the 'bathtub water recycle setting' property shall be referenced. Byte 18: Water flow rate setting, The value of the 'water flow rate setting' property shall be referenced. Bytes 19 and 20: 'Rotation speed for spin drying' setting, The value of the ''rotation speed for spin drying' setting' property shall be referenced. Byte 21: 'Degree of drying' setting, The value of the ''degree of drying' setting' property shall be referenced. Bytes 22 and 23: Presoaking time setting, The value of the 'presoaking time setting' property shall be referenced. Byte 24: Wrinkling minimization setting, The value of the 'wrinkling minimization setting' property shall be referenced."
+      }
+    }
+  ]
+}
