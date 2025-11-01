@@ -1,0 +1,41 @@
+{
+  "eoj": "0x02A5",
+  "properties": [
+    {
+      "epc": "0x80",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x83",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x89",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x8C",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x97",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x98",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE8",
+      "data": {
+        "type": "array",
+        "itemSize": 3,
+        "minItems": 1,
+        "maxItems": 10,
+        "items": {
+          "$ref": "#/definitions/raw_3"
+        }
+      }
+    }
+  ]
+}

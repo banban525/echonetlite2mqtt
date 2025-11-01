@@ -466,6 +466,12 @@
       "maximum": 999999999,
       "unit": "m3"
     },
+    "number_0-999999999m3NoMax": {
+      "type": "number",
+      "format": "uint32",
+      "minimum": 0,
+      "unit": "m3"
+    },
     "number_0-999999.999kWh": {
       "type": "number",
       "format": "uint32",
@@ -481,6 +487,13 @@
       "maximum": 999999999,
       "unit": "m3",
       "multiple": 0.001
+    },
+    "number_0-999999999kWh": {
+      "type": "number",
+      "format": "uint32",
+      "minimum": 0,
+      "maximum": 999999999,
+      "unit": "kWh"
     },
     "number_0-4294967293": {
       "type": "number",
@@ -533,6 +546,12 @@
       "minimum": 1,
       "maximum": 8,
       "unit": "digit"
+    },
+    "number_1-10": {
+      "type": "number",
+      "format": "uint8",
+      "minimum": 1,
+      "maximum": 10
     },
     "number_1-12": {
       "type": "number",
@@ -879,6 +898,14 @@
       "minimum": -2147483647,
       "maximum": 2147483646,
       "unit": "mA"
+    },
+    "number_-214748364.7-214748364.5A": {
+      "type": "number",
+      "format": "int32",
+      "minimum": -2147483647,
+      "maximum": 2147483645,
+      "unit": "A",
+      "multiple": 0.1
     },
     "state_None_00": {
       "type": "state",
@@ -2316,6 +2343,21 @@
         }
       ]
     },
+    "state_Invalid_FFFFFFFF": {
+      "type": "state",
+      "size": 4,
+      "enum": [
+        {
+          "edt": "0xFFFFFFFF",
+          "name": "invalid",
+          "descriptions": {
+            "ja": "無効値",
+            "en": "invalid value"
+          },
+          "readOnly": true
+        }
+      ]
+    },
     "state_NoControlNoSchedule_FFFFFFFFFFFFFF": {
       "type": "state",
       "size": 7,
@@ -2327,6 +2369,20 @@
             "ja": "出力制御スケジュールによる出力制御が必要ない太陽光発電および、出力制御スケジュールが取得できていない場合",
             "en": "Solar power generation that requires no output power control by output power controlling schedule and cases where output power controlling schedule has not been acquired"
           }
+        }
+      ]
+    },
+    "state_initial_FFFF": {
+      "type": "state",
+      "size": 2,
+      "enum": [
+        {
+            "edt": "0xFFFF",
+            "name": "initialValue",
+            "descriptions": {
+              "ja": "初期値(未設定)",
+              "en": "initial value (not set)"
+            }
         }
       ]
     },
@@ -2458,6 +2514,50 @@
           "descriptions": {
             "ja": "搭載",
             "en": "Implemented"
+          }
+        }
+      ]
+    },
+    "state4bitmap_Impossible-Possible_00-01": {
+      "type": "state",
+      "size": 0,
+      "enum": [
+        {
+          "edt": "0x00",
+          "name": "impossible",
+          "descriptions": {
+            "ja": "参加不可",
+            "en": "Non participation"
+          }
+        },
+        {
+          "edt": "0x01",
+          "name": "possible",
+          "descriptions": {
+            "ja": "参加可能",
+            "en": "Participation is possible"
+          }
+        }
+      ]
+    },
+    "state4bitmap_State-False-True_00-01": {
+      "type": "state",
+      "size": 0,
+      "enum": [
+        {
+          "edt": "0x00",
+          "name": "false",
+          "descriptions": {
+            "ja": "当該状態ではない",
+            "en": "Not in this state"
+          }
+        },
+        {
+          "edt": "0x01",
+          "name": "true",
+          "descriptions": {
+            "ja": "当該状態である",
+            "en": "In this state"
           }
         }
       ]
@@ -2602,10 +2702,20 @@
       "minSize": 6,
       "maxSize": 6
     },
+    "raw_7": {
+      "type": "raw",
+      "minSize": 7,
+      "maxSize": 7
+    },
     "raw_8": {
       "type": "raw",
       "minSize": 8,
       "maxSize": 8
+    },
+    "raw_9": {
+      "type": "raw",
+      "minSize": 9,
+      "maxSize": 9
     },
     "raw_10": {
       "type": "raw",
@@ -2850,6 +2960,360 @@
           }
         }
       ]
-    }
+    },
+    "state_Invalid_FFFF": {
+      "type": "state",
+      "size": 2,
+      "enum": [
+      {
+        "edt": "0xFFFF",
+        "name": "invalid",
+        "descriptions": {
+          "ja": "無効値",
+          "en": "Invalid data"
+        },
+        "readOnly": true
+      }
+      ]
+    },
+    "state_Invalid_FF": {
+      "type": "state",
+      "size": 1,
+      "enum": [
+      {
+        "edt": "0xFF",
+        "name": "invalid",
+        "descriptions": {
+          "ja": "無効値",
+          "en": "Invalid data"
+        },
+        "readOnly": true
+      }
+    ]
+    },
+    "number_signed_0-1000mHz": {
+      "type": "number",
+      "format": "int16",
+      "minimum": 0,
+      "maximum": 1000,
+      "unit": "mHz"
+    },
+    "number_unsigned_0-1000mHz": {
+      "type": "number",
+      "format": "uint16",
+      "minimum": 0,
+      "maximum": 1000,
+      "unit": "mHz"
+    },
+    "number_0-999999999WmHz": {
+      "type": "number",
+      "format": "uint32",
+      "minimum": 0,
+      "maximum": 999999999,
+      "unit": "W/mHz"
+    },
+    "number_0-999999999Wsec": {
+       "type": "number",
+      "format": "uint32",
+      "minimum": 0,
+      "maximum": 999999999,
+      "unit": "W/sec"
+    },
+    "number_0-65535_10ms": {
+      "type": "number",
+      "format": "uint16",
+      "minimum": 0,
+      "maximum": 65535,
+      "multiple": 10,
+      "unit": "ms"
+    },
+    "state_Invalid_7FFFFFFF": {
+      "type": "state",
+      "size": 4,
+      "enum": [
+      {
+        "edt": "0x7FFFFFFF",
+        "name": "invalid",
+        "descriptions": {
+          "ja": "無効値",
+          "en": "Invalid value"
+        }
+      }
+      ]
+    },
+    "number_0-96": {
+      "type": "number",
+      "format": "uint16",
+      "minimum": 0,
+      "maximum": 96
+    },
+    "number_signed_0-999999999W": {
+      "type": "number",
+      "format": "int32",
+      "minimum": 0,
+      "maximum": 999999999,
+      "unit": "W"
+    },
+    "number_signed_-100-100mHz": {
+      "type": "number",
+      "format": "int16",
+      "minimum": -100,
+      "maximum": 100,
+      "unit": "mHz"
+    },
+    "number_0-65533mHz": {
+      "type": "number",
+      "format": "uint16",
+      "minimum": 0,
+      "maximum": 65533,
+      "unit": "mHz"
+    },
+    "number_signed_-3000-3000mHz": {
+      "type": "number",
+      "format": "int16",
+      "minimum": -3000,
+      "maximum": 3000,
+      "unit": "mHz"
+    },
+    "state_for_epc89":{
+      "type":"state",
+      "size":2,
+      "enum": [
+        {
+          "edt": "0x0000",
+          "name": "noFault",
+          "descriptions": {
+              "ja": "異常なし",
+              "en": "No fault"
+          }
+        },
+        {
+          "edt": "0x0001",
+          "name": "trunOffOrUnplug",
+          "descriptions": {
+            "ja": "スイッチを切る/コンセントを抜き再操作",
+            "en": "Faults that can be recovered from by turn off the power or unplug and reoperate."
+          }
+        },
+        {
+          "edt": "0x0002",
+          "name": "resetButton",
+          "descriptions": {
+            "ja": "リセットボタンを押し再操作",
+            "en": "Faults that can be recovered from by pressing the reset button."
+          }
+        },
+        {
+          "edt": "0x0003",
+          "name": "setIncorrectly",
+          "descriptions": {
+            "ja": "セット不良",
+            "en": "Device set incorrectly"
+          }
+        },
+        {
+          "edt": "0x0004",
+          "name": "supply",
+          "descriptions": {
+            "ja": "補給",
+            "en": "Supply"
+          }
+        },
+        {
+          "edt": "0x0005",
+          "name": "cleaning",
+          "descriptions": {
+            "ja": "掃除（フィルタ等）",
+            "en": "Cleaning (filters, etc.)"
+          }
+        },
+        {
+          "edt": "0x0006",
+          "name": "changingBattery",
+          "descriptions": {
+            "ja": "電池交換",
+            "en": "Changing the battery"
+          }
+        },
+        {
+          "edt": "0x0007",
+          "name": "recoverOperationNoReuired",
+          "descriptions": {
+            "ja": "復帰操作不要",
+            "en": "Recover operation no required"
+          }
+        },
+        {
+          "edt": "0x0009",
+          "name": "userDefinable",
+          "descriptions": {
+            "ja": "ユーザ定義領域",
+            "en": "User-definable domain"
+          }
+        },
+        {
+          "edt": "0x000a...0x0013",
+          "name": "abnormalEventOrSafety",
+          "descriptions": {
+            "ja": "異常現象／安全装置作動",
+            "en": "Abnormal event or the tripping of a safety device."
+          }
+        },
+        {
+          "edt": "0x0014...0x001D",
+          "name": "switch",
+          "descriptions": {
+            "ja": "スイッチ異常",
+            "en": "Fault in a switch"
+          }
+        },
+        {
+          "edt": "0x001E...0x003B",
+          "name": "sensorSystem",
+          "descriptions": {
+            "ja": "センサ異常",
+            "en": "Fault in the sensor system"
+          }
+        },
+        {
+          "edt": "0x003C...0x0059",
+          "name": "component",
+          "descriptions": {
+            "ja": "機能部品異常",
+            "en": "Fault in a component such as an actuator."
+          }
+        },
+        {
+          "edt": "0x005A...0x006E",
+          "name": "controlCircuitBoard",
+          "descriptions": {
+            "ja": "制御基板異常",
+            "en": "Fault in a control circuit board."
+          }
+        },
+        {
+          "edt": "0x006F...0x03E8",
+          "name": "userDefinable",
+          "descriptions": {
+            "ja": "ユーザ定義領域",
+            "en": "User-definable domain"
+          }
+        },
+        {
+          "edt": "0x03E9",
+          "name": "repairLocationUnkown",
+          "descriptions": {
+            "ja": "修理箇所不明",
+            "en": "Repair location unknown"
+          }
+        },
+        {
+          "edt": "0x03FF",
+          "name": "fault",
+          "descriptions": {
+            "ja": "異常あり",
+            "en": "Fault"
+          }
+        }
+      ]
+    },
+    "state_Open-Close-Stop_41-43": {
+      "type": "state",
+      "size": 1,
+      "enum": [
+        {
+          "edt": "0x41",
+          "name": "open",
+          "descriptions": {
+            "ja": "開",
+            "en": "Open"
+          }
+        },
+        {
+          "edt": "0x42",
+          "name": "close",
+          "descriptions": {
+            "ja": "閉",
+            "en": "Close"
+          }
+        },
+        {
+          "edt": "0x43",
+          "name": "stop",
+          "descriptions": {
+            "ja": "停止",
+            "en": "Stop"
+          }
+        }
+      ]
+    },
+    "state_Permit-Prohibit_4142": {
+      "type": "state",
+      "size": 1,
+      "enum": [
+        {
+          "edt": "0x41",
+          "name": "true",
+          "descriptions": {
+            "ja": "ON (許可)",
+            "en": "ON (permitted)"
+          }
+        },
+        {
+          "edt": "0x42",
+          "name": "false",
+          "descriptions": {
+            "ja": "OFF (禁止)",
+            "en": "OFF (prohibited)"
+          }
+        }
+      ]
+    },
+    "state_FullOpen-FullClosed-Open-Close-StopHalf_41-45": {
+      "type": "state",
+      "size": 1,
+      "enum": [
+        {
+          "edt": "0x41",
+          "name": "fullyOpen",
+          "descriptions": {
+            "ja": "全開",
+            "en": "Fully open"
+          }
+        },
+        {
+          "edt": "0x42",
+          "name": "fullyClosed",
+          "descriptions": {
+            "ja": "全閉",
+            "en": "Fully closed"
+          }
+        },
+        {
+          "edt": "0x43",
+          "name": "opening",
+          "descriptions": {
+            "ja": "開動作中",
+            "en": "Opening"
+          }
+        },
+        {
+          "edt": "0x44",
+          "name": "closing",
+          "descriptions": {
+            "ja": "閉動作中",
+            "en": "Closing"
+          }
+        },
+        {
+          "edt": "0x45",
+          "name": "stoppedHalfway",
+          "descriptions": {
+            "ja": "途中停止",
+            "en": "Stopped halfway"
+          }
+        }
+      ]
+    }    
   }
 }

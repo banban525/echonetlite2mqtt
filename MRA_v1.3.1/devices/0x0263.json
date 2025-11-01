@@ -35,6 +35,126 @@
         "size": 2,
         "enum": [
           {
+            "edt": "0x0000",
+            "name": "NoFault",
+            "descriptions": {
+              "ja": "異常なし",
+              "en": "No fault"
+            }
+          },
+          {
+            "edt": "0x0001",
+            "name": "trunOffOrUnplug",
+            "descriptions": {
+              "ja": "スイッチを切る/コンセントを抜き再操作",
+              "en": "Faults that can be recovered from by turn off the power or unplug and reoperate."
+            }
+          },
+          {
+            "edt": "0x0002",
+            "name": "resetButton",
+            "descriptions": {
+              "ja": "リセットボタンを押し再操作",
+              "en": "Faults that can be recovered from by pressing the reset button."
+            }
+          },
+          {
+            "edt": "0x0003",
+            "name": "SetIncorrectly",
+            "descriptions": {
+              "ja": "セット不良",
+              "en": "Device set incorrectly"
+            }
+          },
+          {
+            "edt": "0x0004",
+            "name": "supply",
+            "descriptions": {
+              "ja": "補給",
+              "en": "Supply"
+            }
+          },
+          {
+            "edt": "0x0005",
+            "name": "cleaning",
+            "descriptions": {
+              "ja": "掃除（フィルタ等）",
+              "en": "Cleaning (filters, etc.)"
+            }
+          },
+          {
+            "edt": "0x0006",
+            "name": "changingBattery",
+            "descriptions": {
+              "ja": "電池交換",
+              "en": "Changing the battery"
+            }
+          },
+          {
+            "edt": "0x0009",
+            "name": "userDefinable",
+            "descriptions": {
+              "ja": "ユーザ定義領域",
+              "en": "User-definable domain"
+            }
+          },
+          {
+            "edt": "0x000a...0x0013",
+            "name": "abnormalEventOrSafety",
+            "descriptions": {
+              "ja": "異常現象／安全装置作動",
+              "en": "Abnormal event or the tripping of a safety device."
+            }
+          },
+          {
+            "edt": "0x0014...0x001D",
+            "name": "switch",
+            "descriptions": {
+              "ja": "スイッチ異常",
+              "en": "Fault in a switch."
+            }
+          },
+          {
+            "edt": "0x001E...0x003B",
+            "name": "SensorSystem",
+            "descriptions": {
+              "ja": "センサ異常",
+              "en": "Fault in the sensor system"
+            }
+          },
+          {
+            "edt": "0x003C...0x0059",
+            "name": "component",
+            "descriptions": {
+              "ja": "機能部品異常",
+              "en": "Fault in a component such as an actuator."
+            }
+          },
+          {
+            "edt": "0x005A...0x006E",
+            "name": "controlCircuitBoard",
+            "descriptions": {
+              "ja": "制御基板異常",
+              "en": "Fault in a control circuit board."
+            }
+          },
+          {
+            "edt": "0x006F...0x03E8",
+            "name": "userDefinable",
+            "descriptions": {
+              "ja": "ユーザ定義領域",
+              "en": "User-definable domain"
+            }
+          },
+          {
+            "edt": "0x03FF",
+            "name": "Fault",
+            "descriptions": {
+              "ja": "異常あり",
+              "en": "Fault"
+            }
+          },
+          {
             "edt": "0x0402",
             "name": "obstacleCaught",
             "descriptions": {
@@ -126,34 +246,7 @@
         "en": "Used to specify the normal opening speed by three levels."
       },
       "data": {
-        "type": "state",
-        "size": 1,
-        "enum": [
-          {
-            "edt": "0x41",
-            "name": "low",
-            "descriptions": {
-              "ja": "低",
-              "en": "Low"
-            }
-          },
-          {
-            "edt": "0x42",
-            "name": "medium",
-            "descriptions": {
-              "ja": "中",
-              "en": "Medium"
-            }
-          },
-          {
-            "edt": "0x43",
-            "name": "high",
-            "descriptions": {
-              "ja": "高",
-              "en": "High"
-            }
-          }
-        ]
+        "$ref": "#/definitions/state_LMH_41-43"
       }
     },
     {
@@ -177,34 +270,7 @@
         "en": "Used to specify the normal closing speed by three levels."
       },
       "data": {
-        "type": "state",
-        "size": 1,
-        "enum": [
-          {
-            "edt": "0x41",
-            "name": "low",
-            "descriptions": {
-              "ja": "低",
-              "en": "Low"
-            }
-          },
-          {
-            "edt": "0x42",
-            "name": "medium",
-            "descriptions": {
-              "ja": "中",
-              "en": "Medium"
-            }
-          },
-          {
-            "edt": "0x43",
-            "name": "high",
-            "descriptions": {
-              "ja": "高",
-              "en": "High"
-            }
-          }
-        ]
+        "$ref": "#/definitions/state_LMH_41-43"
       }
     },
     {
@@ -252,34 +318,7 @@
         "en": "Open/Close/Stop"
       },
       "data": {
-        "type": "state",
-        "size": 1,
-        "enum": [
-          {
-            "edt": "0x41",
-            "name": "open",
-            "descriptions": {
-              "ja": "開",
-              "en": "Open"
-            }
-          },
-          {
-            "edt": "0x42",
-            "name": "close",
-            "descriptions": {
-              "ja": "閉",
-              "en": "Close"
-            }
-          },
-          {
-            "edt": "0x43",
-            "name": "stop",
-            "descriptions": {
-              "ja": "停止",
-              "en": "Stop"
-            }
-          }
-        ]
+        "$ref": "#/definitions/state_Open-Close-Stop_41-43"
       },
       "remark": {
         "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
@@ -403,26 +442,7 @@
         "en": "Indicates whether remote operation is permitted or prohibited."
       },
       "data": {
-        "type": "state",
-        "size": 1,
-        "enum": [
-          {
-            "edt": "0x41",
-            "name": "true",
-            "descriptions": {
-              "ja": "ON (許可)",
-              "en": "ON (permitted)"
-            }
-          },
-          {
-            "edt": "0x42",
-            "name": "false",
-            "descriptions": {
-              "ja": "OFF (禁止)",
-              "en": "OFF (prohibited)"
-            }
-          }
-        ]
+        "$ref": "#/definitions/state_Permit-Prohibit_4142"
       },
       "remark": {
         "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
@@ -525,50 +545,7 @@
         "en": "Indicates the open/closed status."
       },
       "data": {
-        "type": "state",
-        "size": 1,
-        "enum": [
-          {
-            "edt": "0x41",
-            "name": "fullyOpen",
-            "descriptions": {
-              "ja": "全開",
-              "en": "Fully open"
-            }
-          },
-          {
-            "edt": "0x42",
-            "name": "fullyClosed",
-            "descriptions": {
-              "ja": "全閉",
-              "en": "Fully closed"
-            }
-          },
-          {
-            "edt": "0x43",
-            "name": "opening",
-            "descriptions": {
-              "ja": "開動作中",
-              "en": "Opening"
-            }
-          },
-          {
-            "edt": "0x44",
-            "name": "closing",
-            "descriptions": {
-              "ja": "閉動作中",
-              "en": "Closing"
-            }
-          },
-          {
-            "edt": "0x45",
-            "name": "stoppedHalfway",
-            "descriptions": {
-              "ja": "途中停止",
-              "en": "Stopped halfway"
-            }
-          }
-        ]
+        "$ref": "#/definitions/state_FullOpen-FullClosed-Open-Close-StopHalf_41-45"
       },
       "remark": {
         "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",

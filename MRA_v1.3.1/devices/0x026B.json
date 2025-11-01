@@ -870,7 +870,7 @@
       },
       "descriptions": {
         "ja": "1回目の「昼間沸き上げシフト時刻」を示す。また、未設定時の値を0x00と定義する",
-        "en": "This property indicates 'daytime heating shift time 1' for the first time. The value when there are no settings shall be defined as 0x00."
+        "en": "This property indicates 'daytime heating shift time' for the first time. The value when there are no settings shall be defined as 0x00."
       },
       "data": {
         "oneOf": [
@@ -1130,8 +1130,8 @@
         "inf": "optional"
       },
       "descriptions": {
-        "ja": "1回目の「昼間沸き上げシフト時刻」を示す。また、未設定時の値を0x00と定義する",
-        "en": "This property indicates 'daytime heating shift time 1' for the first time The value when no setting shall be defined as 0x00."
+        "ja": "2回目の「昼間沸き上げシフト時刻」を示す。また、未設定時の値を0x00と定義する",
+        "en": "This property indicates 'daytime heating shift time' for the second time. The value when no setting shall be defined as 0x00."
       },
       "data": {
         "oneOf": [

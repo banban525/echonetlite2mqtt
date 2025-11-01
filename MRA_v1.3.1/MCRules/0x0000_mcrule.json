@@ -38,7 +38,7 @@
     {
       "epc": "0x8A",
       "propertyName": {
-        "ja": "メーカー",
+        "ja": "会員ID/メーカー",
         "en": "Manufacturer"
       },
       "data": {
@@ -80,6 +80,7 @@
         "en": "Serial number"
       }
     },
+  
     {
       "epc": "0x93",
       "action": "DEL"

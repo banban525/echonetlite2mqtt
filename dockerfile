@@ -29,7 +29,7 @@ COPY package*.json ./
 USER node
 
 RUN npm ci --omit=dev
-COPY --chown=node:node --from=build /app/MRA_V1.1.1 ./MRA_V1.1.1
+COPY --chown=node:node --from=build /app/MRA_v1.3.1 ./MRA_v1.3.1
 COPY --chown=node:node --from=build /app/MRA_custom ./MRA_custom
 COPY --chown=node:node --from=build /app/views ./views
 COPY --chown=node:node --from=build /app/public ./public

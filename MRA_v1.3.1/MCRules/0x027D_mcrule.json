@@ -6,6 +6,14 @@
       "action": "DEL"
     },
     {
+      "epc": "0x89",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x8C",
+      "action": "DEL"
+    },
+    {
       "epc": "0x97",
       "action": "DEL"
     },
