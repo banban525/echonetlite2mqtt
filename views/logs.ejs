@@ -47,7 +47,7 @@
             data.reverse();
             for(let log of data)
             {
-              $("#logsTable tbody").append(`<tr id="log-${log.id}"><th>${log.id}</th><td>${utcTextToLocalText(log.datetime)}</td><td>${log.message}</td></tr>`);
+              $("#logsTable tbody").append(`<tr id="log-${log.id}"><th>${log.id}</th><td>${utcTextToLocalText(log.datetime)}</td><td>${log.message.replace(/\n/, '<br/>')}</td></tr>`);
             }
         });
       }

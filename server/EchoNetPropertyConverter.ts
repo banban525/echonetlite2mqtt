@@ -48,7 +48,12 @@ function int32ToHexString(number:number):string
 
 export class EchoNetPropertyConverter
 {
-  echoNetDefinitionRepository:EchoNetDefinitionRepository = new EchoNetDefinitionRepository();
+  private readonly echoNetDefinitionRepository:EchoNetDefinitionRepository;
+
+  constructor(additionalMraFolders:string[])
+  {
+    this.echoNetDefinitionRepository = new EchoNetDefinitionRepository(additionalMraFolders);
+  }
 
   public getDevice(eojClass:string):ElDeviceDescription | undefined
   {
@@ -1420,7 +1425,11 @@ class EchoNetDefinitionRepository
   static definitionsCache:ElDefinitions|undefined;
   static superClassCache:ElDeviceDescription|undefined;
   static deviceDescriptionCache:{[key:string]:ElDeviceDescription|undefined} = {};
-
+  private readonly additionalMraFolders:string[];
+  constructor(additionalMraFolders:string[])
+  {
+    this.additionalMraFolders = additionalMraFolders;
+  }
   public getDefinition():ElDefinitions
   {
     if(EchoNetDefinitionRepository.definitionsCache===undefined)
@@ -1453,16 +1462,18 @@ class EchoNetDefinitionRepository
     const superClass = this.getSuperClass();
 
     let device:ElDeviceDescription|undefined = undefined;
-    if(device === undefined)
+    for(const folder of this.additionalMraFolders)
     {
-      const deviceJsonPath = path.join(__dirname, `../MRA_custom/${eojClass}.json`);
+      const deviceJsonPath = path.join(folder, `${eojClass}.json`);
       if(fs.existsSync(deviceJsonPath))
       {
         const deviceText = fs.readFileSync(deviceJsonPath, {encoding:"utf8"});
         device = JSON.parse(deviceText) as ElDeviceDescription;
         device.elProperties.push(...superClass.elProperties);
+        break;
       }
     }
+
     if(device === undefined)
     {
       const deviceJsonPath = path.join(__dirname, `../MRA_v1.3.1/devices/${eojClass}.json`);

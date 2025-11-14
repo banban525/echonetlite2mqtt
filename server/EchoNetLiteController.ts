@@ -30,10 +30,11 @@ export class EchoNetLiteController{
     knownDeviceIpList:string[],
     searchDevices:boolean,
     commandTimeout:number,
-    findDeviceCallback:findDeviceCallback)
+    findDeviceCallback:findDeviceCallback,
+    additionalMraFolders:string[])
   {
     this.aliasOption = aliasOption;
-    this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption, unknownAsError);
+    this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption, unknownAsError, additionalMraFolders);
     this.echonetLiteRawController = new EchoNetLiteRawController();
     this.holdController = new EchoNetHoldController({request:this.requestDeviceProperty, set:this.setDevicePropertyPrivate, isBusy:()=>this.echonetLiteRawController.getSendQueueLength() >= 1});
     this.legacyMultiNicMode = legacyMultiNicMode;

@@ -168,9 +168,10 @@ ECHONET Lite オプション
 | `ECHONET_DEVICE_IP_LIST` | `--echonetDeviceIpList` | デバイスのIPをカンマ区切りで指定します。(デフォルト:無し) |
 | `ECHONET_COMMAND_TIMEOUT` | `--echonetCommandTimeout` | ECHONET Liteコマンドの応答待ちの時間を指定します. (単位: ms) (デフォルト: 3000) |
 | `ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY` | `--echonetDisableAutoDeviceDiscovery` | デバイスの自動探索を無効にします。(デフォルト: off) |
-| `ECHONET_ALIAS_FILE`   | `--echonetAliasFile`  | エイリアスオプションファイルを指定します。 (デフォルト: (空)) |
+| `ECHONET_ALIAS_FILE`   | `--echonetAliasFile`  | エイリアスオプションファイルを指定します。 (デフォルト: 使用しない) |
 | `ECHONET_LEGACY_MULTI_NIC_MODE` | `--echonetLegacyMultiNicMode` | 以前の通信モードに戻します。 (デフォルト: off) |
 | `ECHONET_UNKNOWN_AS_ERROR`   | `--echonetUnknownAsError`  | 不明なデバイスクラスや不明なプロパティをエラーとして扱います。 (デフォルト: off) |
+| `ECHONET_USER_CUSTOM_MRA_FOLDER` | `--echonetUserCustomMraFolder` | ユーザー指定のカスタムMRAフォルダを指定します。 (デフォルト: 使用しない) |
 | ~~`ECHONET_INTERVAL_TO_GET_PROPERTIES`~~ | ~~`--echonetIntervalToGetProperties`~~ | (v3.0.0以降で廃止されました) ~~ECHONET Liteプロパティの受信間隔を指定します。(単位: ms) (デフォルト: 100)~~ |
 | ~~`ECHONET_ALT_MULTI_NIC_MODE`~~ | ~~`--echonetAltMultiNicMode`~~ | (v3.0.0以降で廃止されました) ~~複数NIC環境での代替モードです。もしデバイスから状態を受信できない場合は指定します。 (デフォルト: OFF)~~ |
 
@@ -264,12 +265,14 @@ ECHONET Liteの「温度設定値」が1度単位なので対応できません�
 
 ECHONETLite2MQTTはデバイス定義として [Echonet lite Machine Readable Appendix (MRA)](https://echonet.jp/spec_mra_rr3/) を使用しています。
 しかし、MRAにないデバイスクラス、またはメーカー独自の拡張を使用したい場合があります。
-"MRA_custom"フォルダにeoj名のJsonファイルを作ると、MRAの定義を上書きすることができます。
+環境変数 `ECHONET_USER_CUSTOM_MRA_FOLDER` ( `--echonetUserCustomMraFolder` )でカスタムMRAフォルダを指定することで、ユーザー定義のMRAを使用することができます。
 
 例: エアコン(eoj=0x0130)の場合
-```
-/MRA_custom/0x0130.json
+* Dockerの場合: `-e ECHONET_USER_CUSTOM_MRA_FOLDER=/(your-folder)/MY_MRA/`
+* Node.jsの場合: `--echonetUserCustomMraFolder "/(your-folder)/MY_MRA/"`
 
+```
+/(your-folder)/MY_MRA/0x0130.json
 {
   "eoj": "0x0130"
   ...

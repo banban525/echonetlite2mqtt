@@ -60,6 +60,7 @@ interface InputParameters{
   echonetDeviceIpList:string;
   echonetDisableAutoDeviceDiscovery:boolean;
   echonetCommandTimeout:number;
+  echonetUserCustomMraFolder:string;
   debugLog:boolean;
   restApiPort:number;
   restApiHost:string;
@@ -84,6 +85,7 @@ let echonetUnknownAsError = false;
 let echonetDeviceIpList = "";
 let echonetDisableAutoDeviceDiscovery = false;
 let echonetCommandTimeout = 3000;
+let echonetUserCustomMraFolder = "";
 let debugLog = false;
 let restApiPort = 3000;
 let restApiHost = "0.0.0.0";
@@ -161,6 +163,13 @@ if( "ECHONET_COMMAND_TIMEOUT" in process.env &&
   {
     echonetCommandTimeout = tempNo;
   }
+}
+
+if (
+  "ECHONET_USER_CUSTOM_MRA_FOLDER" in process.env &&
+  process.env.ECHONET_USER_CUSTOM_MRA_FOLDER !== undefined
+) {
+  echonetUserCustomMraFolder = process.env.ECHONET_USER_CUSTOM_MRA_FOLDER.replace(/^"/g, "").replace(/"$/g, "");
 }
 
 if ("DEBUG" in process.env && process.env.DEBUG !== undefined) {
@@ -292,6 +301,10 @@ for(var i = 2;i < process.argv.length; i++){
       echonetCommandTimeout = tempNo;
     }
   }
+  if(name === "--echonetUserCustomMraFolder".toLowerCase())
+  {
+    echonetUserCustomMraFolder = value.replace(/^"/g, "").replace(/"$/g, "");
+  }
   if(name === "--RestApiPort".toLowerCase())
   {
     const tempNo = Number(value.replace(/^"/g, "").replace(/"$/g, ""));
@@ -392,6 +405,7 @@ logger.output(`echonetUnknownAsError=${echonetUnknownAsError}`);
 logger.output(`echonetDeviceIpList=${echonetDeviceIpList}`);
 logger.output(`echonetDisableAutoDeviceDiscovery=${echonetDisableAutoDeviceDiscovery}`);
 logger.output(`echonetCommandTimeout=${echonetCommandTimeout}`);
+logger.output(`echonetUserCustomMraFolder=${echonetUserCustomMraFolder}`);
 logger.output(`debugLog=${debugLog}`);
 logger.output(`restApiPort=${restApiPort}`);
 logger.output(`restApiHost=${restApiHost}`);
@@ -417,6 +431,7 @@ const inputParameters:InputParameters =
   echonetDeviceIpList,
   echonetDisableAutoDeviceDiscovery,
   echonetCommandTimeout,
+  echonetUserCustomMraFolder,
   debugLog,
   restApiPort,
   restApiHost,
@@ -514,6 +529,38 @@ ${validationResult.message}`);
     }
   }
 }
+
+const additionalMraFolders:string[] = [];
+
+if(echonetUserCustomMraFolder !== "")
+{
+  if(fs.existsSync(echonetUserCustomMraFolder)===false)
+  {
+    logger.output(`[ERROR] echonetUserCustomMraFolder is not found. : ${echonetUserCustomMraFolder}`);
+  }
+  else
+  {
+    additionalMraFolders.push(echonetUserCustomMraFolder);
+
+    const userCustomMraFileNames = fs.readdirSync(echonetUserCustomMraFolder, {encoding:"utf-8"});
+    const messages:string[] = [];
+    for(const fileName of userCustomMraFileNames)
+    {
+      const isSupportedFileName = fileName.match(/0x[0-9a-fA-F]{4}\.json/);
+      if(isSupportedFileName)
+      {
+        messages.push(`  ${fileName} : found`);
+      }
+      else
+      {
+        messages.push(`  ${fileName} : skipped (unsupported file name)`);
+      }
+    }
+    logger.output(`use the custom MRA folder: ${echonetUserCustomMraFolder}`);
+    logger.output(`custom MRA files:\n${messages.join("\n")}`);
+  }
+}
+additionalMraFolders.push(path.resolve(__dirname, "../MRA_custom"));
 
 // echonetTargetNetworkが xxx.xxx.xxx.xxx/yy の形式かチェックする
 if(echonetTargetNetwork !== "" && echonetTargetNetwork.match(/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+/)===null )
@@ -645,7 +692,8 @@ const deviceStore = new DeviceStore();
 const echoNetListController = new EchoNetLiteController(networkAddressForEchonet, 
   aliasOption, echonetLegacyMultiNicMode, echonetUnknownAsError, 
   knownDeviceIpList, echonetDisableAutoDeviceDiscovery===false, echonetCommandTimeout,
-  (internalId:string)=>deviceStore.getByInternalId(internalId));
+  (internalId:string)=>deviceStore.getByInternalId(internalId),
+  additionalMraFolders);
 
 echoNetListController.addDeviceDetectedEvent((device:Device)=>{
   if(device === undefined)

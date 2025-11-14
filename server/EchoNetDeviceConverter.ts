@@ -6,14 +6,14 @@ import { Logger } from "./Logger";
 
 export default class EchoNetDeviceConverter
 {
-  private echoNetPropertyConverter:EchoNetPropertyConverter = new EchoNetPropertyConverter();
-
+  private readonly echoNetPropertyConverter:EchoNetPropertyConverter;
   private readonly aliasOption:AliasOption;
   private readonly unknownAsError:boolean;
-  public constructor(aliasOption:AliasOption, unknownAsError:boolean)
+  public constructor(aliasOption:AliasOption, unknownAsError:boolean, additionalMraFolders:string[])
   {
     this.aliasOption = aliasOption;
     this.unknownAsError = unknownAsError;
+    this.echoNetPropertyConverter = new EchoNetPropertyConverter(additionalMraFolders);
   }
 
 

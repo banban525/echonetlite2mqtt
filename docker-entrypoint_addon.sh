@@ -70,7 +70,9 @@ fi
 if (bashio::config.has_value 'ECHONET_UNKNOWN_AS_ERROR'); then
   export ECHONET_UNKNOWN_AS_ERROR=$(bashio::config "ECHONET_UNKNOWN_AS_ERROR")
 fi
-
+if (bashio::config.has_value 'ECHONET_USER_CUSTOM_MRA_FOLDER'); then
+  export ECHONET_USER_CUSTOM_MRA_FOLDER=/addon_config/$(bashio::config "ECHONET_USER_CUSTOM_MRA_FOLDER")
+fi
 
 
 INGRESS_PORT=$(bashio::addon.ingress_port)
