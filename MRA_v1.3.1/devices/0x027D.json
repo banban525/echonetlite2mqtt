@@ -39,6 +39,54 @@
       }
     },
     {
+      "epc": "0x89",
+      "validRelease": {
+        "from": "R",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "異常内容",
+        "en": "Fault description"
+      },
+      "shortName": "faultDescription",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "異常内容",
+        "en": "Describes the fault."
+      },
+      "data": {
+        "$ref": "#/definitions/state_for_epc89"
+      }
+    },
+    {
+      "epc": "0x8C",
+      "validRelease": {
+        "from": "R",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "商品コード",
+        "en": "Product code"
+      },
+      "shortName": "productCode",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ASCIIコードで指定",
+        "en": "Identifies the product using ASCII code."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_12"
+      }
+    },
+    {
       "epc": "0x97",
       "validRelease": {
         "from": "H",

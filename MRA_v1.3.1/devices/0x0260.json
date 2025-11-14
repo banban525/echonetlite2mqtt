@@ -1,0 +1,680 @@
+{
+  "eoj": "0x0260",
+  "validRelease": {
+    "from": "D",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "電動ブラインド・日よけ",
+    "en": "Electrically operated blind/shade"
+  },
+  "shortName": "electricBlindShade",
+  "elProperties": [
+    {
+      "epc": "0x89",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "異常内容(復帰可能な異常)",
+        "en": "Fault description (Recoverable faults)"
+      },
+      "shortName": "faultDescription",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "異常内容",
+        "en": "Fault description"
+      },
+      "data": {
+        "type": "state",
+        "size": 2,
+        "enum": [
+          {
+            "edt": "0x0000",
+            "name": "noFault",
+            "descriptions": {
+              "ja": "異常なし",
+              "en": "No fault"
+            }
+          },
+          {
+            "edt": "0x0001",
+            "name": "trunOffOrUnplug",
+            "descriptions": {
+              "ja": "スイッチを切る/コンセントを抜き再操作",
+              "en": "Faults that can be recovered from by turn off the power or unplug and reoperate."
+            }
+          },
+          {
+            "edt": "0x0002",
+            "name": "resetButton",
+            "descriptions": {
+              "ja": "リセットボタンを押し再操作",
+              "en": "Faults that can be recovered from by pressing the reset button."
+            }
+          },
+          {
+            "edt": "0x0003",
+            "name": "setIncorrectly",
+            "descriptions": {
+              "ja": "セット不良",
+              "en": "Device set incorrectly"
+            }
+          },
+          {
+            "edt": "0x0004",
+            "name": "supply",
+            "descriptions": {
+              "ja": "補給",
+              "en": "Supply"
+            }
+          },
+          {
+            "edt": "0x0005",
+            "name": "cleaning",
+            "descriptions": {
+              "ja": "掃除（フィルタ等）",
+              "en": "Cleaning (filters, etc.)"
+            }
+          },
+          {
+            "edt": "0x0006",
+            "name": "changingBattery",
+            "descriptions": {
+              "ja": "電池交換",
+              "en": "Changing the battery"
+            }
+          },
+          {
+            "edt": "0x0009",
+            "name": "userDefinable",
+            "descriptions": {
+              "ja": "ユーザ定義領域",
+              "en": "User-definable domain"
+            }
+          },
+          {
+            "edt": "0x000a...0x0013",
+            "name": "abnormalEventOrSafety",
+            "descriptions": {
+              "ja": "異常現象／安全装置作動",
+              "en": "Abnormal event or the tripping of a safety device."
+            }
+          },
+          {
+            "edt": "0x0014...0x001D",
+            "name": "switch",
+            "descriptions": {
+              "ja": "スイッチ異常",
+              "en": "Fault in a switch."
+            }
+          },
+          {
+            "edt": "0x001E...0x003B",
+            "name": "sensorSystem",
+            "descriptions": {
+              "ja": "センサ異常",
+              "en": "Fault in the sensor system"
+            }
+          },
+          {
+            "edt": "0x003C...0x0059",
+            "name": "component",
+            "descriptions": {
+              "ja": "機能部品異常",
+              "en": "Fault in a component such as an actuator."
+            }
+          },
+          {
+            "edt": "0x005A...0x006E",
+            "name": "controlCircuitBoard",
+            "descriptions": {
+              "ja": "制御基板異常",
+              "en": "Fault in a control circuit board."
+            }
+          },
+          {
+            "edt": "0x006F...0x03E8",
+            "name": "userDefinable",
+            "descriptions": {
+              "ja": "ユーザ定義領域",
+              "en": "User-definable domain"
+            }
+          },
+          {
+            "edt": "0x03FF",
+            "name": "fault",
+            "descriptions": {
+              "ja": "異常あり",
+              "en": "Fault"
+            }
+          },
+          {
+            "edt": "0x0402",
+            "name": "obstacleCaught",
+            "descriptions": {
+              "ja": "障害物挟込み",
+              "en": "Obstacle caught"
+            }
+          },
+          {
+            "edt": "0x0502",
+            "name": "outageRecovery",
+            "descriptions": {
+              "ja": "停電復帰",
+              "en": "Recovery from outage"
+            }
+          },
+          {
+            "edt": "0x0602",
+            "name": "timeOut",
+            "descriptions": {
+              "ja": "タイムアウト",
+              "en": "Time out"
+            }
+          },
+          {
+            "edt": "0x0702",
+            "name": "batteryLow",
+            "descriptions": {
+              "ja": "電池残量低下",
+              "en": "Battery low"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      },
+      "note": {
+        "ja": "下位1バイトは、スーパークラスのリセットボタンを押し再操作(0x02)固定。上位1バイトは、復帰可能な異常内容を小分類まで定義。0x45～0xFFはユーザ定義",
+        "en": "Lower-order one byte: Restarting the device by performing a reset operation = 0x02. Higher-order one byte: The detailed fault classification. 0x45 to 0xFF are defined by user."
+      }
+    },
+    {
+      "epc": "0x90",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "タイマ動作設定",
+        "en": "Timer operation setting"
+      },
+      "shortName": "timerOperationMode",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "タイマ動作のON・OFF",
+        "en": "Used to specify the timer operation ON or OFF."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFFA_4142"
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xC2",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "風検知状態",
+        "en": "Wind detection status"
+      },
+      "shortName": "windDetection",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "風検知の有無を示す",
+        "en": "This property indicates whether wind is detected."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Detected-NotDetected_4142"
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xC3",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "日差し検知状態",
+        "en": "Sunlight detection status"
+      },
+      "shortName": "sunlightDetection",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "日差しの有無を示す",
+        "en": "This property indicates whether sunlight is detected."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Detected-NotDetected_4142"
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xD0",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "開(張出し)速度設定",
+        "en": "Opening (extension) speed setting"
+      },
+      "shortName": "openingSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常使う開（張出し）速度を 3段階で指定",
+        "en": "This property specifies the normal opening (extension) speed by levels."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LMH_41-43"
+      }
+    },
+    {
+      "epc": "0xD1",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "閉(収納)速度設定",
+        "en": "Closing (retraction) speed setting"
+      },
+      "shortName": "closingSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "通常使う閉（収納）速度を 3段階で指定",
+        "en": "This property specifies the normal closing (retraction) speed by three levels."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LMH_41-43"
+      }
+    },
+    {
+      "epc": "0xD2",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "動作時間設定値",
+        "en": "Operation time"
+      },
+      "shortName": "operationTime",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "動作させる時間を秒数で指定",
+        "en": "This property specifies the operation time in seconds."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-253second"
+      }
+    },
+    {
+      "epc": "0xD4",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "自動動作設定",
+        "en": "Automatic operation setting"
+      },
+      "shortName": "automaticOperation",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "自動動作のON・OFF",
+        "en": "Automatic operation ON or OFF."
+      },
+      "data": {
+        "$ref": "#/definitions/state_ON-OFFA_4142"
+      }
+    },
+    {
+      "epc": "0xE0",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "開閉(張出し/収納)動作設定",
+        "en": "Open/close (extension/retraction) setting"
+      },
+      "shortName": "openCloseOperation",
+      "accessRule": {
+        "get": "required",
+        "set": "required",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "開／閉／停止",
+        "en": "Open/close/stop"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Open-Close-Stop_41-43"
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "開度レベル設定",
+        "en": "Degree-of-opening level"
+      },
+      "shortName": "degreeOfOpening",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "開度レベルを％で指定",
+        "en": "Used to specify the Degree-of-opening level in %, and to acquire the current setting."
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-100percent"
+      },
+      "note": {
+        "ja": "「快適生活支援サービス」「エネルギーサービス」に対応する場合、本プロパティの搭載は必須とする",
+        "en": "In the case where an “energy service” or a “home amenity service” is to be supported, the implementation of this property is mandatory"
+      }
+    },
+    {
+      "epc": "0xE2",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ブラインド角度設定値",
+        "en": "Shade angle setting"
+      },
+      "shortName": "shadeAngle",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ブラインド角度値",
+        "en": "Shade angle value"
+      },
+      "data": {
+        "$ref": "#/definitions/number_0-180degree"
+      }
+    },
+    {
+      "epc": "0xE3",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "開閉(張出し/収納)速度設定",
+        "en": "Open/close (extension/retraction) speed setting"
+      },
+      "shortName": "openCloseSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "低／中／高",
+        "en": "Low/Medium/High"
+      },
+      "data": {
+        "$ref": "#/definitions/state_LMH_41-43"
+      }
+    },
+    {
+      "epc": "0xE5",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "電気錠設定",
+        "en": "Electric lock setting"
+      },
+      "shortName": "electricLock",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "電気錠の施錠・開錠",
+        "en": "Lock or unlock of an electric lock"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Lock-Unlock_4142"
+      }
+    },
+    {
+      "epc": "0xE8",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "遠隔操作設定状態",
+        "en": "Remote operation setting status"
+      },
+      "shortName": "remoteOperation",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "遠隔操作の許可・禁止の設定状態を示す",
+        "en": "This property indicates whether remote operation is permitted or prohibited."
+      },
+      "data": {
+        "$ref": "#/definitions/state_Permit-Prohibit_4142"
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xE9",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "選択開(張出し)度動作設定",
+        "en": "Selective opening (extension) operation setting"
+      },
+      "shortName": "selectiveDegreeOfOpening",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "指定された値で停止させる設定",
+        "en": "Sets a stop at a specified value."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x41",
+            "name": "degreeOfOpening",
+            "descriptions": {
+              "ja": "開度レベル設定位置開",
+              "en": "Degree-of-opening setting position: Open"
+            }
+          },
+          {
+            "edt": "0x42",
+            "name": "operationTimeOfOpening",
+            "descriptions": {
+              "ja": "動作時間設定値開",
+              "en": "Operation time setting value: Open"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "operationTimeOfClosing",
+            "descriptions": {
+              "ja": "動作時間設定値閉",
+              "en": "Operation time setting value: Close"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "localSetting",
+            "descriptions": {
+              "ja": "ローカル設定位置",
+              "en": "Local setting position"
+            }
+          }
+        ]
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      },
+      "note": {
+        "ja": "0x45以降はユーザ定義(開度レベル設定のショートカットなど)",
+        "en": "0x45 to 0xFF are defined by user. (Shortcut to degree-of-opening setting, etc.)"
+      }
+    },
+    {
+      "epc": "0xEA",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "開閉(張出し/収納)状態",
+        "en": "Open/closed (extended/retracted) status"
+      },
+      "shortName": "openCloseStatus",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "開閉状態を示す",
+        "en": "Indicates the open/closed status."
+      },
+      "data": {
+        "$ref": "#/definitions/state_FullOpen-FullClosed-Open-Close-StopHalf_41-45"
+      },
+      "remark": {
+        "ja": "状態変化時(状変時)のアナウンスは、プロパティ実装時には処理必須",
+        "en": "Announcement at status chenge is mondatory processig when the property is implenented."
+      }
+    },
+    {
+      "epc": "0xEE",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ワンタイム開(張出し)速度設定",
+        "en": "One-time opening (extension) speed setting"
+      },
+      "shortName": "oneTimeOpeningSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "開動作1回のみの速度を3段階で指定",
+        "en": "Used to specify the speed of single opening operation by three levels."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LMHN_41-44"
+      }
+    },
+    {
+      "epc": "0xEF",
+      "validRelease": {
+        "from": "D",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "ワンタイム閉(収納)速度設定",
+        "en": "One-time closing (retraction) speed setting"
+      },
+      "shortName": "oneTimeClosingSpeed",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "閉動作1回のみの速度を3段階で指定",
+        "en": "Used to specify the speed of single closing operation by three levels."
+      },
+      "data": {
+        "$ref": "#/definitions/state_LMHN_41-44"
+      }
+    }
+  ]
+}

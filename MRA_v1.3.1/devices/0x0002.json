@@ -1,0 +1,86 @@
+{
+  "eoj": "0x0002",
+  "validRelease": {
+    "from": "A",
+    "to": "latest"
+  },
+  "className": {
+    "ja": "防犯センサ",
+    "en": "Crime prevention sensor"
+  },
+  "shortName": "crimePreventionSensor",
+  "elProperties": [
+    {
+      "epc": "0xB0",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "検知閾値レベル設定",
+        "en": "Detection threshold level"
+      },
+      "shortName": "thresholdLevel",
+      "accessRule": {
+        "get": "optional",
+        "set": "optional",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "検知閾値レベルを８段階で指定",
+        "en": "Specifies detection threshold level (8-step)"
+      },
+      "data": {
+        "$ref": "#/definitions/level_31-8"
+      }
+    },
+    {
+      "epc": "0xB1",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "侵入発生状態",
+        "en": "Invasion occurrence status"
+      },
+      "shortName": "detection",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "侵入の発生状況を示す",
+        "en": "This property indicates invasion occurrence status"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Detected-NotDetected_4142"
+      }
+    },
+    {
+      "epc": "0xBF",
+      "validRelease": {
+        "from": "A",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "侵入発生状態リセット設定",
+        "en": "Invasion occurrence status resetting"
+      },
+      "shortName": "reset",
+      "accessRule": {
+        "get": "notApplicable",
+        "set": "optional",
+        "inf": "notApplicable"
+      },
+      "descriptions": {
+        "ja": "0x00を書き込むことにより、侵入発生状態をリセットする",
+        "en": "Resets invasion occurrence status by setting 0x00"
+      },
+      "data": {
+        "$ref": "#/definitions/state_Reset_00"
+      }
+    }
+  ]
+}

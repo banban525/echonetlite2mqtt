@@ -354,6 +354,52 @@
         "ja": "ASCII コード、YYYYMM",
         "en": "ASCII code, YYYYMM."
       }
+    },
+    {
+      "epc": "0xE7",
+      "validRelease": {
+        "from": "P",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "積算水流量計測値履歴2",
+        "en": "Historical data 2 of measured cumulative amount of flowing water"
+      },
+      "shortName": "cumulativeFlowingWaterLog2",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "積算水流量消費量の計測結果履歴を、30 分毎データを過去24 時間で示す。",
+        "en": "This property indicates the historical data of measured cumulative amount (consumptions) of running water, which consists of 48 pieces of halfhourly data for the preceding 24 hours."
+      },
+      "data": {
+        "type": "array",
+        "itemSize": 4,
+        "minItems": 48,
+        "maxItems": 48,
+        "items": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/number_0-999999999m3",
+              "coefficient": [
+                "0xE1"
+              ],
+              "overflowCode": false,
+              "underflowCode": false
+            },
+            {
+              "$ref": "#/definitions/state_NoData_FFFFFFFE"
+            }
+          ]
+        }
+      },
+      "remark": {
+        "ja": "0xE1の値を乗算する必要あり",
+        "en": "It is necessary to mutiply the value of 0xE2."
+      }
     }
   ]
 }

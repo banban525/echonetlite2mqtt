@@ -11,6 +11,54 @@
   "shortName": "evChargerDischarger",
   "elProperties": [
     {
+      "epc": "0x89",
+      "validRelease": {
+        "from": "R",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "異常内容",
+        "en": "Fault description"
+      },
+      "shortName": "faultDescription",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "異常内容",
+        "en": "Describes the fault."
+      },
+      "data": {
+        "$ref": "#/definitions/state_for_epc89"
+      }
+    },
+    {
+      "epc": "0x8C",
+      "validRelease": {
+        "from": "R",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "商品コード",
+        "en": "Product code"
+      },
+      "shortName": "productCode",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "ASCIIコードで指定",
+        "en": "Identifies the product using ASCII code."
+      },
+      "data": {
+        "$ref": "#/definitions/raw_12"
+      }
+    },
+    {
       "epc": "0xC0",
       "validRelease": {
         "from": "D",
@@ -1964,6 +2012,81 @@
       "note": {
         "ja": "プロパティの値域 は、0x00000001～0x3B9AC9FF (1～999,999,999)：充電時(プラス値)、0xFFFFFFFF～0xC4653601 (－1～－999,999,999)：放電時(マイナス値)とする。なお、充放電電力設定値のプロパティ値は、書き込み要求受信時以外は変更しない値とする。充電方式プロパティ(0xDC)のプロパティ値がV2G (0x06)である場合、もしくは放電方式プロパティ(0xDC)のプロパティ値がV2G (0x06)である場合に、本プロパティのプロパティ値が正の数値である書き込み要求を受信した場合、運転モード設定(0xDA)を充電(0x42)とする。本プロパティのプロパティ値が負の数値である書き込み要求を受信した場合、運転モード設定(0xDA)を放電(0x43)とする。本プロパティのプロパティ値が0x00である書き込み要求を受信した場合、運転モード設定(0xDA)を待機(0x44)とする。充電方式プロパティ(0xDC)がV2G (0x06)以外の時に、本プロパティのプロパティ値が0もしく正の値である書き込み要求を受信しても、運転モード設定プロパティおよび本プロパティのプロパティ値は変更しない。また、放電方式プロパティ(0xDD)がV2G (0x06)以外の時に、本プロパティのプロパティ値が0もしく負の値である書き込み要求を受信しても、運転モード設定プロパティおよび本プロパティのプロパティ値は変更しない",
         "en": "This property specifies the charging/discharging electric power in watts. The property value range shall be 0x00000001 to 0x3B9AC9FF (1 to 999,999,999): charging (positive), 0xFFFFFFFF to 0xC4653601 (-1 to -999,999,999W): discharging (negative). The property value of the charging/discharging electric power setting shall be a value that is not changed except when a write request is received. When the value of the charging method property (0xDC) is V2G (0x06) or the value of the discharging method property (0xDD) is V2G (0x06), the operation mode setting property (0xDA) shall be set to charging (0x42) if a write request specifying a positive value for this property is received. The operation mode setting property (0xDA) shall be set to discharging (0x43) if a write request specifying a negative value for this property is received. The operation mode setting property (0xDA) shall be set to standby (0x44) if a write request specifying zero for this property is received. When the value of the charging method property (0xDC) is other than V2G (0x06), the values of the operation mode setting property and this property shall not be changed even if a write request specifying a positive value or zero for this property is received. When the value of the discharging method property (0xDD) is other than V2G (0x06), the values of the operation mode setting property and this property shall not be changed even if a write request specifying a negative value or zero for this property is received."
+      }
+    },
+    {
+      "epc": "0xE1",
+      "validRelease": {
+        "from": "Q",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "運転動作状態",
+        "en": "Actual operation mode"
+      },
+      "shortName": "actualOperationMode",
+      "accessRule": {
+        "get": "optional",
+        "set": "notApplicable",
+        "inf": "required"
+      },
+      "descriptions": {
+        "ja": "電気自動車充放電器の動作状態を示す。本プロパティ搭載時、「充電状態」、「放電状態」、「待機状態もしくは停止状態」の各運転動作状態は必須とする",
+        "en": "This property indicates the operating status of an electric vehicle charger/discharger. If this property is implemented, charge, discharge and at least one of standby and idle are required to be implemented as property values."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x42",
+            "name": "charge",
+            "descriptions": {
+              "ja": "充電",
+              "en": "Charge"
+            }
+          },
+          {
+            "edt": "0x43",
+            "name": "discharge",
+            "descriptions": {
+              "ja": "放電",
+              "en": "Discharge"
+            }
+          },
+          {
+            "edt": "0x44",
+            "name": "standby",
+            "descriptions": {
+              "ja": "待機",
+              "en": "Standby"
+            }
+          },
+          {
+            "edt": "0x47",
+            "name": "idle",
+            "descriptions": {
+              "ja": "停止",
+              "en": "Idle"
+            }
+          },
+          {
+            "edt": "0x48",
+            "name": "preparation",
+            "descriptions": {
+              "ja": "準備",
+              "en": "Preparation"
+            }
+          },
+          {
+            "edt": "0x40",
+            "name": "other",
+            "descriptions": {
+              "ja": "その他",
+              "en": "Other"
+            }
+          }
+        ]
       }
     },
     {

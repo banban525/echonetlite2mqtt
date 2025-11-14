@@ -292,19 +292,19 @@ export class EchoNetLiteController{
   setDevicePropertyPrivate = async (id:DeviceId, propertyName:string, newValue:any):Promise<void> =>
   {
     const property = this.deviceConverter.getProperty(id.ip, id.eoj, propertyName);
-
+    if(property === undefined)
+    {
+      Logger.warn("[ECHONETLite]", `setDeviceProperty property === undefined propertyName=${propertyName} | the property name is invalid or not implemented. check MRA definition.`);
+      return;
+    }
 
     const echoNetData = this.deviceConverter.propertyToEchoNetData(id.ip, id.eoj, propertyName, newValue);
     if(echoNetData===undefined)
     {
-      Logger.warn("[ECHONETLite]", `setDeviceProperty echoNetData===undefined newValue=${newValue}`);
+      Logger.warn("[ECHONETLite]", `setDeviceProperty echoNetData===undefined newValue=${newValue} | the set value is invalid. check MRA definition.`);
       return;
     }
-    if(property === undefined)
-    {
-      Logger.warn("[ECHONETLite]", `setDeviceProperty property === undefined propertyName=${propertyName}`);
-      return;
-    }
+
     let epc = property.epc.toLowerCase();
     if(epc.startsWith("0x"))
     {

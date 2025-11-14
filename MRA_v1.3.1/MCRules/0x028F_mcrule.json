@@ -1,0 +1,1461 @@
+{
+  "eoj": "0x028F",
+  "properties": [
+    {
+      "epc": "0x80",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC4",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC5",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC7",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xCC",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xCD",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xD3",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xD4",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE1",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE5",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xE6",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xEF",
+      "action": "DEL"
+    },
+    {
+      "epc": "0xC1",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "正方向",
+              "en": "Normal direction"
+            },
+            "shortName": "normalDirection",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWNoMax",
+                  "coefficient": [
+                    "0xC5",
+                    "0xD3",
+                    "0xD4"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "逆方向",
+              "en": "Reverse direction"
+            },
+            "shortName": "reverseDirection",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWNoMax",
+                  "coefficient": [
+                    "0xC5",
+                    "0xD3",
+                    "0xD4"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC2",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "正方向",
+              "en": "Normal direction"
+            },
+            "shortName": "normalDirection",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWNoMax",
+                  "coefficient": [
+                    "0xC7",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "逆方向",
+              "en": "Reverse direction"
+            },
+            "shortName": "reverseDirection",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWNoMax",
+                  "coefficient": [
+                    "0xC7",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC3",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "需要電力 (正方向)",
+              "en": "Electric Power demand (normal direction)"
+            },
+            "shortName": "normalDirectionElectricPower",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWNoMax",
+                  "coefficient": [
+                    "0xC5",
+                    "0xD3",
+                    "0xD4"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "需要電力 (逆方向)",
+              "en": "Electric Power demand (reverse direction)"
+            },
+            "shortName": "reverseDirectionElectricPower",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWNoMax",
+                  "coefficient": [
+                    "0xC5",
+                    "0xD3",
+                    "0xD4"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xC6",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "需要電力 (正方向)",
+              "en": "Electric power demand (normal direction)"
+            },
+            "shortName": "normalDirectionElectricPower",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWNoMax",
+                  "coefficient": [
+                    "0xC5",
+                    "0xD3",
+                    "0xD4"
+                  ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      }
+    },
+    {
+      "epc": "0xC8",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "需要電力 (逆方向)",
+              "en": "Electric power demand (reverse direction)"
+            },
+            "shortName": "reverseDirectionElectricPower",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWNoMax",
+                  "coefficient": [
+                    "0xC5",
+                    "0xD3",
+                    "0xD4"
+                  ]
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      }
+    },
+    {
+      "epc": "0xCA",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (遅れ) (正方向)",
+              "en": "Cumulative amount of reactive electric energy (lag) (normal direction)"
+            },
+            "shortName": "normalDirectionCumulativeReactiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                  "coefficient": [
+                    "0xCD",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (遅れ) (逆方向)",
+              "en": "Cumulative amount of reactive electric energy (lag) (reverse direction)"
+            },
+            "shortName": "reverseDirectionCumulativeReactiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                  "coefficient": [
+                    "0xCD",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCB",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (遅れ) (正方向)",
+              "en": "Cumulative amount of reactive electric energy (lag) (normal direction)"
+            },
+            "shortName": "normalDirectionCumulativeReactiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                  "coefficient": [
+                    "0xCD",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (遅れ) (逆方向)",
+              "en": "Cumulative amount of reactive electric energy (lag) (reverse direction)"
+            },
+            "shortName": "reverseDirectionCumulativeReactiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                  "coefficient": [
+                    "0xCD",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCE",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (遅れ)(正方向)",
+              "en": "Cumulative amount of reactive electric energy (lag) (normal direction)"
+            },
+            "shortName": "normalDirectionCumulativeReactiveElectricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                    "coefficient": [
+                      "0xCD",
+                      "0xD3",
+                      "0xD4"
+                    ],
+                    "overflowCode": false,
+                    "underflowCode": false
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      }
+    },
+    {
+      "epc": "0xCF",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (遅れ)(逆方向)",
+              "en": "Cumulative amount of reactive electric energy (lag) (reverse direction)"
+            },
+            "shortName": "reverseDirectionCumulativeReactiveElectricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                    "coefficient": [
+                      "0xCD",
+                      "0xD3",
+                      "0xD4"
+                    ],
+                    "overflowCode": false,
+                    "underflowCode": false
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      }
+    },
+    {
+      "epc": "0xD0",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算有効電力量 (正方向)",
+              "en": "Cumulative amount of active electric energy (normal direction)"
+            },
+            "shortName": "normalDirectionCumulativeActiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4",
+                    "0xE6"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算有効電力量 (逆方向)",
+              "en": "Cumulative amount of active electric energy (reverse direction)"
+            },
+            "shortName": "reverseDirectionCumulativeActiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4",
+                    "0xE6"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD1",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (遅れ) (正方向)",
+              "en": "Cumulative amount of reactive electric energy (lag) (normal direction)"
+            },
+            "shortName": "normalDirectionCumulativeReactiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                  "coefficient": [
+                    "0xCD",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (遅れ) (逆方向)",
+              "en": "Cumulative amount of reactive electric energy (lag) (reverse direction)"
+            },
+            "shortName": "reverseDirectionCumulativeReactiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                  "coefficient": [
+                    "0xCD",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD5",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (遅れ) (正方向)",
+              "en": "Cumulative amount of reactive electric energy (lag) (normal direction)"
+            },
+            "shortName": "normalDirectionCumulativeReactiveElectricEnergyLag",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                  "coefficient": [
+                    "0xCD",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (遅れ) (逆方向)",
+              "en": "Cumulative amount of reactive electric energy (lag) (reverse direction)"
+            },
+            "shortName": "reverseDirectionCumulativeReactiveElectricEnergyLag",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                  "coefficient": [
+                    "0xCD",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xD6",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (進み) (正方向)",
+              "en": "Cumulative amount of reactive electric energy (lead) (normal direction)"
+            },
+            "shortName": "normalDirectionCumulativeReactiveElectricEnergyLead",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                  "coefficient": [
+                    "0xCD",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算無効電力量 (進み) (逆方向)",
+              "en": "Cumulative amount of reactive electric energy (lead) (reverse direction)"
+            },
+            "shortName": "reverseDirectionCumulativeReactiveElectricEnergyLead",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                  "coefficient": [
+                    "0xCD",
+                    "0xD3",
+                    "0xD4"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE2",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算有効電力量 (正方向)",
+              "en": "Cumulative amount of active electric energy (normal direction)"
+            },
+            "shortName": "normalDirectionCumulativeActiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4",
+                    "0xE6"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算有効電力量 (逆方向)",
+              "en": "Cumulative amount of active electric energy (reverse direction)"
+            },
+            "shortName": "reverseDirectionCumulativeActiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4",
+                    "0xE6"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE3",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算有効電力量 (正方向)",
+              "en": "Cumulative amount of active electric energy (normal direction)"
+            },
+            "shortName": "normalDirectionCumulativeActiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4",
+                    "0xE6"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算有効電力量 (逆方向)",
+              "en": "Cumulative amount of active electric energy (reverse direction)"
+            },
+            "shortName": "reverseDirectionCumulativeActiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4",
+                    "0xE6"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE4",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "計測日時",
+              "en": "Date and time of measurement"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "type": "date-time"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算有効電力量 (正方向)",
+              "en": "Cumulative amount of active electric energy (normal direction)"
+            },
+            "shortName": "normalDirectionCumulativeActiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4",
+                    "0xE6"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算有効電力量 (逆方向)",
+              "en": "Cumulative amount of active electric energy (reverse direction)"
+            },
+            "shortName": "reverseDirectionCumulativeActiveElectricEnergy",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                  "coefficient": [
+                    "0xD3",
+                    "0xD4",
+                    "0xE6"
+                  ],
+                  "overflowCode": false,
+                  "underflowCode": false
+                },
+                {
+                  "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xE7",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算有効電力量 (正方向)",
+              "en": "Cumulative amount of active electric energy (normal direction)"
+            },
+            "shortName": "normalDirectionCumulativeActiveElectricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                    "coefficient": [
+                      "0xD3",
+                      "0xD4",
+                      "0xE6"
+                    ],
+                    "overflowCode": false,
+                    "underflowCode": false
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      }
+    },
+    {
+      "epc": "0xE8",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日",
+              "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+            },
+            "shortName": "day",
+            "element": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/number_0-99_u16"
+                },
+                {
+                  "$ref": "#/definitions/state_DefaultValue_00FF"
+                }
+              ]
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算有効電力量 (逆方向)",
+              "en": "Cumulative amount of active electric energy (reverse direction)"
+            },
+            "shortName": "reverseDirectionCumulativeActiveElectricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 4,
+              "minItems": 48,
+              "maxItems": 48,
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                    "coefficient": [
+                      "0xD3",
+                      "0xD4",
+                      "0xE6"
+                    ],
+                    "overflowCode": false,
+                    "underflowCode": false
+                  },
+                  {
+                    "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "day": {
+          "descriptions": {
+            "ja": "積算履歴収集日",
+            "en": "Day for which the historical data of measured cumulative amounts of electric energy is to be retrieved"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "required": false
+        }
+      }
+    },
+    {
+      "epc": "0xED",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日時",
+              "en": "Date and time for which the historical data is to be retrieved"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "$ref": "#/definitions/date-time_6"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "収集コマ数",
+              "en": "Number of collection segments"
+            },
+            "shortName": "numberOfCollectionSegments",
+            "element": {
+              "$ref": "#/definitions/number_1-10"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "積算有効電力量計測値",
+              "en": "Measured cumulative amount of active electric energy"
+            },
+            "shortName": "cumulativeActiveElectricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 8,
+              "maxItems": 10,
+              "items": {
+                "type": "object",
+                "properties": [
+                  {
+                    "elementName": {
+                      "ja": "正方向",
+                      "en": "Normal direction"
+                    },
+                    "shortName": "normalDirectionCumulativeElectricEnergy",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                          "coefficient": [
+                            "0xD3",
+                            "0xD4",
+                            "0xE6"
+                          ],
+                          "overflowCode": false,
+                          "underflowCode": false
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "elementName": {
+                      "ja": "逆方向",
+                      "en": "Reverse direction"
+                    },
+                    "shortName": "reverseDirectionCumulativeElectricEnergy",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_0-99999999kWhNoMax",
+                          "coefficient": [
+                            "0xD3",
+                            "0xD4",
+                            "0xE6"
+                          ],
+                          "overflowCode": false,
+                          "underflowCode": false
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "dateAndTime": {
+          "descriptions": {
+            "ja": "積算履歴収集日時",
+            "en": "Date and time for which the historical data is to be retrieved"
+          },
+          "data": {
+            "type": "date-time"
+          },
+          "required": true
+        },
+        "numberOfCollectionSegments": {
+          "descriptions": {
+            "ja": "収集コマ数",
+            "en": "Number of collection segments"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "required": true
+        }
+      }
+    },
+    {
+      "epc": "0xEE",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "積算履歴収集日時",
+              "en": "Date and time for which the historical data is to be retrieved"
+            },
+            "shortName": "dateAndTime",
+            "element": {
+              "$ref": "#/definitions/date-time_6"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "収集コマ数",
+              "en": "Number of collection segments"
+            },
+            "shortName": "numberOfCollectionSegments",
+            "element": {
+              "$ref": "#/definitions/number_1-10"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "力測積算無効電力量計測値",
+              "en": "Measured cumulative amounts of reactive electric energy (lag) for power factor"
+            },
+            "shortName": "cumulativeReactiveElectricEnergy",
+            "element": {
+              "type": "array",
+              "itemSize": 8,
+              "maxItems": 10,
+              "items": {
+                "type": "object",
+                "properties": [
+                  {
+                    "elementName": {
+                      "ja": "正方向",
+                      "en": "Normal direction"
+                    },
+                    "shortName": "normalDirectionCumulativeElectricEnergy",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                          "coefficient": [
+                            "0xCD",
+                            "0xD3",
+                            "0xD4"
+                          ],
+                          "overflowCode": false,
+                          "underflowCode": false
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "elementName": {
+                      "ja": "逆方向",
+                      "en": "Reverse direction"
+                    },
+                    "shortName": "reverseDirectionCumulativeElectricEnergy",
+                    "element": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/definitions/number_0-99999999kvarhNoMax",
+                          "coefficient": [
+                            "0xCD",
+                            "0xD3",
+                            "0xD4"
+                          ],
+                          "overflowCode": false,
+                          "underflowCode": false
+                        },
+                        {
+                          "$ref": "#/definitions/state_NoData_FFFFFFFE"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "urlParameters": {
+        "dateAndTime": {
+          "descriptions": {
+            "ja": "積算履歴収集日時",
+            "en": "Date and time for which the historical data is to be retrieved"
+          },
+          "data": {
+            "type": "date-time"
+          },
+          "required": true
+        },
+        "numberOfCollectionSegments": {
+          "descriptions": {
+            "ja": "収集コマ数",
+            "en": "Number of collection segments"
+          },
+          "data": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "required": true
+        }
+      }
+    }
+  ]
+}

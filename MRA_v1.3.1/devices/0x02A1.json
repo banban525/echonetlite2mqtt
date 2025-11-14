@@ -266,6 +266,81 @@
       "epc": "0xCC",
       "validRelease": {
         "from": "G",
+        "to": "Q"
+      },
+      "propertyName": {
+        "ja": "充電器タイプ",
+        "en": "Charger type"
+      },
+      "shortName": "equipmentType",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "電気自動車充電器のタイプを示す",
+        "en": "This property indicates the type of electric vehicle charger."
+      },
+      "data": {
+        "type": "state",
+        "size": 1,
+        "enum": [
+          {
+            "edt": "0x11",
+            "name": "ac_cplt",
+            "descriptions": {
+              "ja": "AC_CPLT",
+              "en": "AC_CPLT"
+            }
+          },
+          {
+            "edt": "0x12",
+            "name": "ac_hlc_charge",
+            "descriptions": {
+              "ja": "AC_HLC (充電のみ)",
+              "en": "AC_HLC_Charge"
+            }
+          },
+          {
+            "edt": "0x21",
+            "name": "dc_aa_charge",
+            "descriptions": {
+              "ja": "DCタイプ_AA (充電のみ)",
+              "en": "DC_AA_Charge"
+            }
+          },
+          {
+            "edt": "0x31",
+            "name": "dc_bb_charge",
+            "descriptions": {
+              "ja": "DCタイプ_BB (充電のみ)",
+              "en": "DC_BB_Charge"
+            }
+          },
+          {
+            "edt": "0x41",
+            "name": "dc_ee_charge",
+            "descriptions": {
+              "ja": "DCタイプ_EE (充電のみ)",
+              "en": "DC_EE_Charge"
+            }
+          },
+          {
+            "edt": "0x51",
+            "name": "dc_ff_charge",
+            "descriptions": {
+              "ja": "DCタイプ_FF (充電のみ)",
+              "en": "DC_FF_Charge"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "epc": "0xCC",
+      "validRelease": {
+        "from": "R",
         "to": "latest"
       },
       "propertyName": {
@@ -286,6 +361,14 @@
         "type": "state",
         "size": 1,
         "enum": [
+          {
+            "edt": "0x10",
+            "name": "ac_no_communication",
+            "descriptions": {
+              "ja": "AC_通信無し",
+              "en": "AC_NO_COMMUNICATION"
+            }
+          },
           {
             "edt": "0x11",
             "name": "ac_cplt",

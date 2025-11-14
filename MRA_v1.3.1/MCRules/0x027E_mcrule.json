@@ -2,6 +2,14 @@
   "eoj": "0x027E",
   "properties": [
     {
+      "epc": "0x89",
+      "action": "DEL"
+    },
+    {
+      "epc": "0x8C",
+      "action": "DEL"
+    },
+    {
       "epc": "0xCD",
       "action": "DEL"
     },

@@ -1,0 +1,181 @@
+{
+    "eoj": "0x02A7",
+    "properties": [
+      {
+        "epc": "0x8C",
+        "action": "DEL"
+      },
+      {
+        "epc": "0x8D",
+        "action": "DEL"
+      },
+    {
+      "epc": "0xE0",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "更新ID",
+              "en": "Update ID"
+            },
+            "shortName": "updateId",
+            "element": {
+              "$ref": "#/definitions/number_0-65535"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "データ数",
+              "en": "Number of data"
+            },
+            "shortName": "numberOfData",
+            "element": {
+              "$ref":"#/definitions/number_0-96"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "先頭データ月日 (MMDD)",
+              "en": "First data in the MMDD format."
+            },
+            "shortName": "firstDataMmDd",
+            "element": {
+              "type": "date",
+              "descriptions": {
+                  "ja": "date型のYYYY部分は意味のない情報",
+                  "en": "YYYY part of date type is meaningless."
+              }
+            }
+          },
+          {
+            "elementName": {
+              "ja": "先頭データ時分 (HHMM)",
+              "en": "Hour and minute of first data in the HHMM format."
+            },
+            "shortName": "firstDataHhMm",
+            "element": {
+              "$ref": "#/definitions/time_2"
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "firstDataMmDdはdate形式だが、YYYY部分は意味のない情報",
+        "en": "YYYY part of firstDataMmDd is meaningless even though its format is date."
+      }
+    },
+    {
+      "epc": "0xE3",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "更新ID",
+              "en": "Update ID"
+            },
+            "shortName": "updateId",
+            "element": {
+              "$ref": "#/definitions/number_0-65535"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "データ数",
+              "en": "Number of data"
+            },
+            "shortName": "numberOfData",
+            "element": {
+              "$ref":"#/definitions/number_0-96"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "先頭データ月日 (MMDD)",
+              "en": "First data in the MMDD format."
+            },
+            "shortName": "firstDataMmDd",
+            "element": {
+              "type": "date",
+              "descriptions": {
+                  "ja": "date型のYYYY部分は無意味な情報",
+                  "en": "YYYY part of date type is meaningless."
+              }
+            }
+          },
+          {
+            "elementName": {
+              "ja": "先頭データ時分 (HHMM)",
+              "en": "Hour and minute of first data in the HHMM format."
+            },
+            "shortName": "firstDataHhMm",
+            "element": {
+              "$ref": "#/definitions/time_2"
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "firstDataMmDdはdate形式だが、YYYY部分は意味のない情報",
+        "en": "YYYY part of firstDataMmDd is meaningless even though its format is date."
+      }
+    },
+    {
+      "epc": "0xE6",
+      "data": {
+        "type": "object",
+        "properties": [
+          {
+            "elementName": {
+              "ja": "更新ID",
+              "en": "Update ID"
+            },
+            "shortName": "updateId",
+            "element": {
+              "$ref": "#/definitions/number_0-65535"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "データ数",
+              "en": "Number of data"
+            },
+            "shortName": "numberOfData",
+            "element": {
+              "$ref":"#/definitions/number_0-96"
+            }
+          },
+          {
+            "elementName": {
+              "ja": "先頭データ月日 (MMDD)",
+              "en": "First data in the MMDD format."
+            },
+            "shortName": "firstDataMmDd",
+            "element": {
+              "type": "date",
+              "descriptions": {
+                  "ja": "date型のYYYY部分は無意味な情報",
+                  "en": "YYYY part of date type is meaningless."
+              }
+            }
+          },
+          {
+            "elementName": {
+              "ja": "先頭データ時分 (HHMM)",
+              "en": "Hour and minute of first data in the HHMM format."
+            },
+            "shortName": "firstDataHhMm",
+            "element": {
+              "$ref": "#/definitions/time_2"
+            }
+          }
+        ]
+      },
+      "note": {
+        "ja": "firstDataMmDdはdate形式だが、YYYY部分は意味のない情報",
+        "en": "YYYY part of firstDataMmDd is meaningless even though its format is date."
+      }
+    }
+    ]
+}

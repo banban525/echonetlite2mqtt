@@ -1,5 +1,6 @@
 import EL, { facilitiesType,eldata,rinfo, DeviceDetailsType } from "echonet-lite";
 import dgram from "dgram";
+import { Logger } from "./Logger";
 
 export class EchoNetCommunicator
 {
@@ -29,12 +30,10 @@ export class EchoNetCommunicator
       EL.Node_details["8a"][1]=0xff;
       EL.Node_details["8a"][2]=0xfe;
 
-      await EL.initialize(objList, this.echonetUserFunc, -1, Options)
-        .then(()=>{
-          EL.Node_details["83"][1]=0xff;
-          EL.Node_details["83"][2]=0xff;
-          EL.Node_details["83"][3]=0xfe;
-        });
+      EL.initialize(objList, this.echonetUserFunc, -1, Options);
+      EL.Node_details["83"][1]=0xff;
+      EL.Node_details["83"][2]=0xff;
+      EL.Node_details["83"][3]=0xfe;
       
       // 向地を渡したipVerを元に戻す
       EL.ipVer = ipVer ?? 4;
@@ -93,12 +92,11 @@ export class EchoNetCommunicator
     EL.Node_details["8a"][1]=0xff;
     EL.Node_details["8a"][2]=0xfe;
 
-    return await EL.initialize(objList, this.echonetUserFunc, ipVer, Options)
-      .then(()=>{
-        EL.Node_details["83"][1]=0xff;
-        EL.Node_details["83"][2]=0xff;
-        EL.Node_details["83"][3]=0xfe;
-      });
+    const result = EL.initialize(objList, this.echonetUserFunc, ipVer, Options);
+    EL.Node_details["83"][1]=0xff;
+    EL.Node_details["83"][2]=0xff;
+    EL.Node_details["83"][3]=0xfe;
+    return result;
   }
 
   public static release():void
@@ -121,6 +119,14 @@ export class EchoNetCommunicator
 
   static echonetUserFunc = (rinfo: rinfo, els: eldata):void =>
   {
+    if(els == undefined || els === null || Object.keys(els).length === 0){
+      if (rinfo == undefined) {
+        Logger.error("[ECHONETLite][userfunc]", "rinfo and eldata are undefined");
+      } else {
+        Logger.error("[ECHONETLite][userfunc]", `els is undefined (from ${rinfo.address})`);
+      }
+      return;
+    }
     if(els.ESV === ELSV.SET_RES)
     {
       this.setResponseHandlers.forEach(_=>_(rinfo,els));

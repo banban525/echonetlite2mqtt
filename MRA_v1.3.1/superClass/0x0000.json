@@ -212,8 +212,8 @@
         "to": "latest"
       },
       "propertyName": {
-        "ja": "積算消費電力計測値",
-        "en": "Measured cumulative power consumption"
+        "ja": "積算消費電力量計測値",
+        "en": "Measured cumulative electric energy consumption"
       },
       "shortName": "consumedCumulativeElectricEnergy",
       "accessRule": {
@@ -222,8 +222,8 @@
         "inf": "optional"
       },
       "descriptions": {
-        "ja": "機器の積算消費電力を0.001kWhで示す",
-        "en": "This property indicates the cumulative power consumption of the device in increments of 0.001kWh."
+        "ja": "機器の積算消費電力量を0.001kWhで示す",
+        "en": "This property indicates the cumulative electric energy consumption of the device in increments of 0.001kWh."
       },
       "data": {
         "$ref": "#/definitions/number_0-999999.999kWh"
@@ -341,21 +341,41 @@
         "en": "Describes the fault."
       },
       "data": {
-        "$ref": "#/definitions/raw_2"
-      },
-      "remark": {
-        "ja": "Appendixの2.5章 異常内容プロパティ参照",
-        "en": "See Chapter 2.5 'Fault Description' Property of the Appendix."
+        "$ref": "#/definitions/state_for_epc89"
       }
     },
     {
       "epc": "0x8A",
       "validRelease": {
         "from": "A",
-        "to": "latest"
+        "to": "Q"
       },
       "propertyName": {
         "ja": "メーカコード",
+        "en": "manufacturer code"
+      },
+      "shortName": "manufacturer",
+      "accessRule": {
+        "get": "required",
+        "set": "notApplicable",
+        "inf": "optional"
+      },
+      "descriptions": {
+        "ja": "3バイトで指定",
+        "en": "3-byte manufacturer code"
+      },
+      "data": {
+        "$ref": "#/definitions/raw_3"
+      }
+    },
+    {
+      "epc": "0x8A",
+      "validRelease": {
+        "from": "R",
+        "to": "latest"
+      },
+      "propertyName": {
+        "ja": "会員ID/メーカコード",
         "en": "Manufacturer code"
       },
       "shortName": "manufacturer",
@@ -610,7 +630,7 @@
       },
       "propertyName": {
         "ja": "遠隔操作設定",
-        "en": "Remote controll setting"
+        "en": "Remote control setting"
       },
       "shortName": "remoteControl",
       "accessRule": {
