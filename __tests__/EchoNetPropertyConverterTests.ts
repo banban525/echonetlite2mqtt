@@ -3,7 +3,7 @@ import 'jest';
 import {EchoNetPropertyConverter} from "../server/EchoNetPropertyConverter";
 import { ElArrayType, ElBitmapType, ElDataType, ElDateTimeType, ElDateType, ElLevelType, ElNumberType, ElNumericValueType, ElObjectType, ElRawType, ElStateType, ElTimeType } from '../server/MraTypes';
 
-const converter = new EchoNetPropertyConverter();
+const converter = new EchoNetPropertyConverter([]);
 
 
 test('convert data for ElStateType', () => {
