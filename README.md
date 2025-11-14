@@ -23,6 +23,7 @@ This will allow you to operate your ECHONET Lite device from a smart home applic
 
 
 The supported devices are as follows.
+* Crime prevention sensor (0x0002)
 * Emergency button (0x0003)
 * Human detection sensor (0x0007)
 * Temperature sensor (0x0011)
@@ -39,6 +40,7 @@ The supported devices are as follows.
 * Air cleaner (0x0135)
 * Package-type commercial air conditioner (indoor unit) (except those for facilities) (0x0156)
 * Package-type commercial air conditioner (outdoor unit) (0x0157)
+* Electrically operated blind/shade (0x0260)
 * Electrically operated rain sliding door/shutter (0x0263)
 * Electrically operated window (0x0265)
 * Electric water heater (0x026B)
@@ -58,12 +60,16 @@ The supported devices are as follows.
 * Low-voltage smart electric energy meter (0x0288)
 * High-voltage smart electric energy meter (0x028A)
 * Smart electric energy meter for sub-metering (0x028D)
+* distributed generator's electric energy meter (0x028E)
+* Bidirectional high voltage smart electric energy meter (0x028F)
 * General lighting (0x0290)
 * Mono functional lighting (0x0291)
 * EV Charger (0x02A1)
 * Lighting system (0x02A3)
 * Extended lighting system (0x02A4)
+* Multiple input pcs (0x02A5)
 * Hybrid water heater (0x02A6)
+* Frequency regulation (0x02A7)
 * Refrigerator (0x03B7)
 * Cooking heater (0x03B9)
 * Rice cooker (0x03BB)
@@ -271,14 +277,14 @@ Example: For air conditioner (eoj=0x0130)
 
 ````
 
-For the file format, please refer to [Echonet lite Machine Readable Appendix (MRA)](https://echonet.jp/spec_mra_rq1/).
+For the file format, please refer to [Echonet lite Machine Readable Appendix (MRA)](https://echonet.jp/spec_mra_rq3/).
 Also, Json Schema is provided in "MraTypes.schema.json".
 
 
 ## Third party use
 
 * The images in the repository use materials such as "いらすとや" (https://www.irasutoya.com/).
-* Machine Readable Appendix (MRA) Version 1.1.1 is ​​used as the definition of ECHONET Lite. (https://echonet.jp/spec_mra_rp1/)
+* Machine Readable Appendix (MRA) Version 1.3.1 is ​​used as the definition of ECHONET Lite. (https://echonet.jp/spec_mra_rr3/)
 
 ## LISENCE
 
