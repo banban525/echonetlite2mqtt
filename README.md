@@ -164,6 +164,7 @@ REST API Options
 | `REST_API_HOST` | `--RestApiHost` | Host IP of the administrator page. If there are multiple IPs, specify them. (Default: 0.0.0.0) |
 | `REST_API_PORT` | `--RestApiPort` | Admin page port number. (Default: 3000) |
 | `REST_API_ROOT` | `--RestApiRoot` | Rest API url prefix. (Default: empty) |
+| `REST_API_SERVER_SENT_EVENT_METHOD` | `--RestApiServerSentEventMethod` | Specifies how server events are sent on the web page. The default is WebSocket, and specifying 1 will enable long polling. If the web page does not refresh automatically, try 1. (Default: WebSocket) |
 
 
 ECHONET Lite Options

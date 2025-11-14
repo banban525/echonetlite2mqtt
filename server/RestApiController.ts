@@ -34,6 +34,7 @@ export class RestApiController
   private readonly mqttBaseTopic:string;
   private readonly detailLogsCallback:()=>{fileName:string, content:string}[];
   private wss:WebSocketServer|undefined;
+  private readonly serverSentEventMethod:"websocket" | "longpolling"
 
   constructor(deviceStore:DeviceStore, 
     systemStatusRepository:SystemStatusRepositry,
@@ -44,7 +45,8 @@ export class RestApiController
     port:number,
     root:string,
     mqttBaseTopic:string,
-    detailLogsCallback:()=>{fileName:string, content:string}[]){
+    detailLogsCallback:()=>{fileName:string, content:string}[],
+    serverSentEventMethod:"websocket" | "longpolling"){
 
     this.deviceStore = deviceStore;
     this.systemStatusRepository = systemStatusRepository;
@@ -56,6 +58,7 @@ export class RestApiController
     this.root = root;
     this.mqttBaseTopic = mqttBaseTopic;
     this.detailLogsCallback = detailLogsCallback;
+    this.serverSentEventMethod = serverSentEventMethod;
 
     setInterval(this.timeoutLongPolling, 10*1000);
   }
@@ -124,6 +127,11 @@ export class RestApiController
           }
         });
     });
+
+    this.eventRepository.addEventCallback("RestApiControllerForLongPolling",
+      async (eventName:string, deviceId:string):Promise<void>=>{
+        this.setNewEvent();
+    });
   }
 
 
@@ -155,7 +163,7 @@ export class RestApiController
   ): void => {
     const root = this.root;
     res.locals["root"] = root;
-    res.render("./index.ejs", {root:root});
+    res.render("./index.ejs", {root:root, serverSentEventMethod:this.serverSentEventMethod});
   }
 
   private viewLogs = (
@@ -164,7 +172,7 @@ export class RestApiController
   ): void => {
     const root = this.root;
     res.locals["root"] = root;
-    res.render("./logs.ejs", {root:root});
+    res.render("./logs.ejs", {root:root, serverSentEventMethod:this.serverSentEventMethod});
   }
 
   private viewDevice = (
@@ -185,7 +193,7 @@ export class RestApiController
 
     const allProperties = JSON.stringify(Device.ToProperiesObject(foundDevice.propertiesValue), null, 2);
     res.locals["root"] = root;
-    res.render("./device.ejs", {device:foundDevice, allProperties, propertyViewModels, context:{mqttTopic}, root:root});
+    res.render("./device.ejs", {device:foundDevice, allProperties, propertyViewModels, context:{mqttTopic}, root:root, serverSentEventMethod:this.serverSentEventMethod});
   }
 
 

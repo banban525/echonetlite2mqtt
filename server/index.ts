@@ -65,6 +65,7 @@ interface InputParameters{
   restApiPort:number;
   restApiHost:string;
   restApiRoot:string;
+  restApiServerSentEventMethod:"websocket" | "longpolling";
   mqttBroker:string;
   mqttOptionFile:string;
   mqttBaseTopic:string;
@@ -90,6 +91,7 @@ let debugLog = false;
 let restApiPort = 3000;
 let restApiHost = "0.0.0.0";
 let restApiRoot = "";
+let restApiServerSentEventMethod:"websocket" | "longpolling" = "websocket";
 let mqttBroker = "";
 let mqttOptionFile = "";
 let mqttBaseTopic = "echonetlite2mqtt/elapi/v2/devices";
@@ -193,6 +195,18 @@ if("REST_API_HOST" in process.env && process.env.REST_API_HOST !== undefined)
 if("REST_API_ROOT" in process.env && process.env.REST_API_ROOT !== undefined)
 {
   restApiRoot = process.env.REST_API_ROOT.replace(/^"/g, "").replace(/"$/g, "");
+}
+if("REST_API_SERVER_SENT_EVENT_METHOD" in process.env && process.env.REST_API_SERVER_SENT_EVENT_METHOD !== undefined)
+{
+  const tempNo = Number(process.env.REST_API_SERVER_SENT_EVENT_METHOD.replace(/^"/g, "").replace(/"$/g, ""));
+  if(tempNo === 1)
+  {
+    restApiServerSentEventMethod = "longpolling";
+  }
+  else
+  {
+    restApiServerSentEventMethod = "websocket";
+  }
 }
 if("MQTT_BROKER" in process.env && process.env.MQTT_BROKER !== undefined)
 {
@@ -327,6 +341,19 @@ for(var i = 2;i < process.argv.length; i++){
       restApiRoot = value.replace(/^"/g, "").replace(/"$/g, "");
     }
   }
+  if(name === "--RestApiServerSentEventMethod".toLowerCase())
+  {
+    const tempNo = Number(value.replace(/^"/g, "").replace(/"$/g, ""));
+    if(tempNo === 1)
+    {
+      restApiServerSentEventMethod = "longpolling";
+    }
+    else
+    {
+      restApiServerSentEventMethod = "websocket";
+    }
+  }
+
   if(name === "--MqttBroker".toLowerCase())
   {
     mqttBroker = value.replace(/^"/g, "").replace(/"$/g, "");
@@ -410,6 +437,7 @@ logger.output(`debugLog=${debugLog}`);
 logger.output(`restApiPort=${restApiPort}`);
 logger.output(`restApiHost=${restApiHost}`);
 logger.output(`restApiRoot=${restApiRoot}`);
+logger.output(`restApiServerSentEventMethod=${restApiServerSentEventMethod}`);
 logger.output(`mqttBroker=${mqttBroker}`);
 logger.output(`mqttPort=${mqttPort}`);
 logger.output(`mqttClientId=${mqttClientId}`);
@@ -436,6 +464,7 @@ const inputParameters:InputParameters =
   restApiPort,
   restApiHost,
   restApiRoot,
+  restApiServerSentEventMethod,
   mqttBroker,
   mqttOptionFile,
   mqttBaseTopic,
@@ -764,7 +793,18 @@ const detailLogsCallback : ()=>{fileName:string, content:string}[] = ()=>{
   return [{fileName, content}];
 }
 
-const restApiController = new RestApiController(deviceStore, systemStatusRepository, eventRepository, logger, echoNetListController, restApiHost, restApiPort, restApiRoot, mqttBaseTopic, detailLogsCallback);
+const restApiController = new RestApiController(
+  deviceStore, 
+  systemStatusRepository, 
+  eventRepository, 
+  logger, 
+  echoNetListController, 
+  restApiHost, 
+  restApiPort, 
+  restApiRoot, 
+  mqttBaseTopic, 
+  detailLogsCallback,
+  restApiServerSentEventMethod);
 restApiController.addPropertyChangedRequestEvent(async (deviceId:string, propertyName:string, newValue:any):Promise<void>=>{
 
   const device = deviceStore.getFromNameOrId(deviceId);

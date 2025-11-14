@@ -159,6 +159,7 @@ REST API オプション
 | `REST_API_HOST` | `--RestApiHost` | 管理者ページのIPを指定します。複数のIPがある場合にこの設定が使用されます。(デフォルト: 0.0.0.0) |
 | `REST_API_PORT` | `--RestApiPort` | 管理者ページのポートNoを指定します. (デフォルト: 3000) |
 | `REST_API_ROOT` | `--RestApiRoot` | REST APIのURLのプレフィックスを指定します。 (Default: empty) |
+| `REST_API_SERVER_SENT_EVENT_METHOD` | `--RestApiServerSentEventMethod` | Webページでのサーバーイベント送信方法を指定します。デフォルトはWebSocket、1を指定するとロングポーリングになります。Webページが自動更新しない場合、1を試してください。(デフォルト: WebSocket) |
 
 ECHONET Lite オプション
 

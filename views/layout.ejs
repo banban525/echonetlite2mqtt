@@ -28,6 +28,150 @@
         const second = date.getSeconds().toString().padStart(2, "0");
         return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
       }
+
+      class EventReceiver
+      {
+        reconnectAttempts = 0;
+        maxReconnectDelay = 30000;
+        eventReceiveMode = "websocket"; // "websocket" | "longpolling"
+        lastEventId = '';
+
+        eventCallbacks = {};
+        constructor(eventReceiveMode)
+        {
+          if(eventReceiveMode !== undefined)
+          {
+            this.eventReceiveMode = eventReceiveMode;
+          }
+        }
+
+        on = (event, callback)=>
+        {
+          if(this.eventCallbacks[event] === undefined)
+          {
+            this.eventCallbacks[event] = [];
+          }
+          this.eventCallbacks[event].push(callback);
+        }
+
+        emit = (event, ...args)=>
+        {
+          if(this.eventCallbacks[event] !== undefined)
+          {
+            for(const callback of this.eventCallbacks[event])
+            {
+              callback(...args);
+            }
+          }
+        }
+        start = ()=>
+        {
+          if(this.eventReceiveMode === "websocket")
+          {
+            this.connectWebSocket();
+          }
+          else if(this.eventReceiveMode === "longpolling")
+          {
+            this.getEvents();
+          }
+          else
+          {
+            this.connectWebSocket();
+          }
+        }
+        connectWebSocket = () =>{
+          const url = new URL(window.location.href);
+          url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
+          url.pathname = "<%= root %>/";
+
+          try
+          {
+            const ws = new WebSocket(url.href);
+
+            ws.onopen = () => {
+              console.log(`Connected to server ${url.href}`);
+              this.reconnectAttempts = 0;
+            }
+            ws.onmessage = (event) => {
+              const obj = JSON.parse(event.data);
+              if(obj.event === "systemUpdated")
+              {
+                this.emit("systemUpdated");
+              }
+              else if(obj.event === "logUpdated")
+              {
+                this.emit("logUpdated");
+              }
+              else
+              {
+                this.emit("deviceUpdated", obj.id);
+              }
+            }
+            ws.onclose = () => {
+              console.log("Disconnected from server");
+              this.scheduleReconnect(this.connectWebSocket);
+            }
+            ws.onerror = (error) => {
+              console.error("Error WebSocket:", error);
+              ws?.close();
+            };
+          }
+          catch(e)
+          {
+            console.error("Error WebSocket:", e);
+            this.scheduleReconnect(this.connectWebSocket);
+          }
+        }
+
+        getEvents = async () =>
+        {
+          let res;
+          try
+          {
+            res = await fetch(`<%= root %>/api/events?lastEvent=${this.lastEventId}`, {
+              method: 'GET'
+            });
+          }
+          catch(e)
+          {
+            console.error("Failed to get events. retry after a few minutes.", e);
+            this.scheduleReconnect(this.getEvents);
+            return;
+          }
+          if(res.ok === false)
+          {
+            console.error("Failed to get events. retry after a few minutes.", res.status, res.statusText);
+            this.scheduleReconnect(this.getEvents);
+            return;
+          }
+          const eventObject = await res.json();
+          this.lastEventId = eventObject.id;
+          for(const event of eventObject.events)
+          {
+            if(event === "SYSTEM")
+            {
+              this.emit("systemUpdated");
+            }
+            else if(event === "LOG")
+            {
+              this.emit("logUpdated");
+            }
+            else
+            {
+              this.emit(event);
+            }
+          }
+          setTimeout(this.getEvents, 100);
+        }
+
+        scheduleReconnect = (callback) => {
+          const delay = Math.min(1000 * (2 ** this.reconnectAttempts), this.maxReconnectDelay);
+          console.warn(`try reconnect after ${delay / 1000} sec...`);
+          setTimeout(callback, delay);
+          this.reconnectAttempts++;
+        }
+      }
+
     </script>
   </head>
   <body>

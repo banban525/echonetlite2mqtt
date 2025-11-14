@@ -49,6 +49,10 @@ if (bashio::config.has_value 'MQTT_CLIENT_ID'); then
   export MQTT_CLIENT_ID=$(bashio::config "MQTT_CLIENT_ID")
 fi
 
+if (bashio::config.has_value 'REST_API_SERVER_SENT_EVENT_METHOD'); then
+  export REST_API_SERVER_SENT_EVENT_METHOD=$(bashio::config "REST_API_SERVER_SENT_EVENT_METHOD")
+fi
+
 if (bashio::config.has_value 'ECHONET_TARGET_NETWORK'); then
   export ECHONET_TARGET_NETWORK=$(bashio::config "ECHONET_TARGET_NETWORK")
 fi
