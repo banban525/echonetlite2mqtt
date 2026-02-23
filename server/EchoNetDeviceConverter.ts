@@ -3,6 +3,7 @@ import { EchoNetPropertyConverter } from "./EchoNetPropertyConverter";
 import { getUtcNowDateTimeText } from "./datetimeLib";
 import { RawDataSet } from "./EchoNetCommunicator";
 import { Logger } from "./Logger";
+import { ElDeviceDescription } from "./MraTypes";
 
 export default class EchoNetDeviceConverter
 {
@@ -113,21 +114,10 @@ export default class EchoNetDeviceConverter
       }
       const epc = "0x" + propertyNo.toUpperCase();
   
-      const matchedDeviceProperties = deviceType.elProperties
-        .filter((_):boolean=>_.epc === epc)
-        .map((_):Property=>({
-          name:_.shortName,
-          descriptions:_.descriptions ?? {ja:"",en:""},
-          epc:_.epc,
-          readable: false,
-          observable:false,
-          writable:false,
-          schema: _,
-        }))
-  
-      if(matchedDeviceProperties.length !== 0)
+      const property = this.createProperty(deviceType, epc, protocol);  
+      if(property !== undefined)
       {
-        properties.push(matchedDeviceProperties[0]);
+        properties.push(property);
       }
       else
       {
@@ -225,6 +215,35 @@ export default class EchoNetDeviceConverter
       manufacturer,
       propertiesValue
     }
+  }
+
+  private createProperty = (deviceType:ElDeviceDescription, epc:string, protocol:Protocol):Property|undefined => {
+    
+    for(const property of deviceType.elProperties)
+    {
+      if(property.epc !== epc)
+      {
+        continue;
+      }
+
+      // latestはとりあえずZの次のASCIIコードである'['にしてしまう
+      const releaseFrom = property.validRelease.from === "latest" ? "[" : property.validRelease.from;
+      const releaseTo = property.validRelease.to === "latest" ? "[" : property.validRelease.to;
+      if(releaseFrom <= protocol.appendix.release  && protocol.appendix.release <= releaseTo)
+      {
+        return {
+          name:property.shortName,
+          descriptions:property.descriptions ?? {ja:"",en:""},
+          epc:property.epc,
+          readable: false,
+          observable:false,
+          writable:false,
+          schema: property,
+        };
+      }
+    }
+
+    return undefined;
   }
 
   private createDummyProperty(epc:string):Property
@@ -346,68 +365,9 @@ export default class EchoNetDeviceConverter
     return id;
   }
 
-  public getPropertyWithEpc = (ip:string, eoj:string, epc:string): Property|undefined =>{
+  public propertyToEchoNetData = (property:Property, value:any):string|undefined => {
 
-    // コンバート可能なデバイスかチェック
-    const deviceClass = "0x"+eoj.substr(0, 4).toUpperCase();
-    const foundDevice = this.echoNetPropertyConverter.getDevice(deviceClass);
-    if(foundDevice === undefined){
-      return undefined;
-    }
-    
-    let property = foundDevice.elProperties.find(_=>_.epc === "0x" + epc.toUpperCase());
-    if(property === undefined)
-    {
-      return undefined;
-    }
-    return this.getProperty(ip, eoj, property.shortName);
-  }
-
-  public getProperty = (ip:string, eoj:string, propertyName:string): Property|undefined =>{
-
-    // コンバート可能なデバイスかチェック
-    const deviceClass = "0x"+eoj.substr(0, 4).toUpperCase();
-    const foundDevice = this.echoNetPropertyConverter.getDevice(deviceClass);
-    if(foundDevice === undefined){
-      return undefined;
-    }
-    
-    const foundProperty = foundDevice.elProperties.find(_=>_.shortName === propertyName);
-    if(foundProperty === undefined)
-    {
-      return undefined;
-    }
-    
-
-    return {
-      descriptions: foundProperty.descriptions ?? {ja:"",en:""},
-      epc: foundProperty.epc,
-      name: foundProperty.shortName,
-      readable: false,
-      observable: false,
-      writable: false,
-      schema: foundProperty
-    };
-  }
-
-  public propertyToEchoNetData = (ip:string, eoj:string, propertyName:string, value:any):string|undefined => {
-
-    // コンバート可能なデバイスかチェック
-    const deviceClass = "0x"+eoj.substr(0, 4).toUpperCase();
-    const foundDevice = this.echoNetPropertyConverter.getDevice(deviceClass);
-    if(foundDevice === undefined){
-      Logger.warn("[propertyToEchoNetData]", `foundDevice === undefined`)
-      return undefined;
-    }
-    
-    const foundProperty = foundDevice.elProperties.find(_=>_.shortName === propertyName);
-    if(foundProperty === undefined)
-    {
-      Logger.warn("[propertyToEchoNetData]", `deviceProperty === undefined`)
-      return undefined;
-    }
-
-    const echoNetData = this.echoNetPropertyConverter.toEchoNetLiteData(foundProperty.data, value);
+    const echoNetData = this.echoNetPropertyConverter.toEchoNetLiteData(property.schema.data, value);
     
     if(echoNetData===undefined){
       Logger.warn("[propertyToEchoNetData]", `echoNetData===undefined`)
@@ -426,49 +386,4 @@ export default class EchoNetDeviceConverter
     return value;
   }
 
-  public convertToSelfNodeInstanceListForNodeProfile(rawData:string):  {numberOfInstances:number, instanceList:string[]} | undefined
-  {
-    const nodeProfileDeviceType = this.echoNetPropertyConverter.getDevice("0x0EF0");
-    if(nodeProfileDeviceType === undefined)
-    {
-      throw Error("ERROR: Not found nodeProfile device class");
-    }
-    const instanceListProperty = nodeProfileDeviceType.elProperties.find(_=>_.epc === "0xD6");
-    if(instanceListProperty === undefined)
-    {
-      throw Error("ERROR: Not found Self-node instance list S property class in nodeProfile device class");
-    }
-    const data = rawData;
-    const eojListUnknown = this.echoNetPropertyConverter.toObject(
-      instanceListProperty.data,
-      data
-    ) as {numberOfInstances:number, instanceList:string[]} | undefined;
-    return eojListUnknown;
-  }
-
-  public convertToPropertyList(rawData:string): string[] | undefined
-  {
-    if(rawData.length < 2)
-    {
-      return undefined;
-    }
-    const result:string[] = [];
-    for(let i=2;i<rawData.length;i+=2)
-    {
-      const epc = rawData.substring(i, i+2).toLowerCase();
-      if(epc.match(/[0-9a-f]{2}/) === null)
-      {
-        return undefined;
-      }
-      result.push(epc);
-    }
-    return result;
-  }
-
-  public isSupportedDeviceType(eoj:string):boolean
-  {
-    const eojClass = "0x" + eoj.substring(0, 4).toUpperCase();
-    const deviceType = this.echoNetPropertyConverter.getDevice(eojClass);
-    return deviceType !== undefined;
-  }
 }

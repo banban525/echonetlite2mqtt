@@ -11,6 +11,10 @@ export interface Manufacturer{
 export interface Protocol{
   type:string;
   version:string;
+  appendix:{
+    release:string,
+    revision:number
+  }
 }
 
 export interface PropertyValue

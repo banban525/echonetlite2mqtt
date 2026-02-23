@@ -57,76 +57,12 @@ export class EchoNetPropertyConverter
 
   public getDevice(eojClass:string):ElDeviceDescription | undefined
   {
-    const definitions = this.echoNetDefinitionRepository.getDefinition();
-    let device = this.echoNetDefinitionRepository.getClass(eojClass);
-
-    if(device === undefined)
-    {
-      return undefined;
-    }
-
-    for(const prop of device.elProperties)
-    {
-      prop.data = this.convertFromRefType(prop.data, definitions);
-    }
+    const device = this.echoNetDefinitionRepository.getClass(eojClass);
     return device;
   }
 
-  private convertFromRefType(schema:ElDataType, definitions:ElDefinitions)
-  {
-    if("$ref" in schema)
-    {
-      const refName = schema["$ref"].replace("#/definitions/", "");
-      if(refName in definitions.definitions)
-      {
-        const toType = definitions.definitions[refName];
-        return toType;
-      }
-      throw new Error(`存在しない$refです:${refName}`);
-    }
-    
-    if("oneOf" in schema)
-    {
-      const newSchema = JSON.parse(JSON.stringify(schema)) as ElMixedOneOfType;
-      for(let i = 0; i < schema.oneOf.length; i++)
-      {
-        newSchema.oneOf[i] = this.convertFromRefType(schema.oneOf[i],definitions);
-      }
-      return newSchema;
-    }
-    
-    if(schema.type === "array")
-    {
-      const newSchema = JSON.parse(JSON.stringify(schema)) as ElArrayType;
-      newSchema.items = this.convertFromRefType(schema.items, definitions);
-      return newSchema;
-    }
-    if(schema.type === "bitmap")
-    {
-      const newSchema = JSON.parse(JSON.stringify(schema)) as ElBitmapType;
-      for(const prop of newSchema.bitmaps)
-      {
-        prop.value = this.convertFromRefType(prop.value, definitions);
-      }
-      return newSchema;
-    }
-
-    if(schema.type === "object")
-    {
-      const newSchema = JSON.parse(JSON.stringify(schema)) as ElObjectType;
-      for(const prop of newSchema.properties)
-      {
-        prop.element = this.convertFromRefType(prop.element, definitions);
-      }
-      return newSchema;
-    }
-    return schema;
-  }
-
-
   public createDummyDevice(eoj:string):ElDeviceDescription
   {
-    const definitions = this.echoNetDefinitionRepository.getDefinition();
     const superClass = this.echoNetDefinitionRepository.getSuperClass();
 
     let eojNo = eoj.toUpperCase();
@@ -138,11 +74,6 @@ export class EchoNetPropertyConverter
       eoj: `0x${eojNo}`,
       shortName: className,
       validRelease: {from:"A", to:"latest"}
-    }
-
-    for(const prop of device.elProperties)
-    {
-      prop.data = this.convertFromRefType(prop.data, definitions);
     }
     return device;
   }
@@ -1177,10 +1108,10 @@ export class EchoNetPropertyConverter
     const revision = parseInt(raw.substr(6,2), 16);
     if(revision === 0)
     {
-      return {"type":"ECHONET_Lite v1.14", "version":`Rel.${release}`};
+      return {"type":"ECHONET_Lite v1.14", "version":`Rel.${release}`, appendix:{release, revision}};
     }
 
-    return {"type":"ECHONET_Lite v1.14", "version":`Rel.${release} Rev.${revision}`};
+    return {"type":"ECHONET_Lite v1.14", "version":`Rel.${release} Rev.${revision}`, appendix:{release, revision}};
   }
 }
 
@@ -1447,8 +1378,17 @@ class EchoNetDefinitionRepository
     {
       const superClassJsonPath = path.join(__dirname, `../MRA_v1.3.1/superClass/0x0000.json`);
       const superClassText = fs.readFileSync(superClassJsonPath, {encoding:"utf8"});
-      EchoNetDefinitionRepository.superClassCache = JSON.parse(superClassText) as ElDeviceDescription;
+      const superClass = JSON.parse(superClassText) as ElDeviceDescription;
+
+      // $refを解決する。
+      const definitions = this.getDefinition();
+      for(const prop of superClass.elProperties)
+      {
+        prop.data = this.convertFromRefType(prop.data, definitions);
+      }
+      EchoNetDefinitionRepository.superClassCache = superClass
     }
+
     return EchoNetDefinitionRepository.superClassCache;
   }
 
@@ -1493,11 +1433,74 @@ class EchoNetDefinitionRepository
       device.elProperties.push(...superClass.elProperties);
     }
 
+    if(device === undefined)
+    {
+      return undefined;
+    }
+
+    // $refを解決する。
+    const definitions = this.getDefinition();
+    for(const prop of device.elProperties)
+    {
+      prop.data = this.convertFromRefType(prop.data, definitions);
+    }
+
     EchoNetDefinitionRepository.deviceDescriptionCache[eojClass]=device;
 
     return device;
   }
 
+
+  private convertFromRefType(schema:ElDataType, definitions:ElDefinitions)
+  {
+    if("$ref" in schema)
+    {
+      const refName = schema["$ref"].replace("#/definitions/", "");
+      if(refName in definitions.definitions)
+      {
+        const toType = definitions.definitions[refName];
+        return toType;
+      }
+      throw new Error(`存在しない$refです:${refName}`);
+    }
+    
+    if("oneOf" in schema)
+    {
+      const newSchema = JSON.parse(JSON.stringify(schema)) as ElMixedOneOfType;
+      for(let i = 0; i < schema.oneOf.length; i++)
+      {
+        newSchema.oneOf[i] = this.convertFromRefType(schema.oneOf[i],definitions);
+      }
+      return newSchema;
+    }
+    
+    if(schema.type === "array")
+    {
+      const newSchema = JSON.parse(JSON.stringify(schema)) as ElArrayType;
+      newSchema.items = this.convertFromRefType(schema.items, definitions);
+      return newSchema;
+    }
+    if(schema.type === "bitmap")
+    {
+      const newSchema = JSON.parse(JSON.stringify(schema)) as ElBitmapType;
+      for(const prop of newSchema.bitmaps)
+      {
+        prop.value = this.convertFromRefType(prop.value, definitions);
+      }
+      return newSchema;
+    }
+
+    if(schema.type === "object")
+    {
+      const newSchema = JSON.parse(JSON.stringify(schema)) as ElObjectType;
+      for(const prop of newSchema.properties)
+      {
+        prop.element = this.convertFromRefType(prop.element, definitions);
+      }
+      return newSchema;
+    }
+    return schema;
+  }
 }
 
 

@@ -7,7 +7,8 @@ import { HoldOption } from "./MqttController";
 import { ELSV } from "./EchoNetCommunicator";
 import { Logger } from "./Logger";
 
-export type findDeviceCallback = (internalId:string)=>Device|undefined;
+export type findDeviceCallback = (internalId:string)=>Readonly<Device>|undefined;
+export type findDeviceByIpEojCallback = (ip:string, eoj:string)=>Readonly<Device>|undefined;
 
 export class EchoNetLiteController{
   
@@ -23,6 +24,7 @@ export class EchoNetLiteController{
   private readonly searchDevices:boolean;
   private readonly commandTimeout:number;
   private readonly findDeviceCallback:findDeviceCallback;
+  private readonly findDeviceByIpEojCallback:findDeviceByIpEojCallback;
   constructor(usedIpByEchoNet:string,  
     aliasOption: AliasOption, 
     legacyMultiNicMode:boolean, 
@@ -31,6 +33,7 @@ export class EchoNetLiteController{
     searchDevices:boolean,
     commandTimeout:number,
     findDeviceCallback:findDeviceCallback,
+    findDeviceByIpEojCallback:findDeviceByIpEojCallback,
     additionalMraFolders:string[])
   {
     this.aliasOption = aliasOption;
@@ -45,6 +48,7 @@ export class EchoNetLiteController{
     this.usedIpByEchoNet = usedIpByEchoNet;
     this.commandTimeout = commandTimeout;
     this.findDeviceCallback = findDeviceCallback;
+    this.findDeviceByIpEojCallback = findDeviceByIpEojCallback;
 
     this.echonetLiteRawController.addReveivedHandler(( rinfo:rinfo, els:eldata ):void=>{
       if(els.ESV === ELSV.SET_RES)
@@ -98,7 +102,8 @@ export class EchoNetLiteController{
 
   private propertyChnaged = (ip:string, eoj:string, epc:string, oldValue:string, newValue:string):void=>
   {
-    const property = this.deviceConverter.getPropertyWithEpc(ip, eoj, epc);
+    const device = this.findDeviceByIpEojCallback(ip, eoj);
+    const property = device?.properties.find(_=>_.epc.toLowerCase() === epc.toLowerCase());
     if(property===undefined){
       return;
     }
@@ -292,14 +297,16 @@ export class EchoNetLiteController{
 
   setDevicePropertyPrivate = async (id:DeviceId, propertyName:string, newValue:any):Promise<void> =>
   {
-    const property = this.deviceConverter.getProperty(id.ip, id.eoj, propertyName);
+    const device = this.findDeviceCallback(id.internalId);
+    
+    const property = device?.properties.find(_=>_.name == propertyName);
     if(property === undefined)
     {
       Logger.warn("[ECHONETLite]", `setDeviceProperty property === undefined propertyName=${propertyName} | the property name is invalid or not implemented. check MRA definition.`);
       return;
     }
 
-    const echoNetData = this.deviceConverter.propertyToEchoNetData(id.ip, id.eoj, propertyName, newValue);
+    const echoNetData = this.deviceConverter.propertyToEchoNetData(property, newValue);
     if(echoNetData===undefined)
     {
       Logger.warn("[ECHONETLite]", `setDeviceProperty echoNetData===undefined newValue=${newValue} | the set value is invalid. check MRA definition.`);
@@ -404,7 +411,8 @@ export class EchoNetLiteController{
 
   requestDeviceProperty = async (id:DeviceId, propertyName:string):Promise<void> =>
   {
-    const property = this.deviceConverter.getProperty(id.ip, id.eoj, propertyName);
+    const device = this.findDeviceCallback(id.internalId);
+    const property = device?.properties.find(_=>_.name === propertyName);
     if(property === undefined)
     {
       Logger.warn("[ECHONETLite]", `setDeviceProperty property === undefined propertyName=${propertyName}`);

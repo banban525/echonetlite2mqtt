@@ -722,6 +722,7 @@ const echoNetListController = new EchoNetLiteController(networkAddressForEchonet
   aliasOption, echonetLegacyMultiNicMode, echonetUnknownAsError, 
   knownDeviceIpList, echonetDisableAutoDeviceDiscovery===false, echonetCommandTimeout,
   (internalId:string)=>deviceStore.getByInternalId(internalId),
+  (ip:string, eoj:string)=>deviceStore.getByIpEoj(ip, eoj),
   additionalMraFolders);
 
 echoNetListController.addDeviceDetectedEvent((device:Device)=>{
