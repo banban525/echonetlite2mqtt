@@ -102,8 +102,10 @@ export class EchoNetLiteController{
 
   private propertyChnaged = (ip:string, eoj:string, epc:string, oldValue:string, newValue:string):void=>
   {
+    const epcWith0X = epc.toLowerCase().startsWith("0x") ? epc.toLowerCase() : "0x"+epc.toLowerCase();
+
     const device = this.findDeviceByIpEojCallback(ip, eoj);
-    const property = device?.properties.find(_=>_.epc.toLowerCase() === epc.toLowerCase());
+    const property = device?.properties.find(_=>_.epc.toLowerCase() === epcWith0X);
     if(property===undefined){
       return;
     }
