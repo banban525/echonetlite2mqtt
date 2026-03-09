@@ -1099,19 +1099,34 @@ export class EchoNetPropertyConverter
     return manufacturer;
   }
 
-  public getProtocol(raw:string): Protocol
+  public getProtocol(raw:string, nodeProfileProtocol:Protocol): Protocol
   {
     // 8桁のHEXのうち4桁目から2文字をHEXとして解釈して対応するアスキーにする
-    const release = String.fromCharCode(parseInt(raw.substr(4,2), 16));
+    const releaseCode = parseInt(raw.substr(4,2), 16);
+    
+    const releaseTemp = String.fromCharCode(releaseCode);
+    const release = 'A' <= releaseTemp && releaseTemp <= 'Z' || 'a' <= releaseTemp && releaseTemp <= 'z' ? releaseTemp.toUpperCase() : '';
     
     // 8桁のHEXのうち6桁目から2文字をHEXとして数値にする
     const revision = parseInt(raw.substr(6,2), 16);
     if(revision === 0)
     {
-      return {"type":"ECHONET_Lite v1.14", "version":`Rel.${release}`, appendix:{release, revision}};
+      return {"type":nodeProfileProtocol.type, "version":`Rel.${release}`, appendix:{release, revision}};
     }
 
-    return {"type":"ECHONET_Lite v1.14", "version":`Rel.${release} Rev.${revision}`, appendix:{release, revision}};
+    return {"type":nodeProfileProtocol.type, "version":`Rel.${release} Rev.${revision}`, appendix:{release, revision}};
+  }
+
+  
+  public getProtocolForNodeProfile(raw:string): Protocol
+  {
+    // 1 バイト目：メジャーバージョン（小数点以上）をBinary で示す。
+    //2 バイト目：マイナーバージョン（小数点以上）をBinary で示す。
+
+    const majorVersion = parseInt(raw.substr(0, 2), 16); // メジャーバージョン
+    const minorVersion = parseInt(raw.substr(2, 2), 16); // マイナーバージョン
+
+    return {"type":`ECHONET_Lite v${majorVersion}.${minorVersion}`, "version":`unknown`, appendix:{release: "", revision: 0}};
   }
 }
 

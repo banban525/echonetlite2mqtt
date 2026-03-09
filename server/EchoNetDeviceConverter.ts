@@ -3,7 +3,7 @@ import { EchoNetPropertyConverter } from "./EchoNetPropertyConverter";
 import { getUtcNowDateTimeText } from "./datetimeLib";
 import { RawDataSet } from "./EchoNetCommunicator";
 import { Logger } from "./Logger";
-import { ElDeviceDescription } from "./MraTypes";
+import { ElDeviceDescription, ElPropertyDescription } from "./MraTypes";
 
 export default class EchoNetDeviceConverter
 {
@@ -32,7 +32,19 @@ export default class EchoNetDeviceConverter
       return undefined;
     }
 
-    const protocol = this.echoNetPropertyConverter.getProtocol(echonetLiteFacilities.getRawData(ip, eoj, "82")??"00000000");
+    // このタイミングでNodeProfileが未取得かもしれないが、デバイスの取得タイミング的にNodeProfileが先なので大丈夫のはず。
+    // 最悪でも、protocol内の type と version がUnknownになるだけなので大丈夫のはず。
+    const nodeProfileProtocol:Protocol = this.echoNetPropertyConverter.getProtocolForNodeProfile(echonetLiteFacilities.getRawData(ip, "0ef001", "82")??"00000000");
+    
+    let protocol:Protocol;
+    if(eoj.toUpperCase().startsWith("0EF001"))
+    {
+      protocol = nodeProfileProtocol;
+    }
+    else
+    {
+      protocol = this.echoNetPropertyConverter.getProtocol(echonetLiteFacilities.getRawData(ip, eoj, "82")??"00000000", nodeProfileProtocol);
+    }
 
     const setPropertyNoList:string[] = [];
     const setPropertyListText = echonetLiteFacilities.getRawData(ip, eoj,"9e") ?? "";
@@ -219,17 +231,33 @@ export default class EchoNetDeviceConverter
 
   private createProperty = (deviceType:ElDeviceDescription, epc:string, protocol:Protocol):Property|undefined => {
     
-    for(const property of deviceType.elProperties)
+    // node_profileにあるバージョン情報は、Echonet Liteのバージョンのようで、Releaseバージョンではないので、常に最新のバージョンを使うようにする
+    if(deviceType.eoj === "0x0EF0")
     {
-      if(property.epc !== epc)
-      {
-        continue;
+      protocol = {
+        appendix: {
+          release: "Z",
+          revision: 0
+        },
+        type: "",
+        version: ""
       }
+    }
 
+    const filteredProperties = deviceType.elProperties.filter(_=>_.epc === epc);
+    if(filteredProperties.length === 0)
+    {
+      return undefined;
+    }
+
+    // バージョンが一致するプロパティを探す。
+    // ノードプロファイルはreleaseが無いので、ここでは見つからず、常に最新のプロパティが選ばれることになる
+    for(const property of filteredProperties)
+    {
       // latestはとりあえずZの次のASCIIコードである'['にしてしまう
-      const releaseFrom = property.validRelease.from === "latest" ? "[" : property.validRelease.from;
-      const releaseTo = property.validRelease.to === "latest" ? "[" : property.validRelease.to;
-      if(releaseFrom <= protocol.appendix.release  && protocol.appendix.release <= releaseTo)
+      const releaseFrom = property.validRelease.from === "latest" ? "[" : property.validRelease.from.toUpperCase();
+      const releaseTo = property.validRelease.to === "latest" ? "[" : property.validRelease.to.toUpperCase();
+      if(protocol.appendix.release !== "" && releaseFrom <= protocol.appendix.release  && protocol.appendix.release <= releaseTo)
       {
         return {
           name:property.shortName,
@@ -243,7 +271,27 @@ export default class EchoNetDeviceConverter
       }
     }
 
-    return undefined;
+    // 見つからない場合は最新のプロパティを返す
+    let latestProperty:ElPropertyDescription|undefined = filteredProperties[0];
+    for(const property of filteredProperties)
+    {
+      // latestはとりあえずZの次のASCIIコードである'['にしてしまう
+      const releaseTo = property.validRelease.to === "latest" ? "[" : property.validRelease.to.toUpperCase();
+      const latestTo = latestProperty.validRelease.to === "latest" ? "[" : latestProperty.validRelease.to.toUpperCase();
+      if(releaseTo > latestTo)
+      {
+        latestProperty = property;
+      }
+    }
+    return {
+      name:latestProperty.shortName,
+      descriptions:latestProperty.descriptions ?? {ja:"",en:""},
+      epc:latestProperty.epc,
+      readable: false,
+      observable:false,
+      writable:false,
+      schema: latestProperty,
+    };
   }
 
   private createDummyProperty(epc:string):Property
