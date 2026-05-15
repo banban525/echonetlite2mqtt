@@ -46,19 +46,9 @@ export default class EchoNetDeviceConverter
       protocol = this.echoNetPropertyConverter.getProtocol(echonetLiteFacilities.getRawData(ip, eoj, "82")??"00000000", nodeProfileProtocol);
     }
 
-    const setPropertyNoList:string[] = [];
-    const setPropertyListText = echonetLiteFacilities.getRawData(ip, eoj,"9e") ?? "";
-    for(let i = 2; i < setPropertyListText.length; i+=2)
-    {
-      setPropertyNoList.push(setPropertyListText.substr(i, 2));
-    }
+    const setPropertyNoList:string[] = this.convertPropertyMapToList(echonetLiteFacilities.getRawData(ip, eoj,"9e") ?? "") ?? [];
 
-    const notifyPropertyNoList:string[] = [];
-    const notifyPropertyListText = echonetLiteFacilities.getRawData(ip, eoj, "9d") ?? "";
-    for(let i = 2; i < notifyPropertyListText.length; i+=2)
-    {
-      notifyPropertyNoList.push(notifyPropertyListText.substr(i, 2));
-    }
+    const notifyPropertyNoList:string[] = this.convertPropertyMapToList(echonetLiteFacilities.getRawData(ip, eoj, "9d") ?? "") ?? [];
 
     const newDevice = this.createDevice2(
       id, 
@@ -330,12 +320,60 @@ export default class EchoNetDeviceConverter
       return undefined;
     }
   
-    const getPropertyNoList:string[] = [];
-    for(let i = 2; i < getPropertyListText.length; i+=2)
+    return this.convertPropertyMapToList(getPropertyListText);
+  }
+
+  private convertPropertyMapToList = (propertyMapText:string): string[]|undefined => {
+    if(propertyMapText.length < 2)
     {
-      getPropertyNoList.push(getPropertyListText.substr(i, 2));
+      return undefined;
     }
-    return getPropertyNoList;
+
+    const propertyCount = parseInt(propertyMapText.substring(0, 2), 16);
+    const propertyNoList:string[] = [];
+
+    if(propertyMapText.length === 2 + propertyCount * 2)
+    {
+      for(let i = 2; i < propertyMapText.length; i+=2)
+      {
+        const propertyNo = propertyMapText.substr(i, 2).toLowerCase();
+        if(propertyNo.match(/[0-9a-f]{2}/) === null)
+        {
+          return undefined;
+        }
+        propertyNoList.push(propertyNo);
+      }
+      return propertyNoList;
+    }
+
+    if(propertyCount > 16)
+    {
+      if(propertyMapText.length < 34)
+      {
+        return undefined;
+      }
+
+      for(let byteIndex=0; byteIndex<16; byteIndex++)
+      {
+        const byteText = propertyMapText.substr(2 + byteIndex * 2, 2).toLowerCase();
+        if(byteText.match(/[0-9a-f]{2}/) === null)
+        {
+          return undefined;
+        }
+        const byteValue = parseInt(byteText, 16);
+        for(let bitIndex=0; bitIndex<8; bitIndex++)
+        {
+          if((byteValue & (1 << bitIndex)) === 0)
+          {
+            continue;
+          }
+          propertyNoList.push((0x80 + bitIndex * 0x10 + byteIndex).toString(16).padStart(2, "0"));
+        }
+      }
+      return propertyNoList;
+    }
+
+    return undefined;
   }
 
   public getDeviceRawId = (ip:string, eoj:string, facilities:RawDataSet):string|undefined => {
