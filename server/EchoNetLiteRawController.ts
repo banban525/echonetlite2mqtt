@@ -81,17 +81,49 @@ export class EchoNetLiteRawController {
     {
       return undefined;
     }
+    const propertyCount = parseInt(rawData.substring(0, 2), 16);
     const result:string[] = [];
-    for(let i=2;i<rawData.length;i+=2)
+
+    if(rawData.length === 2 + propertyCount * 2)
     {
-      const epc = rawData.substring(i, i+2).toLowerCase();
-      if(epc.match(/[0-9a-f]{2}/) === null)
+      for(let i=2;i<rawData.length;i+=2)
       {
-        return undefined;
+        const epc = rawData.substring(i, i+2).toLowerCase();
+        if(epc.match(/[0-9a-f]{2}/) === null)
+        {
+          return undefined;
+        }
+        result.push(epc);
       }
-      result.push(epc);
+      return result;
     }
-    return result;
+
+    // echonet-lite normally normalizes bitmap-format property maps to the
+    // expanded form above. This fallback keeps raw bitmap EDTs parseable if a
+    // future path bypasses that normalization.
+    if(propertyCount >= 16 && rawData.length === 34)
+    {
+      for(let byteIndex=0; byteIndex<16; byteIndex++)
+      {
+        const byteText = rawData.substring(2 + byteIndex * 2, 4 + byteIndex * 2).toLowerCase();
+        if(byteText.match(/[0-9a-f]{2}/) === null)
+        {
+          return undefined;
+        }
+        const byteValue = parseInt(byteText, 16);
+        for(let bitIndex=0; bitIndex<8; bitIndex++)
+        {
+          if((byteValue & (1 << bitIndex)) === 0)
+          {
+            continue;
+          }
+          result.push((0x80 + bitIndex * 0x10 + byteIndex).toString(16).padStart(2, "0"));
+        }
+      }
+      return result;
+    }
+
+    return undefined;
   }
 
   private findProperty = (ip: string, eoj: string, epc: string): RawDeviceProperty | undefined  =>{
