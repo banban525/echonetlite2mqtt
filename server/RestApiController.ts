@@ -7,7 +7,7 @@ import { Device } from "./Property";
 import expressLayouts from 'express-ejs-layouts';
 import { ElDataType, ElMixedOneOfType } from "./MraTypes";
 import admZip from 'adm-zip';
-import { EchoNetLiteController } from "./EchoNetLiteController";
+import { DiscoveryRunResult, EchoNetLiteController } from "./EchoNetLiteController";
 import { Logger } from "./Logger";
 import path from "path";
 import crypto from "crypto";
@@ -35,6 +35,7 @@ export class RestApiController
   private readonly detailLogsCallback:()=>{fileName:string, content:string}[];
   private wss:WebSocketServer|undefined;
   private readonly serverSentEventMethod:"websocket" | "longpolling"
+  private readonly isDiscoveryTargetIpAllowed:(ip:string)=>boolean;
 
   constructor(deviceStore:DeviceStore, 
     systemStatusRepository:SystemStatusRepositry,
@@ -46,7 +47,8 @@ export class RestApiController
     root:string,
     mqttBaseTopic:string,
     detailLogsCallback:()=>{fileName:string, content:string}[],
-    serverSentEventMethod:"websocket" | "longpolling"){
+    serverSentEventMethod:"websocket" | "longpolling",
+    isDiscoveryTargetIpAllowed:(ip:string)=>boolean = ()=>true){
 
     this.deviceStore = deviceStore;
     this.systemStatusRepository = systemStatusRepository;
@@ -59,6 +61,7 @@ export class RestApiController
     this.mqttBaseTopic = mqttBaseTopic;
     this.detailLogsCallback = detailLogsCallback;
     this.serverSentEventMethod = serverSentEventMethod;
+    this.isDiscoveryTargetIpAllowed = isDiscoveryTargetIpAllowed;
 
     setInterval(this.timeoutLongPolling, 10*1000);
   }
@@ -95,6 +98,8 @@ export class RestApiController
     app.put("/elapi/v1/devices/:deviceId/properties/:propertyName/request", this.requestProperty);
 
     app.get("/api/status", this.getStatus);
+    app.post("/api/discovery/rescan", this.rescanDevices);
+    app.post("/api/discovery/rescan/:ip", this.rescanDeviceByIp);
     app.get("/api/events", this.getEventsWithLongPolling);  // OBSOLETE
     app.get("/api/logs", this.getLogs);
     
@@ -677,9 +682,48 @@ export class RestApiController
         protocol:_.protocol
       }
     ))
-  
+
     res.json(result);
   }
+
+  private rescanDevices = async (
+    req: express.Request,
+    res: express.Response
+  ): Promise<void> => {
+    const result:DiscoveryRunResult = await this.echoNetLiteController.runDiscovery("manual", undefined, true);
+    res.json(result);
+  }
+
+  private rescanDeviceByIp = async (
+    req: express.Request,
+    res: express.Response
+  ): Promise<void> => {
+    const ip = req.params.ip;
+    if(this.isValidIPv4(ip)===false)
+    {
+      res.status(400);
+      res.json({status:"error", reason:"manual", targetIp:ip, startedAt:new Date().toISOString(), finishedAt:new Date().toISOString(), message:"invalid ip address"});
+      return;
+    }
+    if(this.isDiscoveryTargetIpAllowed(ip)===false)
+    {
+      res.status(403);
+      res.json({status:"error", reason:"manual", targetIp:ip, startedAt:new Date().toISOString(), finishedAt:new Date().toISOString(), message:"target ip address is outside the ECHONET Lite network"});
+      return;
+    }
+
+    const result:DiscoveryRunResult = await this.echoNetLiteController.runDiscovery("manual", ip, false);
+    res.json(result);
+  }
+
+  private isValidIPv4 = (ip:string):boolean => {
+    if(ip.match(/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/) === null)
+    {
+      return false;
+    }
+    return ip.split(".").map(_=>Number(_)).every(_=>isNaN(_)===false && _ >= 0 && _ <= 255);
+  }
+
   private getLogs = (
     req: express.Request,
     res: express.Response

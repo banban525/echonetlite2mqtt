@@ -10,6 +10,16 @@ import { Logger } from "./Logger";
 export type findDeviceCallback = (internalId:string)=>Readonly<Device>|undefined;
 export type findDeviceByIpEojCallback = (ip:string, eoj:string)=>Readonly<Device>|undefined;
 
+export type DiscoveryRunStatus = "completed" | "busy" | "error";
+export interface DiscoveryRunResult{
+  status:DiscoveryRunStatus;
+  reason:string;
+  targetIp?:string;
+  startedAt:string;
+  finishedAt:string;
+  message?:string;
+}
+
 export class EchoNetLiteController{
   
   private readonly aliasOption: AliasOption;
@@ -23,18 +33,27 @@ export class EchoNetLiteController{
   private readonly knownDeviceIpList:string[];
   private readonly searchDevices:boolean;
   private readonly commandTimeout:number;
+  private readonly startupRetryIntervals:number[];
+  private readonly periodicDiscoveryInterval:number;
   private readonly findDeviceCallback:findDeviceCallback;
   private readonly findDeviceByIpEojCallback:findDeviceByIpEojCallback;
-  constructor(usedIpByEchoNet:string,  
-    aliasOption: AliasOption, 
-    legacyMultiNicMode:boolean, 
+  private discoveryInProgress = false;
+  private readonly unknownDeviceDiscoveryTimers:{[ip:string]:NodeJS.Timeout} = {};
+  private readonly lastUnknownDeviceDiscoveryAt:{[ip:string]:number} = {};
+  private readonly unknownDeviceDiscoveryDelayMilliseconds = 2000;
+  private readonly unknownDeviceDiscoveryCooldownMilliseconds = 60 * 1000;
+  constructor(usedIpByEchoNet:string,
+    aliasOption: AliasOption,
+    legacyMultiNicMode:boolean,
     unknownAsError:boolean,
     knownDeviceIpList:string[],
     searchDevices:boolean,
     commandTimeout:number,
     findDeviceCallback:findDeviceCallback,
     findDeviceByIpEojCallback:findDeviceByIpEojCallback,
-    additionalMraFolders:string[])
+    additionalMraFolders:string[],
+    startupRetryIntervals:number[] = [15, 60],
+    periodicDiscoveryInterval:number = 0)
   {
     this.aliasOption = aliasOption;
     this.deviceConverter = new EchoNetDeviceConverter(this.aliasOption, unknownAsError, additionalMraFolders);
@@ -47,6 +66,8 @@ export class EchoNetLiteController{
 
     this.usedIpByEchoNet = usedIpByEchoNet;
     this.commandTimeout = commandTimeout;
+    this.startupRetryIntervals = startupRetryIntervals;
+    this.periodicDiscoveryInterval = periodicDiscoveryInterval;
     this.findDeviceCallback = findDeviceCallback;
     this.findDeviceByIpEojCallback = findDeviceByIpEojCallback;
 
@@ -230,11 +251,15 @@ export class EchoNetLiteController{
 
   private ReceivedGetResponse = async ( rinfo:rinfo, els:eldata ):Promise<void>=>
   {
-
+    this.scheduleDiscoveryForUnknownDevice(rinfo.address, els.SEOJ, "response");
   };
   ReceivedInfo = ( rinfo:rinfo, els:eldata ):void=>
   {
-  
+    if("d5" in els.DETAILs)
+    {
+      return;
+    }
+    this.scheduleDiscoveryForUnknownDevice(rinfo.address, els.SEOJ, "inf");
   };
   ReceivedGet = (( rinfo:rinfo, els:eldata ):void=>
   {
@@ -275,6 +300,130 @@ export class EchoNetLiteController{
   }
   fireDeviceUpdated = (lastDevice:Device, device:Device):void=>{
     this.deviceUpdatedListeners.forEach(_=>_(lastDevice, device));
+  }
+
+  private scheduleDiscoveryForUnknownDevice = (ip:string, eoj:string, reason:string):void=>
+  {
+    if(this.searchDevices===false)
+    {
+      return;
+    }
+    if(this.discoveryInProgress)
+    {
+      return;
+    }
+    if(ip === "" || ip === this.usedIpByEchoNet || eoj === "05ff01")
+    {
+      return;
+    }
+    if(this.findDeviceByIpEojCallback(ip, eoj) !== undefined)
+    {
+      return;
+    }
+
+    const now = Date.now();
+    const lastDiscoveryAt = this.lastUnknownDeviceDiscoveryAt[ip] ?? 0;
+    if(now - lastDiscoveryAt < this.unknownDeviceDiscoveryCooldownMilliseconds)
+    {
+      return;
+    }
+    if(this.unknownDeviceDiscoveryTimers[ip] !== undefined)
+    {
+      return;
+    }
+
+    Logger.info("[ECHONETLite]", `schedule discovery from unknown ${reason}: ${ip} ${eoj}`);
+    this.lastUnknownDeviceDiscoveryAt[ip] = now;
+    this.unknownDeviceDiscoveryTimers[ip] = setTimeout(()=>{
+      delete this.unknownDeviceDiscoveryTimers[ip];
+      void this.runDiscovery(`unknown-${reason}`, ip, false);
+    }, this.unknownDeviceDiscoveryDelayMilliseconds);
+  }
+
+  public runDiscovery = async (reason:string, targetIp:string|undefined=undefined, forceNetworkDiscovery=false):Promise<DiscoveryRunResult> =>
+  {
+    const startedAt = new Date().toISOString();
+    if(this.discoveryInProgress)
+    {
+      return {
+        status:"busy",
+        reason,
+        targetIp,
+        startedAt,
+        finishedAt:new Date().toISOString(),
+        message:"discovery is already running"
+      };
+    }
+
+    this.discoveryInProgress = true;
+    let status:DiscoveryRunStatus = "completed";
+    let message:string|undefined;
+    try
+    {
+      Logger.info("[ECHONETLite]", `discovery started: ${reason}${targetIp !== undefined ? ` ${targetIp}` : ""}`);
+      if(targetIp !== undefined)
+      {
+        Logger.info("[ECHONETLite]", `collecting devices from ${targetIp}`);
+        await this.echonetLiteRawController.searchDeviceFromIp(targetIp);
+      }
+      else
+      {
+        if(this.knownDeviceIpList.length > 0)
+        {
+          for(const ip of this.knownDeviceIpList)
+          {
+            Logger.info("[ECHONETLite]", `collecting devices from ${ip}`);
+            await this.echonetLiteRawController.searchDeviceFromIp(ip);
+          }
+          Logger.info("[ECHONETLite]", `done collecting devices`);
+        }
+        if(this.searchDevices || forceNetworkDiscovery)
+        {
+          Logger.info("[ECHONETLite]", `searching devices...`);
+          await this.echonetLiteRawController.searchDevicesInNetwork();
+          Logger.info("[ECHONETLite]", `done searching devices`);
+        }
+      }
+    }
+    catch(e)
+    {
+      status = "error";
+      message = e instanceof Error ? e.message : JSON.stringify(e);
+      Logger.warn("[ECHONETLite]", `discovery error: ${reason}`, {exception:e});
+    }
+    finally
+    {
+      this.discoveryInProgress = false;
+    }
+
+    const finishedAt = new Date().toISOString();
+    Logger.info("[ECHONETLite]", `discovery finished: ${reason} ${status}`);
+    return {status, reason, targetIp, startedAt, finishedAt, message};
+  }
+
+  private startDiscoveryTimers = ():void =>
+  {
+    void this.runStartupDiscoveryRetries();
+    if(this.periodicDiscoveryInterval > 0)
+    {
+      setInterval(()=>{
+        void this.runDiscovery(`periodic-${this.periodicDiscoveryInterval}s`, undefined, false);
+      }, this.periodicDiscoveryInterval * 1000);
+    }
+  }
+
+  private runStartupDiscoveryRetries = async ():Promise<void> =>
+  {
+    for(const interval of this.startupRetryIntervals)
+    {
+      await this.wait(interval * 1000);
+      await this.runDiscovery(`startup-retry-${interval}s`, undefined, false);
+    }
+  }
+
+  private wait = async (milliseconds:number):Promise<void> =>
+  {
+    await new Promise<void>((resolve)=>setTimeout(()=>resolve(), milliseconds));
   }
 
 
@@ -394,21 +543,8 @@ export class EchoNetLiteController{
 
     await (new Promise<void>((resolve)=>setTimeout(()=>resolve(), 1000)));
 
-    if(this.knownDeviceIpList.length > 0)
-    {
-      for(const ip of this.knownDeviceIpList)
-      {
-        Logger.info("[ECHONETLite]", `collecting devices from ${ip}`);
-        await this.echonetLiteRawController.searchDeviceFromIp(ip);
-      }
-      Logger.info("[ECHONETLite]", `done collecting devices`);
-    }
-    if(this.searchDevices)
-    {
-      Logger.info("[ECHONETLite]", `searching devices...`);
-      await this.echonetLiteRawController.searchDevicesInNetwork();
-      Logger.info("[ECHONETLite]", `done searching devices`);
-    }
+    await this.runDiscovery("startup", undefined, false);
+    this.startDiscoveryTimers();
   }
 
   requestDeviceProperty = async (id:DeviceId, propertyName:string):Promise<void> =>

@@ -1,6 +1,9 @@
 <div class="container">
   <div class="row">
-    <h2>Devices</h2>
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <h2 class="mb-0">Devices</h2>
+      <button type="button" id="rescanButton" class="btn btn-primary">Rescan</button>
+    </div>
     <table id="deviceListTable" class="table table-striped" style="min-height:400px">
       <thead>
         <tr>
@@ -41,6 +44,19 @@
       });
     }
     updateSystem();
+
+    $("#rescanButton").on("click", ()=>{
+      const button = $("#rescanButton");
+      button.prop("disabled", true).text("Rescanning...");
+      $.ajax({
+        type: "POST",
+        url: "<%= root %>/api/discovery/rescan",
+        dataType : "json"
+      }).always(()=>{
+        button.prop("disabled", false).text("Rescan");
+        updateSystem();
+      });
+    });
 
     const eventReceiver = new EventReceiver("<%=serverSentEventMethod === 'longpolling' ? 'longpolling' : 'websocket'%>");
     eventReceiver.on("systemUpdated", updateSystem);
