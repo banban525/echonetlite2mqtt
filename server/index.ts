@@ -12,6 +12,7 @@ import { Logger } from "./Logger";
 import path from "path";
 import os from "os";
 import * as ipaddr from "ipaddr.js";
+import { parseDiscoveryPeriodicInterval, parseDiscoveryStartupRetryIntervals } from "./discoveryOptions";
 
 // Helper function to check if an IP is in a subnet
 function isIpInSubnet(testIp: string, networkIp: string, netmask: string): boolean {
@@ -60,6 +61,8 @@ interface InputParameters{
   echonetDeviceIpList:string;
   echonetDisableAutoDeviceDiscovery:boolean;
   echonetCommandTimeout:number;
+  echonetDiscoveryStartupRetryIntervals:number[];
+  echonetDiscoveryPeriodicInterval:number;
   echonetUserCustomMraFolder:string;
   debugLog:boolean;
   restApiPort:number;
@@ -86,6 +89,8 @@ let echonetUnknownAsError = false;
 let echonetDeviceIpList = "";
 let echonetDisableAutoDeviceDiscovery = false;
 let echonetCommandTimeout = 3000;
+let echonetDiscoveryStartupRetryIntervals = [15, 60];
+let echonetDiscoveryPeriodicInterval = 0;
 let echonetUserCustomMraFolder = "";
 let debugLog = false;
 let restApiPort = 3000;
@@ -164,6 +169,34 @@ if( "ECHONET_COMMAND_TIMEOUT" in process.env &&
   if(isNaN(tempNo)===false)
   {
     echonetCommandTimeout = tempNo;
+  }
+}
+
+if( "ECHONET_DISCOVERY_STARTUP_RETRY_INTERVALS" in process.env &&
+  process.env.ECHONET_DISCOVERY_STARTUP_RETRY_INTERVALS !== undefined)
+{
+  const temp = parseDiscoveryStartupRetryIntervals(process.env.ECHONET_DISCOVERY_STARTUP_RETRY_INTERVALS);
+  if(temp !== undefined)
+  {
+    echonetDiscoveryStartupRetryIntervals = temp;
+  }
+  else
+  {
+    Logger.warn("", `echonetDiscoveryStartupRetryIntervals is invalid format. expected seconds separated by commas. : "${process.env.ECHONET_DISCOVERY_STARTUP_RETRY_INTERVALS}"`)
+  }
+}
+
+if( "ECHONET_DISCOVERY_PERIODIC_INTERVAL" in process.env &&
+  process.env.ECHONET_DISCOVERY_PERIODIC_INTERVAL !== undefined)
+{
+  const temp = parseDiscoveryPeriodicInterval(process.env.ECHONET_DISCOVERY_PERIODIC_INTERVAL);
+  if(temp !== undefined)
+  {
+    echonetDiscoveryPeriodicInterval = temp;
+  }
+  else
+  {
+    Logger.warn("", `echonetDiscoveryPeriodicInterval is invalid format. expected seconds. : "${process.env.ECHONET_DISCOVERY_PERIODIC_INTERVAL}"`)
   }
 }
 
@@ -315,6 +348,22 @@ for(var i = 2;i < process.argv.length; i++){
       echonetCommandTimeout = tempNo;
     }
   }
+  if(name === "--echonetDiscoveryStartupRetryIntervals".toLowerCase())
+  {
+    const temp = parseDiscoveryStartupRetryIntervals(value);
+    if(temp !== undefined)
+    {
+      echonetDiscoveryStartupRetryIntervals = temp;
+    }
+  }
+  if(name === "--echonetDiscoveryPeriodicInterval".toLowerCase())
+  {
+    const temp = parseDiscoveryPeriodicInterval(value);
+    if(temp !== undefined)
+    {
+      echonetDiscoveryPeriodicInterval = temp;
+    }
+  }
   if(name === "--echonetUserCustomMraFolder".toLowerCase())
   {
     echonetUserCustomMraFolder = value.replace(/^"/g, "").replace(/"$/g, "");
@@ -432,6 +481,8 @@ logger.output(`echonetUnknownAsError=${echonetUnknownAsError}`);
 logger.output(`echonetDeviceIpList=${echonetDeviceIpList}`);
 logger.output(`echonetDisableAutoDeviceDiscovery=${echonetDisableAutoDeviceDiscovery}`);
 logger.output(`echonetCommandTimeout=${echonetCommandTimeout}`);
+logger.output(`echonetDiscoveryStartupRetryIntervals=${echonetDiscoveryStartupRetryIntervals.join(",")}`);
+logger.output(`echonetDiscoveryPeriodicInterval=${echonetDiscoveryPeriodicInterval}`);
 logger.output(`echonetUserCustomMraFolder=${echonetUserCustomMraFolder}`);
 logger.output(`debugLog=${debugLog}`);
 logger.output(`restApiPort=${restApiPort}`);
@@ -459,6 +510,8 @@ const inputParameters:InputParameters =
   echonetDeviceIpList,
   echonetDisableAutoDeviceDiscovery,
   echonetCommandTimeout,
+  echonetDiscoveryStartupRetryIntervals,
+  echonetDiscoveryPeriodicInterval,
   echonetUserCustomMraFolder,
   debugLog,
   restApiPort,
@@ -723,7 +776,9 @@ const echoNetListController = new EchoNetLiteController(networkAddressForEchonet
   knownDeviceIpList, echonetDisableAutoDeviceDiscovery===false, echonetCommandTimeout,
   (internalId:string)=>deviceStore.getByInternalId(internalId),
   (ip:string, eoj:string)=>deviceStore.getByIpEoj(ip, eoj),
-  additionalMraFolders);
+  additionalMraFolders,
+  echonetDiscoveryStartupRetryIntervals,
+  echonetDiscoveryPeriodicInterval);
 
 echoNetListController.addDeviceDetectedEvent((device:Device)=>{
   if(device === undefined)
@@ -794,6 +849,32 @@ const detailLogsCallback : ()=>{fileName:string, content:string}[] = ()=>{
   return [{fileName, content}];
 }
 
+const isDiscoveryTargetIpAllowed = (ip:string):boolean => {
+  if(knownDeviceIpList.includes(ip))
+  {
+    return true;
+  }
+
+  if(networkInterfaceForEchonet !== undefined)
+  {
+    return isIpInSubnet(ip, networkInterfaceForEchonet.address, networkInterfaceForEchonet.netmask);
+  }
+
+  const networkInterfaces = os.networkInterfaces();
+  for (const interfaceName of Object.keys(networkInterfaces)) {
+    const interfaces = networkInterfaces[interfaceName];
+    if(interfaces === undefined)
+    {
+      continue;
+    }
+    if(interfaces.filter(_=>_.family === "IPv4").some(_=>isIpInSubnet(ip, _.address, _.netmask)))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 const restApiController = new RestApiController(
   deviceStore, 
   systemStatusRepository, 
@@ -805,7 +886,8 @@ const restApiController = new RestApiController(
   restApiRoot, 
   mqttBaseTopic, 
   detailLogsCallback,
-  restApiServerSentEventMethod);
+  restApiServerSentEventMethod,
+  isDiscoveryTargetIpAllowed);
 restApiController.addPropertyChangedRequestEvent(async (deviceId:string, propertyName:string, newValue:any):Promise<void>=>{
 
   const device = deviceStore.getFromNameOrId(deviceId);

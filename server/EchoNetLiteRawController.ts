@@ -129,6 +129,107 @@ export class EchoNetLiteRawController {
     return response.els.DETAILs[epc];
   }
 
+  private static getPropertyMap = async (ip: string, eoj: string, epc: string, retryCount = 2): Promise<{res:CommandResponse, edt:{[key:string]:string}} | undefined> =>{
+    for(let i = 0; i <= retryCount; i++)
+    {
+      let res: CommandResponse;
+      try
+      {
+        res = await EchoNetCommunicator.execCommandPromise(ip, "0ef001", eoj, ELSV.GET, epc, "");
+      }
+      catch(e)
+      {
+        Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: exception from ${ip},${eoj}`, {exception:e});
+        continue;
+      }
+      const response = res.matchResponse(_=>_.els.ESV === ELSV.GET_RES && (epc in _.els.DETAILs));
+      if(response === undefined)
+      {
+        Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc} from ${ip},${eoj}`, {responses:res.responses, command:res.command});
+        continue;
+      }
+      return {res, edt:response.els.DETAILs};
+    }
+
+    return undefined;
+  }
+
+  private static cloneProperty = (property: RawDeviceProperty): RawDeviceProperty => ({
+    ip: property.ip,
+    eoj: property.eoj,
+    epc: property.epc,
+    value: property.value,
+    operation: {
+      get: property.operation.get,
+      set: property.operation.set,
+      inf: property.operation.inf
+    }
+  });
+
+  private static cloneDevice = (device: RawDevice): RawDevice => ({
+    ip: device.ip,
+    eoj: device.eoj,
+    properties: device.properties.map(_=>EchoNetLiteRawController.cloneProperty(_)),
+    noExistsId: device.noExistsId
+  });
+
+  private static cloneNode = (node: RawNode): RawNode => ({
+    ip: node.ip,
+    devices: node.devices.map(_=>EchoNetLiteRawController.cloneDevice(_))
+  });
+
+  private static mergeProperty = (current: RawDeviceProperty, next: RawDeviceProperty): RawDeviceProperty => ({
+    ip: next.ip,
+    eoj: next.eoj,
+    epc: next.epc,
+    value: next.value !== "" || current.value === "" ? next.value : current.value,
+    operation: {
+      get: current.operation.get || next.operation.get,
+      set: current.operation.set || next.operation.set,
+      inf: current.operation.inf || next.operation.inf
+    }
+  });
+
+  private static mergeDevice = (current: RawDevice, next: RawDevice): RawDevice => {
+    const result = EchoNetLiteRawController.cloneDevice(current);
+    result.ip = next.ip;
+    result.eoj = next.eoj;
+    result.noExistsId = current.noExistsId && next.noExistsId;
+
+    for(const nextProperty of next.properties)
+    {
+      const currentIndex = result.properties.findIndex(_=>_.epc === nextProperty.epc);
+      if(currentIndex === -1)
+      {
+        result.properties.push(EchoNetLiteRawController.cloneProperty(nextProperty));
+        continue;
+      }
+      result.properties[currentIndex] = EchoNetLiteRawController.mergeProperty(result.properties[currentIndex], nextProperty);
+    }
+    return result;
+  }
+
+  private static mergeNode = (current: RawNode|undefined, next: RawNode): RawNode => {
+    if(current === undefined)
+    {
+      return EchoNetLiteRawController.cloneNode(next);
+    }
+
+    const result = EchoNetLiteRawController.cloneNode(current);
+    result.ip = next.ip;
+    for(const nextDevice of next.devices)
+    {
+      const currentIndex = result.devices.findIndex(_=>_.eoj === nextDevice.eoj);
+      if(currentIndex === -1)
+      {
+        result.devices.push(EchoNetLiteRawController.cloneDevice(nextDevice));
+        continue;
+      }
+      result.devices[currentIndex] = EchoNetLiteRawController.mergeDevice(result.devices[currentIndex], nextDevice);
+    }
+    return result;
+  }
+
   private static async getNewNode(node: RawNode): Promise<RawNode> {
     const result: RawNode = {
       ip: node.ip,
@@ -145,29 +246,18 @@ export class EchoNetLiteRawController {
     {
       for(const epc of ["9f", "9e", "9d"])
       {
-        let res: CommandResponse;
-        try
+        const propertyMapResponse = await EchoNetLiteRawController.getPropertyMap(result.ip, device.eoj, epc);
+        if(propertyMapResponse === undefined)
         {
-          res = await EchoNetCommunicator.execCommandPromise(result.ip, "0ef001", device.eoj, ELSV.GET, epc, "");
-        }
-        catch(e)
-        {
-          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: exception from ${result.ip},${device.eoj}`, {exception:e});
-          continue;
-        }
-        const response = res.matchResponse(_=>_.els.ESV === ELSV.GET_RES && (epc in _.els.DETAILs));
-        if(response === undefined)
-        {
-          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc} from ${result.ip},${device.eoj}`, {responses:res.responses, command:res.command});
           continue;
         }
 
-        const edt = response.els.DETAILs;
+        const edt = propertyMapResponse.edt;
         const data = edt[epc];
         const propertyList = EchoNetLiteRawController.convertToPropertyList(data);
         if(propertyList === undefined)
         {
-          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: invalid reveive data ${result.ip},${device.eoj} ${JSON.stringify(edt)}`, {responses:res.responses, command:res.command});
+          Logger.warn("[ECHONETLite][raw]", `error getNewNode: get ${epc}: invalid reveive data ${result.ip},${device.eoj} ${JSON.stringify(edt)}`, {responses:propertyMapResponse.res.responses, command:propertyMapResponse.res.command});
           continue;
         }
         for(const propertyMapEpc of propertyList)
@@ -287,6 +377,22 @@ export class EchoNetLiteRawController {
     return result;
   }
 
+  private upsertNode = (newNode: RawNode): RawNode => {
+    const currentIndex = this.nodes.findIndex(_=>_.ip === newNode.ip);
+    const mergedNode = EchoNetLiteRawController.mergeNode(
+      currentIndex === -1 ? undefined : this.nodes[currentIndex],
+      newNode);
+    if(currentIndex===-1)
+    {
+      this.nodes.push(mergedNode);
+    }
+    else
+    {
+      this.nodes[currentIndex] = mergedNode;
+    }
+    return mergedNode;
+  }
+
 
 
 
@@ -328,16 +434,8 @@ export class EchoNetLiteRawController {
 
             // ノート応答が遅い場合ここで待たされることになるが、一旦あきらめる
             const newNode = await EchoNetLiteRawController.getNewNode(nodeTemp);
-            const currentIndex = this.nodes.findIndex(_=>_.ip === newNode.ip);
-            if(currentIndex===-1)
-            {
-              this.nodes.push(newNode);
-            }
-            else
-            {
-              this.nodes[currentIndex] = newNode;
-            }
-            this.fireDeviceDetected(newNode.ip, newNode.devices.map(_=>_.eoj));
+            const mergedNode = this.upsertNode(newNode);
+            this.fireDeviceDetected(mergedNode.ip, mergedNode.devices.map(_=>_.eoj));
           }
           continue;
         }
@@ -372,16 +470,8 @@ export class EchoNetLiteRawController {
             });
 
             const newNode = await EchoNetLiteRawController.getNewNode(nodeTemp);
-            const currentIndex = this.nodes.findIndex(_=>_.ip === newNode.ip);
-            if(currentIndex===-1)
-            {
-              this.nodes.push(newNode);
-            }
-            else
-            {
-              this.nodes[currentIndex] = newNode;
-            }
-            this.fireDeviceDetected(newNode.ip, newNode.devices.map(_=>_.eoj));
+            const mergedNode = this.upsertNode(newNode);
+            this.fireDeviceDetected(mergedNode.ip, mergedNode.devices.map(_=>_.eoj));
 
           }
         }
@@ -565,17 +655,8 @@ export class EchoNetLiteRawController {
     // ノードの詳細を取得する
     const newNode = await EchoNetLiteRawController.getNewNode(node);
 
-    const currentIndex = this.nodes.findIndex(_=>_.ip === newNode.ip);
-    if(currentIndex===-1)
-    {
-      this.nodes.push(newNode);
-    }
-    else
-    {
-      this.nodes[currentIndex] = newNode;
-    }
-
-    this.fireDeviceDetected(newNode.ip, newNode.devices.map(_=>_.eoj));
+    const mergedNode = this.upsertNode(newNode);
+    this.fireDeviceDetected(mergedNode.ip, mergedNode.devices.map(_=>_.eoj));
   }
 
   public searchDevicesInNetwork = async (): Promise<void> =>{
@@ -628,16 +709,8 @@ export class EchoNetLiteRawController {
         throw Error("ありえない");
       }
       const newNode = await EchoNetLiteRawController.getNewNode(node);
-      const currentIndex = this.nodes.findIndex(_=>_.ip === newNode.ip);
-      if(currentIndex===-1)
-      {
-        this.nodes.push(newNode);
-      }
-      else
-      {
-        this.nodes[currentIndex] = newNode;
-      }
-      this.fireDeviceDetected(newNode.ip, newNode.devices.map(_=>_.eoj));
+      const mergedNode = this.upsertNode(newNode);
+      this.fireDeviceDetected(mergedNode.ip, mergedNode.devices.map(_=>_.eoj));
     }
   }
 

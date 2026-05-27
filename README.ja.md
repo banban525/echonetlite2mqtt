@@ -90,6 +90,7 @@ ECHONET Lite と MQTT をつなぐブリッジです。
 echonetlite2mqttは同じネットワーク内のデバイスを自動で見つけます。
 そのため、デバイスと同じネットワークで実行する必要があります。
 また、docker使用時は、 `--net=host` が必要です。
+起動時にデバイスが検出されない場合は、デバイス一覧ページの `Rescan` ボタン、または `POST /api/discovery/rescan` を使用できます。
 
 
 ### Home AssistantのAddonとして使用する場合
@@ -169,6 +170,8 @@ ECHONET Lite オプション
 | `ECHONET_TARGET_NETWORK` | `--echonetTargetNetwork` | ECHONET Liteのネットワークを"000.000.000.000/00"の形で指定します。 (デフォルト: 自動) |
 | `ECHONET_DEVICE_IP_LIST` | `--echonetDeviceIpList` | デバイスのIPをカンマ区切りで指定します。(デフォルト:無し) |
 | `ECHONET_COMMAND_TIMEOUT` | `--echonetCommandTimeout` | ECHONET Liteコマンドの応答待ちの時間を指定します. (単位: ms) (デフォルト: 3000) |
+| `ECHONET_DISCOVERY_STARTUP_RETRY_INTERVALS` | `--echonetDiscoveryStartupRetryIntervals` | 起動後の自動探索を再実行するタイミングを秒数のカンマ区切りで指定します。空文字を指定すると起動後の再探索を無効にします。(デフォルト: 15,60) |
+| `ECHONET_DISCOVERY_PERIODIC_INTERVAL` | `--echonetDiscoveryPeriodicInterval` | 定期的な自動探索の間隔を秒数で指定します。0を指定すると定期探索を無効にします。(デフォルト: 0) |
 | `ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY` | `--echonetDisableAutoDeviceDiscovery` | デバイスの自動探索を無効にします。(デフォルト: off) |
 | `ECHONET_ALIAS_FILE`   | `--echonetAliasFile`  | エイリアスオプションファイルを指定します。 (デフォルト: 使用しない) |
 | `ECHONET_LEGACY_MULTI_NIC_MODE` | `--echonetLegacyMultiNicMode` | 以前の通信モードに戻します。 (デフォルト: off) |

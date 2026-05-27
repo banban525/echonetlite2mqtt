@@ -94,6 +94,7 @@ The supported devices are as follows.
 echonetlite2mqtt automatically finds devices in the same network.
 Therefore, echonetlite2mqtt must be run on the same network as the devices.
 Also, when using docker, `--net=host` is required.
+If a device is not detected at startup, use the `Rescan` button on the devices page or `POST /api/discovery/rescan`.
 
 ### As a Home Assistant Add-on
 
@@ -174,6 +175,8 @@ ECHONET Lite Options
 | `ECHONET_TARGET_NETWORK` | `--echonetTargetNetwork` | Specify the network for ECHONET Lite in the format "000.000.000.000/00". (Default: Auto) |
 | `ECHONET_DEVICE_IP_LIST`                | `--echonetDeviceIpList`               | Specify the device IPs separated by commas. (Default: none) |
 | `ECHONET_COMMAND_TIMEOUT` | `--echonetCommandTimeout` | Specify the timeout for ECHONET Lite commands. (Unit: ms) (Default: 3000) |
+| `ECHONET_DISCOVERY_STARTUP_RETRY_INTERVALS` | `--echonetDiscoveryStartupRetryIntervals` | Retry automatic discovery after startup. Specify seconds separated by commas. Use an empty value to disable startup retries. (Default: 15,60) |
+| `ECHONET_DISCOVERY_PERIODIC_INTERVAL` | `--echonetDiscoveryPeriodicInterval` | Run periodic automatic discovery. Specify the interval in seconds. 0 disables periodic discovery. (Default: 0) |
 | `ECHONET_DISABLE_AUTO_DEVICE_DISCOVERY` | `--echonetDisableAutoDeviceDiscovery` | Disable automatic device discovery. (default: off) |
 | `ECHONET_ALIAS_FILE`   | `--echonetAliasFile`  | The file path for alias option file. (Defalt: not use) |
 | `ECHONET_LEGACY_MULTI_NIC_MODE` | `--echonetLegacyMultiNicMode` | Revert to legacy communication mode. (Default: off) |

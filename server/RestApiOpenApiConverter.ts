@@ -44,6 +44,8 @@ export class RestApiOpenApiConverter{
       result.paths = {};
     }
     result.paths[`/api/status`] = this.getSystemStatus();
+    result.paths[`/api/discovery/rescan`] = this.postDiscoveryRescan();
+    result.paths[`/api/discovery/rescan/{ip}`] = this.postDiscoveryRescanIp();
     result.paths[`/api/logs`] = this.getLogs();
     result.paths[`/api/serverevents`] = this.getServerEvents();
 
@@ -79,6 +81,7 @@ export class RestApiOpenApiConverter{
       result.components.schemas["ApiDevice"] = this.getComponentsApiDevice();
       result.components.schemas["ApiDeviceProperty"] = this.getComponentsApiDeviceProperty();
       result.components.schemas["ApiDevicePropertyValue"] = this.getComponentsApiDevicePropertyValue();
+      result.components.schemas["DiscoveryResult"] = this.getDiscoveryResultSchema();
 
 
       // デバイスタイプごとのオブジェクト型を追加
@@ -350,6 +353,89 @@ export class RestApiOpenApiConverter{
           }
         }
       }
+    };
+  }
+
+  postDiscoveryRescan = ():OpenAPIV3_1.PathItemObject =>
+  {
+    return {
+      post:{
+        summary:'Rescan ECHONET Lite devices',
+        description:'Run ECHONET Lite discovery again.',
+        tags:[`System`],
+        responses:{
+          '200':{
+            description:'',
+            content:{
+              'application/json':{
+                schema:{$ref:'#/components/schemas/DiscoveryResult'}
+              }
+            }
+          }
+        }
+      }
+    };
+  }
+
+  postDiscoveryRescanIp = ():OpenAPIV3_1.PathItemObject =>
+  {
+    return {
+      post:{
+        summary:'Rescan an ECHONET Lite device by IP address',
+        description:'Run ECHONET Lite discovery for one IP address.',
+        tags:[`System`],
+        parameters:[
+          {
+            name:'ip',
+            description:'Device IP address',
+            in:'path',
+            required:true,
+            schema:{type:'string'}
+          }
+        ],
+        responses:{
+          '200':{
+            description:'',
+            content:{
+              'application/json':{
+                schema:{$ref:'#/components/schemas/DiscoveryResult'}
+              }
+            }
+          },
+          '400':{
+            description:'Invalid IP address',
+            content:{
+              'application/json':{
+                schema:{$ref:'#/components/schemas/DiscoveryResult'}
+              }
+            }
+          },
+          '403':{
+            description:'IP address is outside the ECHONET Lite network',
+            content:{
+              'application/json':{
+                schema:{$ref:'#/components/schemas/DiscoveryResult'}
+              }
+            }
+          }
+        }
+      }
+    };
+  }
+
+  getDiscoveryResultSchema = ():OpenAPIV3_1.NonArraySchemaObject =>
+  {
+    return {
+      type:'object',
+      properties:{
+        status:{type:'string', enum:['completed','busy','error']},
+        reason:{type:'string'},
+        targetIp:{type:'string'},
+        startedAt:{type:'string'},
+        finishedAt:{type:'string'},
+        message:{type:'string'}
+      },
+      required:['status','reason','startedAt','finishedAt']
     };
   }
 
